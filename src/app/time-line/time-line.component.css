@@ -1,0 +1,23 @@
+.vis-item.red {
+    color: white;
+    background-color: red;
+    border-color: darkred;
+  }
+  .form-width{
+    width:100px;
+  }
+  .flex-container {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    width:60%;
+    justify-content: space-evenly;
+  }
+
+  .item {
+    width: 200px;
+  }
+  .space-evenly { 
+    justify-content: space-evenly; 
+  }

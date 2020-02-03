@@ -1,0 +1,68 @@
+
+
+
+<form [formGroup] = "form">
+<div class="form-group">
+  <div style="width:30%">
+      <mat-form-field class="example-full-width">
+        <mat-label style='color:blue'>Plan Name </mat-label>
+        <input matInput size="35" autocomplete="off" value=""   formControlName="planName" (change) = "editVal($event, 'planName')" >
+      </mat-form-field>
+   </div>   
+    <table  style="table-layout:fixed;"><tr>
+    <td>
+      <mat-form-field class="example-full-width">
+        <mat-label  style='color:blue'>Dose</mat-label>
+        <div style="width:200px">
+        <input matInput id='dose' formControlName="Dose" name="dose" (change) = "editVal($event, 'dose')" autocomplete="off" value="">
+    
+        </div>
+        <span matSuffix>cGy</span>
+      </mat-form-field>
+    </td> 
+     <td><mat-form-field class="example-full-width">
+        <mat-label style='color:blue'>FxDose </mat-label>
+            <input matInput value=""  formControlName="fxDose" (change) = "editVal($event, 'fxDose')"  size=10>
+            <span matSuffix>cGy</span>
+          </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field class="example-full-width">
+          <mat-label style='color:blue'>Num. Fx.</mat-label>
+            <input matInput  formControlName="numFx" (change) = "editVal($event, 'numFx')"  >
+          </mat-form-field>
+    </td>
+    <td>
+        <mat-form-field  class="example-full-width" style="width:140px;">
+            <mat-label style='color:blue'>Beam Type </mat-label>
+            <mat-select name='beamTypeSel' 
+            (selectionChange)="editVal($event, 'beamType')"
+            formControlName="beamType" >
+              <mat-optgroup *ngFor="let group of beamGroups" [label]="group.name"
+                            [disabled]="group.disabled">
+                <mat-option *ngFor="let beam of group.beam" [value]="beam.value">
+                  {{beam.value}}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+        </mat-form-field>
+    </td>
+    <td style="width:200px; padding-left:100px;">
+    <mat-form-field class="example-full-width">
+      <mat-label style='color:blue'>General Consideration</mat-label>
+    <textarea matInput   cols="200"  matTextareaAutosize formControlName="generalConsideration"  (change) = "editVal($event, 'generalConsideration')" ></textarea>
+  </mat-form-field>
+  </td>
+   </tr> </table>
+   
+   <autocomplete-filter-example></autocomplete-filter-example>
+
+ </div>
+  </form>
+<app-time-line></app-time-line>
+
+
+
+
+
+ 
