@@ -35,6 +35,9 @@
     <li class="item" *ngIf = "!this._readonly"  >
         <button mat-raised-button>Delete </button>
     </li>
+    <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
+        <button mat-raised-button>Approve </button>
+    </li>
 </ul>
 <style type="text/css" >
     #timeline {
@@ -43,6 +46,7 @@
         border: 1px solid blue;
     }
 </style>
+
 
 
 

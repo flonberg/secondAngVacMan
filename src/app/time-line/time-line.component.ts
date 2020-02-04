@@ -46,13 +46,16 @@ export class TimeLineComponent implements OnInit {
   _readonly:boolean;
   showControls: boolean;
   _id: string;
+  isApprover: boolean;
 
   constructor( private http: HttpClient, private activatedRoute: ActivatedRoute) {
     
     this.redraw = true;     
     this.showControls = false;                                        // don't know why but this is necessary
     this._readonly = true;
+    this.isApprover = false;  
   }
+ 
   clicked(){                                                        // this responds to ANY click in the div containing the calendat
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
@@ -65,11 +68,13 @@ export class TimeLineComponent implements OnInit {
       this._readonly = false;
     else                                            
       this._readonly = true;  
-      if (this.data2._data[id]){
-      this.reason = this.data2._data[id].title;
+    if (this.data2._data[id]){                                    // if the timeAway is defined
+      this.reason = this.data2._data[id].title;                   // set the values for bottom display
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
       }
+    if (this.userid == 'napolitano' )                             // official 'approver'
+      this.isApprover = true;  
     }
   ngOnInit() {
     this.activatedRoute                                             // point to the route clicked on 
@@ -196,6 +201,10 @@ export class TimeLineComponent implements OnInit {
       this.data2.update({id:itemNum, end: s});   
     }    
                        
+  }
+  approve(){
+    console.log("appreove" + this._id);
+    this.data2.update({id:this._id, style: "color:blue"})
   }
   remove(){
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
