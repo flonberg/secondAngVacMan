@@ -1,3 +1,6 @@
+import { editParam } from './../dose-fx/dose-fx.component';
+import { GenEditService } from './../gen-edit.service';
+
 
 
 
@@ -11,7 +14,17 @@ import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 
+
+interface editParams {
+  tableName: string;
+  whereColName: string;
+  whereColVal: string;
+  editColName: string;
+  newVal: string;
+}
+
 declare var require: any;
+declare const eP: editParams;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 @Component({
   selector: 'app-time-line',
@@ -47,13 +60,16 @@ export class TimeLineComponent implements OnInit {
   showControls: boolean;
   _id: string;
   isApprover: boolean;
+  eP: editParams;
+ 
 
-  constructor( private http: HttpClient, private activatedRoute: ActivatedRoute) {
+  constructor( private http: HttpClient, private getEditSvce: GenEditService, private activatedRoute: ActivatedRoute) {
     
     this.redraw = true;     
     this.showControls = false;                                        // don't know why but this is necessary
     this._readonly = true;
-    this.isApprover = false;  
+    this.isApprover = false; 
+   
   }
  
   clicked(){                                                        // this responds to ANY click in the div containing the calendat
@@ -185,6 +201,8 @@ export class TimeLineComponent implements OnInit {
     }   
 
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
+    var eP = <editParams>{};
+ 
     console.log(`${type}: ${event.value}`);
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
     var editTime = new Date(event.value);                               // date returned by DatePicker
@@ -199,8 +217,9 @@ export class TimeLineComponent implements OnInit {
     }                                                                   // update startDate
     if (`${type}` == 'end'){
       this.data2.update({id:itemNum, end: s});   
-    }    
-                       
+    }   
+    eP.tableName = "vacation3";
+    this.getEditSvce.update(eP);          
   }
   approve(){
     console.log("appreove" + this._id);
