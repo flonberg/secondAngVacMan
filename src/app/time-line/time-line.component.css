@@ -21,3 +21,12 @@
   .space-evenly { 
     justify-content: space-evenly; 
   }
+  .vis-item.approved {
+    color: white;
+    background-color: red;
+    border-color: darkred;
+  }
+  .vis-item {
+    border-color: orange;
+    background-color: yellow;
+  }

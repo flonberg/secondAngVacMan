@@ -48,7 +48,7 @@ export class TimeLineComponent implements OnInit {
   _id: string;
 
   constructor( private http: HttpClient, private activatedRoute: ActivatedRoute) {
-    this.getTimelineData2();
+    
     this.redraw = true;     
     this.showControls = false;                                        // don't know why but this is necessary
     this._readonly = true;
@@ -85,6 +85,7 @@ export class TimeLineComponent implements OnInit {
   }
   setQP(qP){
     this.userid = qP.userid;
+    this.getTimelineData2();
   }
   setGroups(s){
     console.log("set Groups " + s._data);
@@ -104,6 +105,7 @@ export class TimeLineComponent implements OnInit {
     for (var property in this.data2._data ) {
       if (this.data2._data.hasOwnProperty(property)) {
         this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content)
+     //   this.data2._data[property].style="color:red";
       }
     }
   }
@@ -114,6 +116,7 @@ export class TimeLineComponent implements OnInit {
       // more items...
     ]);
     let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=2019-06-01&end=2019-08-01&userid=' + this.userid;
+    console.log("url is " + url );
     this.http.get(url).subscribe(
       (val) => {
         this.setTheData(val);
