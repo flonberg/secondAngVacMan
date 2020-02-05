@@ -10,7 +10,7 @@
 <div id="datums"  style="display:hidden"> datums </div>
 <div id="usekey"  style="display:hidden"> userkey </div>
 
-<ul *ngIf = "this.showControls && this._id " class="flex-container ">
+<ul *ngIf = "this.showControls && this._id " class="flex-container  ">
     <li class="item">
         <mat-form-field  class="item" >
             <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"

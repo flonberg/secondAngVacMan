@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TimeLineComponent } from './time-line/time-line.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { MatButtonModule } from '@angular/material/button';
     ])
 
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [DatePipe],
+  bootstrap: [AppComponent],
+ 
 })
 export class AppModule { }

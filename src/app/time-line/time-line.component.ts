@@ -1,10 +1,7 @@
 import { editParam } from './../dose-fx/dose-fx.component';
 import { GenEditService } from './../gen-edit.service';
-
-
-
-
-import { AfterViewInit, Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { SeditParams } from './../gen-edit.service'
+import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -13,18 +10,9 @@ import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dia
 import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
-
-
-interface editParams {
-  tableName: string;
-  whereColName: string;
-  whereColVal: string;
-  editColName: string;
-  newVal: string;
-}
+import { DatePipe } from '@angular/common';
 
 declare var require: any;
-declare const eP: editParams;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 @Component({
   selector: 'app-time-line',
@@ -60,15 +48,16 @@ export class TimeLineComponent implements OnInit {
   showControls: boolean;
   _id: string;
   isApprover: boolean;
-  eP: editParams;
- 
+  sP: SeditParams;
 
-  constructor( private http: HttpClient, private getEditSvce: GenEditService, private activatedRoute: ActivatedRoute) {
+  constructor( private http: HttpClient, private getEditSvce: GenEditService, 
+    private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
     
     this.redraw = true;     
     this.showControls = false;                                        // don't know why but this is necessary
     this._readonly = true;
     this.isApprover = false; 
+   
    
   }
  
@@ -201,10 +190,15 @@ export class TimeLineComponent implements OnInit {
     }   
 
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
-    var eP = <editParams>{};
- 
-    console.log(`${type}: ${event.value}`);
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
+    var seP = <SeditParams>{};
+    seP.who = this.userid;
+    seP.whereColName = "vidx";
+    seP.tableName = "vacation3";
+    seP.whereColVal = this.data2._data[itemNum].vidx;
+    console.log(`${type}: ${event.value}`);
+    console.log(" this data " + this.data2)
+
     var editTime = new Date(event.value);                               // date returned by DatePicker
     var month = editTime.getMonth() + 1;                                // get month to assemble to edit
     var day = editTime .getDate();                                      // mm
@@ -214,12 +208,17 @@ export class TimeLineComponent implements OnInit {
   
     if (`${type}` == 'start'){
       this.data2.update({id:itemNum, start: s});  
+      seP.editColName = "startDate";    
+      seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');    
     }                                                                   // update startDate
     if (`${type}` == 'end'){
       this.data2.update({id:itemNum, end: s});   
+      seP.editColName = "endDate";    
+      seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   
     }   
-    eP.tableName = "vacation3";
-    this.getEditSvce.update(eP);          
+
+  
+    this.getEditSvce.update(seP);          
   }
   approve(){
     console.log("appreove" + this._id);

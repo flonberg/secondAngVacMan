@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-export interface editParams {
+export interface SeditParams {
   tableName: string;
   whereColName: string;
   whereColVal: string;
   editColName: string;
+  editColVal: string;
   newVal: string;
+  who: String;
 }
 @Injectable({
   providedIn: 'root'
