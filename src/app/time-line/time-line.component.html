@@ -29,7 +29,22 @@
     </li>
     <li class="item">
         <mat-form-field  class="item">
-            <input matInput placeholder="Reason" [value] = "reason" (change) = "editReason($event)">
+                <mat-select>
+                        <mat-option *ngFor="let reason of reasons" [value]="reason.index">
+                          {{reason.rString }}
+                        </mat-option>
+                    </mat-select>
+        </mat-form-field >
+    </li>
+    <li class="wideItem">
+        <mat-form-field  class="wideItem">
+                <textarea matInput placeholder="Note"
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5">
+            </textarea>
+
         </mat-form-field >
     </li>
     <li class="item" *ngIf = "!this._readonly"  >

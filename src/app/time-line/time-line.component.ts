@@ -14,6 +14,11 @@ import { DatePipe } from '@angular/common';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
+interface reasonString {
+  index: number;
+  rString: string;
+}
+
 @Component({
   selector: 'app-time-line',
   templateUrl: './time-line.component.html',
@@ -41,6 +46,7 @@ export class TimeLineComponent implements OnInit {
   reason: String;
   startDate: FormControl;
   endDate: FormControl;
+  reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
   test: any;
@@ -49,6 +55,14 @@ export class TimeLineComponent implements OnInit {
   _id: string;
   isApprover: boolean;
   sP: SeditParams;
+  rStr:reasonString;
+
+  reasons: reasonString[] = [
+    { index: 0, rString: "Personal Vacation"},
+    { index: 1, rString: "Personal"},
+    { index: 2, rString: "Meeting"},
+  ];
+  
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -57,11 +71,15 @@ export class TimeLineComponent implements OnInit {
     this.showControls = false;                                        // don't know why but this is necessary
     this._readonly = true;
     this.isApprover = false; 
+  
+ 
+      
    
    
   }
  
-  clicked(){                                                        // this responds to ANY click in the div containing the calendat
+  clicked(){  
+                                                        // this responds to ANY click in the div containing the calendat
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
        this._id = document.getElementById("datums").innerText;        // get the id from the vis click
@@ -77,6 +95,8 @@ export class TimeLineComponent implements OnInit {
       this.reason = this.data2._data[id].title;                   // set the values for bottom display
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
+    
+
       }
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
@@ -191,20 +211,18 @@ export class TimeLineComponent implements OnInit {
 
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
-    var seP = <SeditParams>{};
+    var seP = <SeditParams>{};                                          // define instance of SeditParams interface
     seP.who = this.userid;
     seP.whereColName = "vidx";
     seP.tableName = "vacation3";
     seP.whereColVal = this.data2._data[itemNum].vidx;
     console.log(`${type}: ${event.value}`);
-    console.log(" this data " + this.data2)
 
     var editTime = new Date(event.value);                               // date returned by DatePicker
     var month = editTime.getMonth() + 1;                                // get month to assemble to edit
-    var day = editTime .getDate();                                      // mm
-    var year = editTime .getFullYear();                                 // mm
-    var s =  month + "-" + day + "-" + year;                            // assemble editDate
-    console.log("typs is " + type);
+    var day = editTime.getDate();                                      // mm
+    var year = editTime.getFullYear();                                 // mm
+    var s =  month + "-" + editTime.getDate() + "-" + editTime.getFullYear();                            // assemble editDate
   
     if (`${type}` == 'start'){
       this.data2.update({id:itemNum, start: s});  
@@ -216,8 +234,6 @@ export class TimeLineComponent implements OnInit {
       seP.editColName = "endDate";    
       seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   
     }   
-
-  
     this.getEditSvce.update(seP);          
   }
   approve(){

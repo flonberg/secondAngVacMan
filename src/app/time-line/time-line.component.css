@@ -14,9 +14,11 @@
     width:80%;
     justify-content: space-evenly;
   }
-
-  .item {
+  .wideItem {
     width: 200px;
+  }
+  .item {
+    width: 100px;
   }
   .space-evenly { 
     justify-content: space-evenly; 
