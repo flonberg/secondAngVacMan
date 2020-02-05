@@ -28,7 +28,8 @@
         </mat-form-field>
     </li>
     <li class="item">
-        <mat-form-field  class="item">
+        <mat-form-field  class="item" style="width:150px;">
+                <mat-label>Reason</mat-label>
                 <mat-select>
                         <mat-option *ngFor="let reason of reasons" [value]="reason.index">
                           {{reason.rString }}
