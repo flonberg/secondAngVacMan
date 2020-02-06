@@ -56,26 +56,22 @@ export class TimeLineComponent implements OnInit {
   isApprover: boolean;
   sP: SeditParams;
   rStr:reasonString;
+  reasonsA = ["Personal Vacation", "Private", "Meeting"];
+  reasonSelected: string;
+  testA ="Personal Vacation"
+  domain: string;
+  modeselect= '0';
 
-  reasons: reasonString[] = [
-    { index: 0, rString: "Personal Vacation"},
-    { index: 1, rString: "Personal"},
-    { index: 2, rString: "Meeting"},
-  ];
-  
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
-    
     this.redraw = true;     
     this.showControls = false;                                        // don't know why but this is necessary
     this._readonly = true;
     this.isApprover = false; 
+
   
- 
-      
-   
-   
+  
   }
  
   clicked(){  
@@ -92,11 +88,11 @@ export class TimeLineComponent implements OnInit {
     else                                            
       this._readonly = true;  
     if (this.data2._data[id]){                                    // if the timeAway is defined
-      this.reason = this.data2._data[id].title;                   // set the values for bottom display
+      this.reasonSelected = this.data2._data[id].reason;                   // set the values for bottom display
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
-    
-
+      let t = this.data2._data[id].reason.toString();
+      this.modeselect = this.data2._data[id].reason.toString();
       }
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
@@ -204,9 +200,16 @@ export class TimeLineComponent implements OnInit {
   clear(){
     console.log("clear " );
   }
-  editReason(s){
-      var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
-      this.data2.update({id:itemNum, title: s.currentTarget.value});   
+  editReason(s){ 
+      var itemNum = document.getElementById('datums').innerHTML;   
+      var seP = <SeditParams>{};                                          // define instance of SeditParams interface
+      seP.who = this.userid;
+      seP.whereColName = "vidx";
+      seP.tableName = "vacation3";
+      seP.whereColVal = this.data2._data[itemNum].vidx;
+      seP.editColName = "reason"
+      seP.editColVal = s; 
+      this.getEditSvce.update(seP); 
     }   
 
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
@@ -216,6 +219,7 @@ export class TimeLineComponent implements OnInit {
     seP.whereColName = "vidx";
     seP.tableName = "vacation3";
     seP.whereColVal = this.data2._data[itemNum].vidx;
+
     console.log(`${type}: ${event.value}`);
 
     var editTime = new Date(event.value);                               // date returned by DatePicker

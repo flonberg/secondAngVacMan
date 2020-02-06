@@ -1,15 +1,8 @@
-<head>
-    <style>
-        .vis-item {
-          border-color: orange;
-          background-color: yellow;
-        }
-      </style>
-</head>
+
 <div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()"></div>
 <div id="datums"  style="display:hidden"> datums </div>
 <div id="usekey"  style="display:hidden"> userkey </div>
-
+{{ testA }}
 <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
     <li class="item">
         <mat-form-field  class="item" >
@@ -28,15 +21,16 @@
         </mat-form-field>
     </li>
     <li class="item">
-        <mat-form-field  class="item" style="width:150px;">
-                <mat-label>Reason</mat-label>
-                <mat-select>
-                        <mat-option *ngFor="let reason of reasons" [value]="reason.index">
-                          {{reason.rString }}
-                        </mat-option>
-                    </mat-select>
-        </mat-form-field >
+        <mat-form-field>
+            <mat-label>Reason</mat-label>
+                <mat-select [(value)]="modeselect" >
+                        <mat-option value="0">Personal Vacation</mat-option>
+                        <mat-option value="1">Private</mat-option>
+                        <mat-option value="2">Meeting</mat-option>  
+                </mat-select>
+        </mat-form-field>
     </li>
+    
     <li class="wideItem">
         <mat-form-field  class="wideItem">
                 <textarea matInput placeholder="Note"
