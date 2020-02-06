@@ -20,25 +20,32 @@
             <mat-datepicker #epicker ></mat-datepicker>
         </mat-form-field>
     </li>
-    <li class="item">
+    <li class="item" *ngIf =!_readonly>
         <mat-form-field>
             <mat-label>Reason</mat-label>
-                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event)">
-                        <mat-option value="0">Personal Vacation</mat-option>
-                        <mat-option value="1">Private</mat-option>
-                        <mat-option value="2">Meeting</mat-option>  
+                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"  >
+                        <mat-option  value="0">Personal Vacation</mat-option>
+                        <mat-option  value="1">Other</mat-option>
+                        <mat-option   value="2">Meeting</mat-option>  
                 </mat-select>
+        </mat-form-field>
+    </li>
+    <li class="wideItem" *ngIf =_readonly>
+            <mat-form-field>
+        <mat-label class="smallLabel"> Reason</mat-label>
+        <input matInput  [value]="reasons[reasonSelect]" size = 40>
         </mat-form-field>
     </li>
 
     <li class="wideItem">
         <mat-form-field  class="wideItem">
-                <textarea matInput placeholder="Note"
+            <textarea matInput  (change)="editReason($event, 'Notes')" [value]="this.data2._data[this._id].Notes"
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="1"
-                cdkAutosizeMaxRows="5">
-            </textarea>
+                cdkAutosizeMaxRows="5"
+                >
+        </textarea>
 
         </mat-form-field >
     </li>

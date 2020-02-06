@@ -15,7 +15,7 @@
     justify-content: space-evenly;
   }
   .wideItem {
-    width: 200px;
+    width: 250px;
   }
   .item {
     width: 100px;
@@ -31,4 +31,7 @@
   .vis-item {
     border-color: orange;
     background-color: yellow;
+  }
+  .smallLable {
+    color:blue;
   }
