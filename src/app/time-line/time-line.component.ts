@@ -177,8 +177,8 @@ export class TimeLineComponent implements OnInit {
       seP.editColName = colName
       if (s.value)                                                      // if comes from a 'select' widget
         seP.editColVal = s.value; 
-      if (s.target.value)  
-      seP.editColVal = s.target.value; 
+      if (s.target && s.target.value)  
+        seP.editColVal = s.target.value; 
       this.getEditSvce.update(seP); 
     }   
 

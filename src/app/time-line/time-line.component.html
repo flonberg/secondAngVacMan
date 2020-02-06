@@ -1,8 +1,8 @@
 
 <div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()"></div>
-<div id="datums"  style="display:hidden"> datums </div>
-<div id="usekey"  style="display:hidden"> userkey </div>
-{{ testA }}
+<div id="datums"  style="display:none"> ddd </div>
+<br>
+
 <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
     <li class="item">
         <mat-form-field  class="item" >
@@ -30,17 +30,19 @@
                 </mat-select>
         </mat-form-field>
     </li>
+
     <li class="wideItem" *ngIf =_readonly>
-            <mat-form-field>
+        <mat-form-field>
         <mat-label class="smallLabel"> Reason</mat-label>
-        <input matInput  [value]="reasons[reasonSelect]" size = 40>
+        <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
         </mat-form-field>
     </li>
 
-    <li class="wideItem">
+    <li style="width:150px">
         <mat-form-field  class="wideItem">
+            <mat-label class="smallLabel"> Note:</mat-label>
             <textarea matInput  (change)="editReason($event, 'Notes')" [value]="this.data2._data[this._id].Notes"
-                cdkTextareaAutosize
+                cdkTextareaAutosize [readonly]="_readonly"
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="1"
                 cdkAutosizeMaxRows="5"
