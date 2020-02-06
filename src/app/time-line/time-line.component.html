@@ -23,14 +23,14 @@
     <li class="item">
         <mat-form-field>
             <mat-label>Reason</mat-label>
-                <mat-select [(value)]="modeselect" >
+                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event)">
                         <mat-option value="0">Personal Vacation</mat-option>
                         <mat-option value="1">Private</mat-option>
                         <mat-option value="2">Meeting</mat-option>  
                 </mat-select>
         </mat-form-field>
     </li>
-    
+
     <li class="wideItem">
         <mat-form-field  class="wideItem">
                 <textarea matInput placeholder="Note"

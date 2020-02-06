@@ -60,7 +60,7 @@ export class TimeLineComponent implements OnInit {
   reasonSelected: string;
   testA ="Personal Vacation"
   domain: string;
-  modeselect= '0';
+ reasonSelect = '';
 
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
@@ -91,8 +91,9 @@ export class TimeLineComponent implements OnInit {
       this.reasonSelected = this.data2._data[id].reason;                   // set the values for bottom display
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
-      let t = this.data2._data[id].reason.toString();
-      this.modeselect = this.data2._data[id].reason.toString();
+   
+      if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) 
+        this.reasonSelect = this.data2._data[id].reason.toString();
       }
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
@@ -208,7 +209,7 @@ export class TimeLineComponent implements OnInit {
       seP.tableName = "vacation3";
       seP.whereColVal = this.data2._data[itemNum].vidx;
       seP.editColName = "reason"
-      seP.editColVal = s; 
+      seP.editColVal = s.value; 
       this.getEditSvce.update(seP); 
     }   
 
@@ -257,22 +258,5 @@ export class TimeLineComponent implements OnInit {
       this.editable = false;  
   }
 
-  getTimelineData() {
-    this.data = new vis.DataSet([
-      {id: 2, content: 'Left Lung PTV', start: '2019-02-05', end: '2019-04-05', title: ' Left Lung PTV 20 fx, 4500 cGy cGE' },
-      {id: 3, content: 'LIVER SBRT', start: '2019-06-05', end: '2019-08-05', title: ' LIVER SBRT 5 fx, 4500 cGy cGE' },
-    ]);
-        this.options = {
-          editable: true,
-          showTooltips: true,
-          tooltip: {
-            followMouse: true,
-            overflowMethod: 'cap'
-          },
-          margin: {
-            item: 20,
-            axis: 40
-          }
-        };
-    }
+  
 }
