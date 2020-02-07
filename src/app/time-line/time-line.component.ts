@@ -26,6 +26,14 @@ interface newTAparams {
   reason: number,
   Note: string
 }
+interface nameToUserId {
+  lastName: string;
+  userid: string;
+}
+interface useridToUserkey {
+  userid: string;
+  userkey: number;
+}
 
 @Component({
   selector: 'app-time-line',
@@ -65,6 +73,8 @@ export class TimeLineComponent implements OnInit {
     reason: -1,
     Note: ''
   }
+  nameToUserId: nameToUserId[]; 
+  useridToUserkeys: useridToUserkey[];
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -72,6 +82,8 @@ export class TimeLineComponent implements OnInit {
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
     this.isApprover = false; 
+    this.nameToUserId = [ {lastName: '', userid: ''} ];
+    this.useridToUserkeys = [{ userid:'Unknown', userkey: 0 }]
  
   }
 
@@ -170,8 +182,12 @@ export class TimeLineComponent implements OnInit {
   setGroups(s){                                                           // make a list of all user forWhich vacs have been found
     this.nameList = new Array();
     for(let i=0; i< s.length; i++){                                        // step thru the data
-      if (this.nameList.indexOf(s._data[i].content) < 0)                  // if name is not already there
-        this.nameList.push( s._data[i].content)                           // add name 
+      if (this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already there
+        this.nameList.push( s._data[i].content);
+        this.nameToUserId[i] = { lastName:s._data[i].content, userid: s._data[i].userkey }
+        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey }
+            
+      }                     // add name 
     }
     this.nameList.sort();                                                 // alphabetize the nameList
   }
@@ -211,6 +227,7 @@ export class TimeLineComponent implements OnInit {
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
     var seP = <SeditParams>{};                                          // define instance of SeditParams interface
     seP.who = this.userid;
+   
     seP.whereColName = "vidx";
     seP.tableName = "vacation3";
     if (this.data2._data[itemNum]  )                                    // if the IS an item to be edited
@@ -251,8 +268,15 @@ export class TimeLineComponent implements OnInit {
      this.newTAparams.Note = event.curentTarget.value; 
     if (this.newTAparams.startDate.length > 0 && this.newTAparams.endDate.length > 0
       &&  this.newTAparams.reason >= 0)
-      this.saveTimeAwayBool = true; 
+    this.saveTimeAwayBool = true;                                      // show the Save TimeAway button
+    var index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  //find arrayIndex of userId
+    var uKey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
+    
+      console.log("cons is " + index + "userkey  is " + uKey) 
+
+   
   } 
+ 
   approve(){
     console.log("appreove" + this._id);
     this.data2.update({id:this._id, style: "color:blue"})
