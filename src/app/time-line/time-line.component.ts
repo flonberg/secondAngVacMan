@@ -11,12 +11,20 @@ import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 import { DatePipe } from '@angular/common';
+import { resetFakeAsyncZone } from '@angular/core/testing';
+
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 interface reasonString {
   index: number;
   rString: string;
+}
+interface newTAparams {
+  startDate: string,
+  endDate: string,
+  reason: number,
+  Note: string
 }
 
 @Component({
@@ -35,7 +43,7 @@ export class TimeLineComponent implements OnInit {
   redraw: boolean;
   itemNum: string;
   qP: any;                                              // used to receive queryParams
-  idSel: String;
+//  idSel: String;
   userkey: number;
   reasons = ["Personal Vacation", "Other", "Meeting"]
   reason: String;
@@ -48,13 +56,23 @@ export class TimeLineComponent implements OnInit {
   showControls: boolean;
   _id: string;
   isApprover: boolean;
-  reasonSelect = '';                                      
+  reasonSelect = '';            
+  newTimeAwayBool: boolean = false;  
+  saveTimeAwayBool: boolean = false; 
+  newTAparams: newTAparams ={
+    startDate: '',
+    endDate: '',
+    reason: -1,
+    Note: ''
+  }
+
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
     this.redraw = true;     
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
     this.isApprover = false; 
+ 
   }
 
   clicked(){   // this responds to ANY click in the div containing the calendat                                             
@@ -116,7 +134,7 @@ export class TimeLineComponent implements OnInit {
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-          this.idSel = properties.items;                                                  // store the id for use in editing
+      //    this.idSel = properties.items;                                                  // store the id for use in editing
           document.getElementById('datums').innerHTML = properties.items  ;               // store the id in the DOM for use by Angular
         });
       }
@@ -175,7 +193,10 @@ export class TimeLineComponent implements OnInit {
       seP.who = this.userid;
       seP.whereColName = "vidx";
       seP.tableName = "vacation3";
-      seP.whereColVal = this.data2._data[itemNum].vidx;
+      if (this.data2._data[itemNum]  )    
+        seP.whereColVal = this.data2._data[itemNum].vidx;
+      else
+        this.needToInsert(colName, s);   
       seP.editColName = colName
       if (s.value)                                                      // if comes from a 'select' widget
         seP.editColVal = s.value; 
@@ -192,12 +213,13 @@ export class TimeLineComponent implements OnInit {
     seP.who = this.userid;
     seP.whereColName = "vidx";
     seP.tableName = "vacation3";
-    seP.whereColVal = this.data2._data[itemNum].vidx;
-    var editTime = new Date(event.value);                               // date returned by DatePicker
-    var month = editTime.getMonth() + 1;                                // get month to assemble to edit
-    var day = editTime.getDate();                                      // mm
-    var year = editTime.getFullYear();                                 // mm
-    var s =  month + "-" + editTime.getDate() + "-" + editTime.getFullYear();                            // assemble editDate
+    if (this.data2._data[itemNum]  )                                    // if the IS an item to be edited
+      seP.whereColVal = this.data2._data[itemNum].vidx;
+    else {
+      this.needToInsert(type, event);                                    // this is an INSERT
+      return;                                                           // don't do anything else
+    }
+    var s = this.makeDateString(event)                                 
     if (`${type}` == 'start'){
       this.data2.update({id:itemNum, start: s});  
       seP.editColName = "startDate";    
@@ -210,11 +232,40 @@ export class TimeLineComponent implements OnInit {
     }   
     this.getEditSvce.update(seP);          
   }
+  makeDateString(event){
+    var editTime = new Date(event.value);                               // date returned by DatePicker
+    var month = editTime.getMonth() + 1;                                // get month to assemble to edit
+    var day = editTime.getDate();                                      // mm
+    var year = editTime.getFullYear();                                 // mm
+    var s =  month + "-" + editTime.getDate() + "-" + editTime.getFullYear();  
+    return s;
+  }
+  needToInsert(type, event){
+    if (type =='start')
+     this.newTAparams.startDate = this.makeDateString(event);
+    if (type =='end')
+     this.newTAparams.endDate = this.makeDateString(event);
+    if (type =='reason')
+     this.newTAparams.reason = event.value; 
+    if (type =='Notes')
+     this.newTAparams.Note = event.curentTarget.value; 
+    if (this.newTAparams.startDate.length > 0 && this.newTAparams.endDate.length > 0
+      &&  this.newTAparams.reason >= 0)
+      this.saveTimeAwayBool = true; 
+  } 
   approve(){
     console.log("appreove" + this._id);
     this.data2.update({id:this._id, style: "color:blue"})
     this.data2._data[this._id].approved == 1;
     this.editReason(1, 'approved')
+  }
+  newTimeAway(){
+    this.startDate = new FormControl();  
+    this.endDate = new FormControl();  
+    this.showControls = true;
+    this._readonly = false;
+    this._id = '1';
+    this.newTimeAwayBool = true;
   }
   remove(){
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited

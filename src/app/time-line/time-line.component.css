@@ -11,6 +11,7 @@
     margin: 0;
     list-style: none;
     display: flex;
+    min-width: 1400px;
     width:80%;
     justify-content: space-evenly;
   }
