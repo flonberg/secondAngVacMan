@@ -60,20 +60,19 @@ export class TimeLineComponent implements OnInit {
   clicked(){   // this responds to ANY click in the div containing the calendat                                             
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
-       this._id = document.getElementById("datums").innerText;        // get the id from the vis click
+       this._id = id;        
        if (this._id !== "datums" )                                // shows user had clicked a box                 
         this.showControls = true;
       }
-    if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid)    // loggedInUser is timeAway owner
+    if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid)    // loggedInUser is timeAway owner so make widgets editable
       this._readonly = false;
     else                                            
       this._readonly = true;  
     if (this.data2._data[id]){                                    // if the timeAway is defined
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
-   
       if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) 
-        this.reasonSelect = this.data2._data[id].reason.toString();
+        this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
       }
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
@@ -94,27 +93,13 @@ export class TimeLineComponent implements OnInit {
     this.userid = qP.userid;                                              // store userid to decide which fields are editable
     this.getTimelineData2();                                              // get the data from REST database call. 
   }
-  setGroups(s){                                                           // make a list of all user forWhich vacs have been found
-    this.nameList = new Array();
-    for(let i=0; i< s.length; i++){                                        // step thru the data
-      if (this.nameList.indexOf(s._data[i].content) < 0)                  // if name is not already there
-        this.nameList.push( s._data[i].content)                           // add name 
-    }
-    this.nameList.sort();                                                 // alphabetize the nameList
-  }
+ 
   ngAfterViewInit() {
     if (this.timelineContainer  ) {
       this.tlContainer = this.timelineContainer.nativeElement;
     }
   }
-  assignGroups(){                                                                       // put each tA in proper group. 
-    for (var property in this.data2._data ) {
-      if (this.data2._data.hasOwnProperty(property)) {
-        this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content)  // set the correct groupNumber
-     //   this.data2._data[property].style="color:red";
-      }
-    }
-  }
+  
   getTimelineData2() 
   {
     let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=2019-06-01&end=2019-08-01&userid=' + this.userid;
@@ -163,6 +148,23 @@ export class TimeLineComponent implements OnInit {
 //      end: new Date(new Date().getFullYear(), new Date().getMonth()+ 2, 1),
 
     };
+  }                                                           // end of getTimelineData2
+  setGroups(s){                                                           // make a list of all user forWhich vacs have been found
+    this.nameList = new Array();
+    for(let i=0; i< s.length; i++){                                        // step thru the data
+      if (this.nameList.indexOf(s._data[i].content) < 0)                  // if name is not already there
+        this.nameList.push( s._data[i].content)                           // add name 
+    }
+    this.nameList.sort();                                                 // alphabetize the nameList
+  }
+  assignGroups(){                                                                       // put each tA in proper group. 
+    for (var property in this.data2._data ) {
+      if (this.data2._data.hasOwnProperty(property)) {
+        this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content)  // set the correct groupNumber
+        if (this.data2._data[property].approved == 0)
+          this.data2._data[property].style="color:red";
+      }
+    }
   }
   clear(){
     console.log("clear " );
@@ -179,6 +181,8 @@ export class TimeLineComponent implements OnInit {
         seP.editColVal = s.value; 
       if (s.target && s.target.value)  
         seP.editColVal = s.target.value; 
+      if (s == 1)  
+        seP.editColVal = '1'; 
       this.getEditSvce.update(seP); 
     }   
 
@@ -209,6 +213,8 @@ export class TimeLineComponent implements OnInit {
   approve(){
     console.log("appreove" + this._id);
     this.data2.update({id:this._id, style: "color:blue"})
+    this.data2._data[this._id].approved == 1;
+    this.editReason(1, 'approved')
   }
   remove(){
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
