@@ -48,16 +48,14 @@ export class TimeLineComponent implements OnInit {
   data2: any;
   options: {};
   groups: any;
+  groupsArray: any;
   redraw: boolean;
   itemNum: string;
   qP: any;                                              // used to receive queryParams
 //  idSel: String;
   userkey: number;
-  categories = [
-    {id : 0, name: "Personal Vacation"},
-    {id : 1, name: "Other"},
-    {id : 2, name: "Meeting"},
-  ]
+
+  reasons = ["Personal Vacation", "Other", "Meeting"]
 
   reason: String;
   startDate: FormControl;
@@ -82,6 +80,10 @@ export class TimeLineComponent implements OnInit {
   nameToUserId: nameToUserId[]; 
   useridToUserkeys: useridToUserkey[];
   initStart: any;
+  startDateEdited: boolean;
+  endDateEdited: boolean;
+  reasonEdited: boolean;
+
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -129,10 +131,6 @@ export class TimeLineComponent implements OnInit {
       this.setQP(queryParams);
     })
   }
-  setTheData(s){
-    this.data2 = new vis.DataSet(s);
-    console.log(" data2  is " + this.nameList);
-  }
   setQP(qP){
     this.userid = qP.userid;                                              // store userid to decide which fields are editable
     this.getTimelineData2();                                              // get the data from REST database call. 
@@ -147,12 +145,13 @@ export class TimeLineComponent implements OnInit {
   
   getTimelineData2() 
   {
-    let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=2019-06-01&end=2019-08-01&userid=' + this.userid;
+    let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=2019-05-01&end=2019-10-01&userid=' + this.userid;
     this.http.get(url).subscribe(
       (val) => {
-        this.setTheData(val);                                                            // store data in this.data2
+        this.data2 = new vis.DataSet(val);                                                        // store data in this.data2
         this.setGroups(this.data2);                                                      // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);                                               // make a dataStruct for the groups
+      
         for( let i = 0; i < this.nameList.length; i++){                                   // foreach name found to have tA's
           this.groups.add({id:i, content:this.nameList[i], value:i})                      // add a group
         }
@@ -200,15 +199,19 @@ export class TimeLineComponent implements OnInit {
   }                                                           // end of getTimelineData2
   setGroups(s){                                                           // make a list of all user forWhich vacs have been found
     this.nameList = new Array();
+    this.groupsArray = new Array();
     for(let i=0; i< s.length; i++){                                        // step thru the data
       if (this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already there
         this.nameList.push( s._data[i].content);
         this.nameToUserId[i] = { lastName:s._data[i].content, userid: s._data[i].userkey }
-        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey }
-            
+        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey } 
+        this.groupsArray[s._data[i].userkey] = s._data[i].content         // used to get 'content' param to add to dataSet.
       }                     // add name 
     }
     this.nameList.sort();                                                 // alphabetize the nameList
+    var index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  //find arrayIndex of userId
+    var uKey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
+    this.userkey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
   }
   assignGroups(){                                                                       // put each tA in proper group. 
     for (var property in this.data2._data ) {
@@ -230,8 +233,6 @@ export class TimeLineComponent implements OnInit {
       seP.tableName = "vacation3";
       if (this.data2._data[itemNum]  )    
         seP.whereColVal = this.data2._data[itemNum].vidx;
-      else
-        this.needToInsert(colName, s);   
       seP.editColName = colName
       if (s.value)                                                      // if comes from a 'select' widget
         seP.editColVal = s.value; 
@@ -240,6 +241,7 @@ export class TimeLineComponent implements OnInit {
       if (s == 1)  
         seP.editColVal = '1'; 
       this.getEditSvce.update(seP); 
+      this.reasonEdited = true
     }   
 
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
@@ -251,20 +253,20 @@ export class TimeLineComponent implements OnInit {
     seP.tableName = "vacation3";
     if (this.data2._data[itemNum]  )                                    // if the IS an item to be edited
       seP.whereColVal = this.data2._data[itemNum].vidx;
-    else {
-      this.needToInsert(type, event);                                    // this is an INSERT
-      return;                                                           // don't do anything else
-    }
+
     var s = this.makeDateString(event)                                 
     if (`${type}` == 'start'){
       this.data2.update({id:itemNum, start: s});  
       seP.editColName = "startDate";    
       seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');    
+      this.startDateEdited = true;
     }                                                                   // update startDate
     if (`${type}` == 'end'){
       this.data2.update({id:itemNum, end: s});   
       seP.editColName = "endDate";    
       seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   
+      this.endDateEdited = true;
+
     }   
     this.getEditSvce.update(seP);          
   }
@@ -279,23 +281,7 @@ export class TimeLineComponent implements OnInit {
     var s =  month + "-" + editTime.getDate() + "-" + editTime.getFullYear();  
     return s;
   }
-  needToInsert(type, event){
-    if (type =='start')
-     this.newTAparams.startDate = this.makeDateString(event);
-    if (type =='end')
-     this.newTAparams.endDate = this.makeDateString(event);
-    if (type =='reason')
-     this.newTAparams.reason = event.value; 
-    if (type =='Notes')
-     this.newTAparams.Note = event.curentTarget.value; 
-    if (this.newTAparams.startDate.length > 0 && this.newTAparams.endDate.length > 0
-      &&  this.newTAparams.reason >= 0)
-    this.saveTimeAwayBool = true;                                      // show the Save TimeAway button
-    var index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  //find arrayIndex of userId
-    var uKey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
-    this.userkey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
-      console.log("cons is " + index + "userkey  is " + uKey) 
-  } 
+ 
  
   approve(){
     console.log("appreove" + this._id);
@@ -315,14 +301,42 @@ export class TimeLineComponent implements OnInit {
   saveNewTimeAway(){
     var params = <SinsertParams>{}
     params.tableName = "vacation3"
-    params.colName  = ['startDate', 'endDate', 'reason', 'userid']
+    params.colName  = ['startDate', 'endDate' , 'reason', 'userid']
     params.colVal = [this.makeDateString(this.startDate),this.makeDateString(this.endDate),this.reasonFC.value,this.userkey];
+  //  var index = this.nameToUserId.map(function(e) { return e.userid; }).indexOf(this.userkey.toString());
+  //  var foundLN = this.nameToUserId[index].lastName;
+    var content = this.groupsArray[this.userkey];
+  //  var index2 = this.groups._data.map(function(e) { return e.content; }).indexOf(foundLN);
+   // var foundGroupNum = this.groups[index2].
+    console.log("dounf " + content)
+   // let in = this.nameList.indexOf(userid: this.userkey);
+   // this.getEditSvce.insert(params);   
 
-    this.getEditSvce.insert(params);   
+
+  }
+  getGroupOfLoggedInUser(){
 
   }
   remove(){
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
     this.data2.remove(itemNum)
   }
+
+  needToInsert(type, event){
+    if (type =='start')
+     this.newTAparams.startDate = this.makeDateString(event);
+    if (type =='end')
+     this.newTAparams.endDate = this.makeDateString(event);
+    if (type =='reason')
+     this.newTAparams.reason = event.value; 
+    if (type =='Notes')
+     this.newTAparams.Note = event.curentTarget.value; 
+    if (this.newTAparams.startDate.length > 0 && this.newTAparams.endDate.length > 0
+      &&  this.newTAparams.reason >= 0)
+    this.saveTimeAwayBool = true;                                      // show the Save TimeAway button
+    var index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  //find arrayIndex of userId
+    var uKey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
+    this.userkey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
+      console.log("cons is " + index + "userkey  is " + uKey) 
+  } 
 }

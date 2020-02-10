@@ -2,7 +2,7 @@
 <div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()">
 
 </div>
-<div id="datums"  style="display:block"> </div>
+<div id="datums"  style="display:none"> </div>
 <br>
 
 <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
@@ -61,13 +61,12 @@
     <li class="item" *ngIf = "!this._readonly && !newTimeAwayBool"  >
         <button mat-raised-button>Delete </button>
     </li>
-    <li class="item" *ngIf = "saveTimeAwayBool" >
+    <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
             <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
     </li>
-  
 
 </ul>
-<div *ngIf = "!this.showControls ">
+<div >
 <button mat-raised-button (click) ="newTimeAway()"  >New Time Away 2</button>
 </div>
 <style type="text/css" >
