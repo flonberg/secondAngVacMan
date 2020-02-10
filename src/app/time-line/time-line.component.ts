@@ -1,5 +1,5 @@
 import { editParam } from './../dose-fx/dose-fx.component';
-import { GenEditService } from './../gen-edit.service';
+import { GenEditService, SinsertParams } from './../gen-edit.service';
 import { SeditParams } from './../gen-edit.service'
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -53,10 +53,16 @@ export class TimeLineComponent implements OnInit {
   qP: any;                                              // used to receive queryParams
 //  idSel: String;
   userkey: number;
-  reasons = ["Personal Vacation", "Other", "Meeting"]
+  categories = [
+    {id : 0, name: "Personal Vacation"},
+    {id : 1, name: "Other"},
+    {id : 2, name: "Meeting"},
+  ]
+
   reason: String;
   startDate: FormControl;
   endDate: FormControl;
+  reasonFC: FormControl;
   reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
@@ -75,6 +81,7 @@ export class TimeLineComponent implements OnInit {
   }
   nameToUserId: nameToUserId[]; 
   useridToUserkeys: useridToUserkey[];
+  initStart: any;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -88,6 +95,8 @@ export class TimeLineComponent implements OnInit {
   }
 
   clicked(){   // this responds to ANY click in the div containing the calendat                                             
+    console.log("clicked")
+ // window.location.reload();
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
        this._id = id;        
@@ -101,12 +110,17 @@ export class TimeLineComponent implements OnInit {
     if (this.data2._data[id]){                                    // if the timeAway is defined
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
-      if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) 
+      this.reasonFC = new FormControl("other");
+      if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
         this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
+       this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
       }
+      //  document.getElementById('reasonId').innerHTML= this.reasonSelect;
+      }
+      
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
-    }
+  }
   ngOnInit() {
     this.activatedRoute                                             // point to the route clicked on 
     .queryParams                                                    // look at the queryParams
@@ -128,6 +142,7 @@ export class TimeLineComponent implements OnInit {
     if (this.timelineContainer  ) {
       this.tlContainer = this.timelineContainer.nativeElement;
     }
+    this.initStart = document.getElementById('datums').innerHTML ;
   }
   
   getTimelineData2() 
@@ -149,6 +164,10 @@ export class TimeLineComponent implements OnInit {
       //    this.idSel = properties.items;                                                  // store the id for use in editing
           document.getElementById('datums').innerHTML = properties.items  ;               // store the id in the DOM for use by Angular
         });
+//        this.timeline.on('rangechanged', function ( properties){
+//          document.getElementById('datums').innerHTML = properties.start 
+ ///        if (properties.byUser) window.location.reload();
+  //      })
       }
     );
     this.options = {
@@ -249,6 +268,9 @@ export class TimeLineComponent implements OnInit {
     }   
     this.getEditSvce.update(seP);          
   }
+  insertTimeAway(){
+   
+  }
   makeDateString(event){
     var editTime = new Date(event.value);                               // date returned by DatePicker
     var month = editTime.getMonth() + 1;                                // get month to assemble to edit
@@ -271,10 +293,8 @@ export class TimeLineComponent implements OnInit {
     this.saveTimeAwayBool = true;                                      // show the Save TimeAway button
     var index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  //find arrayIndex of userId
     var uKey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
-    
+    this.userkey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
       console.log("cons is " + index + "userkey  is " + uKey) 
-
-   
   } 
  
   approve(){
@@ -286,10 +306,20 @@ export class TimeLineComponent implements OnInit {
   newTimeAway(){
     this.startDate = new FormControl();  
     this.endDate = new FormControl();  
+    this.reasonFC = new FormControl();
     this.showControls = true;
     this._readonly = false;
     this._id = '1';
     this.newTimeAwayBool = true;
+  }
+  saveNewTimeAway(){
+    var params = <SinsertParams>{}
+    params.tableName = "vacation3"
+    params.colName  = ['startDate', 'endDate', 'reason', 'userid']
+    params.colVal = [this.makeDateString(this.startDate),this.makeDateString(this.endDate),this.reasonFC.value,this.userkey];
+
+    this.getEditSvce.insert(params);   
+
   }
   remove(){
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited

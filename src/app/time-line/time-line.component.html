@@ -1,6 +1,8 @@
 
-<div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()"></div>
-<div id="datums"  style="display:none"> </div>
+<div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()">
+
+</div>
+<div id="datums"  style="display:block"> </div>
 <br>
 
 <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
@@ -23,10 +25,12 @@
     <li class="item" *ngIf =!_readonly>
         <mat-form-field>
             <mat-label>Reason</mat-label>
-                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"  >
+                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
+                 [formControl] = "reasonFC"  id='reasonId'>
                         <mat-option  value="0">Personal Vacation</mat-option>
                         <mat-option  value="1">Other</mat-option>
                         <mat-option   value="2">Meeting</mat-option>  
+                        
                 </mat-select>
         </mat-form-field>
     </li>
@@ -58,7 +62,7 @@
         <button mat-raised-button>Delete </button>
     </li>
     <li class="item" *ngIf = "saveTimeAwayBool" >
-            <button mat-raised-button  (click) ="newTimeAway()">Save New Time Away </button>
+            <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
     </li>
   
 
