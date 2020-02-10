@@ -49,6 +49,7 @@ export class TimeLineComponent implements OnInit {
   options: {};
   groups: any;
   groupsArray: any;
+  contentArray: any;
   redraw: boolean;
   itemNum: string;
   qP: any;                                              // used to receive queryParams
@@ -93,6 +94,7 @@ export class TimeLineComponent implements OnInit {
     this.isApprover = false; 
     this.nameToUserId = [ {lastName: '', userid: ''} ];
     this.useridToUserkeys = [{ userid:'Unknown', userkey: 0 }]
+    this.contentArray = [];
  
   }
 
@@ -154,6 +156,7 @@ export class TimeLineComponent implements OnInit {
       
         for( let i = 0; i < this.nameList.length; i++){                                   // foreach name found to have tA's
           this.groups.add({id:i, content:this.nameList[i], value:i})                      // add a group
+           this.groupsArray[i] = this.nameList[i];
         }
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
@@ -205,7 +208,7 @@ export class TimeLineComponent implements OnInit {
         this.nameList.push( s._data[i].content);
         this.nameToUserId[i] = { lastName:s._data[i].content, userid: s._data[i].userkey }
         this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey } 
-        this.groupsArray[s._data[i].userkey] = s._data[i].content         // used to get 'content' param to add to dataSet.
+        this.contentArray[s._data[i].userkey] = s._data[i].content         // used to get 'content' param to add to dataSet.
       }                     // add name 
     }
     this.nameList.sort();                                                 // alphabetize the nameList
@@ -303,16 +306,28 @@ export class TimeLineComponent implements OnInit {
     params.tableName = "vacation3"
     params.colName  = ['startDate', 'endDate' , 'reason', 'userid']
     params.colVal = [this.makeDateString(this.startDate),this.makeDateString(this.endDate),this.reasonFC.value,this.userkey];
-  //  var index = this.nameToUserId.map(function(e) { return e.userid; }).indexOf(this.userkey.toString());
-  //  var foundLN = this.nameToUserId[index].lastName;
-    var content = this.groupsArray[this.userkey];
+    var content = this.contentArray[this.userkey];
+    var groupNum = this.groupsArray.indexOf(content);
   //  var index2 = this.groups._data.map(function(e) { return e.content; }).indexOf(foundLN);
    // var foundGroupNum = this.groups[index2].
     console.log("dounf " + content)
    // let in = this.nameList.indexOf(userid: this.userkey);
    // this.getEditSvce.insert(params);   
 
+   var item = {
+    id: 34654,
+    type: 'background',
+    start: new Date(this.makeDateString(this.startDate)),
+    end: new Date(this.makeDateString(this.endDate)),
+   
+    content: content,
+    group: groupNum
+    
+  };
+  
+  this.timeline.itemsData.getDataSet().add(item);
 
+  console.log( "ffff " + this.timeline)
   }
   getGroupOfLoggedInUser(){
 
