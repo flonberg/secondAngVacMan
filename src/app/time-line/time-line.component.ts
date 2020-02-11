@@ -276,12 +276,10 @@ export class TimeLineComponent implements OnInit {
     this.getEditSvce.update(seP);          
   }
   remove(){
-    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
-
-    var vidx =   this.data2._data[this._id].vidx;
-    this.data2.remove(itemNum);
-    this.showControls = false; 
-    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
+    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited LOCALLY
+    var vidx =   this.data2._data[this._id].vidx;                       // vidx for dB remove
+    this.data2.remove(itemNum);                                         // remove LOCALLY
+    this.showControls = false;                                          // turn off controls
     var seP = <SeditParams>{};                                          // define instance of SeditParams interface
     seP.who = this.userid;
     seP.whereColName = "vidx";
@@ -289,10 +287,7 @@ export class TimeLineComponent implements OnInit {
     seP.tableName = "vacation3";
     seP.editColName = "reasonIdx";
     seP.editColVal = "99";
-    console.log("remove " + vidx);
-   
-      this.getEditSvce.update(seP); 
-   
+    this.getEditSvce.update(seP); 
   }
 
   makeDateString(event){
