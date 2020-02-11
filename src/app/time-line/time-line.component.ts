@@ -55,9 +55,7 @@ export class TimeLineComponent implements OnInit {
   qP: any;                                              // used to receive queryParams
 //  idSel: String;
   userkey: number;
-
   reasons = ["Personal Vacation", "Other", "Meeting"]
-
   reason: String;
   startDate: FormControl;
   endDate: FormControl;
@@ -84,6 +82,7 @@ export class TimeLineComponent implements OnInit {
   startDateEdited: boolean;
   endDateEdited: boolean;
   reasonEdited: boolean;
+  localAddId: number;
 
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
@@ -95,31 +94,31 @@ export class TimeLineComponent implements OnInit {
     this.nameToUserId = [ {lastName: '', userid: ''} ];
     this.useridToUserkeys = [{ userid:'Unknown', userkey: 0 }]
     this.contentArray = [];
+    this.localAddId = 34343;
+    this.newTimeAwayBool = false;                               // enable editing of existing tAs
  
   }
 
-  clicked(){   // this responds to ANY click in the div containing the calendat                                             
+  clicked(){                                                // this responds to ANY click in the div containing the calendat                                             
     console.log("clicked")
- // window.location.reload();
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
        this._id = id;        
        if (this._id !== "datums" )                                // shows user had clicked a box                 
-        this.showControls = true;
+        this.showControls = true;                                 // show editing controls
       }
     if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid)    // loggedInUser is timeAway owner so make widgets editable
-      this._readonly = false;
+      this._readonly = false;                                     // enable editing
     else                                            
-      this._readonly = true;  
+      this._readonly = true;                                      
     if (this.data2._data[id]){                                    // if the timeAway is defined
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
       this.reasonFC = new FormControl("other");
       if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
         this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
-       this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
-      }
-      //  document.getElementById('reasonId').innerHTML= this.reasonSelect;
+        this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
+        }
       }
       
     if (this.userid == 'napolitano' )                             // official 'approver'
@@ -248,6 +247,8 @@ export class TimeLineComponent implements OnInit {
     }   
 
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
+ //  if (this.newTimeAwayBool)
+   //   return;
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
     var seP = <SeditParams>{};                                          // define instance of SeditParams interface
     seP.who = this.userid;
@@ -285,7 +286,6 @@ export class TimeLineComponent implements OnInit {
     return s;
   }
  
- 
   approve(){
     console.log("appreove" + this._id);
     this.data2.update({id:this._id, style: "color:blue"})
@@ -308,27 +308,19 @@ export class TimeLineComponent implements OnInit {
     params.colVal = [this.makeDateString(this.startDate),this.makeDateString(this.endDate),this.reasonFC.value,this.userkey];
     var content = this.contentArray[this.userkey];
     var groupNum = this.groupsArray.indexOf(content);
-  //  var index2 = this.groups._data.map(function(e) { return e.content; }).indexOf(foundLN);
-   // var foundGroupNum = this.groups[index2].
-    console.log("dounf " + content)
-   // let in = this.nameList.indexOf(userid: this.userkey);
-   // this.getEditSvce.insert(params);   
-
-   var item = {
-    id: 34654,
-    type: 'background',
+   var item = {                                                           // set up dataStruct to add to timeLine DataSet
+    id: this.localAddId,    
     start: new Date(this.makeDateString(this.startDate)),
     end: new Date(this.makeDateString(this.endDate)),
-   
+    style: 'color:blue',
     content: content,
     group: groupNum
-    
   };
-  
-  this.timeline.itemsData.getDataSet().add(item);
-
-  console.log( "ffff " + this.timeline)
-  }
+  this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
+  this.localAddId++;                                                     // increment the id so can add additional tAs
+  this.newTimeAwayBool = false;                                         // enable editing of existing tAs  
+  this.getEditSvce.insert(params);
+}
   getGroupOfLoggedInUser(){
 
   }
