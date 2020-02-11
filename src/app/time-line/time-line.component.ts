@@ -60,6 +60,7 @@ export class TimeLineComponent implements OnInit {
   startDate: FormControl;
   endDate: FormControl;
   reasonFC: FormControl;
+  notesFC: FormControl;
   reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
@@ -96,7 +97,7 @@ export class TimeLineComponent implements OnInit {
     this.contentArray = [];
     this.localAddId = 34343;
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
- 
+    this.notesFC = new FormControl("");
   }
 
   clicked(){                                                // this responds to ANY click in the div containing the calendat                                             
@@ -115,6 +116,7 @@ export class TimeLineComponent implements OnInit {
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
       this.reasonFC = new FormControl("other");
+
       if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
         this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
         this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
@@ -172,11 +174,10 @@ export class TimeLineComponent implements OnInit {
       }
     );
     this.options = {
-      editable: {
-      //  add: true,         // add new items by double tapping
-      //  updateGroup: true, // drag items from one group to another
-      //  remove: true,       // delete an item by tapping the delete button top right
-        overrideItems: false  // allow these options to override item.editable
+   //   editable: true,
+      itemsAlwaysDraggable: {
+        item: true,
+        range: true
       },
       onAdd: function(item, callback) {
         if (item.content != null) {
@@ -304,22 +305,24 @@ export class TimeLineComponent implements OnInit {
   saveNewTimeAway(){
     var params = <SinsertParams>{}
     params.tableName = "vacation3"
-    params.colName  = ['startDate', 'endDate' , 'reason', 'userid']
-    params.colVal = [this.makeDateString(this.startDate),this.makeDateString(this.endDate),this.reasonFC.value,this.userkey];
-    var content = this.contentArray[this.userkey];
-    var groupNum = this.groupsArray.indexOf(content);
-   var item = {                                                           // set up dataStruct to add to timeLine DataSet
-    id: this.localAddId,    
-    start: new Date(this.makeDateString(this.startDate)),
-    end: new Date(this.makeDateString(this.endDate)),
-    style: 'color:blue',
-    content: content,
-    group: groupNum
+    params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'] // names of columns to INSERT
+    params.colVal = [this.makeDateString(this.startDate),this.makeDateString(this.endDate),this.reasonFC.value, this.notesFC.value, this.userkey];
+
+    var content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
+    var groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
+    var item = {                                                           // set up dataStruct to add to timeLine DataSet
+      id: this.localAddId,    
+      start: new Date(this.makeDateString(this.startDate)),
+      end: new Date(this.makeDateString(this.endDate)),
+      style: 'color:blue',
+      content: content,
+      group: groupNum
   };
+  console.log("item in save " + item);
   this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
   this.localAddId++;                                                     // increment the id so can add additional tAs
   this.newTimeAwayBool = false;                                         // enable editing of existing tAs  
-  this.getEditSvce.insert(params);
+  this.getEditSvce.insert(params);                                    //  insert into dB 
 }
   getGroupOfLoggedInUser(){
 
