@@ -101,13 +101,14 @@ export class TimeLineComponent implements OnInit {
   }
 
   clicked(){                                                // this responds to ANY click in the div containing the calendat                                             
-    console.log("clicked")
+
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
        this._id = id;        
        if (this._id !== "datums" )                                // shows user had clicked a box                 
         this.showControls = true;                                 // show editing controls
       }
+      console.log("clicked"  + id)
     if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid)    // loggedInUser is timeAway owner so make widgets editable
       this._readonly = false;                                     // enable editing
     else                                            
@@ -192,7 +193,7 @@ export class TimeLineComponent implements OnInit {
           callback(null); // cancel updating the item
         }
       },
-      selectable: true,
+      selectable: true, 
       start: new Date('2019-06-01'),
 //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       end: new Date('2019-08-01'),
@@ -253,7 +254,6 @@ export class TimeLineComponent implements OnInit {
     var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
     var seP = <SeditParams>{};                                          // define instance of SeditParams interface
     seP.who = this.userid;
-   
     seP.whereColName = "vidx";
     seP.tableName = "vacation3";
     if (this.data2._data[itemNum]  )                                    // if the IS an item to be edited
@@ -275,9 +275,26 @@ export class TimeLineComponent implements OnInit {
     }   
     this.getEditSvce.update(seP);          
   }
-  insertTimeAway(){
+  remove(){
+    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
+
+    var vidx =   this.data2._data[this._id].vidx;
+    this.data2.remove(itemNum);
+    this.showControls = false; 
+    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
+    var seP = <SeditParams>{};                                          // define instance of SeditParams interface
+    seP.who = this.userid;
+    seP.whereColName = "vidx";
+    seP.whereColVal = vidx;
+    seP.tableName = "vacation3";
+    seP.editColName = "reasonIdx";
+    seP.editColVal = "99";
+    console.log("remove " + vidx);
+   
+      this.getEditSvce.update(seP); 
    
   }
+
   makeDateString(event){
     var editTime = new Date(event.value);                               // date returned by DatePicker
     var month = editTime.getMonth() + 1;                                // get month to assemble to edit
@@ -318,19 +335,15 @@ export class TimeLineComponent implements OnInit {
       content: content,
       group: groupNum
   };
+
   console.log("item in save " + item);
   this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
   this.localAddId++;                                                     // increment the id so can add additional tAs
   this.newTimeAwayBool = false;                                         // enable editing of existing tAs  
   this.getEditSvce.insert(params);                                    //  insert into dB 
 }
-  getGroupOfLoggedInUser(){
 
-  }
-  remove(){
-    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
-    this.data2.remove(itemNum)
-  }
+
 
   needToInsert(type, event){
     if (type =='start')
