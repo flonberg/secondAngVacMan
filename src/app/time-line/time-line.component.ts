@@ -16,10 +16,7 @@ import { resetFakeAsyncZone } from '@angular/core/testing';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
-interface reasonString {
-  index: number;
-  rString: string;
-}
+
 interface newTAparams {
   startDate: string,
   endDate: string,
@@ -79,7 +76,6 @@ export class TimeLineComponent implements OnInit {
   }
   nameToUserId: nameToUserId[]; 
   useridToUserkeys: useridToUserkey[];
-  initStart: any;
   startDateEdited: boolean;
   endDateEdited: boolean;
   reasonEdited: boolean;
@@ -97,18 +93,17 @@ export class TimeLineComponent implements OnInit {
     this.useridToUserkeys = [{ userid:'Unknown', userkey: 0 }]
     this.contentArray = [];
     this.localAddId = 34343;
-    this.newTimeAwayBool = false;                               // enable editing of existing tAs
-    this.notesFC = new FormControl("");                                       
-
+    this.newTimeAwayBool = false;                               // enable editing of existing tAs                        
     this.seP.whereColName = "vidx";
     this.seP.tableName = "vacation3";
   }
 
-  clicked(){                                                // this responds to ANY click in the div containing the calendat                                             
-
+  clicked(){                             // this responds to ANY click in the div containing the calendar                                             
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
        this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet
+       if (!this.data2._data[this._id])                           // click was NOT in a tA box;
+        return;
        this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
        this.seP.whereColVal = this.data2._data[this._id].vidx;
        if (this._id !== "datums" )                                // shows user had clicked a box                 
@@ -123,6 +118,7 @@ export class TimeLineComponent implements OnInit {
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
       this.reasonFC = new FormControl("other");
+      this.notesFC = new FormControl("");   
 
       if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
         this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
@@ -151,18 +147,25 @@ export class TimeLineComponent implements OnInit {
     if (this.timelineContainer  ) {
       this.tlContainer = this.timelineContainer.nativeElement;
     }
-    this.initStart = document.getElementById('datums').innerHTML ;
   }
   
   getTimelineData2() 
   {
-    let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=2019-05-01&end=2019-10-01&userid=' + this.userid;
+    let startDate = new Date();  
+    let endDate = new Date();
+    endDate.setMonth(startDate.getMonth() + 4);
+    startDate.setFullYear(startDate.getFullYear() -1) ;                                                          // get today's date
+    endDate.setFullYear(endDate.getFullYear() -1) ;                                                          // get today's date
+   // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
+    let startDateString = this.datePipe.transform(startDate,'yyyy-MM-dd');                      // format it for dataBase startDate for getting tAs
+    let endDateString = this.datePipe.transform(endDate,'yyyy-MM-dd');                        // mm for endDate
+  
+    let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start='+startDateString+'&end='+ endDateString +'&userid=' + this.userid;
     this.http.get(url).subscribe(
       (val) => {
         this.data2 = new vis.DataSet(val);                                                        // store data in this.data2
         this.setGroups(this.data2);                                                      // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);                                               // make a dataStruct for the groups
-      
         for( let i = 0; i < this.nameList.length; i++){                                   // foreach name found to have tA's
           this.groups.add({id:i, content:this.nameList[i], value:i})                      // add a group
            this.groupsArray[i] = this.nameList[i];
@@ -172,21 +175,11 @@ export class TimeLineComponent implements OnInit {
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-      //    this.idSel = properties.items;                                                  // store the id for use in editing
           document.getElementById('datums').innerHTML = properties.items  ;               // store the id in the DOM for use by Angular
         });
-//        this.timeline.on('rangechanged', function ( properties){
-//          document.getElementById('datums').innerHTML = properties.start 
- ///        if (properties.byUser) window.location.reload();
-  //      })
       }
     );
     this.options = {
-   //   editable: true,
-      itemsAlwaysDraggable: {
-        item: true,
-        range: true
-      },
       onAdd: function(item, callback) {
         if (item.content != null) {
        //   var d = this.data;
@@ -201,9 +194,9 @@ export class TimeLineComponent implements OnInit {
         }
       },
       selectable: true, 
-      start: new Date('2019-06-01'),
+      start: new Date(startDateString),
 //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-      end: new Date('2019-08-01'),
+      end: new Date(endDateString),
 //      end: new Date(new Date().getFullYear(), new Date().getMonth()+ 2, 1),
 
     };
@@ -236,38 +229,36 @@ export class TimeLineComponent implements OnInit {
   clear(){
     console.log("clear " );
   }
-  editReason(s, colName){ 
-     // var itemNum = document.getElementById('datums').innerHTML;   
+  editReason(s, colName){                                                 // used to edit Reason and Note datums   
       var seP = <SeditParams>{};                                          // define instance of SeditParams interface
       seP.who = this.userid;
       seP.whereColName = "vidx";
       seP.tableName = "vacation3";
       if (this.data2._data[this._id] )    
-        seP.whereColVal = this.data2._data[this._id].vidx;
-      seP.editColName = colName
+        this.seP.whereColVal = this.data2._data[this._id].vidx;
+      this.seP.editColName = colName
       if (s.value)                                                      // if comes from a 'select' widget
-        seP.editColVal = s.value; 
+        this.seP.editColVal = s.value; 
       if (s.target && s.target.value)  
-        seP.editColVal = s.target.value; 
+        this.seP.editColVal = s.target.value; 
       if (s == 1)  
-        seP.editColVal = '1'; 
-      this.getEditSvce.update(seP); 
-      this.reasonEdited = true
+        this.seP.editColVal = '1'; 
+      this.getEditSvce.update(this.seP); 
+      this.reasonEdited = true;                                         // has to be true to show Save Time Away button
     }   
-
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
-    var s = this.makeDateString(event)                                 
+    var s = this.makeDateString(event)                                  // make the string for local update                   
     if (`${type}` == 'start'){
       this.data2.update({id:this._id, start: s});                       // do the local update
       this.seP.editColName = "startDate";    
       this.seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');    
       this.startDateEdited = true;
     }                                                                   // update startDate
-    if (`${type}` == 'end')
-    {                                           
+    if (`${type}` == 'end') {                                     
       this.data2.update({id:this._id, end: s});                         // update vis DataSet
       this.seP.editColName = "endDate";                                 // param for dB
-      this.seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   // mm
+      this.seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   // mm   
+      this.endDateEdited = true;
     }   
     this.getEditSvce.update(this.seP);                                  // do the dB edit. 
   }
@@ -277,8 +268,8 @@ export class TimeLineComponent implements OnInit {
     this.seP.editColName = "reasonIdx";                                 // reasonIdx is the DELETE signal column
     this.seP.editColVal = "99";                                         // any smallInt > 0 
     this.getEditSvce.update(this.seP); 
+ 
   }
-
   makeDateString(event){
     var editTime = new Date(event.value);                               // date returned by DatePicker
     var month = editTime.getMonth() + 1;                                // get month to assemble to edit
@@ -287,7 +278,6 @@ export class TimeLineComponent implements OnInit {
     var s =  month + "-" + editTime.getDate() + "-" + editTime.getFullYear();  
     return s;
   }
- 
   approve(){
     console.log("appreove" + this._id);
     this.data2.update({id:this._id, style: "color:blue"})

@@ -45,7 +45,7 @@
     <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
         <mat-form-field  class="wideItem">
             <mat-label class="smallLabel"> Note:</mat-label>
-            <textarea matInput  (change)="editReason($event, 'Notes')" [value]="this.data2._data[this._id].note"
+            <textarea matInput  (change)="editReason($event, 'note')" [value]="this.data2._data[this._id].note"
                 [formControl] = "notesFC"
                 cdkTextareaAutosize [readonly]="_readonly"
                 #autosize="cdkTextareaAutosize"
