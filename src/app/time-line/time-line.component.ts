@@ -84,7 +84,8 @@ export class TimeLineComponent implements OnInit {
   endDateEdited: boolean;
   reasonEdited: boolean;
   localAddId: number;
-
+  seP = <SeditParams>{};  // define instance of SeditParams interface
+  _vidx: string;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -97,14 +98,19 @@ export class TimeLineComponent implements OnInit {
     this.contentArray = [];
     this.localAddId = 34343;
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
-    this.notesFC = new FormControl("");
+    this.notesFC = new FormControl("");                                       
+
+    this.seP.whereColName = "vidx";
+    this.seP.tableName = "vacation3";
   }
 
   clicked(){                                                // this responds to ANY click in the div containing the calendat                                             
 
     if (document.getElementById("datums"))     {                     
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
-       this._id = id;        
+       this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet
+       this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
+       this.seP.whereColVal = this.data2._data[this._id].vidx;
        if (this._id !== "datums" )                                // shows user had clicked a box                 
         this.showControls = true;                                 // show editing controls
       }
@@ -137,6 +143,7 @@ export class TimeLineComponent implements OnInit {
   }
   setQP(qP){
     this.userid = qP.userid;                                              // store userid to decide which fields are editable
+    this.seP.who = this.userid;
     this.getTimelineData2();                                              // get the data from REST database call. 
   }
  
@@ -230,13 +237,13 @@ export class TimeLineComponent implements OnInit {
     console.log("clear " );
   }
   editReason(s, colName){ 
-      var itemNum = document.getElementById('datums').innerHTML;   
+     // var itemNum = document.getElementById('datums').innerHTML;   
       var seP = <SeditParams>{};                                          // define instance of SeditParams interface
       seP.who = this.userid;
       seP.whereColName = "vidx";
       seP.tableName = "vacation3";
-      if (this.data2._data[itemNum]  )    
-        seP.whereColVal = this.data2._data[itemNum].vidx;
+      if (this.data2._data[this._id] )    
+        seP.whereColVal = this.data2._data[this._id].vidx;
       seP.editColName = colName
       if (s.value)                                                      // if comes from a 'select' widget
         seP.editColVal = s.value; 
@@ -249,45 +256,27 @@ export class TimeLineComponent implements OnInit {
     }   
 
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
- //  if (this.newTimeAwayBool)
-   //   return;
-    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited
-    var seP = <SeditParams>{};                                          // define instance of SeditParams interface
-    seP.who = this.userid;
-    seP.whereColName = "vidx";
-    seP.tableName = "vacation3";
-    if (this.data2._data[itemNum]  )                                    // if the IS an item to be edited
-      seP.whereColVal = this.data2._data[itemNum].vidx;
-
     var s = this.makeDateString(event)                                 
     if (`${type}` == 'start'){
-      this.data2.update({id:itemNum, start: s});  
-      seP.editColName = "startDate";    
-      seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');    
+      this.data2.update({id:this._id, start: s});                       // do the local update
+      this.seP.editColName = "startDate";    
+      this.seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');    
       this.startDateEdited = true;
     }                                                                   // update startDate
-    if (`${type}` == 'end'){
-      this.data2.update({id:itemNum, end: s});   
-      seP.editColName = "endDate";    
-      seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   
-      this.endDateEdited = true;
-
+    if (`${type}` == 'end')
+    {                                           
+      this.data2.update({id:this._id, end: s});                         // update vis DataSet
+      this.seP.editColName = "endDate";                                 // param for dB
+      this.seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   // mm
     }   
-    this.getEditSvce.update(seP);          
+    this.getEditSvce.update(this.seP);                                  // do the dB edit. 
   }
   remove(){
-    var itemNum = document.getElementById('datums').innerHTML;          // item num to b edited LOCALLY
-    var vidx =   this.data2._data[this._id].vidx;                       // vidx for dB remove
-    this.data2.remove(itemNum);                                         // remove LOCALLY
+    this.data2.remove(this._id);                                         // remove LOCALLY
     this.showControls = false;                                          // turn off controls
-    var seP = <SeditParams>{};                                          // define instance of SeditParams interface
-    seP.who = this.userid;
-    seP.whereColName = "vidx";
-    seP.whereColVal = vidx;
-    seP.tableName = "vacation3";
-    seP.editColName = "reasonIdx";
-    seP.editColVal = "99";
-    this.getEditSvce.update(seP); 
+    this.seP.editColName = "reasonIdx";                                 // reasonIdx is the DELETE signal column
+    this.seP.editColVal = "99";                                         // any smallInt > 0 
+    this.getEditSvce.update(this.seP); 
   }
 
   makeDateString(event){
