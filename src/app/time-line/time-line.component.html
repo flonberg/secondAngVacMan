@@ -1,79 +1,85 @@
-<div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()">
-</div>
-<div id="datums"  style="display:none"> </div>
-<br>
-<div id="controls" >
-    <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
-    <li class="item">
-        <mat-form-field  class="item" >
-            <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
-            (dateInput)="editDate('start', $event)" (change) = "clear()" [formControl] = "startDate">
-            <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-            <mat-datepicker #picker ></mat-datepicker>
-        </mat-form-field>
-    </li>
-    <li class="item">
-        <mat-form-field  class="item" x>
-            <input matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
-            (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate" >
-            <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-            <mat-datepicker #epicker ></mat-datepicker>
-        </mat-form-field>
-    </li>
-    <li class="item" *ngIf =!_readonly>
-        <mat-form-field>
-            <mat-label>Reason</mat-label>
-                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
-                 [formControl] = "reasonFC"  id='reasonId'>
-                        <mat-option  value="0">Personal Vacation</mat-option>
-                        <mat-option  value="1">Other</mat-option>
-                        <mat-option   value="2">Meeting</mat-option>  
-                        
-                </mat-select>
-        </mat-form-field>
-    </li>
-<!--    This the readOnly version of the Reason control -->
-    <li class="wideItem" *ngIf =_readonly>
-        <mat-form-field>
-        <mat-label class="smallLabel"> Reason</mat-label>
-        <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
-        </mat-form-field>
-    </li>
 
-    <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
-        <mat-form-field  class="wideItem">
-            <mat-label class="smallLabel"> Note:</mat-label>
-            <textarea matInput  (change)="editReason($event, 'note')" [value]="this.data2._data[this._id].note"
-                [formControl] = "notesFC"
-                cdkTextareaAutosize [readonly]="_readonly"
-                #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="1"
-                cdkAutosizeMaxRows="5"
-                >
-            </textarea>
-        </mat-form-field >
-    </li> 
-  
-    <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
-            <button mat-raised-button>Approve </button>
-        </li>
-    <li class="item" *ngIf = "!this._readonly && !newTimeAwayBool" (click)= "remove()" >
-        <button mat-raised-button>Delete </button>
-    </li>
-    <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
-            <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
-    </li>
-</ul>
-<div >
-<button mat-raised-button (click) ="newTimeAway()"  >New Time Away </button>
-</div>
-</div>
+    <div id="container">  
+        <div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()">
+        </div>
+    </div>  
+    <div id="controls" >
+        <div>
+            <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
+            <li class="item">
+                <mat-form-field  class="item" >
+                    <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
+                    (dateInput)="editDate('start', $event)" (change) = "clear()" [formControl] = "startDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
+                    <mat-datepicker #picker ></mat-datepicker>
+                </mat-form-field>
+            </li>
+        
+            <li class="item">
+                <mat-form-field  class="item" x>
+                    <input matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
+                    (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate" >
+                    <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
+                    <mat-datepicker #epicker ></mat-datepicker>
+                </mat-form-field>
+            </li>
+            <li class="item" *ngIf =!_readonly>
+                <mat-form-field>
+                    <mat-label>Reason</mat-label>
+                        <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
+                         [formControl] = "reasonFC"  id='reasonId'>
+                                <mat-option  value="0">Personal Vacation</mat-option>
+                                <mat-option  value="1">Other</mat-option>
+                                <mat-option   value="2">Meeting</mat-option>  
+                                
+                        </mat-select>
+                </mat-form-field>
+            </li>
+        <!--    This the readOnly version of the Reason control -->
+            <li class="wideItem" *ngIf =_readonly>
+                <mat-form-field>
+                <mat-label class="smallLabel"> Reason</mat-label>
+                <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
+                </mat-form-field>
+            </li>
+        
+            <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
+                <mat-form-field  class="wideItem">
+                    <mat-label class="smallLabel"> Note:</mat-label>
+                    <textarea matInput  (change)="editReason($event, 'note')" [value]="this.data2._data[this._id].note"
+                        [formControl] = "notesFC"
+                        cdkTextareaAutosize [readonly]="_readonly"
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1"
+                        cdkAutosizeMaxRows="5"
+                        >
+                    </textarea>
+                </mat-form-field >
+            </li> 
+          
+            <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
+                    <button mat-raised-button>Approve </button>
+                </li>
+            <li class="item" *ngIf = "!this._readonly && !newTimeAwayBool" (click)= "remove()" >
+                <button mat-raised-button>Delete </button>
+            </li>
+            <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
+                    <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
+            </li>
+        </ul>
+        <div >
+        <button mat-raised-button (click) ="newTimeAway()"  >New Time Away </button>
+        </div>
+    </div>
+
+
 <style type="text/css" >
     #timeline {
         width: 100%;
         height: 60%;
     }
 </style>
+<div id="datums"  style="display:none"> </div>
 
 
 

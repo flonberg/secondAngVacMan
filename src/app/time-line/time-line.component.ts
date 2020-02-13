@@ -181,9 +181,9 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
           this.groups.add({id:i, content:this.nameList[i], value:i})                      // add a group
            this.groupsArray[i] = this.nameList[i];
         }
-        var top = this.nameList.length * 40;
+        var top = this.nameList.length * 20;
         var topString = top.toString() +"px";
-        document.getElementById('controls').style.setProperty("top", topString); 
+    //    document.getElementById('controls').style.setProperty("top", topString); 
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
         this.timeline.setOptions(this.options);
@@ -193,6 +193,7 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
         });
       }
     );
+
     this.options = {
       onAdd: function(item, callback) {
         if (item.content != null) {
