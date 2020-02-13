@@ -1,11 +1,9 @@
-
 <div id="timeline" #visjsTimeline *ngIf = "redraw"    (click) = "clicked()">
-
 </div>
 <div id="datums"  style="display:none"> </div>
 <br>
-
-<ul *ngIf = "this.showControls && this._id " class="flex-container  ">
+<div id="controls" >
+    <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
     <li class="item">
         <mat-form-field  class="item" >
             <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
@@ -65,16 +63,15 @@
     <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
             <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
     </li>
-
 </ul>
 <div >
 <button mat-raised-button (click) ="newTimeAway()"  >New Time Away </button>
 </div>
+</div>
 <style type="text/css" >
     #timeline {
         width: 100%;
-        height: 80%;
-       
+        height: 60%;
     }
 </style>
 

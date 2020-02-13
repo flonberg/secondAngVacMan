@@ -82,6 +82,9 @@ export class TimeLineComponent implements OnInit {
   localAddId: number;
   seP = <SeditParams>{};  // define instance of SeditParams interface
   _vidx: string;
+  endDateString: string;
+  startDateString: string;
+  endDateShownString: string;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -119,7 +122,6 @@ export class TimeLineComponent implements OnInit {
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
       this.reasonFC = new FormControl("other");
       this.notesFC = new FormControl("");   
-
       if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
         this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
         this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
@@ -134,13 +136,14 @@ export class TimeLineComponent implements OnInit {
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {                                     // get the queryParams as Observable
       this.qP = queryParams;
-      this.setQP(queryParams);
+      this.userid = queryParams.userid;                             // store userid to decide which fields are editable
+      this.seP.who = this.userid;
+      this.getTimelineData2();                                      // get the data from REST database call. 
     })
-  }
-  setQP(qP){
-    this.userid = qP.userid;                                              // store userid to decide which fields are editable
-    this.seP.who = this.userid;
-    this.getTimelineData2();                                              // get the data from REST database call. 
+    var scale = 'scale(.73)';
+document.body.style.webkitTransform =       // Chrome, Opera, Safari
+
+ document.body.style.transform = scale;     // General
   }
  
   ngAfterViewInit() {
@@ -151,25 +154,36 @@ export class TimeLineComponent implements OnInit {
   
   getTimelineData2() 
   {
-    let startDate = new Date();  
+    let todayDate = new Date();  
+    var startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     let endDate = new Date();
-    endDate.setMonth(startDate.getMonth() + 4);
-    startDate.setFullYear(startDate.getFullYear() -1) ;                                                          // get today's date
-    endDate.setFullYear(endDate.getFullYear() -1) ;                                                          // get today's date
-   // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
-    let startDateString = this.datePipe.transform(startDate,'yyyy-MM-dd');                      // format it for dataBase startDate for getting tAs
-    let endDateString = this.datePipe.transform(endDate,'yyyy-MM-dd');                        // mm for endDate
+    let endDateShown = new Date();
+    endDateShown.setMonth(startDate.getMonth() + 2);                                    // set endDate of shown TimeLine for 2 months
+    endDate.setMonth(startDate.getMonth() + 4);                                           // set 4 month interval for data collection
+    startDate.setFullYear(startDate.getFullYear() -1) ;                                  // for developement purpose use old data
+    endDate.setFullYear(endDate.getFullYear() -1) ;                                      // mm
+    endDateShown.setFullYear(endDateShown.getFullYear() -1) ;                            // mm
+   
+    // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
+    this.startDateString = this.datePipe.transform(startDate,'yyyy-MM-dd');                      // format it for dataBase startDate for getting tAs
+    this.endDateString = this.datePipe.transform(endDate,'yyyy-MM-dd');                        // mm for endDate
+    this.endDateShownString = this.datePipe.transform(endDateShown,'yyyy-MM-dd');                        // mm for endDate
   
-    let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start='+startDateString+'&end='+ endDateString +'&userid=' + this.userid;
+    let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start='+this.startDateString+'&end='+ this.endDateString +'&userid=' + this.userid;
     this.http.get(url).subscribe(
       (val) => {
-        this.data2 = new vis.DataSet(val);                                                        // store data in this.data2
+        this.data2 = new vis.DataSet(val);     
+                                                        // store data in this.data2
         this.setGroups(this.data2);                                                      // make this.nameList a  list of users who have timeAways found
-        this.groups = new vis.DataSet([]);                                               // make a dataStruct for the groups
-        for( let i = 0; i < this.nameList.length; i++){                                   // foreach name found to have tA's
+        this.groups = new vis.DataSet([]);    
+        let i = 0;                                           // make a dataStruct for the groups
+        for( i = 0; i < this.nameList.length; i++){                                   // foreach name found to have tA's
           this.groups.add({id:i, content:this.nameList[i], value:i})                      // add a group
            this.groupsArray[i] = this.nameList[i];
         }
+        var top = this.nameList.length * 40;
+        var topString = top.toString() +"px";
+        document.getElementById('controls').style.setProperty("top", topString); 
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
         this.timeline.setOptions(this.options);
@@ -194,9 +208,9 @@ export class TimeLineComponent implements OnInit {
         }
       },
       selectable: true, 
-      start: new Date(startDateString),
+      start: new Date(this.startDateString),
 //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-      end: new Date(endDateString),
+      end: new Date(this.endDateShownString),
 //      end: new Date(new Date().getFullYear(), new Date().getMonth()+ 2, 1),
 
     };
@@ -288,6 +302,7 @@ export class TimeLineComponent implements OnInit {
     this.startDate = new FormControl();  
     this.endDate = new FormControl();  
     this.reasonFC = new FormControl();
+  
     this.showControls = true;
     this._readonly = false;
     this._id = '1';
