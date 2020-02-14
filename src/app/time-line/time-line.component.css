@@ -9,39 +9,14 @@
 #container {
   border:solid;
   overflow:auto;
-  transform: scale(0.8, 0.8);
-
-}
-.mat-datepicker-calendar, .mat-datepicker-input-mask-opaque {
-    background: rgb(255,255,255);
-}
-.mat-datepicker-calendar, .mat-datepicker-input-mask-opaque {
-    background: rgb(255,255,255);
-}
 
 
-.mat-calendar-date.md-calendar-selected-date .mat-calendar-date-selection-indicator, .mat-calendar-date.md-focus.mat-calendar-selected-date .mat-calendar-date-selection-indicator {
-    background: rgb(33,150,243);
-    color: rgb(255,255,255);
-    border-color: transparent;
 }
 
-.mat-calendar-date-selection-indicator:hover {
-    background: rgb(224,224,224);
-}
-
-.mat-calendar-day-header {
-    background: rgb(224,224,224);
-    color: rgba(0,0,0,0.87);
-}
-
-.mat-calendar-date-disabled, .mat-calendar-month-label-disabled {
-    color: rgba(0,0,0,0.26);
-}
 #controls {
   position:relative;
-  height:800px;
-  background-color:pink;
+  height:100px;
+ 
   display: flex;
   justify-content: center;
   align-items: center;

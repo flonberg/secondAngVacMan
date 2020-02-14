@@ -43,6 +43,7 @@
                 </mat-form-field>
             </li>
         
+            
             <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
                 <mat-form-field  class="wideItem">
                     <mat-label class="smallLabel"> Note:</mat-label>
@@ -77,6 +78,7 @@
     #timeline {
         width: 100%;
         height: 60%;
+        font-size:8pt;
     }
 </style>
 <div id="datums"  style="display:none"> </div>

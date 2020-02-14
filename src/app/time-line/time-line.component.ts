@@ -85,6 +85,7 @@ export class TimeLineComponent implements OnInit {
   endDateString: string;
   startDateString: string;
   endDateShownString: string;
+  startDateShownString: string;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -158,8 +159,11 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
     var startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     let endDate = new Date();
     let endDateShown = new Date();
-    endDateShown.setMonth(startDate.getMonth() + 2);                                    // set endDate of shown TimeLine for 2 months
+    let numWeeks = 6;
+    endDateShown.setDate(startDate.getDate() + numWeeks * 7);                                    // set endDate of shown TimeLine for 2 months
     endDate.setMonth(startDate.getMonth() + 4);                                           // set 4 month interval for data collection
+
+    ////////////  go back for DEV only ///////////////
     startDate.setFullYear(startDate.getFullYear() -1) ;                                  // for developement purpose use old data
     endDate.setFullYear(endDate.getFullYear() -1) ;                                      // mm
     endDateShown.setFullYear(endDateShown.getFullYear() -1) ;                            // mm
@@ -167,9 +171,11 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
     // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
     this.startDateString = this.datePipe.transform(startDate,'yyyy-MM-dd');                      // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate,'yyyy-MM-dd');                        // mm for endDate
-    this.endDateShownString = this.datePipe.transform(endDateShown,'yyyy-MM-dd');                        // mm for endDate
+    this.endDateShownString = this.datePipe.transform(endDateShown,'yyyy-MM-dd');          // start date for opening of tL
+    this.startDateShownString = this.datePipe.transform(startDate,'yyyy-MM-dd');   
   
     let url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start='+this.startDateString+'&end='+ this.endDateString +'&userid=' + this.userid;
+    console.log(" url is " + url );
     this.http.get(url).subscribe(
       (val) => {
         this.data2 = new vis.DataSet(val);     
@@ -209,7 +215,7 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
         }
       },
       selectable: true, 
-      start: new Date(this.startDateString),
+      start: new Date(this.startDateShownString),
 //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       end: new Date(this.endDateShownString),
 //      end: new Date(new Date().getFullYear(), new Date().getMonth()+ 2, 1),
