@@ -22,6 +22,7 @@ import { DatePipe } from '@angular/common';
 import { NavBarVMComponent } from './nav-bar-vm/nav-bar-vm.component';
 
 import { MatTabsModule } from '@angular/material';
+import { MonthViewComponent } from './month-view/month-view.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatTabsModule } from '@angular/material';
     AutocompleteFilterExample,
     TimeLineComponent,
     NavBarVMComponent,
+    MonthViewComponent,
 
   ],
   imports: [
@@ -47,7 +49,7 @@ import { MatTabsModule } from '@angular/material';
     FormsModule,
     MatAutocompleteModule,
     RouterModule.forRoot([
-      { path: 'WWD', component: DoseFxComponent },
+      { path: 'Monthview', component: MonthViewComponent },
       { path: 'WWD/:docidx', component: DoseFxComponent},
       { path: 'VacMan**', component: TimeLineComponent},
       { path: '**', component: TimeLineComponent}

@@ -86,6 +86,7 @@ export class TimeLineComponent implements OnInit {
   startDateString: string;
   endDateShownString: string;
   startDateShownString: string;
+  index: number;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -100,6 +101,10 @@ export class TimeLineComponent implements OnInit {
     this.newTimeAwayBool = false;                               // enable editing of existing tAs                        
     this.seP.whereColName = "vidx";
     this.seP.tableName = "vacation3";
+  }
+  setIndex(n){
+    this.index = n;
+    console.log("index is " + this.index);
   }
 
   clicked(){                             // this responds to ANY click in the div containing the calendar                                             
@@ -140,7 +145,8 @@ export class TimeLineComponent implements OnInit {
       this.qP = queryParams;
       this.userid = queryParams.userid;                             // store userid to decide which fields are editable
       this.seP.who = this.userid;
-      this.getTimelineData2();                                      // get the data from REST database call. 
+  
+        this.getTimelineData2();                                      // get the data from REST database call. 
     })
     var scale = 'scale(.73)';
 document.body.style.webkitTransform =       // Chrome, Opera, Safari
@@ -150,6 +156,7 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
  
   ngAfterViewInit() {
     if (this.timelineContainer  ) {
+  
       this.tlContainer = this.timelineContainer.nativeElement;
     }
   }

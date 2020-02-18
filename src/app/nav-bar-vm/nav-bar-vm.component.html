@@ -7,13 +7,13 @@
        [queryParams]="{userid:'kung' }"
        routerLinkActive="mat-tab-link-active"
        #rla="routerLinkActive"
-       (click)="activeLinkIndex = i"
-       [routerLinkActiveOptions]="{exact: true}"
+       (click)="tlc.setIndex(i)"
+        [routerLinkActiveOptions]="{exact: true}"
     >
         {{routeLink.label}}
-  </button>
-</nav>
+    </button>
+  </nav>
 </div>
 <div > 
-  <router-outlet></router-outlet>
+  <router-outlet ></router-outlet>
 </div>
