@@ -1,3 +1,4 @@
+import { TimeLineComponent } from './../time-line/time-line.component';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarVMComponent implements OnInit {
   routeLinks: any[];
-  constructor() { 
+  userid: String;
+  constructor(private tlc: TimeLineComponent) { 
+    this.userid = tlc.userid;
     this.routeLinks = [
       {
           label: 'Vacation Manager',

@@ -54,7 +54,7 @@ import { MatTabsModule } from '@angular/material';
     ])
 
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, TimeLineComponent],
   bootstrap: [AppComponent],
  
 })
