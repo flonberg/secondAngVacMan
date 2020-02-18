@@ -103,9 +103,10 @@ export class TimeLineComponent implements OnInit {
   }
 
   clicked(){                             // this responds to ANY click in the div containing the calendar                                             
-    if (document.getElementById("datums"))     {                     
+    if (document.getElementById("datums"))     {             
+      this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet               
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
-       this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet
+
        if (!this.data2._data[this._id])                           // click was NOT in a tA box;
         return;
        this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing

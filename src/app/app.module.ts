@@ -19,6 +19,9 @@ import { TimeLineComponent } from './time-line/time-line.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DatePipe } from '@angular/common';
+import { NavBarVMComponent } from './nav-bar-vm/nav-bar-vm.component';
+
+import { MatTabsModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,7 @@ import { DatePipe } from '@angular/common';
     DoseFxComponent,
     AutocompleteFilterExample,
     TimeLineComponent,
+    NavBarVMComponent,
 
   ],
   imports: [
@@ -45,6 +49,7 @@ import { DatePipe } from '@angular/common';
     RouterModule.forRoot([
       { path: 'WWD', component: DoseFxComponent },
       { path: 'WWD/:docidx', component: DoseFxComponent},
+      { path: 'VacMan**', component: TimeLineComponent},
       { path: '**', component: TimeLineComponent}
     ])
 

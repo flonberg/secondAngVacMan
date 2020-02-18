@@ -1,0 +1,19 @@
+<div class = "tab">
+  <nav md-tab-nav-bar >
+    <button md-tab-link
+      class="button"
+       *ngFor="let routeLink of routeLinks; let i = index;"
+       [routerLink]="routeLink.link"
+       [queryParams]="{userid:'kung' }"
+       routerLinkActive="mat-tab-link-active"
+       #rla="routerLinkActive"
+       (click)="activeLinkIndex = i"
+       [routerLinkActiveOptions]="{exact: true}"
+    >
+        {{routeLink.label}}
+  </button>
+</nav>
+</div>
+<div>
+  <router-outlet></router-outlet>
+</div>
