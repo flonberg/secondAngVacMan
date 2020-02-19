@@ -4,16 +4,17 @@
       class="button"
        *ngFor="let routeLink of routeLinks; let i = index;"
        [routerLink]="routeLink.link"
-       [queryParams]="{userid:'kung' }"
        routerLinkActive="mat-tab-link-active"
+       queryParamsHandling="merge"
        #rla="routerLinkActive"
        (click)="tlc.setIndex(i)"
-        [routerLinkActiveOptions]="{exact: true}"
+        [routerLinkActiveOptions]="{exact: false}"
     >
-        {{routeLink.label}}
+        {{routeLink.label }}
     </button>
   </nav>
 </div>
+
 
 <div > 
   <router-outlet ></router-outlet>

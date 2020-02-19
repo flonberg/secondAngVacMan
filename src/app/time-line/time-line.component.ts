@@ -87,6 +87,7 @@ export class TimeLineComponent implements OnInit {
   endDateShownString: string;
   startDateShownString: string;
   index: number;
+  useridP: string;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService, 
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -144,12 +145,20 @@ export class TimeLineComponent implements OnInit {
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {                                     // get the queryParams as Observable
       this.qP = queryParams;
-      this.userid = queryParams.userid;                             // store userid to decide which fields are editable
-      this.seP.who = this.userid;
+      this.setQueryParams(queryParams);
+     console.log(" this.userit " + this.userid);
+        this.seP.who = this.userid;
   
         this.getTimelineData2();                                      // get the data from REST database call. 
     })
 
+  }
+  setQueryParams(qP){
+    if (qP.userid){
+      this.useridP = qP.userid;
+      this.userid = qP.userid;
+    }
+    console.log( "setA " + this.userid);
   }
  
   ngAfterViewInit() {
