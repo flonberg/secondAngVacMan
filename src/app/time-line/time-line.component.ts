@@ -101,6 +101,7 @@ export class TimeLineComponent implements OnInit {
     this.newTimeAwayBool = false;                               // enable editing of existing tAs                        
     this.seP.whereColName = "vidx";
     this.seP.tableName = "vacation3";
+    this.index = 0;
   }
   setIndex(n){
     this.index = n;
@@ -148,10 +149,7 @@ export class TimeLineComponent implements OnInit {
   
         this.getTimelineData2();                                      // get the data from REST database call. 
     })
-    var scale = 'scale(.73)';
-document.body.style.webkitTransform =       // Chrome, Opera, Safari
 
- document.body.style.transform = scale;     // General
   }
  
   ngAfterViewInit() {
@@ -163,6 +161,7 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
   
   getTimelineData2() 
   {
+   
     let todayDate = new Date();  
     var startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     let endDate = new Date();
@@ -186,7 +185,10 @@ document.body.style.webkitTransform =       // Chrome, Opera, Safari
     console.log(" url is " + url );
     this.http.get(url).subscribe(
       (val) => {
-        this.data2 = new vis.DataSet(val);     
+        if (this.index == 0)
+          this.data2 = new vis.DataSet(val);  
+        else
+          this.data2 = Array();     
                                                         // store data in this.data2
         this.setGroups(this.data2);                                                      // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);    

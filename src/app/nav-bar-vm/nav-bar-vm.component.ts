@@ -17,8 +17,8 @@ export class NavBarVMComponent implements OnInit {
           link: './VacMan',
           index: 0
       }, {
-          label: 'Month View',
-          link: './VacMan',
+          label: 'Monthview',
+          link: './MonthView',
           index: 1
       }
   ];

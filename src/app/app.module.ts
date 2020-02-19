@@ -49,10 +49,11 @@ import { MonthViewComponent } from './month-view/month-view.component';
     FormsModule,
     MatAutocompleteModule,
     RouterModule.forRoot([
-      { path: 'Monthview', component: MonthViewComponent },
+      { path: 'MonthView', component: MonthViewComponent },
       { path: 'WWD/:docidx', component: DoseFxComponent},
       { path: 'VacMan**', component: TimeLineComponent},
-      { path: '**', component: TimeLineComponent}
+      { path: 'VacMan/:userid', component: TimeLineComponent},
+     { path: '**', component: TimeLineComponent}
     ])
 
   ],
