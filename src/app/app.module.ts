@@ -23,6 +23,7 @@ import { NavBarVMComponent } from './nav-bar-vm/nav-bar-vm.component';
 
 import { MatTabsModule } from '@angular/material';
 import { MonthViewComponent } from './month-view/month-view.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { MonthViewComponent } from './month-view/month-view.component';
     TimeLineComponent,
     NavBarVMComponent,
     MonthViewComponent,
-
+  
   ],
   imports: [
     BrowserModule,
@@ -57,6 +58,7 @@ import { MonthViewComponent } from './month-view/month-view.component';
     ])
 
   ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [DatePipe, TimeLineComponent],
   bootstrap: [AppComponent],
  
