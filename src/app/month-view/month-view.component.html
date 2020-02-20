@@ -1,8 +1,9 @@
 <div >  
   Monthview works
 </div>
-
+<button (click) = 'nextMonth(1)'>Next Month </button>
 <table>
+  <caption> {{ monthName }} </caption>
   <tr>
       <th> Monday</th>
       <th> Tuesday</th>
@@ -11,6 +12,21 @@
       <th> Friday</th>
   </tr>
   <tr>
-   
+    <td *ngFor=" let dayEl of daysS[0] "> {{ dayEl.dayNumber }} </td>
+  </tr>
+  <tr>
+      <td *ngFor=" let dayEl of daysS[1] "> {{ dayEl.dayNumber }} </td>
+  </tr>
+  <tr>
+      <td *ngFor=" let dayEl of daysS[2] "> {{ dayEl.dayNumber }} </td>
+  </tr>
+  <tr>
+      <td *ngFor=" let dayEl of daysS[3] "> {{ dayEl.dayNumber }} </td>
+  </tr>
+  <tr>
+      <td *ngFor=" let dayEl of daysS[4] "> {{ dayEl.dayNumber }} </td>
+  </tr>
+  <tr>
+      <td *ngFor=" let dayEl of daysS[5] "> {{ dayEl.dayNumber }} </td>
   </tr>
 </table>
