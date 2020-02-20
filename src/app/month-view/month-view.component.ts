@@ -5,6 +5,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 interface dateBox {
   dayNumber: number;
+  isInCurrMonth: string;
   date: Date;
   covererUserId: {
     serviceId: number,
@@ -35,15 +36,16 @@ export class MonthViewComponent implements OnInit {
   }
   nextMonth(nn)
   {
-    this.daysS = Array(Array());
+    this.daysS = Array(Array());                                                            // make array to hold daysS structures
     var tmpDate = new Date();
-    this.date = new Date('2020-11-28'); 
-    this.monthNumber += nn;
-    if (this.monthNumber > 0)
-    this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));  
-    this.monthName = this.datePipe.transform(this.date, 'MMMM');                                                  // set the date, done by queryParam
+    this.date = new Date('2020-01-28');                                                     //  this will be set to today in production
+    this.monthNumber += nn;                                                                 // increment or decrement month by button
+    if (nn != 0)                                                                            // if date has been changed by button  
+      this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));     // make the new date
+    this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                       // used for the caption on the calendar                           // set the date, done by queryParam
     var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);              
-    var lastDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
+    var monthShowNumber = this.date.getMonth();                                              // use to grey out days NOT in monthShown
+    // var lastDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
     var dowFD = firstDayOfShownMonth.getDay();                                                // det dayOfWeek e.g. 5 for Friday, 0 = Sunday
     var n = 0;
     this.daysS = Array(Array());                                                              // create 2D array hold days  [week][day]
@@ -61,12 +63,15 @@ export class MonthViewComponent implements OnInit {
         this.daysS[0][i].dayNumber = firstDayOnCal;                                             // set dayNumber element of interface
         if ( i == 0)
           this.daysS[0][i].date = new Date(lastDayPrevMonth.getFullYear(), lastDayPrevMonth.getMonth(), firstDayOnCal);  // set first date on Calendar in array
+          this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
         firstDayOnCal++; 
         if (i > 0 )  {                            // go to next day
           tmpDate =  new Date(this.daysS[0][i-1].date.getFullYear(), this.daysS[0][i-1].date.getMonth(), this.daysS[0][i-1].date.getDate()) // make a date to increment
                                                                                                 // from the previous entry in the loop
           tmpDate.setDate(tmpDate.getDate() + 1);                                               // increment the date
           this.daysS[0][i].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());                                                      // put that date in the dateBox of the MonthStructure
+          this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
+
         }
         if (firstDayOnCal == lastDayNum + 1)                                                    // if it is greater than lastDayOfMonth
           firstDayOnCal = 1;                                                                    // go to 1, for the first day of monthShown 
@@ -89,6 +94,7 @@ export class MonthViewComponent implements OnInit {
               this.daysS[i][j] = <dateBox>{};                                                         // define an instance of the daysS interface
               this.daysS[i][j].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());    // put date in daysS dataStructure.
               this.daysS[i][j].dayNumber = tmpDate.getDate();
+              this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";   
         }
     }
     console.log("i is "   )

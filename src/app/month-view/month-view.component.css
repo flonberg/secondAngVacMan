@@ -3,3 +3,9 @@ td {
     width: 200px;
     height: 140px;
 }
+.inMonth {
+    background-color: rgb(241, 212, 212);
+}
+.outMonth {
+    background-color: grey;
+}
