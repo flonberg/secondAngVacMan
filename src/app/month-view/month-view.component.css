@@ -6,7 +6,6 @@
   button {
     background-color: var(--accent);
 }
-
 td {
     border:solid;
     width: 200px;
@@ -26,6 +25,9 @@ td {
     height: 80px;
     width:100px;
   
+}
+.dow {
+    color:black;
 }
 .accent {
     background-color: var(--accent);

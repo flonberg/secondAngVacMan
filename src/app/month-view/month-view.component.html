@@ -21,7 +21,7 @@
   
   <div id="header" class="flex-container">
     <table>
-      <tr>
+      <tr class="dow">
           <th > Monday</th>
           <th> Tuesday</th>
           <th> Wednesday</th>
@@ -30,11 +30,10 @@
       </tr>
       <tr *ngFor = " let week of daysS">
         <td [class]="dayEl.isInCurrMonth"   *ngFor=" let dayEl of week ">
-          <div id=#dateHeader > 
-          </div>  
+   
           <table style="width:100%;">
             <caption> {{ dayEl.dayNumber }} </caption>
-            <tr class="one"><th>1</th></tr>
+            <tr class="one"><th>Mauceri</th></tr>
             <tr class="two"><th>2</th></tr>
             <tr class="three"><th>3</th></tr>
             <tr class="four"><th>4</th></tr>
