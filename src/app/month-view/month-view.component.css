@@ -1,11 +1,74 @@
+
+  :host{
+    --accent:rgb(210, 210, 247);
+    --disable:rgb(182, 179, 179);
+  }
+  button {
+    background-color: var(--accent);
+}
+
 td {
     border:solid;
     width: 200px;
     height: 140px;
 }
 .inMonth {
-    background-color: rgb(241, 212, 212);
+    background-color: rgb(245, 230, 230);  
 }
 .outMonth {
-    background-color: grey;
+    background-color: var(--disable)
 }
+#header {
+    text-align: center;
+
+}
+#legend {
+    height: 80px;
+    width:100px;
+  
+}
+.accent {
+    background-color: var(--accent);
+}
+.title {
+    font-size:18pt;
+}
+.smallTable {
+    table-layout:fixed;
+    width:200px;
+    height:40px;;
+}
+tr {
+    font-size:12pt;
+    color:white;
+}
+caption {
+    color:black;
+    font-size:18pt;
+}
+.flex-container {
+    display: flex;
+    justify-content:center;
+    width:100%;
+    height:120px;
+ 
+  }
+  
+  .flex-container > div {
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+  }
+  .one {
+      background-color:rgb(180, 180, 248);
+  }
+  .two {
+    background-color:rgb(143, 143, 223)
+    }
+.three {
+    background-color:rgb(99, 99, 175)
+    }
+.four {
+    background-color:rgb(70, 70, 161)
+    }
+

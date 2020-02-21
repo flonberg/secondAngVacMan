@@ -19,8 +19,6 @@ interface dateBox {
   styleUrls: ['./month-view.component.css']
 })
 
-
-
 export class MonthViewComponent implements OnInit {
   prevMonthLastDays:[];
   daysS: dateBox[][];
@@ -31,29 +29,24 @@ export class MonthViewComponent implements OnInit {
   constructor(private datePipe: DatePipe) { }
 
   ngOnInit(){
-    this.nextMonth(0);
-    this.monthNumber = 0;
+    this.nextMonth(0);                                                                      // draw the calendar for current month
+    this.monthNumber = 0;                                                                   // number for going forward or back. 
   }
   nextMonth(nn)
   {
     this.daysS = Array(Array());                                                            // make array to hold daysS structures
-    var tmpDate = new Date();
+    var tmpDate = new Date();                                                               // this is the date which will be incremented
     this.date = new Date('2020-01-28');                                                     //  this will be set to today in production
-    this.monthNumber += nn;                                                                 // increment or decrement month by button
+    this.monthNumber += nn;                                                                 // nn will be either +1 of -1 to go forward or bacf
     if (nn != 0)                                                                            // if date has been changed by button  
       this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));     // make the new date
     this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                       // used for the caption on the calendar                           // set the date, done by queryParam
     var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);              
     var monthShowNumber = this.date.getMonth();                                              // use to grey out days NOT in monthShown
-    // var lastDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
-    var dowFD = firstDayOfShownMonth.getDay();                                                // det dayOfWeek e.g. 5 for Friday, 0 = Sunday
-    var n = 0;
-    this.daysS = Array(Array());                                                              // create 2D array hold days  [week][day]
-    console.log("fd  " + dowFD);
-   // date.setMonth(date.getMonth() - 1);
+    var dowFD = firstDayOfShownMonth.getDay();                                                // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, of firstDayOfMonthShown
     var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);                
-    var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                          //  e.g. for Jan 31  ->  31
-    var firstDayOnCal = lastDayNum - (dowFD -2);   // get dayNum of first Monday on Cal       //  det how many days from prev. month we need. e.g Thurs we need 5 - 2 = 3
+    var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                          //  e.g. for March   ->  31
+    var firstDayOnCal = lastDayNum - (dowFD -2);   // get dayNum of first Monday on Cal       //  E.g. April 1 is Wed. to firstDayShown is March 29, so firstDanOnCal = 29
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
     if (dowFD > 0 && dowFD < 6){                                                               // if the firstDayOfMonth is NOT Sat or Sun  
       for (let i = 0;  i < 5; i++){                                                              // make the 5 days of the first week;

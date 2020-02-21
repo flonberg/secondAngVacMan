@@ -1,33 +1,47 @@
-<div >  
-  Monthview works
-</div>
-<button (click) = 'nextMonth(-1)'>Previous Month </button>
-<button (click) = 'nextMonth(1)'>Next Month </button>
-<table>
-  <caption> {{ monthName }} </caption>
-  <tr>
-      <th> Monday</th>
-      <th> Tuesday</th>
-      <th> Wednesday</th>
-      <th> Thursday</th>
-      <th> Friday</th>
-  </tr>
-  <tr>
-    <td [class]="dayEl.isInCurrMonth"   *ngFor=" let dayEl of daysS[0] "> {{ dayEl.dayNumber }}  </td>
-  </tr>
-  <tr>
-      <td  [class]="dayEl.isInCurrMonth"  *ngFor=" let dayEl of daysS[1] "> {{ dayEl.dayNumber }} </td>
-  </tr>
-  <tr>
-      <td  [class]="dayEl.isInCurrMonth"  *ngFor=" let dayEl of daysS[2] "> {{ dayEl.dayNumber }} </td>
-  </tr>
-  <tr>
-      <td  [class]="dayEl.isInCurrMonth"  *ngFor=" let dayEl of daysS[3] "> {{ dayEl.dayNumber }} </td>
-  </tr>
-  <tr>
-      <td  [class]="dayEl.isInCurrMonth"  *ngFor=" let dayEl of daysS[4] "> {{ dayEl.dayNumber }} </td>
-  </tr>
-  <tr>
-      <td  [class]="dayEl.isInCurrMonth"  *ngFor=" let dayEl of daysS[5] "> {{ dayEl.dayNumber }} </td>
-  </tr>
-</table>
+<div class="wholePage">
+  <div id="header" class="flex-container">
+    <div>
+      <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
+    </div>
+      <div class="title"> {{ monthName }}</div> 
+    <div>
+    <button (click) = 'nextMonth(1)'   mat-raised-button class="accent"  >Next Month </button>
+    </div>  
+    <div id="legend">
+      <div>
+        <table class="smallTable">
+            <tr class="one"><th>MorningA/IORT</th></tr>
+            <tr class="two"><th>MorningB</th></tr>
+            <tr class="three"><th>EveningA</th></tr>
+            <tr class="four"><th>EveningB</th></tr>
+        </table>
+      </div>    
+    </div>
+  </div>
+  
+  <div id="header" class="flex-container">
+    <table>
+      <tr>
+          <th > Monday</th>
+          <th> Tuesday</th>
+          <th> Wednesday</th>
+          <th> Thursday</th>
+          <th> Friday</th>
+      </tr>
+      <tr *ngFor = " let week of daysS">
+        <td [class]="dayEl.isInCurrMonth"   *ngFor=" let dayEl of week ">
+          <div id=#dateHeader > 
+          </div>  
+          <table style="width:100%;">
+            <caption> {{ dayEl.dayNumber }} </caption>
+            <tr class="one"><th>1</th></tr>
+            <tr class="two"><th>2</th></tr>
+            <tr class="three"><th>3</th></tr>
+            <tr class="four"><th>4</th></tr>
+          </table>
+        </td>
+      </tr>
+      
+    </table>
+  </div>
+</div>    
