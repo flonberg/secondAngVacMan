@@ -3,7 +3,7 @@
 <div >
     
     <div id="container">  
-        <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked(event)">
+        <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)">
         </div>
         <input id="chData" value="test" >  
     </div>  
@@ -79,7 +79,7 @@
 
     </div>
 </div>
-<div id="datums"  style="display:none"> </div>
+<div id="datums"  style="display:block"> </div>
 
 <style type="text/css" >
     #timeline {

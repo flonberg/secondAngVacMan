@@ -224,6 +224,7 @@ export class TimeLineComponent implements OnInit {
           document.getElementById('datums').innerHTML = properties.items  ;   
                      // store the id in the DOM for use by Angular
         });
+ 
    
       
       function logEvent(event, properties) {
@@ -236,8 +237,15 @@ export class TimeLineComponent implements OnInit {
     }
     );
 
+    
     this.options = {
-      editable: true,
+  /*    editable: {
+        updateTime: true,  // drag items horizontally
+      //  updateGroup: true, // drag items from one group to another
+        remove: false,       // delete an item by tapping the delete button top right
+        add: true,         // add new items by double tapping
+      },
+ */
   /*
       onAdd: function(item, callback) {
         if (item.content != null) {
