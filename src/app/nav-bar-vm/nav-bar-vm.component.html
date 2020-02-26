@@ -1,10 +1,10 @@
 <div class = "tab">
-  <nav md-tab-nav-bar >
-    <button md-tab-link
+  <nav  >
+    <button 
       class="button"
        *ngFor="let routeLink of routeLinks; let i = index;"
        [routerLink]="routeLink.link"
-       routerLinkActive="mat-tab-link-active"
+       routerLinkActive="tab-link-active"
        queryParamsHandling="merge"
        #rla="routerLinkActive"
        (click)="tlc.setIndex(i)"

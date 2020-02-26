@@ -1,11 +1,4 @@
 
-#parent {
-  background-color:yellow;
-  position: absolute;
-  top: 0px;
-  width: 90%;
-  height:100%;
-}
 #container {
   border:solid;
   overflow:auto;
