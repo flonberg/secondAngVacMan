@@ -3,55 +3,51 @@
   border:solid;
   overflow:auto;
 }
-
-
-
-
 #controls {
   position:relative;
   height:100px;
   width:100%;
-
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-
 }
 .vis-item.red {
     color: white;
     background-color: red;
     border-color: darkred;
   }
-  .form-width{
+.form-width{
     width:100px;
   }
-  .flex-container {
+.flex-container {
     padding: 0;
     margin: 0;
     list-style: none;
     display: flex;
-
     width:80%;
     justify-content: space-evenly;
   }
-  .wideItem {
+.wideItem {
     width: 250px;
   }
-  .item {
+ /* 
+.item {
     width: 100px;
+    background-color:green;
   }
-  .space-evenly { 
+  */
+.space-evenly { 
     justify-content: space-evenly; 
   }
-  .vis-item.approved {
+.vis-item.approved {
     color: white;
     background-color: red;
     border-color: darkred;
   }
-  .vis-item {
+.vis-item {
     border-color: orange;
-    background-color: yellow;
+    background-color: green;
   }
   .smallLable {
     color:blue;

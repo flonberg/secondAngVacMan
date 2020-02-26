@@ -1,10 +1,11 @@
 
    <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
 <div >
-    test
+    
     <div id="container">  
-        <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked()">
+        <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked(event)">
         </div>
+        <input id="chData" value="test" >  
     </div>  
     <div id="controls" >
    
@@ -87,6 +88,11 @@
         font-size:8pt;
         font-family: sans-serif;
         padding:0px;    
+    }
+      /* gray background in weekends, white text color */
+  .vis.timeline .timeaxis .grid.saturday,
+  .vis.timeline .timeaxis .grid.sunday {
+    background: gray;
     }
 </style>
 

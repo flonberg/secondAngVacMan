@@ -109,8 +109,14 @@ export class TimeLineComponent implements OnInit {
     console.log("index is " + this.index);
   }
 
-  clicked(){                             // this responds to ANY click in the div containing the calendar                                             
-    if (document.getElementById("datums"))     {             
+  clicked(ev){                             // this responds to ANY click in the div containing the calendar                                             
+   console.log("ev is " + ev);
+
+    if (document.getElementById("datums"))     { 
+      if (document.getElementById("startDateInput"))  { 
+      var Rtst = document.getElementById("startDateInput").value;
+      console.log("tst is " + Rtst);       
+    }
       this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet               
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
 
@@ -214,12 +220,26 @@ export class TimeLineComponent implements OnInit {
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-          document.getElementById('datums').innerHTML = properties.items  ;               // store the id in the DOM for use by Angular
+          document.getElementById('datums').innerHTML = properties.items  ;   
+                     // store the id in the DOM for use by Angular
         });
+        this.timeline.on('*', function (event, properties) {
+          logEvent(event, properties);
+        });
+      
+      function logEvent(event, properties) {
+        var log = document.getElementById('log');
+        var msg = document.createElement('div');
+        document.getElementById('chData').innerHTML = properties.items .innerHTML = 'event=' + JSON.stringify(event) + ', ' +
+            'properties=' + JSON.stringify(properties);
+        log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
       }
+    }
     );
 
     this.options = {
+      editable: true,
+  /*
       onAdd: function(item, callback) {
         if (item.content != null) {
        //   var d = this.data;
@@ -233,7 +253,8 @@ export class TimeLineComponent implements OnInit {
           callback(null); // cancel updating the item
         }
       },
-      selectable: true, 
+      */
+     // selectable: true, 
       start: new Date(this.startDateShownString),
 //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       end: new Date(this.endDateShownString),
@@ -261,8 +282,8 @@ export class TimeLineComponent implements OnInit {
     for (var property in this.data2._data ) {
       if (this.data2._data.hasOwnProperty(property)) {
         this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content)  // set the correct groupNumber
-        if (this.data2._data[property].approved == 0)
-          this.data2._data[property].style="color:red";
+        if (this.data2._data[property].approved == 1)
+          this.data2._data[property].style="color:green";
       }
     }
   }
