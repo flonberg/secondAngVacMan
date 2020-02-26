@@ -113,10 +113,6 @@ export class TimeLineComponent implements OnInit {
    console.log("ev is " + ev);
 
     if (document.getElementById("datums"))     { 
-      if (document.getElementById("startDateInput"))  { 
-      var Rtst = document.getElementById("startDateInput").value;
-      console.log("tst is " + Rtst);       
-    }
       this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet               
        var id = document.getElementById("datums").innerText;        // get the id from the vis click
 
@@ -142,9 +138,14 @@ export class TimeLineComponent implements OnInit {
         this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
         }
       }
+      this.logChange(this.data2._data[id].start, this.data2._data[id].end)
       
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
+  }
+  logChange(sD, eD){
+    console.log("sD is " + sD);
+    console.log("eD is " + eD);
   }
   ngOnInit() {
     this.activatedRoute                                             // point to the route clicked on 
@@ -223,9 +224,7 @@ export class TimeLineComponent implements OnInit {
           document.getElementById('datums').innerHTML = properties.items  ;   
                      // store the id in the DOM for use by Angular
         });
-        this.timeline.on('*', function (event, properties) {
-          logEvent(event, properties);
-        });
+   
       
       function logEvent(event, properties) {
         var log = document.getElementById('log');
