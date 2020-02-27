@@ -151,22 +151,40 @@ export class TimeLineComponent implements OnInit {
         this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
         }
       }
-      this.logChange(this.data2._data[id].start, this.data2._data[id].end)
+      this.updateDB(this.data2._data[id].start, this.data2._data[id].end)
       
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
+    /*******************          remove routines  **********************/  
     if (document.getElementById("datums2").innerText.indexOf("remove") !== -1){
-      var n = +document.getElementById("datums").innerText;
-      console.log("remove item with id = " + +document.getElementById("datums").innerText);
-      var tst = this.data2._data[n];
-      this.data2.remove({id: n});
-     // delete this.data2._data[+document.getElementById("datums").innerText];
-      this.drawControls = false;
+      this.data2.remove({id: +document.getElementById("datums").innerText});    // remove the item from the dataSet
+      this.drawControls = false;                                  // turn off the edit Controls. 
     }
   }
-  logChange(sD, eD){
-    console.log("sD is " + sD);
-    console.log("eD is " + eD);
+  updateDB(sD, eD){
+    console.log("sD is " + sD  + "length is " + sD.length);
+      var dParams = {
+      "tableName":"vacation3", "whereColName":"vidx", "whereColVal": this.data2._data[this._id].vidx,
+      "editColNames": ['startDate','endDate'],
+      "editColVals": [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ] 
+    }
+ //   const url = 'http://blackboard-dev.partners.org/dev/WrittenDirectives/RESTupdatePOST.php';
+    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php';
+    this.http.post(url, JSON.stringify(dParams)).subscribe(
+      (val) => {
+        console.log("POST call", val);
+      });
+
+  }
+  formatDateYYYymmdd(d){
+    var date = new Date(d)
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var dd = date.getDate();
+    //var mS = m < 9 ? "0" + m : m;                                 // put in leading zero if needed
+   // var dS = dd < 9 ? "0" + dd : dd;
+    var fD = m + "/" + dd + "/" + y;
+    return fD;
   }
   ngOnInit() {
     this.activatedRoute                                             // point to the route clicked on 
