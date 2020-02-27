@@ -64,6 +64,8 @@ export class TimeLineComponent implements OnInit {
   _readonly:boolean;
   showControls: boolean;
   _id: string;
+  _content;                                           // store the item.content from click
+  drawControls = true;
   isApprover: boolean;
   reasonSelect = '';            
   newTimeAwayBool: boolean = false;  
@@ -109,8 +111,19 @@ export class TimeLineComponent implements OnInit {
     console.log("index is " + this.index);
   }
 
-  clicked(ev){                             // this responds to ANY click in the div containing the calendar                                             
+  clicked(ev)
+  {                             // this responds to ANY click in the div containing the calendar                                             
    console.log("ev is " + ev);
+   if (document.getElementById("datums").innerText.length > 4){
+     console.log("new Item ");
+   }
+
+    
+   if (document.getElementById("datums2"))     { 
+     this._content = document.getElementById("datums2").innerText; 
+     if (this._content == "new item")
+        this.drawControls = false;
+   }
 
     if (document.getElementById("datums"))     { 
       this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet               
@@ -131,8 +144,8 @@ export class TimeLineComponent implements OnInit {
     if (this.data2._data[id]){                                    // if the timeAway is defined
       this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
       this.endDate = new FormControl(new Date(this.data2._data[id].end));
-      this.reasonFC = new FormControl("other");
-      this.notesFC = new FormControl("");   
+      this.reasonFC = new FormControl(this.data2._data[id].reason);
+      this.notesFC = new FormControl(this.data2._data[id].note);   
       if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
         this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
         this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
@@ -142,6 +155,14 @@ export class TimeLineComponent implements OnInit {
       
     if (this.userid == 'napolitano' )                             // official 'approver'
       this.isApprover = true;  
+    if (document.getElementById("datums2").innerText.indexOf("remove") !== -1){
+      var n = +document.getElementById("datums").innerText;
+      console.log("remove item with id = " + +document.getElementById("datums").innerText);
+      var tst = this.data2._data[n];
+      this.data2.remove({id: n});
+     // delete this.data2._data[+document.getElementById("datums").innerText];
+      this.drawControls = false;
+    }
   }
   logChange(sD, eD){
     console.log("sD is " + sD);
@@ -239,13 +260,22 @@ export class TimeLineComponent implements OnInit {
 
     
     this.options = {
-  /*    editable: {
+  /*   editable: {
         updateTime: true,  // drag items horizontally
       //  updateGroup: true, // drag items from one group to another
         remove: false,       // delete an item by tapping the delete button top right
         add: true,         // add new items by double tapping
       },
- */
+      */
+      onAdd: function (item, callback){
+        document.getElementById('datums').innerHTML = item.group;  
+        document.getElementById('datums2').innerHTML = item.start;  
+      },
+      onRemove: function (item, callback){
+        document.getElementById('datums').innerHTML = item.id;  
+        document.getElementById('datums2').innerHTML = callback;  
+      },
+ 
   /*
       onAdd: function(item, callback) {
         if (item.content != null) {

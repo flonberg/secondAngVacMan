@@ -7,7 +7,7 @@
         </div>
         <input id="chData" value="test" >  
     </div>  
-    <div id="controls" >
+    <div id="controls" *ngIf = "drawControls" >
    
             <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
                 <li class="item">
@@ -80,6 +80,7 @@
     </div>
 </div>
 <div id="datums"  style="display:block"> </div>
+<div id="datums2"  style="display:block"> </div>
 
 <style type="text/css" >
     #timeline {
