@@ -65,9 +65,7 @@
                 <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
                         <button mat-raised-button>Approve </button>
                     </li>
-                <li class="item" *ngIf = "!this._readonly && !newTimeAwayBool" (click)= "remove()" >
-                    <button mat-raised-button>Delete </button>
-                </li>
+             
                 <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
                         <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
                 </li>

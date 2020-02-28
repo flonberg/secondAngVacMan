@@ -367,20 +367,29 @@ export class TimeLineComponent implements OnInit {
       this.reasonEdited = true;                                         // has to be true to show Save Time Away button
     }   
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
-    var s = this.makeDateString(event)                                  // make the string for local update                   
+    var s = this.makeDateString(event)   
+    let newDate = new Date(s);                               // make the string for local update    
+    var tst = "2019-02-01";               
     if (`${type}` == 'start'){
       this.data2.update({id:this._id, start: s});                       // do the local update
+      this.data2.update({id:this._id, start: tst});                       // do the local update
       this.seP.editColName = "startDate";    
-      this.seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');    
+      this.seP.editColVal = s;    
+      console.log("edtied local ");
+//      this.seP.editColVal = this.datePipe.transform(newDate, 'yyyy-MM-dd');    
       this.startDateEdited = true;
     }                                                                   // update startDate
     if (`${type}` == 'end') {                                     
       this.data2.update({id:this._id, end: s});                         // update vis DataSet
-      this.seP.editColName = "endDate";                                 // param for dB
-      this.seP.editColVal = this.datePipe.transform(s, 'yyyy-MM-dd');   // mm   
+      this.data2.update({id:this._id, end: s});                         // update vis DataSet
+      this.seP.editColName = "endDate";   
+                               // param for dB
+     // this.seP.editColVal = this.datePipe.transform(newDate, 'yyyy-MM-dd');   // mm   
       this.endDateEdited = true;
+      console.log("edtied local ");
     }   
     this.getEditSvce.update(this.seP);                                  // do the dB edit. 
+    this.timeline.redraw();
   }
   remove(){
     this.data2.remove(this._id);                                         // remove LOCALLY
@@ -393,6 +402,10 @@ export class TimeLineComponent implements OnInit {
   makeDateString(event){
     var editTime = new Date(event.value);                               // date returned by DatePicker
     var month = editTime.getMonth() + 1;                                // get month to assemble to edit
+    if (month <= 9){
+      <string><unknown>month;
+      var monthString  = "0" + month;
+    }
     var day = editTime.getDate();                                      // mm
     var year = editTime.getFullYear();                                 // mm
     var s =  month + "-" + editTime.getDate() + "-" + editTime.getFullYear();  
