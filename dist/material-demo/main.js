@@ -1019,12 +1019,11 @@ var TimeLineComponent = /** @class */ (function () {
         this.reasonEdited = true; // has to be true to show Save Time Away button
     };
     TimeLineComponent.prototype.editDate = function (type, event) {
-        var s = this.makeDateString(event);
-        var newDate = new Date(s); // make the string for local update    
+        var s = this.formatDateForTimeline(event.value); // make the string for local update    
         var tst = "2019-02-01";
         if ("" + type == 'start') {
             this.data2.update({ id: this._id, start: s }); // do the local update
-            this.data2.update({ id: this._id, start: tst }); // do the local update
+            //   this.data2.update({id:this._id, start: tst});                       // do the local update
             this.seP.editColName = "startDate";
             this.seP.editColVal = s;
             console.log("edtied local ");
@@ -1033,22 +1032,14 @@ var TimeLineComponent = /** @class */ (function () {
         } // update startDate
         if ("" + type == 'end') {
             this.data2.update({ id: this._id, end: s }); // update vis DataSet
-            this.data2.update({ id: this._id, end: s }); // update vis DataSet
             this.seP.editColName = "endDate";
             // param for dB
-            // this.seP.editColVal = this.datePipe.transform(newDate, 'yyyy-MM-dd');   // mm   
+            this.seP.editColVal = s; // mm   
             this.endDateEdited = true;
             console.log("edtied local ");
         }
         this.getEditSvce.update(this.seP); // do the dB edit. 
         this.timeline.redraw();
-    };
-    TimeLineComponent.prototype.remove = function () {
-        this.data2.remove(this._id); // remove LOCALLY
-        this.showControls = false; // turn off controls
-        this.seP.editColName = "reasonIdx"; // reasonIdx is the DELETE signal column
-        this.seP.editColVal = "99"; // any smallInt > 0 
-        this.getEditSvce.update(this.seP);
     };
     TimeLineComponent.prototype.makeDateString = function (event) {
         var editTime = new Date(event.value); // date returned by DatePicker
@@ -1061,6 +1052,21 @@ var TimeLineComponent = /** @class */ (function () {
         var year = editTime.getFullYear(); // mm
         var s = month + "-" + editTime.getDate() + "-" + editTime.getFullYear();
         return s;
+    };
+    TimeLineComponent.prototype.formatDateForTimeline = function (date) {
+        var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+        return [year, month, day].join('-');
+    };
+    TimeLineComponent.prototype.remove = function () {
+        this.data2.remove(this._id); // remove LOCALLY
+        this.showControls = false; // turn off controls
+        this.seP.editColName = "reasonIdx"; // reasonIdx is the DELETE signal column
+        this.seP.editColVal = "99"; // any smallInt > 0 
+        this.getEditSvce.update(this.seP);
     };
     TimeLineComponent.prototype.approve = function () {
         console.log("appreove" + this._id);
