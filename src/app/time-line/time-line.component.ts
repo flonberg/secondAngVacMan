@@ -349,6 +349,8 @@ export class TimeLineComponent implements OnInit {
   clear(){
     console.log("clear " );
   }
+
+
   editReason(s, colName){                                                 // used to edit Reason and Note datums   
       var seP = <SeditParams>{};                                          // define instance of SeditParams interface
       seP.who = this.userid;
@@ -368,7 +370,7 @@ export class TimeLineComponent implements OnInit {
     }   
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
     var s = this.formatDateForTimeline(event.value)                                // make the string for local update    
-    var tst = "2019-02-01";               
+            
     if (`${type}` == 'start'){
       this.data2.update({id:this._id, start: s});                       // do the local update
    //   this.data2.update({id:this._id, start: tst});                       // do the local update
@@ -384,10 +386,10 @@ export class TimeLineComponent implements OnInit {
                                // param for dB
       this.seP.editColVal = s;   // mm   
       this.endDateEdited = true;
-      console.log("edtied local ");
+      console.log("edtied local " + s);
     }   
     this.getEditSvce.update(this.seP);                                  // do the dB edit. 
-    this.timeline.redraw();
+  // this.timeline.redraw();
   }
   makeDateString(event){
     var editTime = new Date(event.value);                               // date returned by DatePicker
@@ -411,7 +413,8 @@ export class TimeLineComponent implements OnInit {
           month = '0' + month;
       if (day.length < 2) 
           day = '0' + day;
-      return [year, month, day].join('-');
+      return year + "-" + month + "-" + day;
+//      return [year, month, day].join('-');
   }
   remove(){
     this.data2.remove(this._id);                                         // remove LOCALLY
@@ -442,14 +445,17 @@ export class TimeLineComponent implements OnInit {
     var params = <SinsertParams>{}
     params.tableName = "vacation3"
     params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'] // names of columns to INSERT
-    params.colVal = [this.makeDateString(this.startDate),this.makeDateString(this.endDate),this.reasonFC.value, this.notesFC.value, this.userkey];
+    params.colVal = [this.formatDateForTimeline(this.startDate.value),
+      this.formatDateForTimeline(this.endDate.value),this.reasonFC.value,
+       this.notesFC.value, 
+       this.userkey];
 
     var content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
     var groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
     var item = {                                                           // set up dataStruct to add to timeLine DataSet
       id: this.localAddId,    
-      start: new Date(this.makeDateString(this.startDate)),
-      end: new Date(this.makeDateString(this.endDate)),
+      start: new Date(this.formatDateForTimeline(this.startDate)),
+      end: new Date(this.formatDateForTimeline(this.endDate)),
       style: 'color:blue',
       content: content,
       group: groupNum
@@ -466,9 +472,9 @@ export class TimeLineComponent implements OnInit {
 
   needToInsert(type, event){
     if (type =='start')
-     this.newTAparams.startDate = this.makeDateString(event);
+     this.newTAparams.startDate = this.formatDateForTimeline(event);
     if (type =='end')
-     this.newTAparams.endDate = this.makeDateString(event);
+     this.newTAparams.endDate = this.formatDateForTimeline(event);
     if (type =='reason')
      this.newTAparams.reason = event.value; 
     if (type =='Notes')

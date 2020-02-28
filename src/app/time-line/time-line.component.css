@@ -12,6 +12,14 @@
   align-items: center;
   text-align: center;
 }
+.vis-time-axis .vis-grid.vis-saturday,
+	.vis-time-axis .vis-grid.vis-sunday {
+		background: green	
+	  }
+	  
+	.vis-time-axis .vis-grid.vis-today {
+		background: #FFFFCC;	
+	  }
 .vis-item.red {
     color: white;
     background-color: red;
