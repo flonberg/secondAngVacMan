@@ -113,68 +113,72 @@ export class TimeLineComponent implements OnInit {
 
   clicked(ev)
   {                             // this responds to ANY click in the div containing the calendar                                             
-   console.log("ev is " + ev);
-   if (document.getElementById("datums").innerText.length > 4){
-     console.log("new Item ");
-   }
-
-    
-   if (document.getElementById("datums2"))     { 
-     this._content = document.getElementById("datums2").innerText; 
-     if (this._content == "new item")
-        this.drawControls = false;
-   }
-
-    if (document.getElementById("datums"))     { 
-      this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet               
-       var id = document.getElementById("datums").innerText;        // get the id from the vis click
-
-       if (!this.data2._data[this._id])                           // click was NOT in a tA box;
-        return;
-       this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
-       this.seP.whereColVal = this.data2._data[this._id].vidx;
-       if (this._id !== "datums" )                                // shows user had clicked a box                 
-        this.showControls = true;                                 // show editing controls
-      }
-      console.log("clicked"  + id)
-    if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid)    // loggedInUser is timeAway owner so make widgets editable
-      this._readonly = false;                                     // enable editing
-    else                                            
-      this._readonly = true;                                      
-    if (this.data2._data[id]){                                    // if the timeAway is defined
-      this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
-      this.endDate = new FormControl(new Date(this.data2._data[id].end));
-      this.reasonFC = new FormControl(this.data2._data[id].reason);
-      this.notesFC = new FormControl(this.data2._data[id].note);   
-      if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
-        this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
-        this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
-        }
-      }
-      this.updateDB(this.data2._data[id].start, this.data2._data[id].end)
-      
-    if (this.userid == 'napolitano' )                             // official 'approver'
-      this.isApprover = true;  
-    /*******************          remove routines  **********************/  
-    if (document.getElementById("datums2").innerText.indexOf("remove") !== -1){
-      this.data2.remove({id: +document.getElementById("datums").innerText});    // remove the item from the dataSet
-      this.drawControls = false;                                  // turn off the edit Controls. 
+    if (document.getElementById("datums2"))     { 
+      this._content = document.getElementById("datums2").innerText; 
+      if (this._content == "new item")
+          this.drawControls = false;
     }
+    if (document.getElementById("datums"))     { 
+        this._id = document.getElementById("datums").innerText;     // id of the item clickedOn in the DataSet               
+        var id = document.getElementById("datums").innerText;        // get the id from the vis click
+        console.log("box clicked on");
+        if (!this.data2._data[this._id])                           // click was NOT in a tA box;
+          return;
+        this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
+        document.getElementById("vidx").innerText = this.data2._data[id].vidx; // store the vidx for DELETE
+        this.seP.whereColVal = this.data2._data[this._id].vidx;
+        if (this._id !== "datums" )                                // shows user had clicked a box                 
+          this.showControls = true;                                 // show editing controls
+        }
+        console.log("clicked"  + this._id)
+    if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid)    // loggedInUser is timeAway owner so make widgets editable
+        this._readonly = false;                                     // enable editing
+      else                                            
+        this._readonly = true;                                      
+    if (this.data2._data[id]){                                    // if the timeAway is defined
+        this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
+        this.endDate = new FormControl(new Date(this.data2._data[id].end));
+        this.reasonFC = new FormControl(this.data2._data[id].reason);
+        this.notesFC = new FormControl(this.data2._data[id].note);   
+        if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
+          this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
+          this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
+          }
+        }
+    if (this.userid == 'napolitano' )                             // official 'approver'
+        this.isApprover = true;  
+      /*******************          remove routines  **********************/  
+    if (document.getElementById("datums2").innerText.indexOf("remove") !== -1){
+        this.data2.remove({id: +document.getElementById("datums").innerText});    // remove the item from the dataSet 
+        this.drawControls = false;                                  // turn off the edit Controls. 
+        var dParams = {
+          "action":"delete",                                            // actions are 'edit', 'insert', 'delete'  
+          "tableName":"vacation3", "whereColName":"vidx", "whereColVal": document.getElementById("vidx").innerText,
+        }
+        var i = 0;
+        this.doREST(dParams);
+       
+      }
+      else              /************    Edit Routine  */
+        this.updateDB(this.data2._data[id].start, this.data2._data[id].end)
   }
+
   updateDB(sD, eD){
     console.log("sD is " + sD  + "length is " + sD.length);
       var dParams = {
+      "action":"edit",                                            // actions are 'edit', 'insert', 'delete'  
       "tableName":"vacation3", "whereColName":"vidx", "whereColVal": this.data2._data[this._id].vidx,
-      "editColNames": ['startDate','endDate'],
+      "editColNames": ['startDate','endDate'],                    // editColNames and editColVals are one-to-one correspond
       "editColVals": [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ] 
     }
- //   const url = 'http://blackboard-dev.partners.org/dev/WrittenDirectives/RESTupdatePOST.php';
+   this.doREST(dParams);
+  }
+  doREST(dP){
     const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php';
-    this.http.post(url, JSON.stringify(dParams)).subscribe(
+    this.http.post(url, JSON.stringify(dP)).subscribe(
       (val) => {
         console.log("POST call", val);
       });
-
   }
   formatDateYYYymmdd(d){
     var date = new Date(d)

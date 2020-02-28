@@ -721,7 +721,7 @@ module.exports = "\n#container {\n  border:solid;\n  overflow:auto;\n}\n#control
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n   <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->\n<div >\n    \n    <div id=\"container\">  \n        <div id=\"timeline\" #visjsTimeline *ngIf = \"redraw  && index == 0\"   (click) = \"clicked($event)\">\n        </div>\n        <input id=\"chData\" value=\"test\" >  \n    </div>  \n    <div id=\"controls\" >\n   \n            <ul *ngIf = \"this.showControls && this._id \" class=\"flex-container  \">\n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" >\n                        <input matInput [matDatepicker]=\"picker\" placeholder= \"Start Date \" id='startDateInput' [readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('start', $event)\" (change) = \"clear()\" [formControl] = \"startDate\">\n                        <mat-datepicker-toggle matSuffix [for]=\"picker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #picker ></mat-datepicker>\n                    </mat-form-field>\n                </li>\n        \n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" x>\n                        <input matInput [matDatepicker]=\"epicker\" placeholder= \"End Date \" id='endDateInput'[readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('end', $event)\" (change) = \"clear()\" [formControl] = \"endDate\" >\n                        <mat-datepicker-toggle matSuffix [for]=\"epicker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #epicker ></mat-datepicker>\n                    </mat-form-field>\n                </li>\n                <li class=\"item\" *ngIf =!_readonly>\n                    <mat-form-field>\n                        <mat-label>Reason</mat-label>\n                            <mat-select [(value)]=\"reasonSelect\" (selectionChange)=\"editReason($event, 'reason')\"\n                            [formControl] = \"reasonFC\"  id='reasonId'>\n                                    <mat-option  value=\"0\">Personal Vacation</mat-option>\n                                    <mat-option  value=\"1\">Other</mat-option>\n                                    <mat-option   value=\"2\">Meeting</mat-option>  \n                                    \n                            </mat-select>\n                    </mat-form-field>\n                </li>\n        <!--    This the readOnly version of the Reason control -->\n                <li class=\"wideItem\" *ngIf =_readonly>\n                    <mat-form-field>\n                    <mat-label class=\"smallLabel\"> Reason</mat-label>\n                    <input matInput  [value]=\"reasons[reasonSelect]\" size = 40  [readonly] = \"_readonly\">\n                    </mat-form-field>\n                </li>\n        \n            \n                <li style=\"width:150px\" *ngIf = \"!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)\" >\n                    <mat-form-field  class=\"wideItem\">\n                        <mat-label class=\"smallLabel\"> Note:</mat-label>\n                        <textarea matInput  (change)=\"editReason($event, 'note')\" [value]=\"this.data2._data[this._id].note\"\n                            [formControl] = \"notesFC\"\n                            cdkTextareaAutosize [readonly]=\"_readonly\"\n                            #autosize=\"cdkTextareaAutosize\"\n                            cdkAutosizeMinRows=\"1\"\n                            cdkAutosizeMaxRows=\"5\"\n                            >\n                        </textarea>\n                    </mat-form-field >\n                </li> \n          \n                <li class=\"item\" *ngIf = \"this.isApprover\" (click) = \"approve()\" >\n                        <button mat-raised-button>Approve </button>\n                    </li>\n                <li class=\"item\" *ngIf = \"!this._readonly && !newTimeAwayBool\" (click)= \"remove()\" >\n                    <button mat-raised-button>Delete </button>\n                </li>\n                <li class=\"item\" *ngIf = \"this.reasonEdited && this.startDateEdited && endDateEdited\" >\n                        <button mat-raised-button  (click) =\"saveNewTimeAway()\">Save New Time Away </button>\n                </li>\n            </ul>\n            <div style=\"display:block;\" >\n            <button mat-raised-button (click) =\"newTimeAway()\"  >New Time Away </button>\n            </div>\n\n\n    </div>\n</div>\n<div id=\"datums\"  style=\"display:block\"> </div>\n\n<style type=\"text/css\" >\n    #timeline {\n        width: 100%;\n        height: 60%;\n        font-size:8pt;\n        font-family: sans-serif;\n        padding:0px;    \n    }\n      /* gray background in weekends, white text color */\n  .vis.timeline .timeaxis .grid.saturday,\n  .vis.timeline .timeaxis .grid.sunday {\n    background: gray;\n    }\n</style>\n\n\n"
+module.exports = "\n   <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->\n<div >\n    \n    <div id=\"container\">  \n        <div id=\"timeline\" #visjsTimeline *ngIf = \"redraw  && index == 0\"   (click) = \"clicked($event)\">\n        </div>\n        <input id=\"chData\" value=\"test\" >  \n    </div>  \n    <div id=\"controls\" *ngIf = \"drawControls\" >\n   \n            <ul *ngIf = \"this.showControls && this._id \" class=\"flex-container  \">\n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" >\n                        <input matInput [matDatepicker]=\"picker\" placeholder= \"Start Date \" id='startDateInput' [readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('start', $event)\" (change) = \"clear()\" [formControl] = \"startDate\">\n                        <mat-datepicker-toggle matSuffix [for]=\"picker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #picker ></mat-datepicker>\n                    </mat-form-field>\n                </li>\n        \n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" x>\n                        <input matInput [matDatepicker]=\"epicker\" placeholder= \"End Date \" id='endDateInput'[readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('end', $event)\" (change) = \"clear()\" [formControl] = \"endDate\" >\n                        <mat-datepicker-toggle matSuffix [for]=\"epicker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #epicker ></mat-datepicker>\n                    </mat-form-field>\n                </li>\n                <li class=\"item\" *ngIf =!_readonly>\n                    <mat-form-field>\n                        <mat-label>Reason</mat-label>\n                            <mat-select [(value)]=\"reasonSelect\" (selectionChange)=\"editReason($event, 'reason')\"\n                            [formControl] = \"reasonFC\"  id='reasonId'>\n                                    <mat-option  value=\"0\">Personal Vacation</mat-option>\n                                    <mat-option  value=\"1\">Other</mat-option>\n                                    <mat-option   value=\"2\">Meeting</mat-option>  \n                                    \n                            </mat-select>\n                    </mat-form-field>\n                </li>\n        <!--    This the readOnly version of the Reason control -->\n                <li class=\"wideItem\" *ngIf =_readonly>\n                    <mat-form-field>\n                    <mat-label class=\"smallLabel\"> Reason</mat-label>\n                    <input matInput  [value]=\"reasons[reasonSelect]\" size = 40  [readonly] = \"_readonly\">\n                    </mat-form-field>\n                </li>\n        \n            \n                <li style=\"width:150px\" *ngIf = \"!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)\" >\n                    <mat-form-field  class=\"wideItem\">\n                        <mat-label class=\"smallLabel\"> Note:</mat-label>\n                        <textarea matInput  (change)=\"editReason($event, 'note')\" [value]=\"this.data2._data[this._id].note\"\n                            [formControl] = \"notesFC\"\n                            cdkTextareaAutosize [readonly]=\"_readonly\"\n                            #autosize=\"cdkTextareaAutosize\"\n                            cdkAutosizeMinRows=\"1\"\n                            cdkAutosizeMaxRows=\"5\"\n                            >\n                        </textarea>\n                    </mat-form-field >\n                </li> \n          \n                <li class=\"item\" *ngIf = \"this.isApprover\" (click) = \"approve()\" >\n                        <button mat-raised-button>Approve </button>\n                    </li>\n                <li class=\"item\" *ngIf = \"!this._readonly && !newTimeAwayBool\" (click)= \"remove()\" >\n                    <button mat-raised-button>Delete </button>\n                </li>\n                <li class=\"item\" *ngIf = \"this.reasonEdited && this.startDateEdited && endDateEdited\" >\n                        <button mat-raised-button  (click) =\"saveNewTimeAway()\">Save New Time Away </button>\n                </li>\n            </ul>\n            <div style=\"display:block;\" >\n            <button mat-raised-button (click) =\"newTimeAway()\"  >New Time Away </button>\n            </div>\n\n\n    </div>\n</div>\n<div id=\"datums\"  style=\"display:block\"> </div>\n<div id=\"datums2\"  style=\"display:block\"> </div>\n\n<style type=\"text/css\" >\n    #timeline {\n        width: 100%;\n        height: 60%;\n        font-size:8pt;\n        font-family: sans-serif;\n        padding:0px;    \n    }\n      /* gray background in weekends, white text color */\n  .vis.timeline .timeaxis .grid.saturday,\n  .vis.timeline .timeaxis .grid.sunday {\n    background: gray;\n    }\n</style>\n\n\n"
 
 /***/ }),
 
@@ -757,6 +757,7 @@ var TimeLineComponent = /** @class */ (function () {
         this.activatedRoute = activatedRoute;
         this.datePipe = datePipe;
         this.reasons = ["Personal Vacation", "Other", "Meeting"];
+        this.drawControls = true;
         this.reasonSelect = '';
         this.newTimeAwayBool = false;
         this.saveTimeAwayBool = false;
@@ -786,6 +787,14 @@ var TimeLineComponent = /** @class */ (function () {
     };
     TimeLineComponent.prototype.clicked = function (ev) {
         console.log("ev is " + ev);
+        if (document.getElementById("datums").innerText.length > 4) {
+            console.log("new Item ");
+        }
+        if (document.getElementById("datums2")) {
+            this._content = document.getElementById("datums2").innerText;
+            if (this._content == "new item")
+                this.drawControls = false;
+        }
         if (document.getElementById("datums")) {
             this._id = document.getElementById("datums").innerText; // id of the item clickedOn in the DataSet               
             var id = document.getElementById("datums").innerText; // get the id from the vis click
@@ -804,20 +813,49 @@ var TimeLineComponent = /** @class */ (function () {
         if (this.data2._data[id]) { // if the timeAway is defined
             this.startDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](new Date(this.data2._data[id].start)); // this is where the value is set
             this.endDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](new Date(this.data2._data[id].end));
-            this.reasonFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]("other");
-            this.notesFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]("");
+            this.reasonFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](this.data2._data[id].reason);
+            this.notesFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](this.data2._data[id].note);
             if (this.data2._data[id].reason || this.data2._data[id].reason == 0) {
                 this.reasonSelect = this.data2._data[id].reason.toString(); // expecting string 
                 this.reasonFC.setValue(this.data2._data[id].reason.toString()); // needed for initial click
             }
         }
-        this.logChange(this.data2._data[id].start, this.data2._data[id].end);
         if (this.userid == 'napolitano') // official 'approver'
             this.isApprover = true;
+        /*******************          remove routines  **********************/
+        if (document.getElementById("datums2").innerText.indexOf("remove") !== -1) {
+            this.data2.remove({ id: +document.getElementById("datums").innerText }); // remove the item from the dataSet 
+            this.drawControls = false; // turn off the edit Controls. 
+        }
+        else /************    Edit Routine  */
+            this.updateDB(this.data2._data[id].start, this.data2._data[id].end);
     };
-    TimeLineComponent.prototype.logChange = function (sD, eD) {
-        console.log("sD is " + sD);
-        console.log("eD is " + eD);
+    TimeLineComponent.prototype.updateDB = function (sD, eD) {
+        console.log("sD is " + sD + "length is " + sD.length);
+        var dParams = {
+            "action": "edit",
+            "tableName": "vacation3", "whereColName": "vidx", "whereColVal": this.data2._data[this._id].vidx,
+            "editColNames": ['startDate', 'endDate'],
+            "editColVals": [this.formatDateYYYymmdd(sD), this.formatDateYYYymmdd(eD)]
+        };
+        //   const url = 'http://blackboard-dev.partners.org/dev/WrittenDirectives/RESTupdatePOST.php';
+        this.doREST(dParams);
+    };
+    TimeLineComponent.prototype.doREST = function (dP) {
+        var url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php';
+        this.http.post(url, JSON.stringify(dP)).subscribe(function (val) {
+            console.log("POST call", val);
+        });
+    };
+    TimeLineComponent.prototype.formatDateYYYymmdd = function (d) {
+        var date = new Date(d);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        var dd = date.getDate();
+        //var mS = m < 9 ? "0" + m : m;                                 // put in leading zero if needed
+        // var dS = dd < 9 ? "0" + dd : dd;
+        var fD = m + "/" + dd + "/" + y;
+        return fD;
     };
     TimeLineComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -896,13 +934,21 @@ var TimeLineComponent = /** @class */ (function () {
             }
         });
         this.options = {
-            /*    editable: {
+            /*   editable: {
                   updateTime: true,  // drag items horizontally
                 //  updateGroup: true, // drag items from one group to another
                   remove: false,       // delete an item by tapping the delete button top right
                   add: true,         // add new items by double tapping
                 },
-           */
+                */
+            onAdd: function (item, callback) {
+                document.getElementById('datums').innerHTML = item.group;
+                document.getElementById('datums2').innerHTML = item.start;
+            },
+            onRemove: function (item, callback) {
+                document.getElementById('datums').innerHTML = item.id;
+                document.getElementById('datums2').innerHTML = callback;
+            },
             /*
                 onAdd: function(item, callback) {
                   if (item.content != null) {
