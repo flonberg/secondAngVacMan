@@ -426,14 +426,14 @@ export class TimeLineComponent implements OnInit {
   }
 
   approve(){
-    console.log("appreove" + this._id);
-    this.data2.update({id:this._id, style: "color:blue"})
-    this.data2._data[this._id].approved == 1;
-    this.editReason(1, 'approved')
+    console.log('appreove' + this._id);
+    this.data2.update({id: this._id, style: 'color:blue'});
+    this.data2._data[this._id].approved = 1;
+    this.editReason(1, 'approved');
   }
   newTimeAway(){
-    this.startDate = new FormControl();  
-    this.endDate = new FormControl();  
+    this.startDate = new FormControl();
+    this.endDate = new FormControl();
     this.reasonFC = new FormControl();
     this.notesFC = new FormControl();
   
