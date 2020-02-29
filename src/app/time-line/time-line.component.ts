@@ -122,20 +122,23 @@ export class TimeLineComponent implements OnInit {
         this._id = document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet               
         var id = document.getElementById('datums').innerText;        // get the id from the vis click
         console.log('box clicked on');
-        if (!this.data2._data[this._id])                           // click was NOT in a tA box;
+        if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
           return;
+        }
         this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
         document.getElementById('vidx').innerText = this.data2._data[id].vidx; // store the vidx for DELETE
         this.seP.whereColVal = this.data2._data[this._id].vidx;
-        if (this._id !== 'datums' )                                // shows user had clicked a box                 
-          this.showControls = true;                                 // show editing controls
+        if (this._id !== 'datums' ) {                               // shows user had clicked a box
+          this.showControls = true;
+          }                                // show editing controls
         }
-        console.log('clicked'  + this._id)
-    if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid)    // loggedInUser is timeAway owner so make widgets editable
+        console.log('clicked'  + this._id);
+    if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid) { // loggedInUser is tA owner so make widgets editable
         this._readonly = false;                                     // enable editing
-      else                                            
-        this._readonly = true;                                      
-    if (this.data2._data[id]){                                    // if the timeAway is defined
+        } else {
+        this._readonly = true;
+        }
+    if (this.data2._data[id]) {                                    // if the timeAway is defined
         this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
         this.endDate = new FormControl(new Date(this.data2._data[id].end));
         this.reasonFC = new FormControl(this.data2._data[id].reason);
@@ -145,17 +148,18 @@ export class TimeLineComponent implements OnInit {
           this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
           }
         }
-    if (this.userid == 'napolitano' )                             // official 'approver'
-        this.isApprover = true;  
+    if (this.userid == 'napolitano' ) {                          // official 'approver'
+        this.isApprover = true;
+      }
       /*******************          remove routines  **********************/  
     if (document.getElementById('datums2').innerText.indexOf('remove') !== -1){
         this.data2.remove({id: +document.getElementById('datums').innerText});    // remove the item from the dataSet 
         this.drawControls = false;                                  // turn off the edit Controls. 
-        var dParams = {
+        const dParams = {
           'action':'delete',                                            // actions are 'edit', 'insert', 'delete'  
           'tableName':'vacation3', 'whereColName':'vidx', 'whereColVal': document.getElementById('vidx').innerText,
-        }
-        var i = 0;
+        };
+        const i = 0;
         this.doREST(dParams);
       } else {             /************    Edit Routine  */
           this.updateDB(this.data2._data[id].start, this.data2._data[id].end);
