@@ -435,6 +435,7 @@ export class TimeLineComponent implements OnInit {
     this.startDate = new FormControl();  
     this.endDate = new FormControl();  
     this.reasonFC = new FormControl();
+    this.notesFC = new FormControl();
   
     this.showControls = true;
     this._readonly = false;
@@ -442,26 +443,26 @@ export class TimeLineComponent implements OnInit {
     this.newTimeAwayBool = true;
   }
   saveNewTimeAway(){
-    var params = <SinsertParams>{}
-    params.tableName = "vacation3"
+    const params = <SinsertParams>{};
+    params.tableName = 'vacation3'
     params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'] // names of columns to INSERT
     params.colVal = [this.formatDateForTimeline(this.startDate.value),
       this.formatDateForTimeline(this.endDate.value),this.reasonFC.value,
        this.notesFC.value, 
        this.userkey];
 
-    var content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
-    var groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
-    var item = {                                                           // set up dataStruct to add to timeLine DataSet
-      id: this.localAddId,    
-      start: new Date(this.formatDateForTimeline(this.startDate)),
-      end: new Date(this.formatDateForTimeline(this.endDate)),
+    const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
+    const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
+    const item = {                                                           // set up dataStruct to add to timeLine DataSet
+      id: this.localAddId,
+      start: new Date(this.formatDateForTimeline(this.startDate.value)),
+      end: new Date(this.formatDateForTimeline(this.endDate.value)),
       style: 'color:blue',
       content: content,
       group: groupNum
   };
 
-  console.log("item in save " + item);
+  console.log('item in save ' + item);
   this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
   this.localAddId++;                                                     // increment the id so can add additional tAs
   this.newTimeAwayBool = false;                                         // enable editing of existing tAs  
@@ -469,7 +470,7 @@ export class TimeLineComponent implements OnInit {
 }
 
 
-
+/*
   needToInsert(type, event){
     if (type =='start')
      this.newTAparams.startDate = this.formatDateForTimeline(event);
@@ -487,4 +488,5 @@ export class TimeLineComponent implements OnInit {
     this.userkey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
       console.log("cons is " + index + "userkey  is " + uKey) 
   } 
+  */
 }
