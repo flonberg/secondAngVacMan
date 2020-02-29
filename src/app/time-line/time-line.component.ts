@@ -112,15 +112,17 @@ export class TimeLineComponent implements OnInit {
   }
 
   clicked(ev)
-  {                   // this responds to ANY click in the div containing the calendar                                             
+  {                   // this responds to ANY click in the div containing the calendar
     if (document.getElementById('datums2'))     {
       this._content = document.getElementById('datums2').innerText;
-      if (this._content == 'new item')
+      if (this._content === 'new item') {
           this.drawControls = false;
+      }
     }
-    if (document.getElementById('datums'))     { 
-        this._id = document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet               
-        var id = document.getElementById('datums').innerText;        // get the id from the vis click
+    let id = '';
+    if (document.getElementById('datums')) {
+        this._id = document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet
+        id = document.getElementById('datums').innerText;        // get the id from the vis click
         console.log('box clicked on');
         if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
           return;
@@ -133,7 +135,7 @@ export class TimeLineComponent implements OnInit {
           }                                // show editing controls
         }
         console.log('clicked'  + this._id);
-    if ( this.data2._data[id] &&  this.data2._data[id].className == this.userid) { // loggedInUser is tA owner so make widgets editable
+    if ( this.data2._data[id] &&  this.data2._data[id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
         this._readonly = false;                                     // enable editing
         } else {
         this._readonly = true;
@@ -142,22 +144,22 @@ export class TimeLineComponent implements OnInit {
         this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
         this.endDate = new FormControl(new Date(this.data2._data[id].end));
         this.reasonFC = new FormControl(this.data2._data[id].reason);
-        this.notesFC = new FormControl(this.data2._data[id].note);   
-        if (this.data2._data[id].reason || this.data2._data[id].reason == 0 ) {
-          this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string 
+        this.notesFC = new FormControl(this.data2._data[id].note);
+        if (this.data2._data[id].reason || this.data2._data[id].reason === 0 ) {
+          this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string
           this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
           }
         }
-    if (this.userid == 'napolitano' ) {                          // official 'approver'
+    if (this.userid === 'napolitano' ) {                          // official 'approver'
         this.isApprover = true;
       }
-      /*******************          remove routines  **********************/  
-    if (document.getElementById('datums2').innerText.indexOf('remove') !== -1){
-        this.data2.remove({id: +document.getElementById('datums').innerText});    // remove the item from the dataSet 
-        this.drawControls = false;                                  // turn off the edit Controls. 
+      /*******************          remove routines  **********************/
+    if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {
+        this.data2.remove({id: +document.getElementById('datums').innerText});    // remove the item from the dataSet
+        this.drawControls = false;                                  // turn off the edit Controls.
         const dParams = {
-          'action':'delete',                                            // actions are 'edit', 'insert', 'delete'  
-          'tableName':'vacation3', 'whereColName':'vidx', 'whereColVal': document.getElementById('vidx').innerText,
+          'action': 'delete',                                            // actions are 'edit', 'insert', 'delete'
+          'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
         };
         const i = 0;
         this.doREST(dParams);
@@ -234,7 +236,7 @@ export class TimeLineComponent implements OnInit {
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                        // mm for endDate
     this.endDateShownString = this.datePipe.transform(endDateShown, 'yyyy-MM-dd');          // start date for opening of tL
     this.startDateShownString = this.datePipe.transform(startDate, 'yyyy-MM-dd');
-const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString + 
+const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString +
 '&end=' + this.endDateString + '&userid=' + this.userid;
     console.log(' url is ' + url );
     this.http.get(url).subscribe(
