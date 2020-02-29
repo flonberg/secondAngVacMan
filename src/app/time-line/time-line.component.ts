@@ -17,16 +17,19 @@ import { resetFakeAsyncZone } from '@angular/core/testing';
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 
+// tslint:disable-next-line:class-name
 interface newTAparams {
-  startDate: string,
-  endDate: string,
-  reason: number,
-  Note: string
+  startDate: string;
+  endDate: string;
+  reason: number;
+  Note: string;
 }
+// tslint:disable-next-line:class-name
 interface nameToUserId {
   lastName: string;
   userid: string;
 }
+// tslint:disable-next-line:class-name
 interface useridToUserkey {
   userid: string;
   userkey: number;
@@ -52,7 +55,7 @@ export class TimeLineComponent implements OnInit {
   qP: any;                                              // used to receive queryParams
 //  idSel: String;
   userkey: number;
-  reasons = ['Personal Vacation', 'Other', 'Meeting']
+  reasons = ['Personal Vacation', 'Other', 'Meeting'];
   reason: String;
   startDate: FormControl;
   endDate: FormControl;
@@ -61,22 +64,22 @@ export class TimeLineComponent implements OnInit {
   reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
-  _readonly:boolean;
+  _readonly: boolean;
   showControls: boolean;
   _id: string;
   _content;                                           // store the item.content from click
   drawControls = true;
   isApprover: boolean;
-  reasonSelect = '';            
-  newTimeAwayBool: boolean = false;  
-  saveTimeAwayBool: boolean = false; 
-  newTAparams: newTAparams ={
+  reasonSelect = '';
+  newTimeAwayBool = false;
+  saveTimeAwayBool = false;
+  newTAparams: newTAparams = {
     startDate: '',
     endDate: '',
     reason: -1,
     Note: ''
-  }
-  nameToUserId: nameToUserId[]; 
+  };
+  nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
   endDateEdited: boolean;
@@ -91,28 +94,27 @@ export class TimeLineComponent implements OnInit {
   index: number;
   useridP: string;
 
-  constructor( private http: HttpClient, private getEditSvce: GenEditService, 
+  constructor( private http: HttpClient, private getEditSvce: GenEditService,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
-    this.redraw = true;     
+    this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
-    this.isApprover = false; 
+    this.isApprover = false;
     this.nameToUserId = [ {lastName: '', userid: ''} ];
-    this.useridToUserkeys = [{ userid:'Unknown', userkey: 0 }]
+    this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
     this.contentArray = [];
     this.localAddId = 34343;
-    this.newTimeAwayBool = false;                               // enable editing of existing tAs                        
+    this.newTimeAwayBool = false;                               // enable editing of existing tAs
     this.seP.whereColName = 'vidx';
     this.seP.tableName = 'vacation3';
     this.index = 0;
   }
-  setIndex(n){
+  setIndex(n) {
     this.index = n;
     console.log('index is ' + this.index);
   }
 
-  clicked(ev)
-  {                   // this responds to ANY click in the div containing the calendar
+  clicked(ev) {// this responds to ANY click in the div containing the calendar
     if (document.getElementById('datums2'))     {
       this._content = document.getElementById('datums2').innerText;
       if (this._content === 'new item') {
