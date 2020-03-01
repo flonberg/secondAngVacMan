@@ -1,6 +1,6 @@
 import { editParam } from './../dose-fx/dose-fx.component';
 import { GenEditService, SinsertParams } from './../gen-edit.service';
-import { SeditParams } from './../gen-edit.service'
+import { SeditParams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -12,7 +12,6 @@ import { HttpClient } from '@angular/common/http';
 import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 import { DatePipe } from '@angular/common';
 import { resetFakeAsyncZone } from '@angular/core/testing';
-
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -436,8 +435,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.endDate = new FormControl();
     this.reasonFC = new FormControl();
     this.notesFC = new FormControl();
-
-    this.showControls = true;
+    this.showControls = true;                                         // show the dataEntry controls
     this._readonly = false;
     this._id = '1';
     this.newTimeAwayBool = true;
@@ -445,48 +443,25 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
   saveNewTimeAway() {
     const params = <SinsertParams>{};
     params.tableName = 'vacation3';
+    /**********  set up INSERT params as pair of 1-to-1 arrays of colNames -to- colVals  ******************/
     params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
-    params.colVal = [this.formatDateForTimeline(this.startDate.value),
+    params.colVal = [this.formatDateForTimeline(this.startDate.value),  // colValues
       this.formatDateForTimeline(this.endDate.value), this.reasonFC.value,
-       this.notesFC.value,
-       this.userkey];
-
+       this.notesFC.value, this.userkey];
     const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
     const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
-    const item = {                                                           // set up dataStruct to add to timeLine DataSet
+    const item = {                                                      // set up dataStruct to add to timeLine DataSet
       id: this.localAddId,
       start: new Date(this.formatDateForTimeline(this.startDate.value)),
       end: new Date(this.formatDateForTimeline(this.endDate.value)),
       style: 'color:blue',
       content: content,
       group: groupNum
-  };
-
-  console.log('item in save ' + item);
-  this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
-  this.localAddId++;                                                     // increment the id so can add additional tAs
-  this.newTimeAwayBool = false;                                         // enable editing of existing tAs
-  this.getEditSvce.insert(params);                                    //  insert into dB
-}
-
-
-/*
-  needToInsert(type, event){
-    if (type =='start')
-     this.newTAparams.startDate = this.formatDateForTimeline(event);
-    if (type =='end')
-     this.newTAparams.endDate = this.formatDateForTimeline(event);
-    if (type =='reason')
-     this.newTAparams.reason = event.value; 
-    if (type =='Notes')
-     this.newTAparams.Note = event.curentTarget.value; 
-    if (this.newTAparams.startDate.length > 0 && this.newTAparams.endDate.length > 0
-      &&  this.newTAparams.reason >= 0)
-    this.saveTimeAwayBool = true;                                      // show the Save TimeAway button
-    var index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  //find arrayIndex of userId
-    var uKey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
-    this.userkey = this.useridToUserkeys[index].userkey                   // the userKey of the loggedIn user
-      console.log('cons is ' + index + 'userkey  is ' + uKey) 
-  } 
-  */
+      };
+    console.log('item in save ' + item);
+    this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
+    this.localAddId++;                                                     // increment the id so can add additional tAs
+    this.newTimeAwayBool = false;                                         // enable editing of existing tAs
+    this.getEditSvce.insert(params);                                    //  insert into dB
+  }
 }
