@@ -110,7 +110,7 @@ export class TimeLineComponent implements OnInit {
     this.index = 0;
     this.form = new FormGroup({
       'startDate': this.startDate = new FormControl('', Validators.required),
-      'endDate': this.endDate = new FormControl(),
+      'endDate': this.endDate = new FormControl('', Validators.required),
       'reason': this.reasonFC = new FormControl(),
       'note': this.notesFC = new FormControl("-"),
     })
