@@ -7,7 +7,7 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { ActivatedRoute } from '@angular/router';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 import { DatePipe } from '@angular/common';
@@ -92,6 +92,7 @@ export class TimeLineComponent implements OnInit {
   startDateShownString: string;
   index: number;
   useridP: string;
+  form: FormGroup;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
@@ -107,6 +108,12 @@ export class TimeLineComponent implements OnInit {
     this.seP.whereColName = 'vidx';
     this.seP.tableName = 'vacation3';
     this.index = 0;
+    this.form = new FormGroup({
+      'startDate': this.startDate = new FormControl('', Validators.required),
+      'endDate': this.endDate = new FormControl(),
+      'reason': this.reasonFC = new FormControl(),
+      'note': this.notesFC = new FormControl("-"),
+    })
   }
   setIndex(n) {
     this.index = n;
@@ -115,9 +122,9 @@ export class TimeLineComponent implements OnInit {
 
   clicked(ev) {// this responds to ANY click in the div containing the calendar
     if (document.getElementById('datums2'))     {
-      this._content = document.getElementById('datums2').innerText;
+      this ._content = document.getElementById('datums2').innerText;
       if (this._content === 'new item') {
-          this.drawControls = false;
+          this.drawControls = false;   
       }
     }
     let id = '';
@@ -131,9 +138,9 @@ export class TimeLineComponent implements OnInit {
         this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
         document.getElementById('vidx').innerText = this.data2._data[id].vidx; // store the vidx for DELETE
         this.seP.whereColVal = this.data2._data[this._id].vidx;
-        if (this._id >= 0 ) {                               // shows user had clicked a box
-          this.showControls = true;
-          }                                // show editing controls
+        if (this._id >= 0 ) {                                     // shows user had clicked a box
+          this.showControls = true;                             // show editing controls
+          }                                
         }
         console.log('clicked'  + this._id);
     if ( this.data2._data[id] &&  this.data2._data[id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
@@ -142,8 +149,9 @@ export class TimeLineComponent implements OnInit {
         this._readonly = true;
         }
     if (this.data2._data[id]) {                                    // if the timeAway is defined
-        this.startDate = new FormControl(new Date(this.data2._data[id].start));   // this is where the value is set
-        this.endDate = new FormControl(new Date(this.data2._data[id].end));
+        
+        this.startDate = new FormControl(new Date(this.data2._data[id].start), Validators.required);   // this is where the value is set
+        this.endDate = new FormControl(new Date(this.data2._data[id].end), Validators.required);
         this.reasonFC = new FormControl(this.data2._data[id].reason);
         this.notesFC = new FormControl(this.data2._data[id].note);
         if (this.data2._data[id].reason || this.data2._data[id].reason === 0 ) {
@@ -439,10 +447,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.editReason(1, 'approved');
   }
   newTimeAway() {
-    this.startDate = new FormControl();
-    this.endDate = new FormControl();
-    this.reasonFC = new FormControl();
-    this.notesFC = new FormControl("-");
+
     this.showControls = true;                                         // show the dataEntry controls
     this._readonly = false;
     this._id = 1;
@@ -473,13 +478,8 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
       reason: this.reasonFC.value,
       note: this.notesFC.value
       };
- 
-    console.log('item in save ' + item);
-
     this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
-   
-   //
-     this.data2.update({id: this._id, reason: item.start});   
+ //   this.data2.update({id: this._id, reason: item.start});   
                      // add the new tA to local DataSet
 
     this.localAddId++;                                                     // increment the id so can add additional tAs

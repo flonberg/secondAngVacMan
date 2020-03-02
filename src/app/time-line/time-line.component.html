@@ -7,22 +7,26 @@
         </div>
         <input id="chData" value="test" >  
     </div>  
-    <div id="controls" *ngIf = "drawControls" >
+    <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
    
             <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
                 <li class="item">
                     <mat-form-field  class="item" >
                         <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
-                        (dateInput)="editDate('start', $event)" (change) = "clear()" [formControl] = "startDate">
+                        (dateInput)="editDate('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
                         <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
                         <mat-datepicker #picker ></mat-datepicker>
+                   
                     </mat-form-field>
                 </li>
+                <div-alert-alert-danger *ngIf = "form.get('startDate').touched && form.get('startDate').invalid">
+                    Date is requred.
+                </div-alert-alert-danger>
         
                 <li class="item">
                     <mat-form-field  class="item" x>
-                        <input matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
-                        (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate" >
+                        <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
+                        (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate"  >
                         <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
                         <mat-datepicker #epicker ></mat-datepicker>
                     </mat-form-field>
