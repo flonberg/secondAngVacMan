@@ -65,7 +65,7 @@ export class TimeLineComponent implements OnInit {
   userid: String;
   _readonly: boolean;
   showControls: boolean;
-  _id: string;
+  _id: number;
   _content;                                           // store the item.content from click
   drawControls = true;
   isApprover: boolean;
@@ -122,7 +122,7 @@ export class TimeLineComponent implements OnInit {
     }
     let id = '';
     if (document.getElementById('datums')) {
-        this._id = document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet
+        this._id = +document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet
         id = document.getElementById('datums').innerText;        // get the id from the vis click
         console.log('box clicked on');
         if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
@@ -131,7 +131,7 @@ export class TimeLineComponent implements OnInit {
         this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
         document.getElementById('vidx').innerText = this.data2._data[id].vidx; // store the vidx for DELETE
         this.seP.whereColVal = this.data2._data[this._id].vidx;
-        if (this._id !== 'datums' ) {                               // shows user had clicked a box
+        if (this._id >= 0 ) {                               // shows user had clicked a box
           this.showControls = true;
           }                                // show editing controls
         }
@@ -363,7 +363,10 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
       if (s === 1) {
         this.seP.editColVal = '1';
       }
-      this.data2.update({id: this._id, reason: s.value});               // update dateSet
+      if (colName=='note')
+        this.data2.update({id: this._id, note:  this.seP.editColVal});   
+        if (colName=='reason')
+        this.data2.update({id: this._id, reason:  this.seP.editColVal});               // update dateSet
       this.getEditSvce.update(this.seP);                                // uses RESTupdatePOST.php
       this.reasonEdited = true;                                         // has to be true to show Save Time Away button
     }
@@ -439,10 +442,10 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.startDate = new FormControl();
     this.endDate = new FormControl();
     this.reasonFC = new FormControl();
-    this.notesFC = new FormControl();
+    this.notesFC = new FormControl("-");
     this.showControls = true;                                         // show the dataEntry controls
     this._readonly = false;
-    this._id = '1';
+    this._id = 1;
     this.newTimeAwayBool = true;
   }
   saveNewTimeAway() {
