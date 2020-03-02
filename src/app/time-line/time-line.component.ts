@@ -363,6 +363,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
       if (s === 1) {
         this.seP.editColVal = '1';
       }
+      this.data2.update({id: this._id, reason: s.value});                     // update dateSet
       this.getEditSvce.update(this.seP);
       this.reasonEdited = true;                                         // has to be true to show Save Time Away button
     }
@@ -427,6 +428,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
   approve() {
     console.log('appreove' + this._id);
     this.data2.update({id: this._id, style: 'color:blue'});
+
     this.data2._data[this._id].approved = 1;
     this.editReason(1, 'approved');
   }
@@ -450,16 +452,27 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
        this.notesFC.value, this.userkey];
     const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
     const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
+   
+    const lastItem = Object.keys(this.data2._data).length;
+    console.log("laseItem is " + lastItem);
+
     const item = {                                                      // set up dataStruct to add to timeLine DataSet
-      id: this.localAddId,
-      start: new Date(this.formatDateForTimeline(this.startDate.value)),
-      end: new Date(this.formatDateForTimeline(this.endDate.value)),
+      id: lastItem,
+      start: this.formatDateForTimeline(this.startDate.value),
+      end: this.formatDateForTimeline(this.endDate.value),
       style: 'color:blue',
       content: content,
       group: groupNum
       };
+ 
     console.log('item in save ' + item);
+
     this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
+   
+   //
+     this.data2.update({id: this._id, reason: item.start});   
+                     // add the new tA to local DataSet
+
     this.localAddId++;                                                     // increment the id so can add additional tAs
     this.newTimeAwayBool = false;                                         // enable editing of existing tAs
     this.getEditSvce.insert(params);                                    //  insert into dB
