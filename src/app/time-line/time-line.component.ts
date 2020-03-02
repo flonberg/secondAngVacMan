@@ -446,6 +446,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.showControls = true;                                         // show the dataEntry controls
     this._readonly = false;
     this._id = 1;
+    this.showControls = true;
     this.newTimeAwayBool = true;
   }
   saveNewTimeAway() {
@@ -468,7 +469,9 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
       end: this.formatDateForTimeline(this.endDate.value),
       style: 'color:blue',
       content: content,
-      group: groupNum
+      group: groupNum,
+      reason: this.reasonFC.value,
+      note: this.notesFC.value
       };
  
     console.log('item in save ' + item);

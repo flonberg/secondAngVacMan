@@ -51,7 +51,7 @@
                 <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
                     <mat-form-field  class="wideItem">
                         <mat-label class="smallLabel"> Note:</mat-label>
-                        <textarea matInput  (change)="editReason($event, 'note')" [value]="this.data2._data[this._id].note"
+                        <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id].note"
                             [formControl] = "notesFC"
                             cdkTextareaAutosize [readonly]="_readonly"
                             #autosize="cdkTextareaAutosize"
@@ -70,11 +70,10 @@
                         <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
                 </li>
             </ul>
-            <div style="display:block;" >
-            <button mat-raised-button (click) ="newTimeAway()"  >New Time Away </button>
-            </div>
-
-
+    
+    </div>
+    <div style="display:block;" >
+        <button mat-raised-button (click) ="newTimeAway()"  >New Time Away </button>
     </div>
 </div>
 <div id="datums"  style="display:block"> </div>
