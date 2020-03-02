@@ -159,8 +159,9 @@ export class TimeLineComponent implements OnInit {
         this.data2.remove({id: +document.getElementById('datums').innerText});    // remove the item from the dataSet
         this.drawControls = false;                                  // turn off the edit Controls.
         const dParams = {
-          'action': 'delete',                                            // actions are 'edit', 'insert', 'delete'
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
+          'editColNames':['reasonIdx'],
+          'editColVals':['99']
         };
         const i = 0;
         this.doREST(dParams);
@@ -168,7 +169,6 @@ export class TimeLineComponent implements OnInit {
           this.updateDB(this.data2._data[id].start, this.data2._data[id].end);
       }
   }
-
   updateDB(sD, eD) {
     console.log('sD is ' + sD  + 'length is ' + sD.length);
       const dParams = {
@@ -363,8 +363,8 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
       if (s === 1) {
         this.seP.editColVal = '1';
       }
-      this.data2.update({id: this._id, reason: s.value});                     // update dateSet
-      this.getEditSvce.update(this.seP);
+      this.data2.update({id: this._id, reason: s.value});               // update dateSet
+      this.getEditSvce.update(this.seP);                                // uses RESTupdatePOST.php
       this.reasonEdited = true;                                         // has to be true to show Save Time Away button
     }
 
@@ -374,7 +374,10 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.showControls = false;                                          // turn off controls
     this.seP.editColName = 'reasonIdx';                                 // reasonIdx is the DELETE signal column
     this.seP.editColVal = '99';                                         // any smallInt > 0
-    this.getEditSvce.update(this.seP);
+    this.seP.whereColName = 'vidx';
+    this.seP.whereColVal = document.getElementById('vidx').innerText; 
+  //  this.getEditSvce.update(this.seP);
+    this.doREST(this.seP);
   }
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
     const s = this.formatDateForTimeline(event.value);                 // make the string for local update
