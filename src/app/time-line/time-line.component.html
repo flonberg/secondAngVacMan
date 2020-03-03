@@ -9,11 +9,15 @@
     </div>      
 
     <form [formGroup]="formG" novalidate (ngSubmit)="onSubmit()">
-    <input formControlName="dateFrom" type="date" useValueAsDate />
-  <input formControlName="dateTo" type="date" useValueAsDate />
+        <input formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" 
+        (blur) = "B_EnterDate()" (change)="fEnterDate()"/>
+        <div class  = 'warning' *ngIf='invalidDate'  > Start Date Required </div>
+        <input formControlName="dateTo" type="date" useValueAsDate />
   <!--<button [disabled]="form.pristine || form.invalid" type="submit">Submit</button>-->
-  <button type="submit">Submit</button>
-  <label *ngIf="formG.errors">{{ formG.errors?.dates | json }} Invalid </label>
+    <button type="submit">Submit</button>
+    <div *ngIf = "this.doValidation" > {{ formG.status }} </div> 
+    <label *ngIf="formG.errors">{{ formG.errors?.dates | json }}  </label>
+
 
   </form>
 

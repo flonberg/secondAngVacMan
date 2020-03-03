@@ -95,7 +95,9 @@ export class TimeLineComponent implements OnInit {
   form: FormGroup;
   cutOffDate: Date;
   startDateEntered: Date;
-  formG: FormGroup
+  formG: FormGroup;
+  doValidation: boolean;
+  invalidDate: boolean;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
@@ -121,26 +123,43 @@ export class TimeLineComponent implements OnInit {
     this.createForm();
   }
   createForm() {
+    this.doValidation = false;
+    this.invalidDate = false;
     this.formG = this.fb.group({
       dateTo: ['', Validators.required ],
       dateFrom: ['', Validators.required ]
-    }, {validator: this.dateLessThan('dateFrom', 'dateTo')});
+    }, {validator: this.dateLessThan('dateFrom', 'dateTo')}
+    );
   }
   dateLessThan(from: string, to: string) {
     return (group: FormGroup): {[key: string]: any} => {
      let f = group.controls[from];
      let t = group.controls[to];
-     if (f.value > t.value) {
+  
+     if (t.value && f.value > t.value) {
        return {
-         dates: "Date from should be less than Date to"
+         dates: "End Date must be after Start Date "
        };
+      
      }
      return {};
     }
   }
+  B_EnterDate(){
+    console.log("fEnterDate " + this.formG );
+    if (this.formG.controls.dateFrom.status == "INVALID")
+      this.invalidDate = true;
+  }
+
+  fEnterDate(){
+    console.log("fEnterDate " + this.formG );
+    this.invalidDate = false;
+  }
+
   onSubmit() {
+    this.doValidation = true; 
     console.log("Probando")
-    console.log(this.formG)
+    console.log(this.formG.status)
     console.log(this.formG.value)
   }
   setIndex(n) {
