@@ -9,16 +9,24 @@
     </div>      
 
     <form [formGroup]="formG" novalidate (ngSubmit)="onSubmit()">
-        <input formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" 
-        (blur) = "B_EnterDate()" (change)="fEnterDate()"/>
-        <div class  = 'warning' *ngIf='invalidDate'  > Start Date Required </div>
+        <input id="dateFrom" formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
         <input formControlName="dateTo" type="date" useValueAsDate />
   <!--<button [disabled]="form.pristine || form.invalid" type="submit">Submit</button>-->
-    <button type="submit">Submit</button>
-    <div *ngIf = "this.doValidation" > {{ formG.status }} </div> 
-    <label *ngIf="formG.errors">{{ formG.errors?.dates | json }}  </label>
+         <button type="submit">Submit</button>
 
-
+    <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
+        class="alert alert-danger">
+            <div *ngIf="this.formG.controls.dateFrom.errors.required">
+                Start Date is required.
+            </div>
+    </div>       
+    <div *ngIf="this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) "
+         class="alert alert-danger">
+        <div *ngIf="this.formG.controls.dateTo.errors.required">
+           End Date is required.
+        </div>
+    </div>  
+    <div class="alert alert-danger" *ngIf="formG.errors"  > {{ formG.errors?.dates | json }} </div>     
   </form>
 
 

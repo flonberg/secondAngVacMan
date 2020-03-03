@@ -97,7 +97,7 @@ export class TimeLineComponent implements OnInit {
   startDateEntered: Date;
   formG: FormGroup;
   doValidation: boolean;
-  invalidDate: boolean;
+  invalidFromDate: boolean;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
@@ -124,7 +124,7 @@ export class TimeLineComponent implements OnInit {
   }
   createForm() {
     this.doValidation = false;
-    this.invalidDate = false;
+    this.invalidFromDate = false;
     this.formG = this.fb.group({
       dateTo: ['', Validators.required ],
       dateFrom: ['', Validators.required ]
@@ -144,16 +144,6 @@ export class TimeLineComponent implements OnInit {
      }
      return {};
     }
-  }
-  B_EnterDate(){
-    console.log("fEnterDate " + this.formG );
-    if (this.formG.controls.dateFrom.status == "INVALID")
-      this.invalidDate = true;
-  }
-
-  fEnterDate(){
-    console.log("fEnterDate " + this.formG );
-    this.invalidDate = false;
   }
 
   onSubmit() {
