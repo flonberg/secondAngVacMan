@@ -6,7 +6,18 @@
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)">
         </div>
         <input id="chData" value="test" >  
-    </div>  
+    </div>      
+
+    <form [formGroup]="formG" novalidate (ngSubmit)="onSubmit()">
+    <input formControlName="dateFrom" type="date" useValueAsDate />
+  <input formControlName="dateTo" type="date" useValueAsDate />
+  <!--<button [disabled]="form.pristine || form.invalid" type="submit">Submit</button>-->
+  <button type="submit">Submit</button>
+  <label *ngIf="formG.errors">{{ formG.errors?.dates | json }} Invalid </label>
+
+  </form>
+
+
     <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
    
             <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
@@ -19,9 +30,8 @@
                    
                     </mat-form-field>
                 </li>
-                <div-alert-alert-danger *ngIf = "form.get('startDate').touched && form.get('startDate').invalid">
-                    Date is requred.
-                </div-alert-alert-danger>
+                <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
+                  
         
                 <li class="item">
                     <mat-form-field  class="item" x>
@@ -31,6 +41,8 @@
                         <mat-datepicker #epicker ></mat-datepicker>
                     </mat-form-field>
                 </li>
+                <div class='alert' *ngIf = "endDateGet.touched && endDateGet.invalid"> Date is requred and must be great than  </div>
+                <div class='alert' *ngIf = "endDateGet.mustBeLaterThan "> Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
                 <li class="item" *ngIf =!_readonly>
                     <mat-form-field>
                         <mat-label>Reason</mat-label>

@@ -7,7 +7,7 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { ActivatedRoute } from '@angular/router';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 import { DatePipe } from '@angular/common';
@@ -93,9 +93,12 @@ export class TimeLineComponent implements OnInit {
   index: number;
   useridP: string;
   form: FormGroup;
+  cutOffDate: Date;
+  startDateEntered: Date;
+  formG: FormGroup
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService,
-    private activatedRoute: ActivatedRoute, private datePipe: DatePipe) {
+    private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
     this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
@@ -110,14 +113,58 @@ export class TimeLineComponent implements OnInit {
     this.index = 0;
     this.form = new FormGroup({
       'startDate': this.startDate = new FormControl('', Validators.required),
-      'endDate': this.endDate = new FormControl('', Validators.required),
+      'endDate': this.endDate = new FormControl(['', Validators.required]),
       'reason': this.reasonFC = new FormControl(),
       'note': this.notesFC = new FormControl("-"),
-    })
+    }   )
+    this.cutOffDate = new Date('2019-02-01');
+    this.createForm();
+  }
+  createForm() {
+    this.formG = this.fb.group({
+      dateTo: ['', Validators.required ],
+      dateFrom: ['', Validators.required ]
+    }, {validator: this.dateLessThan('dateFrom', 'dateTo')});
+  }
+  dateLessThan(from: string, to: string) {
+    return (group: FormGroup): {[key: string]: any} => {
+     let f = group.controls[from];
+     let t = group.controls[to];
+     if (f.value > t.value) {
+       return {
+         dates: "Date from should be less than Date to"
+       };
+     }
+     return {};
+    }
+  }
+  onSubmit() {
+    console.log("Probando")
+    console.log(this.formG)
+    console.log(this.formG.value)
   }
   setIndex(n) {
     this.index = n;
     console.log('index is ' + this.index);
+  }
+  get startDateGet(){
+    return this.form.get('startDate');
+  }
+  get endDateGet(){
+    return this.form.get('endDate');
+  }
+ 
+  
+  mustBeLaterThan(control: AbstractControl) : ValidationErrors | null {
+    if (this){
+      console.log("startDateEntered" + this.startDateEntered)
+    }
+    console.log("typeof " + typeof control.value);
+    let controlValueDate = new Date(control.value);
+    if (typeof control.value =='object' && this && (controlValueDate) < this.startDateEntered) 
+      return { mustBeLaterThan : true};
+    else
+      return null;
   }
 
   clicked(ev) {// this responds to ANY click in the div containing the calendar
@@ -393,6 +440,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
     const s = this.formatDateForTimeline(event.value);                 // make the string for local update
     if (`${type}` === 'start') {
+      this.startDateEntered = event.value;
       this.data2.update({id: this._id, start: s});                       // do the local update
    //   this.data2.update({id:this._id, start: tst});                       // do the local update
       this.seP.editColName = 'startDate';
