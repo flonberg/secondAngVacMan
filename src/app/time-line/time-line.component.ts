@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 import { DatePipe } from '@angular/common';
 import { resetFakeAsyncZone } from '@angular/core/testing';
+import { throwIfEmpty } from 'rxjs/operators';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -98,6 +99,7 @@ export class TimeLineComponent implements OnInit {
   formG: FormGroup;
   doValidation: boolean;
   invalidFromDate: boolean;
+  formValidation: boolean;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
@@ -121,31 +123,50 @@ export class TimeLineComponent implements OnInit {
     }   )
     this.cutOffDate = new Date('2019-02-01');
     this.createForm();
+    this.formValidation = false;
   }
   createForm() {
     this.doValidation = false;
     this.invalidFromDate = false;
-    this.formG = this.fb.group({
+    this.formG = this.fb.group({                          // fb is
       dateTo: ['', Validators.required ],
-      dateFrom: ['', Validators.required ]
-    }, {validator: this.dateLessThan('dateFrom', 'dateTo')}
+      dateFrom: ['', Validators.required ],
+      reasonG: [''],
+      noteG: ['']
+    }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
     );
   }
-  dateLessThan(from: string, to: string) {
-    return (group: FormGroup): {[key: string]: any} => {
-     let f = group.controls[from];
-     let t = group.controls[to];
-  
-     if (t.value && f.value > t.value) {
-       return {
-         dates: "End Date must be after Start Date "
-       };
-      
-     }
-     return {};
+  dateLessThan(from: string, to: string, reason: string) {
+      return (group: FormGroup): {[key: string]: any} => 
+      {
+        let today = new Date(); 
+        let f = group.controls[from];
+        let t = group.controls[to];
+        let r = group.controls[reason];
+        if (t.value && f.value > t.value) {
+          return {
+            dates: "End Date must be after Start Date "
+          };
+        }
+        if (f.value ){
+          let fDate = new Date(f.value);
+          if (fDate < today)
+          return {
+            dates: "Date must be in the future"
+          };
+       //   this.editDate2('start', f);                             // to be used for editing dates not for submitting new tAs
+        }
+        if (f.value.length > 0  && f.value.length  > 0  && r.value.length  > 0){
+          this.formValidation = true;
+          console.log("form valid " + this.formValidation)
+        }
+    
+        return {};
     }
   }
-
+  mustBeInFuture(date: string){
+    
+  }
   onSubmit() {
     this.doValidation = true; 
     console.log("Probando")
@@ -445,6 +466,9 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.seP.whereColVal = document.getElementById('vidx').innerText; 
   //  this.getEditSvce.update(this.seP);
     this.doREST(this.seP);
+  }
+  editDate2(type: string, c: AbstractControl){
+    console.log("type is " + type );
   }
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
     const s = this.formatDateForTimeline(event.value);                 // make the string for local update
