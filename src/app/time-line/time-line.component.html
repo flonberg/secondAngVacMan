@@ -7,8 +7,10 @@
         </div>
         <input id="chData" value="test" >  
     </div>      
-
-<form [formGroup]="formG"  (ngSubmit)="onSubmit()">
+    <div *ngIf = "!newTimeAway2" >
+            <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button>
+    </div>
+<form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
     <mat-form-field class="item">
         <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
     </mat-form-field>   
@@ -28,7 +30,7 @@
     <mat-form-field  class="wideItem">
             <mat-label class="smallLabel"> Note:</mat-label>
             <textarea matInput 
-                formControlName = "reasonG" 
+                formControlName = "noteG" 
                 cdkTextareaAutosize 
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="1"
@@ -36,7 +38,7 @@
                 >
             </textarea>
         </mat-form-field > 
-    <button [disabled]="!formValidation" type="submit">Submit</button>
+    <button mat-raised-button [disabled]="!formValidation"   >Submit New Time Away</button>
         <!-- <button type="submit">Submit</button> -->
 
     <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
@@ -132,6 +134,7 @@
 <div id="datums"  style="display:block"> </div>
 <div id="datums2"  style="display:block"> </div>
 <div id="vidx"  style="display:block"> </div>
+
 
 <style type="text/css" >
     #timeline {

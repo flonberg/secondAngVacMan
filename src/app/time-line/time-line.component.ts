@@ -100,6 +100,7 @@ export class TimeLineComponent implements OnInit {
   doValidation: boolean;
   invalidFromDate: boolean;
   formValidation: boolean;
+  newTimeAway2: boolean;
 
   constructor( private http: HttpClient, private getEditSvce: GenEditService,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
@@ -124,6 +125,7 @@ export class TimeLineComponent implements OnInit {
     this.cutOffDate = new Date('2019-02-01');
     this.createForm();
     this.formValidation = false;
+    this.newTimeAway2 = false;
   }
   createForm() {
     this.doValidation = false;
@@ -139,7 +141,7 @@ export class TimeLineComponent implements OnInit {
   dateLessThan(from: string, to: string, reason: string) {
       return (group: FormGroup): {[key: string]: any} => 
       {
-        let today = new Date(); 
+        let today = new Date('2019-03-01'); 
         let f = group.controls[from];
         let t = group.controls[to];
         let r = group.controls[reason];
@@ -172,6 +174,21 @@ export class TimeLineComponent implements OnInit {
     console.log("Probando")
     console.log(this.formG.status)
     console.log(this.formG.value)
+    const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
+    const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
+    const lastItem = Object.keys(this.data2._data).length;
+ 
+    const item = {
+      id: lastItem,
+      start: this.formG.value.dateFrom,
+      end: this.formG.value.dateTo,
+      content: content,
+      group: groupNum,
+      reason: this.formG.value.reasonG,
+      note: this.formG.value.noteG,
+    };
+    console.log("laseItem is " + item);
+    this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
   }
   setIndex(n) {
     this.index = n;
@@ -527,13 +544,19 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.data2._data[this._id].approved = 1;
     this.editReason(1, 'approved');
   }
+  setNewTimeAway2(){
+    this.newTimeAway2 = true;
+  }
   newTimeAway() {
-
     this.showControls = true;                                         // show the dataEntry controls
     this._readonly = false;
     this._id = 1;
     this.showControls = true;
     this.newTimeAwayBool = true;
+  }
+  saveNewTimeAway2(){
+ 
+    console.log("222" + this.formG.controls.dateFrom.value);
   }
   saveNewTimeAway() {
     const params = <SinsertParams>{};
@@ -545,7 +568,6 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
        this.notesFC.value, this.userkey];
     const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
     const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
-   
     const lastItem = Object.keys(this.data2._data).length;
     console.log("laseItem is " + lastItem);
 

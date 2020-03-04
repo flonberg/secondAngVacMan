@@ -639,7 +639,7 @@ var MonthViewComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* Style the tab */\n.tab {\n    overflow: hidden;\n  }\n/* Style the buttons inside the tab */\n.button {\n    background-color: inherit;\n    float: left;\n    border: none;\n    outline: none;\n    cursor: pointer;\n    padding: 8px 10px;\n    transition: 0.3s;\n    font-size: 12px;\n    border:solid;\n    border-color:gray;\n    border-top-left-radius: 15px;\n    border-top-right-radius: 15px;\n  }\n/* Change background color of buttons on hover */\n.button:hover {\n    background-color: rgb(231, 154, 154);\n  }\n.button.active {\n    font-style:underline;\n  }\n/* Create an active/current tablink class */\n.button.active {\n    background-color: rgb(97, 89, 89);\n  }\n/* Style the tab content */\n.tabcontent {\n    display: none;\n    padding: 6px 12px;\n    border: 1px solid #ccc;\n    border-top: none;\n  }\n \n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbmF2LWJhci12bS9uYXYtYmFyLXZtLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsa0JBQWtCO0FBQ2xCO0lBQ0ksZ0JBQWdCO0VBQ2xCO0FBRUEscUNBQXFDO0FBQ3JDO0lBQ0UseUJBQXlCO0lBQ3pCLFdBQVc7SUFDWCxZQUFZO0lBQ1osYUFBYTtJQUNiLGVBQWU7SUFDZixpQkFBaUI7SUFDakIsZ0JBQWdCO0lBQ2hCLGVBQWU7SUFDZixZQUFZO0lBQ1osaUJBQWlCO0lBQ2pCLDRCQUE0QjtJQUM1Qiw2QkFBNkI7RUFDL0I7QUFFQSxnREFBZ0Q7QUFDakQ7SUFDRyxvQ0FBb0M7RUFDdEM7QUFDQTtJQUNFLG9CQUFvQjtFQUN0QjtBQUVBLDJDQUEyQztBQUM1QztJQUNHLGlDQUFpQztFQUNuQztBQUVBLDBCQUEwQjtBQUMxQjtJQUNFLGFBQWE7SUFDYixpQkFBaUI7SUFDakIsc0JBQXNCO0lBQ3RCLGdCQUFnQjtFQUNsQiIsImZpbGUiOiJzcmMvYXBwL25hdi1iYXItdm0vbmF2LWJhci12bS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogU3R5bGUgdGhlIHRhYiAqL1xuLnRhYiB7XG4gICAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgfVxuICBcbiAgLyogU3R5bGUgdGhlIGJ1dHRvbnMgaW5zaWRlIHRoZSB0YWIgKi9cbiAgLmJ1dHRvbiB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogaW5oZXJpdDtcbiAgICBmbG9hdDogbGVmdDtcbiAgICBib3JkZXI6IG5vbmU7XG4gICAgb3V0bGluZTogbm9uZTtcbiAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgcGFkZGluZzogOHB4IDEwcHg7XG4gICAgdHJhbnNpdGlvbjogMC4zcztcbiAgICBmb250LXNpemU6IDEycHg7XG4gICAgYm9yZGVyOnNvbGlkO1xuICAgIGJvcmRlci1jb2xvcjpncmF5O1xuICAgIGJvcmRlci10b3AtbGVmdC1yYWRpdXM6IDE1cHg7XG4gICAgYm9yZGVyLXRvcC1yaWdodC1yYWRpdXM6IDE1cHg7XG4gIH1cbiAgXG4gIC8qIENoYW5nZSBiYWNrZ3JvdW5kIGNvbG9yIG9mIGJ1dHRvbnMgb24gaG92ZXIgKi9cbiAuYnV0dG9uOmhvdmVyIHtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2IoMjMxLCAxNTQsIDE1NCk7XG4gIH1cbiAgLmJ1dHRvbi5hY3RpdmUge1xuICAgIGZvbnQtc3R5bGU6dW5kZXJsaW5lO1xuICB9XG4gIFxuICAvKiBDcmVhdGUgYW4gYWN0aXZlL2N1cnJlbnQgdGFibGluayBjbGFzcyAqL1xuIC5idXR0b24uYWN0aXZlIHtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2IoOTcsIDg5LCA4OSk7XG4gIH1cbiAgXG4gIC8qIFN0eWxlIHRoZSB0YWIgY29udGVudCAqL1xuICAudGFiY29udGVudCB7XG4gICAgZGlzcGxheTogbm9uZTtcbiAgICBwYWRkaW5nOiA2cHggMTJweDtcbiAgICBib3JkZXI6IDFweCBzb2xpZCAjY2NjO1xuICAgIGJvcmRlci10b3A6IG5vbmU7XG4gIH1cbiAiXX0= */"
+module.exports = "/* Style the tab */\n.tab {\n    overflow: hidden;\n  }\n/* Style the buttons inside the tab */\n.button {\n    background-color: inherit;\n    float: left;\n    border: none;\n    outline: none;\n    cursor: pointer;\n    padding: 8px 10px;\n    transition: 0.3s;\n    font-size: 14px;\n    border:solid;\n    border-color:gray;\n    border-top-left-radius: 15px;\n    border-top-right-radius: 15px;\n  }\n/* Change background color of buttons on hover */\n.button:hover {\n    background-color: rgb(231, 154, 154);\n  }\n.button.active {\n    font-style:underline;\n  }\n/* Create an active/current tablink class */\n.button.active {\n    background-color: rgb(97, 89, 89);\n  }\n/* Style the tab content */\n.tabcontent {\n    display: none;\n    padding: 6px 12px;\n    border: 1px solid #ccc;\n    border-top: none;\n  }\n \n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbmF2LWJhci12bS9uYXYtYmFyLXZtLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsa0JBQWtCO0FBQ2xCO0lBQ0ksZ0JBQWdCO0VBQ2xCO0FBRUEscUNBQXFDO0FBQ3JDO0lBQ0UseUJBQXlCO0lBQ3pCLFdBQVc7SUFDWCxZQUFZO0lBQ1osYUFBYTtJQUNiLGVBQWU7SUFDZixpQkFBaUI7SUFDakIsZ0JBQWdCO0lBQ2hCLGVBQWU7SUFDZixZQUFZO0lBQ1osaUJBQWlCO0lBQ2pCLDRCQUE0QjtJQUM1Qiw2QkFBNkI7RUFDL0I7QUFFQSxnREFBZ0Q7QUFDakQ7SUFDRyxvQ0FBb0M7RUFDdEM7QUFDQTtJQUNFLG9CQUFvQjtFQUN0QjtBQUVBLDJDQUEyQztBQUM1QztJQUNHLGlDQUFpQztFQUNuQztBQUVBLDBCQUEwQjtBQUMxQjtJQUNFLGFBQWE7SUFDYixpQkFBaUI7SUFDakIsc0JBQXNCO0lBQ3RCLGdCQUFnQjtFQUNsQiIsImZpbGUiOiJzcmMvYXBwL25hdi1iYXItdm0vbmF2LWJhci12bS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogU3R5bGUgdGhlIHRhYiAqL1xuLnRhYiB7XG4gICAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgfVxuICBcbiAgLyogU3R5bGUgdGhlIGJ1dHRvbnMgaW5zaWRlIHRoZSB0YWIgKi9cbiAgLmJ1dHRvbiB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogaW5oZXJpdDtcbiAgICBmbG9hdDogbGVmdDtcbiAgICBib3JkZXI6IG5vbmU7XG4gICAgb3V0bGluZTogbm9uZTtcbiAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgcGFkZGluZzogOHB4IDEwcHg7XG4gICAgdHJhbnNpdGlvbjogMC4zcztcbiAgICBmb250LXNpemU6IDE0cHg7XG4gICAgYm9yZGVyOnNvbGlkO1xuICAgIGJvcmRlci1jb2xvcjpncmF5O1xuICAgIGJvcmRlci10b3AtbGVmdC1yYWRpdXM6IDE1cHg7XG4gICAgYm9yZGVyLXRvcC1yaWdodC1yYWRpdXM6IDE1cHg7XG4gIH1cbiAgXG4gIC8qIENoYW5nZSBiYWNrZ3JvdW5kIGNvbG9yIG9mIGJ1dHRvbnMgb24gaG92ZXIgKi9cbiAuYnV0dG9uOmhvdmVyIHtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2IoMjMxLCAxNTQsIDE1NCk7XG4gIH1cbiAgLmJ1dHRvbi5hY3RpdmUge1xuICAgIGZvbnQtc3R5bGU6dW5kZXJsaW5lO1xuICB9XG4gIFxuICAvKiBDcmVhdGUgYW4gYWN0aXZlL2N1cnJlbnQgdGFibGluayBjbGFzcyAqL1xuIC5idXR0b24uYWN0aXZlIHtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiByZ2IoOTcsIDg5LCA4OSk7XG4gIH1cbiAgXG4gIC8qIFN0eWxlIHRoZSB0YWIgY29udGVudCAqL1xuICAudGFiY29udGVudCB7XG4gICAgZGlzcGxheTogbm9uZTtcbiAgICBwYWRkaW5nOiA2cHggMTJweDtcbiAgICBib3JkZXI6IDFweCBzb2xpZCAjY2NjO1xuICAgIGJvcmRlci10b3A6IG5vbmU7XG4gIH1cbiAiXX0= */"
 
 /***/ }),
 
@@ -710,7 +710,7 @@ var NavBarVMComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n#container {\n  border:solid;\n  overflow:auto;\n}\n#controls {\n  position:relative;\n  height:100px;\n  width:100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  text-align: center;\n}\n.vis-item.red {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.form-width{\n    width:100px;\n  }\n.flex-container {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n    display: flex;\n    width:80%;\n    justify-content: space-evenly;\n  }\n.wideItem {\n    width: 250px;\n  }\n/* \n.item {\n    width: 100px;\n    background-color:green;\n  }\n  */\n.space-evenly { \n    justify-content: space-evenly; \n  }\n.vis-item.approved {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.vis-item {\n    border-color: orange;\n    background-color: green;\n  }\n.smallLable {\n    color:blue;\n  }\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvdGltZS1saW5lL3RpbWUtbGluZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFDQTtFQUNFLFlBQVk7RUFDWixhQUFhO0FBQ2Y7QUFDQTtFQUNFLGlCQUFpQjtFQUNqQixZQUFZO0VBQ1osVUFBVTtFQUNWLGFBQWE7RUFDYix1QkFBdUI7RUFDdkIsbUJBQW1CO0VBQ25CLGtCQUFrQjtBQUNwQjtBQUNBO0lBQ0ksWUFBWTtJQUNaLHFCQUFxQjtJQUNyQixxQkFBcUI7RUFDdkI7QUFDRjtJQUNJLFdBQVc7RUFDYjtBQUNGO0lBQ0ksVUFBVTtJQUNWLFNBQVM7SUFDVCxnQkFBZ0I7SUFDaEIsYUFBYTtJQUNiLFNBQVM7SUFDVCw2QkFBNkI7RUFDL0I7QUFDRjtJQUNJLFlBQVk7RUFDZDtBQUNEOzs7OztHQUtFO0FBQ0g7SUFDSSw2QkFBNkI7RUFDL0I7QUFDRjtJQUNJLFlBQVk7SUFDWixxQkFBcUI7SUFDckIscUJBQXFCO0VBQ3ZCO0FBQ0Y7SUFDSSxvQkFBb0I7SUFDcEIsdUJBQXVCO0VBQ3pCO0FBQ0E7SUFDRSxVQUFVO0VBQ1oiLCJmaWxlIjoic3JjL2FwcC90aW1lLWxpbmUvdGltZS1saW5lLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJcbiNjb250YWluZXIge1xuICBib3JkZXI6c29saWQ7XG4gIG92ZXJmbG93OmF1dG87XG59XG4jY29udHJvbHMge1xuICBwb3NpdGlvbjpyZWxhdGl2ZTtcbiAgaGVpZ2h0OjEwMHB4O1xuICB3aWR0aDoxMDAlO1xuICBkaXNwbGF5OiBmbGV4O1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuLnZpcy1pdGVtLnJlZCB7XG4gICAgY29sb3I6IHdoaXRlO1xuICAgIGJhY2tncm91bmQtY29sb3I6IHJlZDtcbiAgICBib3JkZXItY29sb3I6IGRhcmtyZWQ7XG4gIH1cbi5mb3JtLXdpZHRoe1xuICAgIHdpZHRoOjEwMHB4O1xuICB9XG4uZmxleC1jb250YWluZXIge1xuICAgIHBhZGRpbmc6IDA7XG4gICAgbWFyZ2luOiAwO1xuICAgIGxpc3Qtc3R5bGU6IG5vbmU7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICB3aWR0aDo4MCU7XG4gICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1ldmVubHk7XG4gIH1cbi53aWRlSXRlbSB7XG4gICAgd2lkdGg6IDI1MHB4O1xuICB9XG4gLyogXG4uaXRlbSB7XG4gICAgd2lkdGg6IDEwMHB4O1xuICAgIGJhY2tncm91bmQtY29sb3I6Z3JlZW47XG4gIH1cbiAgKi9cbi5zcGFjZS1ldmVubHkgeyBcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWV2ZW5seTsgXG4gIH1cbi52aXMtaXRlbS5hcHByb3ZlZCB7XG4gICAgY29sb3I6IHdoaXRlO1xuICAgIGJhY2tncm91bmQtY29sb3I6IHJlZDtcbiAgICBib3JkZXItY29sb3I6IGRhcmtyZWQ7XG4gIH1cbi52aXMtaXRlbSB7XG4gICAgYm9yZGVyLWNvbG9yOiBvcmFuZ2U7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogZ3JlZW47XG4gIH1cbiAgLnNtYWxsTGFibGUge1xuICAgIGNvbG9yOmJsdWU7XG4gIH0iXX0= */"
+module.exports = "\n#container {\n  border:solid;\n  overflow:auto;\n}\n#controls {\n  position:relative;\n  height:100px;\n  width:100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  text-align: center;\n}\n.vis-time-axis .vis-grid.vis-saturday,\n\t.vis-time-axis .vis-grid.vis-sunday {\n\t\tbackground: green\t\n\t  }\n.vis-time-axis .vis-grid.vis-today {\n\t\tbackground: #FFFFCC;\t\n\t  }\n.vis-item.red {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.form-width{\n    width:100px;\n  }\n.flex-container {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n    display: flex;\n    width:80%;\n    justify-content: space-evenly;\n  }\n.wideItem {\n    width: 250px;\n  }\n/* \n.item {\n    width: 100px;\n    background-color:green;\n  }\n  */\n.space-evenly { \n    justify-content: space-evenly; \n  }\n.vis-item.approved {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.vis-item {\n    border-color: orange;\n    background-color: green;\n  }\n.smallLable {\n    color:blue;\n  }\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvdGltZS1saW5lL3RpbWUtbGluZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFDQTtFQUNFLFlBQVk7RUFDWixhQUFhO0FBQ2Y7QUFDQTtFQUNFLGlCQUFpQjtFQUNqQixZQUFZO0VBQ1osVUFBVTtFQUNWLGFBQWE7RUFDYix1QkFBdUI7RUFDdkIsbUJBQW1CO0VBQ25CLGtCQUFrQjtBQUNwQjtBQUNBOztFQUVFO0dBQ0M7QUFFRjtFQUNDLG1CQUFtQjtHQUNsQjtBQUNIO0lBQ0ksWUFBWTtJQUNaLHFCQUFxQjtJQUNyQixxQkFBcUI7RUFDdkI7QUFDRjtJQUNJLFdBQVc7RUFDYjtBQUNGO0lBQ0ksVUFBVTtJQUNWLFNBQVM7SUFDVCxnQkFBZ0I7SUFDaEIsYUFBYTtJQUNiLFNBQVM7SUFDVCw2QkFBNkI7RUFDL0I7QUFDRjtJQUNJLFlBQVk7RUFDZDtBQUNEOzs7OztHQUtFO0FBQ0g7SUFDSSw2QkFBNkI7RUFDL0I7QUFDRjtJQUNJLFlBQVk7SUFDWixxQkFBcUI7SUFDckIscUJBQXFCO0VBQ3ZCO0FBQ0Y7SUFDSSxvQkFBb0I7SUFDcEIsdUJBQXVCO0VBQ3pCO0FBQ0E7SUFDRSxVQUFVO0VBQ1oiLCJmaWxlIjoic3JjL2FwcC90aW1lLWxpbmUvdGltZS1saW5lLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJcbiNjb250YWluZXIge1xuICBib3JkZXI6c29saWQ7XG4gIG92ZXJmbG93OmF1dG87XG59XG4jY29udHJvbHMge1xuICBwb3NpdGlvbjpyZWxhdGl2ZTtcbiAgaGVpZ2h0OjEwMHB4O1xuICB3aWR0aDoxMDAlO1xuICBkaXNwbGF5OiBmbGV4O1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuLnZpcy10aW1lLWF4aXMgLnZpcy1ncmlkLnZpcy1zYXR1cmRheSxcblx0LnZpcy10aW1lLWF4aXMgLnZpcy1ncmlkLnZpcy1zdW5kYXkge1xuXHRcdGJhY2tncm91bmQ6IGdyZWVuXHRcblx0ICB9XG5cdCAgXG5cdC52aXMtdGltZS1heGlzIC52aXMtZ3JpZC52aXMtdG9kYXkge1xuXHRcdGJhY2tncm91bmQ6ICNGRkZGQ0M7XHRcblx0ICB9XG4udmlzLWl0ZW0ucmVkIHtcbiAgICBjb2xvcjogd2hpdGU7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmVkO1xuICAgIGJvcmRlci1jb2xvcjogZGFya3JlZDtcbiAgfVxuLmZvcm0td2lkdGh7XG4gICAgd2lkdGg6MTAwcHg7XG4gIH1cbi5mbGV4LWNvbnRhaW5lciB7XG4gICAgcGFkZGluZzogMDtcbiAgICBtYXJnaW46IDA7XG4gICAgbGlzdC1zdHlsZTogbm9uZTtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIHdpZHRoOjgwJTtcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWV2ZW5seTtcbiAgfVxuLndpZGVJdGVtIHtcbiAgICB3aWR0aDogMjUwcHg7XG4gIH1cbiAvKiBcbi5pdGVtIHtcbiAgICB3aWR0aDogMTAwcHg7XG4gICAgYmFja2dyb3VuZC1jb2xvcjpncmVlbjtcbiAgfVxuICAqL1xuLnNwYWNlLWV2ZW5seSB7IFxuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtZXZlbmx5OyBcbiAgfVxuLnZpcy1pdGVtLmFwcHJvdmVkIHtcbiAgICBjb2xvcjogd2hpdGU7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmVkO1xuICAgIGJvcmRlci1jb2xvcjogZGFya3JlZDtcbiAgfVxuLnZpcy1pdGVtIHtcbiAgICBib3JkZXItY29sb3I6IG9yYW5nZTtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBncmVlbjtcbiAgfVxuICAuc21hbGxMYWJsZSB7XG4gICAgY29sb3I6Ymx1ZTtcbiAgfSJdfQ== */"
 
 /***/ }),
 
@@ -721,7 +721,7 @@ module.exports = "\n#container {\n  border:solid;\n  overflow:auto;\n}\n#control
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n   <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->\n<div >\n    \n    <div id=\"container\">  \n        <div id=\"timeline\" #visjsTimeline *ngIf = \"redraw  && index == 0\"   (click) = \"clicked($event)\">\n        </div>\n        <input id=\"chData\" value=\"test\" >  \n    </div>  \n    <div id=\"controls\" *ngIf = \"drawControls\" >\n   \n            <ul *ngIf = \"this.showControls && this._id \" class=\"flex-container  \">\n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" >\n                        <input matInput [matDatepicker]=\"picker\" placeholder= \"Start Date \" id='startDateInput' [readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('start', $event)\" (change) = \"clear()\" [formControl] = \"startDate\">\n                        <mat-datepicker-toggle matSuffix [for]=\"picker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #picker ></mat-datepicker>\n                    </mat-form-field>\n                </li>\n        \n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" x>\n                        <input matInput [matDatepicker]=\"epicker\" placeholder= \"End Date \" id='endDateInput'[readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('end', $event)\" (change) = \"clear()\" [formControl] = \"endDate\" >\n                        <mat-datepicker-toggle matSuffix [for]=\"epicker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #epicker ></mat-datepicker>\n                    </mat-form-field>\n                </li>\n                <li class=\"item\" *ngIf =!_readonly>\n                    <mat-form-field>\n                        <mat-label>Reason</mat-label>\n                            <mat-select [(value)]=\"reasonSelect\" (selectionChange)=\"editReason($event, 'reason')\"\n                            [formControl] = \"reasonFC\"  id='reasonId'>\n                                    <mat-option  value=\"0\">Personal Vacation</mat-option>\n                                    <mat-option  value=\"1\">Other</mat-option>\n                                    <mat-option   value=\"2\">Meeting</mat-option>  \n                                    \n                            </mat-select>\n                    </mat-form-field>\n                </li>\n        <!--    This the readOnly version of the Reason control -->\n                <li class=\"wideItem\" *ngIf =_readonly>\n                    <mat-form-field>\n                    <mat-label class=\"smallLabel\"> Reason</mat-label>\n                    <input matInput  [value]=\"reasons[reasonSelect]\" size = 40  [readonly] = \"_readonly\">\n                    </mat-form-field>\n                </li>\n        \n            \n                <li style=\"width:150px\" *ngIf = \"!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)\" >\n                    <mat-form-field  class=\"wideItem\">\n                        <mat-label class=\"smallLabel\"> Note:</mat-label>\n                        <textarea matInput  (change)=\"editReason($event, 'note')\" [value]=\"this.data2._data[this._id].note\"\n                            [formControl] = \"notesFC\"\n                            cdkTextareaAutosize [readonly]=\"_readonly\"\n                            #autosize=\"cdkTextareaAutosize\"\n                            cdkAutosizeMinRows=\"1\"\n                            cdkAutosizeMaxRows=\"5\"\n                            >\n                        </textarea>\n                    </mat-form-field >\n                </li> \n          \n                <li class=\"item\" *ngIf = \"this.isApprover\" (click) = \"approve()\" >\n                        <button mat-raised-button>Approve </button>\n                    </li>\n             \n                <li class=\"item\" *ngIf = \"this.reasonEdited && this.startDateEdited && endDateEdited\" >\n                        <button mat-raised-button  (click) =\"saveNewTimeAway()\">Save New Time Away </button>\n                </li>\n            </ul>\n            <div style=\"display:block;\" >\n            <button mat-raised-button (click) =\"newTimeAway()\"  >New Time Away </button>\n            </div>\n\n\n    </div>\n</div>\n<div id=\"datums\"  style=\"display:block\"> </div>\n<div id=\"datums2\"  style=\"display:block\"> </div>\n<div id=\"vidx\"  style=\"display:block\"> </div>\n\n<style type=\"text/css\" >\n    #timeline {\n        width: 100%;\n        height: 60%;\n        font-size:8pt;\n        font-family: sans-serif;\n        padding:0px;    \n    }\n      /* gray background in weekends, white text color */\n  .vis.timeline .timeaxis .grid.saturday,\n  .vis.timeline .timeaxis .grid.sunday {\n    background: gray;\n    }\n</style>\n\n\n"
+module.exports = "\n   <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->\n<div >\n    \n    <div id=\"container\">  \n        <div id=\"timeline\" #visjsTimeline *ngIf = \"redraw  && index == 0\"   (click) = \"clicked($event)\">\n        </div>\n        <input id=\"chData\" value=\"test\" >  \n    </div>      \n    <div *ngIf = \"!newTimeAway2\" >\n            <button mat-raised-button (click) =\"setNewTimeAway2()\"  >New Time Away </button>\n    </div>\n<form [formGroup]=\"formG\" *ngIf = \"newTimeAway2\" (ngSubmit)=\"onSubmit()\">\n    <mat-form-field class=\"item\">\n        <input matInput  placeholder= \"Start Date \"  formControlName=\"dateFrom\" type=\"date\" useValueAsDate title=\"click down triangle for calendar\" />\n    </mat-form-field>   \n    <mat-form-field class=\"item\">\n        <input matInput placeholder= \"End Date \"   formControlName=\"dateTo\" type=\"date\" useValueAsDate />\n    </mat-form-field>    \n    <mat-form-field>\n            <mat-label>Reason</mat-label>\n                <mat-select  \n                formControlName = \"reasonG\"  id='reasonId'>\n                        <mat-option  value=\"0\">Personal Vacation</mat-option>\n                        <mat-option  value=\"1\">Other</mat-option>\n                        <mat-option   value=\"2\">Meeting</mat-option>  \n                        \n                </mat-select>\n    </mat-form-field>\n    <mat-form-field  class=\"wideItem\">\n            <mat-label class=\"smallLabel\"> Note:</mat-label>\n            <textarea matInput \n                formControlName = \"reasonG\" \n                cdkTextareaAutosize \n                #autosize=\"cdkTextareaAutosize\"\n                cdkAutosizeMinRows=\"1\"\n                cdkAutosizeMaxRows=\"5\"\n                >\n            </textarea>\n        </mat-form-field > \n    <button mat-raised-button [disabled]=\"!formValidation\" type=\"submit\">Submit New Time Away</button>\n        <!-- <button type=\"submit\">Submit</button> -->\n\n    <div *ngIf=\"this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) \"\n        class=\"alert alert-danger\">\n            <div *ngIf=\"this.formG.controls.dateFrom.errors.required\">\n                Start Date is required.\n            </div>\n    </div>       \n    <div *ngIf=\"this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) \"\n         class=\"alert alert-danger\">\n        <div *ngIf=\"this.formG.controls.dateTo.errors.required\">\n           End Date is required.\n        </div>\n    </div>  \n    <div class=\"alert alert-danger\" *ngIf=\"formG.errors\"  > {{ formG.errors?.dates | json }} </div>     \n</form>\n\n\n    <div id=\"controls\" [formGroup] = 'form' *ngIf = \"drawControls\" >\n   \n            <ul *ngIf = \"this.showControls && this._id \" class=\"flex-container  \">\n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" >\n                        <input matInput [matDatepicker]=\"picker\" placeholder= \"Start Date \" id='startDateInput' [readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('start', $event)\" (change) = \"clear()\" [formControl] = \"startDate\" formControlName = 'startDate'>\n                        <mat-datepicker-toggle matSuffix [for]=\"picker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #picker ></mat-datepicker>\n                   \n                    </mat-form-field>\n                </li>\n                <div class='alert' *ngIf = \"startDateGet.touched && startDateGet.invalid\"> Date is requred.  </div>\n                  \n        \n                <li class=\"item\">\n                    <mat-form-field  class=\"item\" x>\n                        <input  matInput [matDatepicker]=\"epicker\" placeholder= \"End Date \" id='endDateInput'[readonly] = \"_readonly\"\n                        (dateInput)=\"editDate('end', $event)\" (change) = \"clear()\" [formControl] = \"endDate\"  >\n                        <mat-datepicker-toggle matSuffix [for]=\"epicker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                        <mat-datepicker #epicker ></mat-datepicker>\n                    </mat-form-field>\n                </li>\n                <div class='alert' *ngIf = \"endDateGet.touched && endDateGet.invalid\"> Date is requred and must be great than  </div>\n                <div class='alert' *ngIf = \"endDateGet.mustBeLaterThan \"> Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    \n                <li class=\"item\" *ngIf =!_readonly>\n                    <mat-form-field>\n                        <mat-label>Reason</mat-label>\n                            <mat-select [(value)]=\"reasonSelect\" (selectionChange)=\"editReason($event, 'reason')\"\n                            [formControl] = \"reasonFC\"  id='reasonId'>\n                                    <mat-option  value=\"0\">Personal Vacation</mat-option>\n                                    <mat-option  value=\"1\">Other</mat-option>\n                                    <mat-option   value=\"2\">Meeting</mat-option>  \n                                    \n                            </mat-select>\n                    </mat-form-field>\n                </li>\n        <!--    This the readOnly version of the Reason control -->\n                <li class=\"wideItem\" *ngIf =_readonly>\n                    <mat-form-field>\n                    <mat-label class=\"smallLabel\"> Reason</mat-label>\n                    <input matInput  [value]=\"reasons[reasonSelect]\" size = 40  [readonly] = \"_readonly\">\n                    </mat-form-field>\n                </li>\n        \n            \n                <li style=\"width:150px\" *ngIf = \"!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)\" >\n                    <mat-form-field  class=\"wideItem\">\n                        <mat-label class=\"smallLabel\"> Note:</mat-label>\n                        <textarea matInput  (change)=\"editReason($event, 'note')\" [value]=\"newTimeAwayBool ? ' ' : this.data2._data[this._id].note\"\n                            [formControl] = \"notesFC\"\n                            cdkTextareaAutosize [readonly]=\"_readonly\"\n                            #autosize=\"cdkTextareaAutosize\"\n                            cdkAutosizeMinRows=\"1\"\n                            cdkAutosizeMaxRows=\"5\"\n                            >\n                        </textarea>\n                    </mat-form-field >\n                </li> \n          \n                <li class=\"item\" *ngIf = \"this.isApprover\" (click) = \"approve()\" >\n                        <button mat-raised-button>Approve </button>\n                    </li>\n             \n                <li class=\"item\" *ngIf = \"this.reasonEdited && this.startDateEdited && endDateEdited\" >\n                        <button mat-raised-button  (click) =\"saveNewTimeAway()\">Save New Time Away </button>\n                </li>\n            </ul>\n    \n    </div>\n    <div style=\"display:block;\" >\n        <button mat-raised-button (click) =\"newTimeAway()\"  >New Time Away </button>\n    </div>\n</div>\n<div id=\"datums\"  style=\"display:block\"> </div>\n<div id=\"datums2\"  style=\"display:block\"> </div>\n<div id=\"vidx\"  style=\"display:block\"> </div>\n\n\n<style type=\"text/css\" >\n    #timeline {\n        width: 100%;\n        height: 60%;\n        font-size:8pt;\n        font-family: sans-serif;\n        padding:0px;    \n    }\n      /* gray background in weekends, white text color */\n  .vis.timeline .timeaxis .grid.saturday,\n  .vis.timeline .timeaxis .grid.sunday {\n    background: green;\n    }\n</style>\n"
 
 /***/ }),
 
@@ -751,12 +751,13 @@ __webpack_require__.r(__webpack_exports__);
 
 var vis = __webpack_require__(/*! ../../../node_modules/vis/dist/vis.js */ "./node_modules/vis/dist/vis.js");
 var TimeLineComponent = /** @class */ (function () {
-    function TimeLineComponent(http, getEditSvce, activatedRoute, datePipe) {
+    function TimeLineComponent(http, getEditSvce, activatedRoute, datePipe, fb) {
         this.http = http;
         this.getEditSvce = getEditSvce;
         this.activatedRoute = activatedRoute;
         this.datePipe = datePipe;
-        this.reasons = ["Personal Vacation", "Other", "Meeting"];
+        this.fb = fb;
+        this.reasons = ['Personal Vacation', 'Other', 'Meeting'];
         this.drawControls = true;
         this.reasonSelect = '';
         this.newTimeAwayBool = false;
@@ -776,78 +777,167 @@ var TimeLineComponent = /** @class */ (function () {
         this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
         this.contentArray = [];
         this.localAddId = 34343;
-        this.newTimeAwayBool = false; // enable editing of existing tAs                        
-        this.seP.whereColName = "vidx";
-        this.seP.tableName = "vacation3";
+        this.newTimeAwayBool = false; // enable editing of existing tAs
+        this.seP.whereColName = 'vidx';
+        this.seP.tableName = 'vacation3';
         this.index = 0;
+        this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormGroup"]({
+            'startDate': this.startDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]('', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required),
+            'endDate': this.endDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]),
+            'reason': this.reasonFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](),
+            'note': this.notesFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]("-"),
+        });
+        this.cutOffDate = new Date('2019-02-01');
+        this.createForm();
+        this.formValidation = false;
+        this.newTimeAway2 = false;
     }
+    TimeLineComponent.prototype.createForm = function () {
+        this.doValidation = false;
+        this.invalidFromDate = false;
+        this.formG = this.fb.group({
+            dateTo: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
+            dateFrom: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
+            reasonG: [''],
+            noteG: ['']
+        }, { validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG') });
+    };
+    TimeLineComponent.prototype.dateLessThan = function (from, to, reason) {
+        var _this = this;
+        return function (group) {
+            var today = new Date();
+            var f = group.controls[from];
+            var t = group.controls[to];
+            var r = group.controls[reason];
+            if (t.value && f.value > t.value) {
+                return {
+                    dates: "End Date must be after Start Date "
+                };
+            }
+            if (f.value) {
+                var fDate = new Date(f.value);
+                if (fDate < today)
+                    return {
+                        dates: "Date must be in the future"
+                    };
+                //   this.editDate2('start', f);                             // to be used for editing dates not for submitting new tAs
+            }
+            if (f.value.length > 0 && f.value.length > 0 && r.value.length > 0) {
+                _this.formValidation = true;
+                console.log("form valid " + _this.formValidation);
+            }
+            return {};
+        };
+    };
+    TimeLineComponent.prototype.mustBeInFuture = function (date) {
+    };
+    TimeLineComponent.prototype.onSubmit = function () {
+        this.doValidation = true;
+        console.log("Probando");
+        console.log(this.formG.status);
+        console.log(this.formG.value);
+    };
     TimeLineComponent.prototype.setIndex = function (n) {
         this.index = n;
-        console.log("index is " + this.index);
+        console.log('index is ' + this.index);
+    };
+    Object.defineProperty(TimeLineComponent.prototype, "startDateGet", {
+        get: function () {
+            return this.form.get('startDate');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TimeLineComponent.prototype, "endDateGet", {
+        get: function () {
+            return this.form.get('endDate');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    TimeLineComponent.prototype.mustBeLaterThan = function (control) {
+        if (this) {
+            console.log("startDateEntered" + this.startDateEntered);
+        }
+        console.log("typeof " + typeof control.value);
+        var controlValueDate = new Date(control.value);
+        if (typeof control.value == 'object' && this && (controlValueDate) < this.startDateEntered)
+            return { mustBeLaterThan: true };
+        else
+            return null;
     };
     TimeLineComponent.prototype.clicked = function (ev) {
-        if (document.getElementById("datums2")) {
-            this._content = document.getElementById("datums2").innerText;
-            if (this._content == "new item")
+        if (document.getElementById('datums2')) {
+            this._content = document.getElementById('datums2').innerText;
+            if (this._content === 'new item') {
                 this.drawControls = false;
+            }
         }
-        if (document.getElementById("datums")) {
-            this._id = document.getElementById("datums").innerText; // id of the item clickedOn in the DataSet               
-            var id = document.getElementById("datums").innerText; // get the id from the vis click
-            console.log("box clicked on");
-            if (!this.data2._data[this._id]) // click was NOT in a tA box;
+        var id = '';
+        if (document.getElementById('datums')) {
+            this._id = +document.getElementById('datums').innerText; // id of the item clickedOn in the DataSet
+            id = document.getElementById('datums').innerText; // get the id from the vis click
+            console.log('box clicked on');
+            if (!this.data2._data[this._id]) { // click was NOT in a tA box;
                 return;
+            }
             this._vidx = this.data2._data[this._id].vidx; // store the vidx for editing
-            document.getElementById("vidx").innerText = this.data2._data[id].vidx; // store the vidx for DELETE
+            document.getElementById('vidx').innerText = this.data2._data[id].vidx; // store the vidx for DELETE
             this.seP.whereColVal = this.data2._data[this._id].vidx;
-            if (this._id !== "datums") // shows user had clicked a box                 
+            if (this._id >= 0) { // shows user had clicked a box
                 this.showControls = true; // show editing controls
+            }
         }
-        console.log("clicked" + this._id);
-        if (this.data2._data[id] && this.data2._data[id].className == this.userid) // loggedInUser is timeAway owner so make widgets editable
+        console.log('clicked' + this._id);
+        if (this.data2._data[id] && this.data2._data[id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
             this._readonly = false; // enable editing
-        else
+        }
+        else {
             this._readonly = true;
+        }
         if (this.data2._data[id]) { // if the timeAway is defined
-            this.startDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](new Date(this.data2._data[id].start)); // this is where the value is set
-            this.endDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](new Date(this.data2._data[id].end));
+            this.startDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](new Date(this.data2._data[id].start), _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required); // this is where the value is set
+            this.endDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](new Date(this.data2._data[id].end), _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required);
             this.reasonFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](this.data2._data[id].reason);
             this.notesFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](this.data2._data[id].note);
-            if (this.data2._data[id].reason || this.data2._data[id].reason == 0) {
-                this.reasonSelect = this.data2._data[id].reason.toString(); // expecting string 
+            if (this.data2._data[id].reason || this.data2._data[id].reason === 0) {
+                this.reasonSelect = this.data2._data[id].reason.toString(); // expecting string
                 this.reasonFC.setValue(this.data2._data[id].reason.toString()); // needed for initial click
             }
         }
-        if (this.userid == 'napolitano') // official 'approver'
+        if (this.userid === 'napolitano') { // official 'approver'
             this.isApprover = true;
+        }
         /*******************          remove routines  **********************/
-        if (document.getElementById("datums2").innerText.indexOf("remove") !== -1) {
-            this.data2.remove({ id: +document.getElementById("datums").innerText }); // remove the item from the dataSet 
-            this.drawControls = false; // turn off the edit Controls. 
+        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {
+            this.data2.remove({ id: +document.getElementById('datums').innerText }); // remove the item from the dataSet
+            this.drawControls = false; // turn off the edit Controls.
             var dParams = {
-                "action": "delete",
-                "tableName": "vacation3", "whereColName": "vidx", "whereColVal": document.getElementById("vidx").innerText,
+                'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
+                'editColNames': ['reasonIdx'],
+                'editColVals': ['99']
             };
             var i = 0;
             this.doREST(dParams);
         }
-        else /************    Edit Routine  */
+        else { /************    Edit Routine  */
             this.updateDB(this.data2._data[id].start, this.data2._data[id].end);
+        }
     };
     TimeLineComponent.prototype.updateDB = function (sD, eD) {
-        console.log("sD is " + sD + "length is " + sD.length);
+        console.log('sD is ' + sD + 'length is ' + sD.length);
         var dParams = {
-            "action": "edit",
-            "tableName": "vacation3", "whereColName": "vidx", "whereColVal": this.data2._data[this._id].vidx,
-            "editColNames": ['startDate', 'endDate'],
-            "editColVals": [this.formatDateYYYymmdd(sD), this.formatDateYYYymmdd(eD)]
+            'action': 'edit',
+            'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': this.data2._data[this._id].vidx,
+            'editColNames': ['startDate', 'endDate'],
+            'editColVals': [this.formatDateYYYymmdd(sD), this.formatDateYYYymmdd(eD)]
         };
         this.doREST(dParams);
     };
     TimeLineComponent.prototype.doREST = function (dP) {
         var url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php';
         this.http.post(url, JSON.stringify(dP)).subscribe(function (val) {
-            console.log("POST call", val);
+            console.log('POST call', val);
         });
     };
     TimeLineComponent.prototype.formatDateYYYymmdd = function (d) {
@@ -855,21 +945,19 @@ var TimeLineComponent = /** @class */ (function () {
         var y = date.getFullYear();
         var m = date.getMonth() + 1;
         var dd = date.getDate();
-        //var mS = m < 9 ? "0" + m : m;                                 // put in leading zero if needed
-        // var dS = dd < 9 ? "0" + dd : dd;
-        var fD = m + "/" + dd + "/" + y;
+        var fD = m + '/' + dd + '/' + y;
         return fD;
     };
     TimeLineComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.activatedRoute // point to the route clicked on 
+        this.activatedRoute // point to the route clicked on
             .queryParams // look at the queryParams
             .subscribe(function (queryParams) {
             _this.qP = queryParams;
             _this.setQueryParams(queryParams);
-            console.log(" this.userit " + _this.userid);
+            console.log(' this.userit ' + _this.userid);
             _this.seP.who = _this.userid;
-            _this.getTimelineData2(); // get the data from REST database call. 
+            _this.getTimelineData2(); // get the data from REST database call.
         });
     };
     TimeLineComponent.prototype.setQueryParams = function (qP) {
@@ -877,8 +965,9 @@ var TimeLineComponent = /** @class */ (function () {
             this.useridP = qP.userid;
             this.userid = qP.userid;
         }
-        console.log("setA " + this.userid);
+        console.log('setA ' + this.userid);
     };
+    // tslint:disable-next-line:use-life-cycle-interface
     TimeLineComponent.prototype.ngAfterViewInit = function () {
         if (this.timelineContainer) {
             this.tlContainer = this.timelineContainer.nativeElement;
@@ -902,13 +991,16 @@ var TimeLineComponent = /** @class */ (function () {
         this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd'); // mm for endDate
         this.endDateShownString = this.datePipe.transform(endDateShown, 'yyyy-MM-dd'); // start date for opening of tL
         this.startDateShownString = this.datePipe.transform(startDate, 'yyyy-MM-dd');
-        var url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid;
-        console.log(" url is " + url);
+        var url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString +
+            '&end=' + this.endDateString + '&userid=' + this.userid;
+        console.log(' url is ' + url);
         this.http.get(url).subscribe(function (val) {
-            if (_this.index == 0)
+            if (_this.index === 0) {
                 _this.data2 = new vis.DataSet(val);
-            else
+            }
+            else {
                 _this.data2 = Array();
+            }
             // store data in this.data2
             _this.setGroups(_this.data2); // make this.nameList a  list of users who have timeAways found
             _this.groups = new vis.DataSet([]);
@@ -918,8 +1010,8 @@ var TimeLineComponent = /** @class */ (function () {
                 _this.groupsArray[i] = _this.nameList[i];
             }
             var top = _this.nameList.length * 20;
-            var topString = top.toString() + "px";
-            //    document.getElementById('controls').style.setProperty("top", topString); 
+            var topString = top.toString() + 'px';
+            //    document.getElementById('controls').style.setProperty('top', topString);
             _this.assignGroups(); // go thru tA's and assign each to proper Group
             _this.timeline = new vis.Timeline(_this.tlContainer, _this.data2, {});
             _this.timeline.setOptions(_this.options);
@@ -967,7 +1059,7 @@ var TimeLineComponent = /** @class */ (function () {
                   }
                 },
                 */
-            // selectable: true, 
+            // selectable: true,
             start: new Date(this.startDateShownString),
             //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
             end: new Date(this.endDateShownString),
@@ -982,10 +1074,10 @@ var TimeLineComponent = /** @class */ (function () {
                 this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };
                 this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };
                 this.contentArray[s._data[i].userkey] = s._data[i].content; // used to get 'content' param to add to dataSet.
-            } // add name 
+            } // add name
         }
         this.nameList.sort(); // alphabetize the nameList
-        var index = this.useridToUserkeys.map(function (e) { return e.userid; }).indexOf(this.userid); //find arrayIndex of userId
+        var index = this.useridToUserkeys.map(function (e) { return e.userid; }).indexOf(this.userid); // find arrayIndex of userId
         var uKey = this.useridToUserkeys[index].userkey; // the userKey of the loggedIn user
         this.userkey = this.useridToUserkeys[index].userkey; // the userKey of the loggedIn user
     };
@@ -993,133 +1085,146 @@ var TimeLineComponent = /** @class */ (function () {
         for (var property in this.data2._data) {
             if (this.data2._data.hasOwnProperty(property)) {
                 this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content); // set the correct groupNumber
-                if (this.data2._data[property].approved == 1)
-                    this.data2._data[property].style = "color:green";
+                if (this.data2._data[property].approved === 1) {
+                    this.data2._data[property].style = 'color:green';
+                }
             }
         }
     };
     TimeLineComponent.prototype.clear = function () {
-        console.log("clear ");
+        console.log('clear ');
     };
     TimeLineComponent.prototype.editReason = function (s, colName) {
         var seP = {}; // define instance of SeditParams interface
         seP.who = this.userid;
-        seP.whereColName = "vidx";
-        seP.tableName = "vacation3";
-        if (this.data2._data[this._id])
+        seP.whereColName = 'vidx';
+        seP.tableName = 'vacation3';
+        if (this.data2._data[this._id]) {
             this.seP.whereColVal = this.data2._data[this._id].vidx;
+        }
         this.seP.editColName = colName;
-        if (s.value) // if comes from a 'select' widget
+        if (s.value) { // if comes from a 'select' widget
             this.seP.editColVal = s.value;
-        if (s.target && s.target.value)
+        }
+        if (s.target && s.target.value) {
             this.seP.editColVal = s.target.value;
-        if (s == 1)
+        }
+        if (s === 1) {
             this.seP.editColVal = '1';
-        this.getEditSvce.update(this.seP);
+        }
+        if (colName == 'note')
+            this.data2.update({ id: this._id, note: this.seP.editColVal });
+        if (colName == 'reason')
+            this.data2.update({ id: this._id, reason: this.seP.editColVal }); // update dateSet
+        this.getEditSvce.update(this.seP); // uses RESTupdatePOST.php
         this.reasonEdited = true; // has to be true to show Save Time Away button
     };
+    /*************  remove the tA from display working, needs dataBase part **************/
+    TimeLineComponent.prototype.remove = function () {
+        this.data2.remove(this._id); // remove LOCALLY
+        this.showControls = false; // turn off controls
+        this.seP.editColName = 'reasonIdx'; // reasonIdx is the DELETE signal column
+        this.seP.editColVal = '99'; // any smallInt > 0
+        this.seP.whereColName = 'vidx';
+        this.seP.whereColVal = document.getElementById('vidx').innerText;
+        //  this.getEditSvce.update(this.seP);
+        this.doREST(this.seP);
+    };
+    TimeLineComponent.prototype.editDate2 = function (type, c) {
+        console.log("type is " + type);
+    };
     TimeLineComponent.prototype.editDate = function (type, event) {
-        var s = this.formatDateForTimeline(event.value); // make the string for local update    
-        var tst = "2019-02-01";
-        if ("" + type == 'start') {
+        var s = this.formatDateForTimeline(event.value); // make the string for local update
+        if ("" + type === 'start') {
+            this.startDateEntered = event.value;
             this.data2.update({ id: this._id, start: s }); // do the local update
             //   this.data2.update({id:this._id, start: tst});                       // do the local update
-            this.seP.editColName = "startDate";
+            this.seP.editColName = 'startDate';
             this.seP.editColVal = s;
-            console.log("edtied local ");
-            //      this.seP.editColVal = this.datePipe.transform(newDate, 'yyyy-MM-dd');    
+            console.log('edtied local ');
+            //      this.seP.editColVal = this.datePipe.transform(newDate, 'yyyy-MM-dd');
             this.startDateEdited = true;
         } // update startDate
-        if ("" + type == 'end') {
+        if ("" + type === 'end') {
             this.data2.update({ id: this._id, end: s }); // update vis DataSet
-            this.seP.editColName = "endDate";
+            this.seP.editColName = 'endDate';
             // param for dB
-            this.seP.editColVal = s; // mm   
+            this.seP.editColVal = s; // mm
             this.endDateEdited = true;
-            console.log("edtied local ");
+            console.log('edtied local ' + s);
         }
-        this.getEditSvce.update(this.seP); // do the dB edit. 
-        this.timeline.redraw();
+        this.getEditSvce.update(this.seP); // do the dB edit.
+        // this.timeline.redraw();
     };
     TimeLineComponent.prototype.makeDateString = function (event) {
         var editTime = new Date(event.value); // date returned by DatePicker
         var month = editTime.getMonth() + 1; // get month to assemble to edit
         if (month <= 9) {
-            month;
-            var monthString = "0" + month;
+            var monthString = '0' + month;
         }
         var day = editTime.getDate(); // mm
         var year = editTime.getFullYear(); // mm
-        var s = month + "-" + editTime.getDate() + "-" + editTime.getFullYear();
+        var s = month + '-' + editTime.getDate() + '-' + editTime.getFullYear();
         return s;
     };
+    /**************  format date as yyyy-mm-dd  for dataBase ********************/
     TimeLineComponent.prototype.formatDateForTimeline = function (date) {
-        var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
-        if (month.length < 2)
+        var d = new Date(date);
+        var month = '' + (d.getMonth() + 1);
+        var day = '' + d.getDate();
+        var year = d.getFullYear();
+        if (month.length < 2) {
             month = '0' + month;
-        if (day.length < 2)
+        }
+        if (day.length < 2) {
             day = '0' + day;
-        return [year, month, day].join('-');
-    };
-    TimeLineComponent.prototype.remove = function () {
-        this.data2.remove(this._id); // remove LOCALLY
-        this.showControls = false; // turn off controls
-        this.seP.editColName = "reasonIdx"; // reasonIdx is the DELETE signal column
-        this.seP.editColVal = "99"; // any smallInt > 0 
-        this.getEditSvce.update(this.seP);
+        }
+        return year + '-' + month + '-' + day;
     };
     TimeLineComponent.prototype.approve = function () {
-        console.log("appreove" + this._id);
-        this.data2.update({ id: this._id, style: "color:blue" });
-        this.data2._data[this._id].approved == 1;
+        console.log('appreove' + this._id);
+        this.data2.update({ id: this._id, style: 'color:blue' });
+        this.data2._data[this._id].approved = 1;
         this.editReason(1, 'approved');
     };
+    TimeLineComponent.prototype.setNewTimeAway2 = function () {
+        this.newTimeAway2 = true;
+    };
     TimeLineComponent.prototype.newTimeAway = function () {
-        this.startDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]();
-        this.endDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]();
-        this.reasonFC = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]();
-        this.showControls = true;
+        this.showControls = true; // show the dataEntry controls
         this._readonly = false;
-        this._id = '1';
+        this._id = 1;
+        this.showControls = true;
         this.newTimeAwayBool = true;
     };
     TimeLineComponent.prototype.saveNewTimeAway = function () {
         var params = {};
-        params.tableName = "vacation3";
+        params.tableName = 'vacation3';
+        /**********  set up INSERT params as pair of 1-to-1 arrays of colNames -to- colVals  ******************/
         params.colName = ['startDate', 'endDate', 'reason', 'note', 'userid']; // names of columns to INSERT
-        params.colVal = [this.makeDateString(this.startDate), this.makeDateString(this.endDate), this.reasonFC.value, this.notesFC.value, this.userkey];
+        params.colVal = [this.formatDateForTimeline(this.startDate.value),
+            this.formatDateForTimeline(this.endDate.value), this.reasonFC.value,
+            this.notesFC.value, this.userkey];
         var content = this.contentArray[this.userkey]; // build the dataStruct to add to the timeLine DataSet
         var groupNum = this.groupsArray.indexOf(content); // the groupNumber of the item to be added
+        var lastItem = Object.keys(this.data2._data).length;
+        console.log("laseItem is " + lastItem);
         var item = {
-            id: this.localAddId,
-            start: new Date(this.makeDateString(this.startDate)),
-            end: new Date(this.makeDateString(this.endDate)),
+            id: lastItem,
+            start: this.formatDateForTimeline(this.startDate.value),
+            end: this.formatDateForTimeline(this.endDate.value),
             style: 'color:blue',
             content: content,
-            group: groupNum
+            group: groupNum,
+            reason: this.reasonFC.value,
+            note: this.notesFC.value
         };
-        console.log("item in save " + item);
         this.timeline.itemsData.getDataSet().add(item); // add the new tA to local DataSet
+        //   this.data2.update({id: this._id, reason: item.start});   
+        // add the new tA to local DataSet
         this.localAddId++; // increment the id so can add additional tAs
-        this.newTimeAwayBool = false; // enable editing of existing tAs  
-        this.getEditSvce.insert(params); //  insert into dB 
-    };
-    TimeLineComponent.prototype.needToInsert = function (type, event) {
-        if (type == 'start')
-            this.newTAparams.startDate = this.makeDateString(event);
-        if (type == 'end')
-            this.newTAparams.endDate = this.makeDateString(event);
-        if (type == 'reason')
-            this.newTAparams.reason = event.value;
-        if (type == 'Notes')
-            this.newTAparams.Note = event.curentTarget.value;
-        if (this.newTAparams.startDate.length > 0 && this.newTAparams.endDate.length > 0
-            && this.newTAparams.reason >= 0)
-            this.saveTimeAwayBool = true; // show the Save TimeAway button
-        var index = this.useridToUserkeys.map(function (e) { return e.userid; }).indexOf(this.userid); //find arrayIndex of userId
-        var uKey = this.useridToUserkeys[index].userkey; // the userKey of the loggedIn user
-        this.userkey = this.useridToUserkeys[index].userkey; // the userKey of the loggedIn user
-        console.log("cons is " + index + "userkey  is " + uKey);
+        this.newTimeAwayBool = false; // enable editing of existing tAs
+        this.getEditSvce.insert(params); //  insert into dB
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ViewChild"])('visjsTimeline', { static: false }),
@@ -1132,7 +1237,7 @@ var TimeLineComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./time-line.component.css */ "./src/app/time-line/time-line.component.css")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClient"], _gen_edit_service__WEBPACK_IMPORTED_MODULE_1__["GenEditService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["DatePipe"]])
+            _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["DatePipe"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"]])
     ], TimeLineComponent);
     return TimeLineComponent;
 }());
@@ -1202,7 +1307,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/franklinlonberg/Angular/vacMan4/VacManTimeline/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/franklinlonberg/Angular/vacMan5/VacManTimeline/src/main.ts */"./src/main.ts");
 
 
 /***/ })
