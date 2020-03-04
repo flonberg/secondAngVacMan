@@ -180,15 +180,16 @@ export class TimeLineComponent implements OnInit {
  
     const item = {
       id: lastItem,
-      start: this.formG.value.dateFrom,
-      end: this.formG.value.dateTo,
+      start: this.formG.value.dateFrom + ' 00:00:00',
+      end: this.formG.value.dateTo + ' 00:00:00',
       content: content,
       group: groupNum,
       reason: this.formG.value.reasonG,
       note: this.formG.value.noteG,
     };
-    console.log("laseItem is " + item);
+
     this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
+    console.log("laseItem is " + item);
   }
   setIndex(n) {
     this.index = n;
