@@ -156,40 +156,38 @@ export class TimeLineComponent implements OnInit {
           return {
             dates: "Date must be in the future"
           };
-       //   this.editDate2('start', f);                             // to be used for editing dates not for submitting new tAs
+
         }
         if (f.value.length > 0  && f.value.length  > 0  && r.value.length  > 0){
           this.formValidation = true;
           console.log("form valid " + this.formValidation)
         }
-    
+
         return {};
     }
   }
-  mustBeInFuture(date: string){
-    
-  }
+  /*********     This is where the new tA is intered in the local and dB tables  **********************/
   onSubmit() {
-    this.doValidation = true; 
-    console.log("Probando")
-    console.log(this.formG.status)
-    console.log(this.formG.value)
-    const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
-    const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
-    const lastItem = Object.keys(this.data2._data).length;
- 
+    console.log("statue is " + this.formG.status + "formG.value is " + this.formG.value );
     const item = {
-      id: lastItem,
+      id: Object.keys(this.data2._data).length,
       start: this.formG.value.dateFrom + ' 00:00:00',
       end: this.formG.value.dateTo + ' 00:00:00',
-      content: content,
-      group: groupNum,
+      content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
+      group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
       reason: this.formG.value.reasonG,
       note: this.formG.value.noteG,
     };
-
     this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
     console.log("laseItem is " + item);
+    const params = <SinsertParams>{};
+    params.tableName = 'vacation3';
+    /**********  set up INSERT params as pair of 1-to-1 arrays of colNames -to- colVals  ******************/
+    params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
+    params.colVal = [this.formG.value.dateFrom,  // colValues
+      this.formG.value.dateTo, this.formG.value.reasonG,
+      this.formG.value.noteG, this.userkey];
+      this.getEditSvce.insert(params);                                    //  insert into dB
   }
   setIndex(n) {
     this.index = n;
@@ -257,7 +255,8 @@ export class TimeLineComponent implements OnInit {
     if (this.userid === 'napolitano' ) {                          // official 'approver'
         this.isApprover = true;
       }
-      /*******************          remove routines  **********************/
+      /*******************          This is called anytime the user RELEASES the mouse click **********************/
+      /*******************          remove routine  **********************/
     if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {
         this.data2.remove({id: +document.getElementById('datums').innerText});    // remove the item from the dataSet
         this.drawControls = false;                                  // turn off the edit Controls.
@@ -268,7 +267,8 @@ export class TimeLineComponent implements OnInit {
         };
         const i = 0;
         this.doREST(dParams);
-      } else {             /************    Edit Routine  */
+      } else {             /************    Edit Routine  ***************************************************/
+          console.log("doRest");
           this.updateDB(this.data2._data[id].start, this.data2._data[id].end);
       }
   }
@@ -329,7 +329,7 @@ export class TimeLineComponent implements OnInit {
     const endDateShown = new Date();
     const numWeeks = 6;
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                      // set endDate of shown TimeLine for 2 months
-    endDate.setMonth(startDate.getMonth() + 4);                                           // set 4 month interval for data collection
+    endDate.setMonth(startDate.getMonth() + 2);                                           // set 4 month interval for data collection
 
     ////////////  go back for DEV only ///////////////
     startDate.setFullYear(startDate.getFullYear() - 1) ;                                  // for developement purpose use old data
@@ -340,8 +340,9 @@ export class TimeLineComponent implements OnInit {
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                        // mm for endDate
     this.endDateShownString = this.datePipe.transform(endDateShown, 'yyyy-MM-dd');          // start date for opening of tL
     this.startDateShownString = this.datePipe.transform(startDate, 'yyyy-MM-dd');
-const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString +
-'&end=' + this.endDateString + '&userid=' + this.userid;
+const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid;
+//const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid;
+
     console.log(' url is ' + url );
     this.http.get(url).subscribe(
       (val) => {
@@ -485,9 +486,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
   //  this.getEditSvce.update(this.seP);
     this.doREST(this.seP);
   }
-  editDate2(type: string, c: AbstractControl){
-    console.log("type is " + type );
-  }
+
   editDate(type: string, event: MatDatepickerInputEvent<Date>) {
     const s = this.formatDateForTimeline(event.value);                 // make the string for local update
     if (`${type}` === 'start') {
@@ -502,8 +501,8 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     }                                                                   // update startDate
     if (`${type}` === 'end') {
       this.data2.update({id: this._id, end: s});                         // update vis DataSet
+      // param for dB
       this.seP.editColName = 'endDate';
-                               // param for dB
       this.seP.editColVal = s;   // mm
       this.endDateEdited = true;
       console.log('edtied local ' + s);

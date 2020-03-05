@@ -1,16 +1,20 @@
 
-   <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
+<!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
+
 <div >
-    
+ 
     <div id="container">  
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)">
         </div>
         <input id="chData" value="test" >  
     </div>      
     <div *ngIf = "!newTimeAway2" >
-            <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button>
+        <!------        This is the form used for adding new tAs --------------->
+        <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button>
     </div>
+ 
 <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
+        <div class = "heading" > Enter New Time Away Paramters </div>
     <mat-form-field class="item">
         <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
     </mat-form-field>   
@@ -29,16 +33,10 @@
     </mat-form-field>
     <mat-form-field  class="wideItem">
             <mat-label class="smallLabel"> Note:</mat-label>
-            <textarea matInput 
-                formControlName = "noteG" 
-                cdkTextareaAutosize 
-                #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="1"
-                cdkAutosizeMaxRows="5"
-                >
+            <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize"  cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
             </textarea>
         </mat-form-field > 
-    <button mat-raised-button [disabled]="!formValidation"   >Submit New Time Away</button>
+    <button mat-raised-button [disabled]="!formValidation" title="Valid Start and End dates as well as Reason required"  >Submit New Time Away</button>
         <!-- <button type="submit">Submit</button> -->
 
     <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
@@ -56,80 +54,74 @@
     <div class="alert alert-danger" *ngIf="formG.errors"  > {{ formG.errors?.dates | json }} </div>     
 </form>
 
-
-    <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
-   
-            <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
-                <li class="item">
-                    <mat-form-field  class="item" >
-                        <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
-                        (dateInput)="editDate('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
-                        <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-                        <mat-datepicker #picker ></mat-datepicker>
-                   
-                    </mat-form-field>
-                </li>
-                <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
-                  
-        
-                <li class="item">
-                    <mat-form-field  class="item" x>
-                        <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
-                        (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate"  >
-                        <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-                        <mat-datepicker #epicker ></mat-datepicker>
-                    </mat-form-field>
-                </li>
-                <div class='alert' *ngIf = "endDateGet.touched && endDateGet.invalid"> Date is requred and must be great than  </div>
-                <div class='alert' *ngIf = "endDateGet.mustBeLaterThan "> Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
-                <li class="item" *ngIf =!_readonly>
-                    <mat-form-field>
-                        <mat-label>Reason</mat-label>
-                            <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
-                            [formControl] = "reasonFC"  id='reasonId'>
-                                    <mat-option  value="0">Personal Vacation</mat-option>
-                                    <mat-option  value="1">Other</mat-option>
-                                    <mat-option   value="2">Meeting</mat-option>  
-                                    
-                            </mat-select>
-                    </mat-form-field>
-                </li>
-        <!--    This the readOnly version of the Reason control -->
-                <li class="wideItem" *ngIf =_readonly>
-                    <mat-form-field>
-                    <mat-label class="smallLabel"> Reason</mat-label>
-                    <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
-                    </mat-form-field>
-                </li>
-        
-            
-                <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
-                    <mat-form-field  class="wideItem">
-                        <mat-label class="smallLabel"> Note:</mat-label>
-                        <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id].note"
-                            [formControl] = "notesFC"
-                            cdkTextareaAutosize [readonly]="_readonly"
-                            #autosize="cdkTextareaAutosize"
-                            cdkAutosizeMinRows="1"
-                            cdkAutosizeMaxRows="5"
-                            >
-                        </textarea>
-                    </mat-form-field >
-                </li> 
-          
-                <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
-                        <button mat-raised-button>Approve </button>
-                    </li>
-             
-                <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
-                        <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
-                </li>
-            </ul>
+<div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
+        <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
+            <li class="item">
+                <mat-form-field  class="item" >
+                    <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
+                    (dateInput)="editDate('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
+                    <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
+                    <mat-datepicker #picker ></mat-datepicker>            
+                </mat-form-field>
+            </li>
+            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
+                
+            <li class="item">
+                <mat-form-field  class="item" x>
+                    <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
+                    (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate"  >
+                    <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
+                    <mat-datepicker #epicker ></mat-datepicker>
+                </mat-form-field>
+            </li>
+            <div class='alert' *ngIf = "endDateGet.touched && endDateGet.invalid"> Date is requred and must be great than  </div>
+            <div class='alert' *ngIf = "endDateGet.mustBeLaterThan "> Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
+            <li class="item" *ngIf =!_readonly>
+                <mat-form-field>
+                    <mat-label>Reason</mat-label>
+                        <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
+                        [formControl] = "reasonFC"  id='reasonId'>
+                                <mat-option  value="0">Personal Vacation</mat-option>
+                                <mat-option  value="1">Other</mat-option>
+                                <mat-option   value="2">Meeting</mat-option>  
+                                
+                        </mat-select>
+                </mat-form-field>
+            </li>
+    <!--    This the readOnly version of the Reason control -->
+            <li class="wideItem" *ngIf =_readonly>
+                <mat-form-field>
+                <mat-label class="smallLabel"> Reason</mat-label>
+                <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
+                </mat-form-field>
+            </li>
     
-    </div>
-    <div style="display:block;" >
-        <button mat-raised-button (click) ="newTimeAway()"  >New Time Away </button>
-    </div>
+        
+            <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
+                <mat-form-field  class="wideItem">
+                    <mat-label class="smallLabel"> Note:</mat-label>
+                    <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id].note"
+                        [formControl] = "notesFC"
+                        cdkTextareaAutosize [readonly]="_readonly"
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1"
+                        cdkAutosizeMaxRows="5"
+                        >
+                    </textarea>
+                </mat-form-field >
+            </li> 
+        
+            <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
+                    <button mat-raised-button>Approve </button>
+                </li>
+            
+            <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
+                    <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
+            </li>
+        </ul>
+
+</div>
+ 
 </div>
 <div id="datums"  style="display:block"> </div>
 <div id="datums2"  style="display:block"> </div>
