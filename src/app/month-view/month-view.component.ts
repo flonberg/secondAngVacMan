@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import { DatePipe } from '@angular/common';
@@ -28,12 +29,12 @@ export class MonthViewComponent implements OnInit {
   date: Date;
   monthNumber:number;
   baseDate: Date;                                                                           // used to calculate a dayNumber to use as key
-  constructor(private datePipe: DatePipe) { }
+  constructor(private datePipe: DatePipe, private http: HttpClient ){ }
 
   ngOnInit(){
     this.nextMonth(0);                                                                      // draw the calendar for current month
     this.monthNumber = 0;                                                                   // number for going forward or back. 
-
+    this.getPhysicsMonthlyDuties('2018-12-31');
   }
   nextMonth(nn)
   {
@@ -50,6 +51,7 @@ export class MonthViewComponent implements OnInit {
     var dowFD = firstDayOfShownMonth.getDay();                                                // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, of firstDayOfMonthShown
     var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);                
     var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                          //  e.g. for March   ->  31
+    //////////  use firstDayOnCal as dateSince to make array of physicsDuties     \\\\\\\\\\\\\\\\\
     var firstDayOnCal = lastDayNum - (dowFD -2);   // get dayNum of first Monday on Cal       //  E.g. April 1 is Wed. to firstDayShown is March 29, so firstDanOnCal = 29
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
     if (dowFD > 0 && dowFD < 6){                                                               // if the firstDayOfMonth is NOT Sat or Sun  
@@ -106,6 +108,14 @@ export class MonthViewComponent implements OnInit {
   daysSince(d:Date){
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
     return Math.ceil(diff / (1000 * 3600 * 24)); 
+  }
+  getPhysicsMonthlyDuties(dateSince){
+    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' + dateSince;
+    this.http.get(url).subscribe(
+      (val) => {
+        console.log(val);
+      }
+    )
   }
 }
 

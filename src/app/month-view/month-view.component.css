@@ -1,9 +1,4 @@
 
-  :host{
-    --accent:rgb(210, 210, 247);
-    --disable:rgb(182, 179, 179);
-    --baseFont:10pt;
-  }
   body{
     font-size:8pt;
     font-family:sans-serif;
@@ -20,6 +15,7 @@ td {
     border:solid;
     width: 200px;
     height: 100px;
+    font-family:sans-serif;
 }
 .inMonth {
     background-color: rgb(245, 230, 230);  
@@ -49,8 +45,7 @@ td {
     height:40px;;
 }
 tr {
-    font-size:var(--baseFont);
-    color:white;
+    color:black;
 }
 caption {
     color:black;
@@ -70,15 +65,15 @@ caption {
     font-size:100%;
   }
   .one {
-      background-color:rgb(180, 180, 248);
+      background-color:rgb(212, 212, 248);
   }
   .two {
-    background-color:rgb(143, 143, 223)
+    background-color:rgb(181, 181, 221)
     }
 .three {
-    background-color:rgb(99, 99, 175)
+    background-color:rgb(153, 153, 214)
     }
 .four {
-    background-color:rgb(70, 70, 161)
+    background-color:rgb(124, 124, 168)
     }
 
