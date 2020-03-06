@@ -145,7 +145,7 @@ export class TimeLineComponent implements OnInit {
         let f = group.controls[from];
         let t = group.controls[to];
         let r = group.controls[reason];
-        if (t.value && f.value > t.value) {
+        if (t.value && f.value >= t.value) {
           return {
             dates: "End Date must be after Start Date "
           };
@@ -199,7 +199,6 @@ export class TimeLineComponent implements OnInit {
   get endDateGet(){
     return this.form.get('endDate');
   }
- 
   
   mustBeLaterThan(control: AbstractControl) : ValidationErrors | null {
     if (this){
@@ -207,7 +206,7 @@ export class TimeLineComponent implements OnInit {
     }
     console.log("typeof " + typeof control.value);
     let controlValueDate = new Date(control.value);
-    if (typeof control.value =='object' && this && (controlValueDate) < this.startDateEntered) 
+    if (typeof control.value =='object' && this && (controlValueDate) <= this.startDateEntered) 
       return { mustBeLaterThan : true};
     else
       return null;
@@ -225,7 +224,7 @@ export class TimeLineComponent implements OnInit {
         this._id = +document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet
         id = document.getElementById('datums').innerText;        // get the id from the vis click
         console.log('box clicked on');
-        if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
+        if (!this.data2._data[id]) {                          // click was NOT in a tA box;
           return;
         }
         this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
@@ -327,14 +326,14 @@ export class TimeLineComponent implements OnInit {
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     const endDate = new Date();
     const endDateShown = new Date();
-    const numWeeks = 6;
+    const numWeeks = 12;
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                      // set endDate of shown TimeLine for 2 months
-    endDate.setMonth(startDate.getMonth() + 2);                                           // set 4 month interval for data collection
+    endDate.setMonth(startDate.getMonth() + 4);                                           // set 4 month interval for data collection
 
     ////////////  go back for DEV only ///////////////
-    startDate.setFullYear(startDate.getFullYear() - 1) ;                                  // for developement purpose use old data
-    endDate.setFullYear(endDate.getFullYear() - 1) ;                                      // mm
-    endDateShown.setFullYear(endDateShown.getFullYear() - 1) ;                            // mm
+  //  startDate.setFullYear(startDate.getFullYear() - 1) ;                                  // for developement purpose use old data
+  //  endDate.setFullYear(endDate.getFullYear() - 1) ;                                      // mm
+  //  endDateShown.setFullYear(endDateShown.getFullYear() - 1) ;                            // mm
     // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');         // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                        // mm for endDate
@@ -533,7 +532,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
       if (day.length < 2) {
           day = '0' + day;
       }
-      return year + '-' + month + '-' + day;
+      return year + '-' + month + '-' + day + ' 00:00:00';
   }
 
 
