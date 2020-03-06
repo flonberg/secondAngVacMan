@@ -5,7 +5,7 @@
     --baseFont:10pt;
   }
   body{
-    font-size:62.5%;
+    font-size:8pt;
     font-family:sans-serif;
 }
   button {
@@ -13,13 +13,13 @@
 }
 .title {
     font-style: italic;
-    font-size:24px !important;
+    font-size:200% !important;
     color:blue;
 }
 td {
     border:solid;
     width: 200px;
-    height: 140px;
+    height: 100px;
 }
 .inMonth {
     background-color: rgb(245, 230, 230);  
@@ -54,7 +54,7 @@ tr {
 }
 caption {
     color:black;
-    font-size:18pt;
+    font-size:100%;
 }
 .flex-container {
     display: flex;
@@ -67,7 +67,7 @@ caption {
   .flex-container > div {
     margin: 10px;
     padding: 20px;
-    font-size:12pt;
+    font-size:100%;
   }
   .one {
       background-color:rgb(180, 180, 248);

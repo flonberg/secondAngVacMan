@@ -199,7 +199,7 @@ export class TimeLineComponent implements OnInit {
   get endDateGet(){
     return this.form.get('endDate');
   }
-  
+  /*
   mustBeLaterThan(control: AbstractControl) : ValidationErrors | null {
     if (this){
       console.log("startDateEntered" + this.startDateEntered)
@@ -211,6 +211,7 @@ export class TimeLineComponent implements OnInit {
     else
       return null;
   }
+  */
 
   clicked(ev) {// this responds to ANY click in the div containing the calendar
     if (document.getElementById('datums2'))     {

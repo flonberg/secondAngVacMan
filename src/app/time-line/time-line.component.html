@@ -75,7 +75,7 @@
                 </mat-form-field>
             </li>
             <div class='alert' *ngIf = "endDateGet.touched && endDateGet.invalid"> Date is requred and must be great than  </div>
-            <div class='alert' *ngIf = "endDateGet.mustBeLaterThan "> Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
+            <div class='alert' *ngIf = "endDateGet.mustBeLaterThan ">End Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
             <li class="item" *ngIf =!_readonly>
                 <mat-form-field>
                     <mat-label>Reason</mat-label>
