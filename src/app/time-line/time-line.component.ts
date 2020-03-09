@@ -141,7 +141,7 @@ export class TimeLineComponent implements OnInit {
   dateLessThan(from: string, to: string, reason: string) {
       return (group: FormGroup): {[key: string]: any} => 
       {
-        let today = new Date('2019-03-01'); 
+        let today = new Date(); 
         let f = group.controls[from];
         let t = group.controls[to];
         let r = group.controls[reason];
