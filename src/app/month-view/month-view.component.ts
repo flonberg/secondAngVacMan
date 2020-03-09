@@ -8,6 +8,7 @@ interface dateBox {
   dayNumber: number;
   isInCurrMonth: string;
   date: Date;
+  dateString: string
   daysSince: number;
   covererUserId: {
     serviceId: number,
@@ -29,6 +30,7 @@ export class MonthViewComponent implements OnInit {
   date: Date;
   monthNumber:number;
   baseDate: Date;    
+  physicsMonthlyDuties: {};
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
@@ -92,6 +94,7 @@ export class MonthViewComponent implements OnInit {
           this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
           var diff = Math.abs(this.baseDate.getTime() - tmpDate.getTime());
           this.daysS[0][i].daysSince = Math.ceil(diff / (1000 * 3600 * 24)); 
+          
         }
         firstDayOnCal++; 
         if (i > 0 )  {                            // go to next day
@@ -107,7 +110,9 @@ export class MonthViewComponent implements OnInit {
         }
         if (firstDayOnCal == lastDayNum + 1)                                                    // if it is greater than lastDayOfMonth
           firstDayOnCal = 1;                                                                    // go to 1, for the first day of monthShown 
-      }
+     
+          this.daysS[0][i].dateString = this.datePipe.transform(this.daysS[0][i].date, 'yyyy-MM-dd');   }
+  
     }
     if (dowFD == 1 || dowFD == 6){
       startDateForGettingData = firstDayOfShownMonth;  
@@ -125,10 +130,11 @@ export class MonthViewComponent implements OnInit {
             let dayNum = tmpDate.getDay();                                                    // get dayNum of week  0 = Sunday  
           if (dayNum == 6 )                                                                   // if it is Saturday, increment by 2 days
             tmpDate.setDate(tmpDate.getDate() + 2);
-            if (!this.daysS[i])                                                                     //  if array row has not been defined
+          if (!this.daysS[i])                                                                     //  if array row has not been defined
               this.daysS[i] = Array();  
               this.daysS[i][j] = <dateBox>{};                                                         // define an instance of the daysS interface
               this.daysS[i][j].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());    // put date in daysS dataStructure.
+              this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
               this.daysS[i][j].dayNumber = tmpDate.getDate();
               this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";   
               this.daysS[i][j].daysSince = this.daysSince(tmpDate);     
@@ -137,8 +143,8 @@ export class MonthViewComponent implements OnInit {
  
    // this.startDateForGettingDataString = this.datePipe.transform(startDateForGettingData, 'yyyy-MM-dd'); 
     console.log("140   startDatyForGettingData"  +  this.startDateForGettingDataString);   
-      this.getPhysicsMonthlyDuties();
-    console.log("i is "   )
+    this.getPhysicsMonthlyDuties();
+
   }
   daysSince(d:Date){
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
@@ -149,9 +155,14 @@ export class MonthViewComponent implements OnInit {
     console.log("MonthView url is " + url);
     this.http.get(url).subscribe(
       (val) => {
-        console.log(val);
+    //    console.log(val);
+        this.setPhysicsMonthlyDuties(val);
       }
     )
+  }
+  setPhysicsMonthlyDuties(val){
+    this.physicsMonthlyDuties = val;
+    console.log("160 pDM is " + this.physicsMonthlyDuties   )
   }
 }
 
