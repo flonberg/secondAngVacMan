@@ -65,6 +65,8 @@ export class MonthViewComponent implements OnInit {
     var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                          //  e.g. for March   ->  31
     //////////  use firstDayOnCal as dateSince to make array of physicsDuties     \\\\\\\\\\\\\\\\\
     var firstDayOnCal = lastDayNum - (dowFD -2);   // get dayNum of first Monday on Cal       //  E.g. April 1 is Wed. to firstDayShown is March 29, so firstDanOnCal = 29
+  
+    
     if (dowFD !== 6 && dowFD !== 0)
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() - (dowFD - 1 ));              // first of Month is a WeekDay so need to step back to Monday
     if (dowFD === 6 )
@@ -73,12 +75,13 @@ export class MonthViewComponent implements OnInit {
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
 
     this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');;
+    console.log("firstDareOnCalendar is " + firstDateOnCalendar);
     console.log("startDateForGettingDataString " + this.startDateForGettingDataString + "  doWFD is " + dowFD);
     if (dowFD == 1)
       firstDayOnCal = 1;
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
     var startDateForGettingData = new Date()                                                             // define a date to set in the below loop
-    if (dowFD > 0 && dowFD < 6){                                                               // if the firstDayOfMonth is NOT Sat or Sun  
+    if (dowFD > 0 && dowFD < 6){                                                             // if the firstDayOfMonth is NOT Sat or Sun  
       for (let i = 0;  i < 5; i++){                                                              // make the 5 days of the first week;
         if (!this.daysS[0])                                                                     //  if array row has not been defined
           this.daysS[0] = Array();                                                              // define the array for the Week
@@ -86,6 +89,8 @@ export class MonthViewComponent implements OnInit {
         this.daysS[0][i].dayNumber = firstDayOnCal;                                             // set dayNumber element of interface
         if ( i == 0){
           this.daysS[0][i].date = new Date(lastDayPrevMonth.getFullYear(), lastDayPrevMonth.getMonth(), firstDayOnCal);  // set first date on Calendar in array
+          if (dowFD == 1)
+            this.daysS[0][i].date = firstDateOnCalendar;
           startDateForGettingData = this.daysS[0][i].date;
           if (dowFD == 1 || dowFD == 6){
             startDateForGettingData = firstDayOfShownMonth;  
@@ -120,10 +125,13 @@ export class MonthViewComponent implements OnInit {
     }  
     /////////////         take care of months which start on Sat or Sun                       \\\\\\\\\\\\\\\\\\\\\\\\\\\\
     if (dowFD == 6)
-      tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 2);                            // if firstDayOfMonth is Sat. increment by 2 days
+      tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 2);                  // if firstDayOfMonth is Sat. increment by 2 days
     if (dowFD == 0)
-      tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 1);                            // if firstDayOfMonth is Sub. increment by 1 day  
-    ///////////  make the suceeding weeks  \\\\\\\\\\\\\\\\\\\\\\\\\\ 
+      tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 1);                  // if firstDayOfMonth is Sub. increment by 1 day  
+    if (dowFD == 1)
+      tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 0); 
+      console.log("tmpDate is " + tmpDate);
+      ///////////  make the suceeding weeks  \\\\\\\\\\\\\\\\\\\\\\\\\\ 
     for (let i=1; i < 6; i++){                                                                // max of 4 more weeks in calendar
         for (let j= 0; j < 5; j++) {                                                           // the days of each week
           tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date

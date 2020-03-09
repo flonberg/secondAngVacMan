@@ -32,7 +32,8 @@
         <td [class]="dayEl.isInCurrMonth"   *ngFor=" let dayEl of week ">
    
           <table style="width:100%;">
-            <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>
+       <!--  <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption> -->   
+            <caption> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption>
             <tr class="one"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>
             <tr class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>
             <tr class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>
