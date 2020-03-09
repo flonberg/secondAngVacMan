@@ -29,15 +29,14 @@
           <th> Friday</th>
       </tr>
       <tr *ngFor = " let week of daysS">
-        <td [class]="dayEl.isInCurrMonth"   *ngFor=" let dayEl of week ">
-   
+        <td  *ngFor=" let dayEl of week "  [class] = "dayEl.isInCurrMonth">
           <table style="width:100%;">
        <!--  <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption> -->   
-            <caption> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption>
-            <tr class="one"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>
-            <tr class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>
-            <tr class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>
-            <tr class="four"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>
+            <caption *ngIf = "dayEl "> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption>
+            <tr *ngIf = "physicsMonthlyDuties" class="one"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties" class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties" class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties" class="four"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>
           </table>
         </td>
       </tr>
