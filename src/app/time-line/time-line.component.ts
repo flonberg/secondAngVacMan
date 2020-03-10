@@ -79,13 +79,12 @@ export class TimeLineComponent implements OnInit {
     reason: -1,
     Note: ''
   };
-  nameToUserId: nameToUserId[];
-  useridToUserkeys: useridToUserkey[];
+  nameToUserId: nameToUserId[];                                       // used for assigning Groups
+  useridToUserkeys: useridToUserkey[];                                // mm
   startDateEdited: boolean;
   endDateEdited: boolean;
   reasonEdited: boolean;
-  localAddId: number;
-  seP = <SeditParams>{};  // define instance of SeditParams interface
+  seP = <SeditParams>{};                                              // define instance of SeditParams interface
   _vidx: string;
   endDateString: string;
   startDateString: string;
@@ -98,7 +97,7 @@ export class TimeLineComponent implements OnInit {
   startDateEntered: Date;
   formG: FormGroup;
   doValidation: boolean;
-  invalidFromDate: boolean;
+ // invalidFromDate: boolean;
   formValidation: boolean;
   newTimeAway2: boolean;
 
@@ -111,7 +110,6 @@ export class TimeLineComponent implements OnInit {
     this.nameToUserId = [ {lastName: '', userid: ''} ];
     this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
     this.contentArray = [];
-    this.localAddId = 34343;
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
     this.seP.whereColName = 'vidx';
     this.seP.tableName = 'vacation3';
@@ -127,42 +125,37 @@ export class TimeLineComponent implements OnInit {
     this.formValidation = false;
     this.newTimeAway2 = false;
   }
-  createForm() {
-    this.doValidation = false;
-    this.invalidFromDate = false;
-    this.formG = this.fb.group({                          // fb is
+  createForm() {                                                                                // Form for New tA
+    this.doValidation = false;                                                              // used to enable Submit button
+ //   this.invalidFromDate = false;                                                           // mm
+    this.formG = this.fb.group({                                                            // fb is
       dateTo: ['', Validators.required ],
       dateFrom: ['', Validators.required ],
       reasonG: [''],
       noteG: ['']
-    }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
+    }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}                      // declare custom validator
     );
   }
   dateLessThan(from: string, to: string, reason: string) {
       return (group: FormGroup): {[key: string]: any} => 
       {
         let today = new Date(); 
-        let f = group.controls[from];
-        let t = group.controls[to];
-        let r = group.controls[reason];
-        if (t.value && f.value >= t.value) {
+        if (group.controls[from].value ){                                                   // if user has entered a value
+          let fDate = new Date(group.controls[from].value);                                 // make a Date out of the userEntered String
+          if (fDate < today)                                                                // if it is before today
+          return {
+            dates: "Date must be in the future"                                             // 
+          };
+        }
+        if (group.controls[to].value && group.controls[from].value >= group.controls[to].value) {
           return {
             dates: "End Date must be after Start Date "
           };
         }
-        if (f.value ){
-          let fDate = new Date(f.value);
-          if (fDate < today)
-          return {
-            dates: "Date must be in the future"
-          };
 
-        }
-        if (f.value.length > 0  && f.value.length  > 0  && r.value.length  > 0){
+        if (group.controls[from].value.length > 0  && group.controls[from].value.length  > 0  && group.controls[reason].value.length  > 0){
           this.formValidation = true;
-          console.log("form valid " + this.formValidation)
         }
-
         return {};
     }
   }
@@ -199,19 +192,6 @@ export class TimeLineComponent implements OnInit {
   get endDateGet(){
     return this.form.get('endDate');
   }
-  /*
-  mustBeLaterThan(control: AbstractControl) : ValidationErrors | null {
-    if (this){
-      console.log("startDateEntered" + this.startDateEntered)
-    }
-    console.log("typeof " + typeof control.value);
-    let controlValueDate = new Date(control.value);
-    if (typeof control.value =='object' && this && (controlValueDate) <= this.startDateEntered) 
-      return { mustBeLaterThan : true};
-    else
-      return null;
-  }
-  */
 
   clicked(ev) {// this responds to ANY click in the div containing the calendar
     if (document.getElementById('datums2'))     {
@@ -273,7 +253,6 @@ export class TimeLineComponent implements OnInit {
       }
   }
   updateDB(sD, eD) {
-    console.log('sD is ' + sD  + 'length is ' + sD.length);
       const dParams = {
       'action': 'edit',                                            // actions are 'edit', 'insert', 'delete'
       'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': this.data2._data[this._id].vidx,
@@ -325,18 +304,20 @@ export class TimeLineComponent implements OnInit {
   getTimelineData2() {
     const todayDate = new Date();
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
+    const startDateForData = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
+    startDateForData.setDate(startDateForData.getDate() - 100);                           // go back 100 days to make sure everybody is on the list
     const endDate = new Date();
     const endDateShown = new Date();
     const numWeeks = 12;
-    endDateShown.setDate(startDate.getDate() + numWeeks * 7);                      // set endDate of shown TimeLine for 2 months
-    endDate.setMonth(startDate.getMonth() + 4);                                           // set 4 month interval for data collection
+    endDateShown.setDate(startDate.getDate() + numWeeks * 7);                             // set endDate of shown TimeLine for 2 months
+    endDate.setMonth(startDate.getMonth() + 3);                                           // set 4 month interval for data collection
 
     ////////////  go back for DEV only ///////////////
   //  startDate.setFullYear(startDate.getFullYear() - 1) ;                                  // for developement purpose use old data
   //  endDate.setFullYear(endDate.getFullYear() - 1) ;                                      // mm
   //  endDateShown.setFullYear(endDateShown.getFullYear() - 1) ;                            // mm
     // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
-    this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');         // format it for dataBase startDate for getting tAs
+    this.startDateString = this.datePipe.transform(startDateForData, 'yyyy-MM-dd');         // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                        // mm for endDate
     this.endDateShownString = this.datePipe.transform(endDateShown, 'yyyy-MM-dd');          // start date for opening of tL
     this.startDateShownString = this.datePipe.transform(startDate, 'yyyy-MM-dd');
@@ -361,7 +342,6 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
         }
         const top = this.nameList.length * 20;
         const topString = top.toString() + 'px';
-    //    document.getElementById('controls').style.setProperty('top', topString);
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
         this.timeline.setOptions(this.options);
@@ -433,7 +413,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     }
     this.nameList.sort();                                                 // alphabetize the nameList
     const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId
-    const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
+   // const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
     this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
   }
   assignGroups() {                                                                       // put each tA in proper group.
@@ -449,6 +429,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
   clear() {
     console.log('clear ' );
   }
+
   editReason(s, colName) {                                                 // used to edit Reason and Note datums
       const seP = <SeditParams>{};                                          // define instance of SeditParams interface
       seP.who = this.userid;
@@ -585,7 +566,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
  //   this.data2.update({id: this._id, reason: item.start});   
                      // add the new tA to local DataSet
 
-    this.localAddId++;                                                     // increment the id so can add additional tAs
+   // this.localAddId++;                                                     // increment the id so can add additional tAs
     this.newTimeAwayBool = false;                                         // enable editing of existing tAs
     this.getEditSvce.insert(params);                                    //  insert into dB
   }

@@ -14,12 +14,12 @@
     </div>
  
 <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
-        <div class = "heading" > Enter New Time Away Paramters </div>
+        <div class = "heading" > Enter New Time Away Parameters </div>
     <mat-form-field class="item">
         <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
     </mat-form-field>   
     <mat-form-field class="item">
-        <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
+        <input matInput  placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
     </mat-form-field>    
     <mat-form-field>
             <mat-label>Reason</mat-label>
@@ -51,7 +51,7 @@
            End Date is required.
         </div>
     </div>  
-    <div class="alert alert-danger" *ngIf="formG.errors"  > {{ formG.errors?.dates | json }} </div>     
+    <div class="alert alert-danger" *ngIf="formG.errors"  > {{ formG.errors?.dates | json }} </div>    <!-- display Errors -->
 </form>
 
 <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
@@ -64,8 +64,7 @@
                     <mat-datepicker #picker ></mat-datepicker>            
                 </mat-form-field>
             </li>
-            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
-                
+            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>          
             <li class="item">
                 <mat-form-field  class="item" x>
                     <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
