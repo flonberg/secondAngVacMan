@@ -152,7 +152,6 @@ export class TimeLineComponent implements OnInit {
             dates: "End Date must be after Start Date "
           };
         }
-
         if (group.controls[from].value.length > 0  && group.controls[from].value.length  > 0  && group.controls[reason].value.length  > 0){
           this.formValidation = true;
         }

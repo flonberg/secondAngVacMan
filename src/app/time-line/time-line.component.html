@@ -6,7 +6,7 @@
     <div id="container">  
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)">
         </div>
-        <input id="chData" value="test" >  
+        <input id="chData"  >  
     </div>      
     <div *ngIf = "!newTimeAway2" >
         <!------        This is the form used for adding new tAs --------------->
@@ -16,7 +16,7 @@
 <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
         <div class = "heading" > Enter New Time Away Parameters </div>
     <mat-form-field class="item">
-        <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
+        <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate />
     </mat-form-field>   
     <mat-form-field class="item">
         <input matInput  placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />

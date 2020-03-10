@@ -520,7 +520,7 @@ module.exports = "\n  body{\n    font-size:8pt;\n    font-family:sans-serif;\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"wholePage\">\n  <div id=\"header\" class=\"flex-container\">\n    <div>\n      <button (click) = 'nextMonth(-1)'  mat-raised-button class=\"accent\"  >Previous Month </button>\n    </div>\n    <div class=\"title\"> {{ monthName }}</div> \n    <div>\n    <button (click) = 'nextMonth(1)'   mat-raised-button class=\"accent\"  >Next Month </button>\n    </div>  \n    <div id=\"legend\">\n      <div>\n        <table class=\"smallTable\">\n            <tr class=\"one\"><th>MorningA-IORT</th></tr>\n            <tr class=\"two\"><th>MorningB</th></tr>\n            <tr class=\"three\"><th>EveningA</th></tr>\n            <tr class=\"four\"><th>EveningB</th></tr>\n        </table>\n      </div>    \n    </div>\n  </div>\n  \n  <div id=\"header\" class=\"flex-container\">\n    <table>\n      <tr class=\"dow\">\n          <th > Monday</th>\n          <th> Tuesday</th>\n          <th> Wednesday</th>\n          <th> Thursday</th>\n          <th> Friday</th>\n      </tr>\n      <tr *ngFor = \" let week of daysS\">\n        <td  *ngFor=\" let dayEl of week \"  [class] = \"dayEl.isInCurrMonth\">\n          <table style=\"width:100%;\">\n       <!--  <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption> -->   \n            <caption *ngIf = \"dayEl \"> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"one\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"two\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"three\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"four\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>\n          </table>\n        </td>\n      </tr>\n      \n    </table>\n  </div>\n</div>    "
+module.exports = "<div class=\"wholePage\">\n  <div id=\"header\" class=\"flex-container\">\n    <div>\n      <button (click) = 'nextMonth(-1)'  mat-raised-button class=\"accent\"  >Previous Month </button>\n    </div>\n    <div class=\"title\"> {{ monthName }}</div> \n    <div>\n    <button (click) = 'nextMonth(1)'   mat-raised-button class=\"accent\"  >Next Month </button>\n    </div>  \n    <div id=\"legend\">\n      <div>\n        <table class=\"smallTable\">\n            <tr class=\"one\"><th>MorningA-IORT</th></tr>\n            <tr class=\"two\"><th>MorningB</th></tr>\n            <tr class=\"three\"><th>EveningA</th></tr>\n            <tr class=\"four\"><th>EveningB</th></tr>\n        </table>\n      </div>    \n    </div>\n  </div>\n  \n  <div id=\"header\" class=\"flex-container\">\n    <table>\n      <tr class=\"dow\">\n          <th > Monday</th>\n          <th> Tuesday</th>\n          <th> Wednesday</th>\n          <th> Thursday</th>\n          <th> Friday</th>\n      </tr>\n      <tr *ngFor = \" let week of daysS\">\n        <td  *ngFor=\" let dayEl of week \"  [class] = \"dayEl.isInCurrMonth\">\n          <table style=\"width:100%;\">\n            <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   \n          <!--  <caption *ngIf = \"dayEl \"> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption> -->\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"one\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"two\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"three\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"four\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>\n          </table>\n        </td>\n      </tr>\n      \n    </table>\n  </div>\n</div>    "
 
 /***/ }),
 
@@ -565,14 +565,13 @@ var MonthViewComponent = /** @class */ (function () {
         var firstDateOnCalendar = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
         var monthShowNumber = this.date.getMonth(); // use to grey out days NOT in monthShown
         var dowFD = firstDayOfShownMonth.getDay(); // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of 
-        //  if (dowFD == 0 || dowFD == 1)
-        //  firstDayOfShownMonth.setDate(firstDayOfShownMonth.getDate() + (2 - dowFD)); 
-        console.log("firstDayOfShownMonth is " + firstDayOfShownMonth);
-        console.log("first day of month" + dowFD);
+        console.log("dowFD is " + dowFD);
         var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
         var lastDayNum = +this.datePipe.transform(lastDayPrevMonth, 'd'); //  e.g. for March   ->  31
         //////////  use firstDayOnCal as dateSince to make array of physicsDuties     \\\\\\\\\\\\\\\\\
         var firstDayOnCal = lastDayNum - (dowFD - 2); // get dayNum of first Monday on Cal       //  E.g. April 1 is Wed. to firstDayShown is March 29, so firstDanOnCal = 29
+        if (dowFD == 1)
+            firstDayOnCal = 1;
         /************  make the first day shown on the calendar  **********************/
         if (dowFD !== 6 && dowFD !== 0)
             firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() - (dowFD - 1)); // first of Month is a WeekDay so need to step back to Monday
@@ -582,42 +581,36 @@ var MonthViewComponent = /** @class */ (function () {
             firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() + 1); // first of Month is Sunday so need to step forward 1 day1 to Monday
         this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');
         ;
-        console.log("firstDareOnCalendar is " + firstDateOnCalendar);
-        console.log("startDateForGettingDataString " + this.startDateForGettingDataString + "  doWFD is " + dowFD);
-        if (dowFD == 1)
-            firstDayOnCal = 1;
         /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
         var startDateForGettingData = new Date(); // define a date to set in the below loop
-        if (dowFD > 0 && dowFD < 6) { // if the firstDayOfMonth is NOT Sat or Sun  
+        if (dowFD > 1 && dowFD < 6) { // if the firstDayOfMonth is NOT Sat or Sun  
+            //      if (dowFD > 0 && dowFD < 6){                                                                 // if the firstDayOfMonth is NOT Sat or Sun  
             for (var i = 0; i < 5; i++) { // make the 5 days of the first week;
                 if (!this.daysS[0]) //  if array row has not been defined
                     this.daysS[0] = Array(); // define the array for the Week
                 this.daysS[0][i] = {}; // define an instance of the daysS interface
                 this.daysS[0][i].dayNumber = firstDayOnCal; // set dayNumber element of interface
-                /************      first week   **********************/
+                /************      first Day of first week **********************/
                 if (i == 0) {
                     this.daysS[0][i].date = new Date(lastDayPrevMonth.getFullYear(), lastDayPrevMonth.getMonth(), firstDayOnCal); // set first date on Calendar in array
+                    tmpDate = new Date(lastDayPrevMonth.getFullYear(), lastDayPrevMonth.getMonth(), firstDayOnCal); // set first date on Calendar in array
                     if (dowFD == 1)
                         this.daysS[0][i].date = firstDateOnCalendar;
                     startDateForGettingData = this.daysS[0][i].date;
                     if (dowFD == 1 || dowFD == 6) {
                         startDateForGettingData = firstDayOfShownMonth;
-                        console.log("startDateForGettingData is reset to " + startDateForGettingData);
                     }
                     this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
-                    var diff = Math.abs(this.baseDate.getTime() - tmpDate.getTime());
-                    //       this.daysS[0][i].daysSince = Math.ceil(diff / (1000 * 3600 * 24)); 
                 }
+                /***************    rest of days in first week *******************/
                 firstDayOnCal++;
-                /**********    succeeding weeks  *********************/
                 if (i > 0) { // go to next day
                     startDateForGettingData = this.daysS[0][i].date;
                     tmpDate = new Date(this.daysS[0][i - 1].date.getFullYear(), this.daysS[0][i - 1].date.getMonth(), this.daysS[0][i - 1].date.getDate()); // make a date to increment                                                                                           // from the previous entry in the loop
-                    tmpDate.setDate(tmpDate.getDate() + 1); // increment the date
+                    tmpDate.setDate(tmpDate.getDate() + 1);
+                    console.log("tmpDate is " + tmpDate); // increment the date
                     this.daysS[0][i].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate()); // put that date in the dateBox of the MonthStructure
                     this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
-                    var diff = Math.abs(this.baseDate.getTime() - tmpDate.getTime());
-                    //        this.daysS[0][i].daysSince = Math.ceil(diff / (1000 * 3600 * 24)); 
                 }
                 if (firstDayOnCal == lastDayNum + 1) // if it is greater than lastDayOfMonth
                     firstDayOnCal = 1; // go to 1, for the first day of monthShown 
@@ -625,24 +618,32 @@ var MonthViewComponent = /** @class */ (function () {
             }
         }
         if (dowFD == 1 || dowFD == 6) {
+            firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() - 1);
+            tmpDate = firstDateOnCalendar;
             startDateForGettingData = firstDayOfShownMonth;
             console.log("startDateForGettingData is reset to " + startDateForGettingData);
         }
+        console.log("startDateForGettingData is reset to " + startDateForGettingData);
         /////////////         take care of months which start on Sat or Sun                       \\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        /*
         if (dowFD == 6)
-            tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 2); // if firstDayOfMonth is Sat. increment by 2 days
+          tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 2);                  // if firstDayOfMonth is Sat. increment by 2 days
         if (dowFD == 0)
-            tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 1); // if firstDayOfMonth is Sub. increment by 1 day  
+          tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 1);                  // if firstDayOfMonth is Sub. increment by 1 day
         if (dowFD == 1)
-            tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
-        console.log("tmpDate is " + tmpDate);
+          tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+          */
+        console.log("116" + this.daysS);
         ///////////  make the suceeding weeks  \\\\\\\\\\\\\\\\\\\\\\\\\\ 
+        if (dowFD == 0)
+            tmpDate = firstDateOnCalendar;
         for (var i = 1; i < 6; i++) { // max of 4 more weeks in calendar
             for (var j = 0; j < 5; j++) { // the days of each week
                 tmpDate.setDate(tmpDate.getDate() + 1); // increment the date
-                var dayNum = tmpDate.getDay(); // get dayNum of week  0 = Sunday  
-                if (dayNum == 6) // if it is Saturday, increment by 2 days
-                    tmpDate.setDate(tmpDate.getDate() + 2);
+                console.log("tmpDate is " + tmpDate);
+                var dayNum = tmpDate.getDay(); // get dayNum of week, this will be Saturday 
+                if (dayNum == 6) // check if it is Saturday, 
+                    tmpDate.setDate(tmpDate.getDate() + 2); // increment 2 days to get to Monday. 
                 if (!this.daysS[i]) //  if array row has not been defined
                     this.daysS[i] = Array();
                 this.daysS[i][j] = {}; // define an instance of the daysS interface
@@ -650,7 +651,6 @@ var MonthViewComponent = /** @class */ (function () {
                 this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
                 this.daysS[i][j].dayNumber = tmpDate.getDate();
                 this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
-                //      this.daysS[i][j].daysSince = this.daysSince(tmpDate);     
             }
         }
         /*************      get the data  ************************/
@@ -665,13 +665,11 @@ var MonthViewComponent = /** @class */ (function () {
         var url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' + this.startDateForGettingDataString;
         console.log("MonthView url is " + url);
         this.http.get(url).subscribe(function (val) {
-            //    console.log(val);
             _this.setPhysicsMonthlyDuties(val);
         });
     };
     MonthViewComponent.prototype.setPhysicsMonthlyDuties = function (val) {
         this.physicsMonthlyDuties = val;
-        console.log("160 pDM is " + this.physicsMonthlyDuties);
     };
     MonthViewComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
@@ -766,7 +764,7 @@ var NavBarVMComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n#container {\n  border:solid;\n  overflow:auto;\n}\n#controls {\n  position:relative;\n  height:100px;\n  width:100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  text-align: center;\n}\n.vis-time-axis .vis-grid.vis-saturday,\n\t.vis-time-axis .vis-grid.vis-sunday {\n\t\tbackground: green\t\n\t  }\n.vis-time-axis .vis-grid.vis-today {\n\t\tbackground: #FFFFCC;\t\n\t  }\n.vis-item.red {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.form-width{\n    width:100px;\n  }\n.flex-container {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n    display: flex;\n    width:80%;\n    justify-content: space-evenly;\n  }\n.wideItem {\n    width: 250px;\n  }\n/* \n.item {\n    width: 100px;\n    background-color:green;\n  }\n  */\n.space-evenly { \n    justify-content: space-evenly; \n  }\n.vis-item.approved {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.vis-item {\n    border-color: orange;\n    background-color: green;\n  }\n.smallLable {\n    color:blue;\n  }\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvdGltZS1saW5lL3RpbWUtbGluZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFDQTtFQUNFLFlBQVk7RUFDWixhQUFhO0FBQ2Y7QUFDQTtFQUNFLGlCQUFpQjtFQUNqQixZQUFZO0VBQ1osVUFBVTtFQUNWLGFBQWE7RUFDYix1QkFBdUI7RUFDdkIsbUJBQW1CO0VBQ25CLGtCQUFrQjtBQUNwQjtBQUNBOztFQUVFO0dBQ0M7QUFFRjtFQUNDLG1CQUFtQjtHQUNsQjtBQUNIO0lBQ0ksWUFBWTtJQUNaLHFCQUFxQjtJQUNyQixxQkFBcUI7RUFDdkI7QUFDRjtJQUNJLFdBQVc7RUFDYjtBQUNGO0lBQ0ksVUFBVTtJQUNWLFNBQVM7SUFDVCxnQkFBZ0I7SUFDaEIsYUFBYTtJQUNiLFNBQVM7SUFDVCw2QkFBNkI7RUFDL0I7QUFDRjtJQUNJLFlBQVk7RUFDZDtBQUNEOzs7OztHQUtFO0FBQ0g7SUFDSSw2QkFBNkI7RUFDL0I7QUFDRjtJQUNJLFlBQVk7SUFDWixxQkFBcUI7SUFDckIscUJBQXFCO0VBQ3ZCO0FBQ0Y7SUFDSSxvQkFBb0I7SUFDcEIsdUJBQXVCO0VBQ3pCO0FBQ0E7SUFDRSxVQUFVO0VBQ1oiLCJmaWxlIjoic3JjL2FwcC90aW1lLWxpbmUvdGltZS1saW5lLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJcbiNjb250YWluZXIge1xuICBib3JkZXI6c29saWQ7XG4gIG92ZXJmbG93OmF1dG87XG59XG4jY29udHJvbHMge1xuICBwb3NpdGlvbjpyZWxhdGl2ZTtcbiAgaGVpZ2h0OjEwMHB4O1xuICB3aWR0aDoxMDAlO1xuICBkaXNwbGF5OiBmbGV4O1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuLnZpcy10aW1lLWF4aXMgLnZpcy1ncmlkLnZpcy1zYXR1cmRheSxcblx0LnZpcy10aW1lLWF4aXMgLnZpcy1ncmlkLnZpcy1zdW5kYXkge1xuXHRcdGJhY2tncm91bmQ6IGdyZWVuXHRcblx0ICB9XG5cdCAgXG5cdC52aXMtdGltZS1heGlzIC52aXMtZ3JpZC52aXMtdG9kYXkge1xuXHRcdGJhY2tncm91bmQ6ICNGRkZGQ0M7XHRcblx0ICB9XG4udmlzLWl0ZW0ucmVkIHtcbiAgICBjb2xvcjogd2hpdGU7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmVkO1xuICAgIGJvcmRlci1jb2xvcjogZGFya3JlZDtcbiAgfVxuLmZvcm0td2lkdGh7XG4gICAgd2lkdGg6MTAwcHg7XG4gIH1cbi5mbGV4LWNvbnRhaW5lciB7XG4gICAgcGFkZGluZzogMDtcbiAgICBtYXJnaW46IDA7XG4gICAgbGlzdC1zdHlsZTogbm9uZTtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIHdpZHRoOjgwJTtcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWV2ZW5seTtcbiAgfVxuLndpZGVJdGVtIHtcbiAgICB3aWR0aDogMjUwcHg7XG4gIH1cbiAvKiBcbi5pdGVtIHtcbiAgICB3aWR0aDogMTAwcHg7XG4gICAgYmFja2dyb3VuZC1jb2xvcjpncmVlbjtcbiAgfVxuICAqL1xuLnNwYWNlLWV2ZW5seSB7IFxuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtZXZlbmx5OyBcbiAgfVxuLnZpcy1pdGVtLmFwcHJvdmVkIHtcbiAgICBjb2xvcjogd2hpdGU7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmVkO1xuICAgIGJvcmRlci1jb2xvcjogZGFya3JlZDtcbiAgfVxuLnZpcy1pdGVtIHtcbiAgICBib3JkZXItY29sb3I6IG9yYW5nZTtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBncmVlbjtcbiAgfVxuICAuc21hbGxMYWJsZSB7XG4gICAgY29sb3I6Ymx1ZTtcbiAgfSJdfQ== */"
+module.exports = "input[type=\"date\"]::-webkit-calendar-picker-indicator {\n  background: transparent;\n  bottom: 0;\n  color: transparent;\n  cursor: pointer;\n  height: auto;\n  left: 0;\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: auto;\n}\n#container {\n  border:solid;\n  overflow:auto;\n}\n#controls {\n  position:relative;\n  height:100px;\n  width:100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  text-align: center;\n}\n.vis-time-axis .vis-grid.vis-saturday,\n\t.vis-time-axis .vis-grid.vis-sunday {\n\t\tbackground: green\t\n\t  }\n.vis-time-axis .vis-grid.vis-today {\n\t\tbackground: #FFFFCC;\t\n\t  }\n.vis-item.red {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.form-width{\n    width:100px;\n  }\n.flex-container {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n    display: flex;\n    width:80%;\n    justify-content: space-evenly;\n  }\n.wideItem {\n    width: 250px;\n  }\n/* \n.item {\n    width: 100px;\n    background-color:green;\n  }\n  */\n.space-evenly { \n    justify-content: space-evenly; \n  }\n.vis-item.approved {\n    color: white;\n    background-color: red;\n    border-color: darkred;\n  }\n.vis-item {\n    border-color: orange;\n    background-color: green;\n  }\n.smallLable {\n    color:blue;\n  }\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvdGltZS1saW5lL3RpbWUtbGluZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsdUJBQXVCO0VBQ3ZCLFNBQVM7RUFDVCxrQkFBa0I7RUFDbEIsZUFBZTtFQUNmLFlBQVk7RUFDWixPQUFPO0VBQ1Asa0JBQWtCO0VBQ2xCLFFBQVE7RUFDUixNQUFNO0VBQ04sV0FBVztBQUNiO0FBQ0E7RUFDRSxZQUFZO0VBQ1osYUFBYTtBQUNmO0FBQ0E7RUFDRSxpQkFBaUI7RUFDakIsWUFBWTtFQUNaLFVBQVU7RUFDVixhQUFhO0VBQ2IsdUJBQXVCO0VBQ3ZCLG1CQUFtQjtFQUNuQixrQkFBa0I7QUFDcEI7QUFDQTs7RUFFRTtHQUNDO0FBRUY7RUFDQyxtQkFBbUI7R0FDbEI7QUFDSDtJQUNJLFlBQVk7SUFDWixxQkFBcUI7SUFDckIscUJBQXFCO0VBQ3ZCO0FBQ0Y7SUFDSSxXQUFXO0VBQ2I7QUFDRjtJQUNJLFVBQVU7SUFDVixTQUFTO0lBQ1QsZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYixTQUFTO0lBQ1QsNkJBQTZCO0VBQy9CO0FBQ0Y7SUFDSSxZQUFZO0VBQ2Q7QUFDRDs7Ozs7R0FLRTtBQUNIO0lBQ0ksNkJBQTZCO0VBQy9CO0FBQ0Y7SUFDSSxZQUFZO0lBQ1oscUJBQXFCO0lBQ3JCLHFCQUFxQjtFQUN2QjtBQUNGO0lBQ0ksb0JBQW9CO0lBQ3BCLHVCQUF1QjtFQUN6QjtBQUNBO0lBQ0UsVUFBVTtFQUNaIiwiZmlsZSI6InNyYy9hcHAvdGltZS1saW5lL3RpbWUtbGluZS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaW5wdXRbdHlwZT1cImRhdGVcIl06Oi13ZWJraXQtY2FsZW5kYXItcGlja2VyLWluZGljYXRvciB7XG4gIGJhY2tncm91bmQ6IHRyYW5zcGFyZW50O1xuICBib3R0b206IDA7XG4gIGNvbG9yOiB0cmFuc3BhcmVudDtcbiAgY3Vyc29yOiBwb2ludGVyO1xuICBoZWlnaHQ6IGF1dG87XG4gIGxlZnQ6IDA7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgcmlnaHQ6IDA7XG4gIHRvcDogMDtcbiAgd2lkdGg6IGF1dG87XG59XG4jY29udGFpbmVyIHtcbiAgYm9yZGVyOnNvbGlkO1xuICBvdmVyZmxvdzphdXRvO1xufVxuI2NvbnRyb2xzIHtcbiAgcG9zaXRpb246cmVsYXRpdmU7XG4gIGhlaWdodDoxMDBweDtcbiAgd2lkdGg6MTAwJTtcbiAgZGlzcGxheTogZmxleDtcbiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbn1cbi52aXMtdGltZS1heGlzIC52aXMtZ3JpZC52aXMtc2F0dXJkYXksXG5cdC52aXMtdGltZS1heGlzIC52aXMtZ3JpZC52aXMtc3VuZGF5IHtcblx0XHRiYWNrZ3JvdW5kOiBncmVlblx0XG5cdCAgfVxuXHQgIFxuXHQudmlzLXRpbWUtYXhpcyAudmlzLWdyaWQudmlzLXRvZGF5IHtcblx0XHRiYWNrZ3JvdW5kOiAjRkZGRkNDO1x0XG5cdCAgfVxuLnZpcy1pdGVtLnJlZCB7XG4gICAgY29sb3I6IHdoaXRlO1xuICAgIGJhY2tncm91bmQtY29sb3I6IHJlZDtcbiAgICBib3JkZXItY29sb3I6IGRhcmtyZWQ7XG4gIH1cbi5mb3JtLXdpZHRoe1xuICAgIHdpZHRoOjEwMHB4O1xuICB9XG4uZmxleC1jb250YWluZXIge1xuICAgIHBhZGRpbmc6IDA7XG4gICAgbWFyZ2luOiAwO1xuICAgIGxpc3Qtc3R5bGU6IG5vbmU7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICB3aWR0aDo4MCU7XG4gICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1ldmVubHk7XG4gIH1cbi53aWRlSXRlbSB7XG4gICAgd2lkdGg6IDI1MHB4O1xuICB9XG4gLyogXG4uaXRlbSB7XG4gICAgd2lkdGg6IDEwMHB4O1xuICAgIGJhY2tncm91bmQtY29sb3I6Z3JlZW47XG4gIH1cbiAgKi9cbi5zcGFjZS1ldmVubHkgeyBcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWV2ZW5seTsgXG4gIH1cbi52aXMtaXRlbS5hcHByb3ZlZCB7XG4gICAgY29sb3I6IHdoaXRlO1xuICAgIGJhY2tncm91bmQtY29sb3I6IHJlZDtcbiAgICBib3JkZXItY29sb3I6IGRhcmtyZWQ7XG4gIH1cbi52aXMtaXRlbSB7XG4gICAgYm9yZGVyLWNvbG9yOiBvcmFuZ2U7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogZ3JlZW47XG4gIH1cbiAgLnNtYWxsTGFibGUge1xuICAgIGNvbG9yOmJsdWU7XG4gIH0iXX0= */"
 
 /***/ }),
 
@@ -777,7 +775,7 @@ module.exports = "\n#container {\n  border:solid;\n  overflow:auto;\n}\n#control
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->\n\n<div >\n \n    <div id=\"container\">  \n        <div id=\"timeline\" #visjsTimeline *ngIf = \"redraw  && index == 0\"   (click) = \"clicked($event)\">\n        </div>\n        <input id=\"chData\" value=\"test\" >  \n    </div>      \n    <div *ngIf = \"!newTimeAway2\" >\n        <!------        This is the form used for adding new tAs --------------->\n        <button mat-raised-button (click) =\"setNewTimeAway2()\"  >New Time Away </button>\n    </div>\n \n<form [formGroup]=\"formG\" *ngIf = \"newTimeAway2\" (ngSubmit)=\"onSubmit()\">\n        <div class = \"heading\" > Enter New Time Away Paramters </div>\n    <mat-form-field class=\"item\">\n        <input matInput  placeholder= \"Start Date \"  formControlName=\"dateFrom\" type=\"date\" useValueAsDate title=\"click down triangle for calendar\" />\n    </mat-form-field>   \n    <mat-form-field class=\"item\">\n        <input matInput placeholder= \"End Date \"   formControlName=\"dateTo\" type=\"date\" useValueAsDate />\n    </mat-form-field>    \n    <mat-form-field>\n            <mat-label>Reason</mat-label>\n                <mat-select  \n                formControlName = \"reasonG\"  id='reasonId'>\n                        <mat-option  value=\"0\">Personal Vacation</mat-option>\n                        <mat-option  value=\"1\">Other</mat-option>\n                        <mat-option   value=\"2\">Meeting</mat-option>  \n                        \n                </mat-select>\n    </mat-form-field>\n    <mat-form-field  class=\"wideItem\">\n            <mat-label class=\"smallLabel\"> Note:</mat-label>\n            <textarea matInput  formControlName = \"noteG\"  cdkTextareaAutosize  #autosize=\"cdkTextareaAutosize\"  cdkAutosizeMinRows=\"1\"  cdkAutosizeMaxRows=\"5\" >\n            </textarea>\n        </mat-form-field > \n    <button mat-raised-button [disabled]=\"!formValidation\" title=\"Valid Start and End dates as well as Reason required\"  >Submit New Time Away</button>\n        <!-- <button type=\"submit\">Submit</button> -->\n\n    <div *ngIf=\"this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) \"\n        class=\"alert alert-danger\">\n            <div *ngIf=\"this.formG.controls.dateFrom.errors.required\">\n                Start Date is required.\n            </div>\n    </div>       \n    <div *ngIf=\"this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) \"\n         class=\"alert alert-danger\">\n        <div *ngIf=\"this.formG.controls.dateTo.errors.required\">\n           End Date is required.\n        </div>\n    </div>  \n    <div class=\"alert alert-danger\" *ngIf=\"formG.errors\"  > {{ formG.errors?.dates | json }} </div>     \n</form>\n\n<div id=\"controls\" [formGroup] = 'form' *ngIf = \"drawControls\" >\n        <ul *ngIf = \"this.showControls && this._id \" class=\"flex-container  \">\n            <li class=\"item\">\n                <mat-form-field  class=\"item\" >\n                    <input matInput [matDatepicker]=\"picker\" placeholder= \"Start Date \" id='startDateInput' [readonly] = \"_readonly\"\n                    (dateInput)=\"editDate('start', $event)\" (change) = \"clear()\" [formControl] = \"startDate\" formControlName = 'startDate'>\n                    <mat-datepicker-toggle matSuffix [for]=\"picker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                    <mat-datepicker #picker ></mat-datepicker>            \n                </mat-form-field>\n            </li>\n            <div class='alert' *ngIf = \"startDateGet.touched && startDateGet.invalid\"> Date is requred.  </div>\n                \n            <li class=\"item\">\n                <mat-form-field  class=\"item\" x>\n                    <input  matInput [matDatepicker]=\"epicker\" placeholder= \"End Date \" id='endDateInput'[readonly] = \"_readonly\"\n                    (dateInput)=\"editDate('end', $event)\" (change) = \"clear()\" [formControl] = \"endDate\"  >\n                    <mat-datepicker-toggle matSuffix [for]=\"epicker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                    <mat-datepicker #epicker ></mat-datepicker>\n                </mat-form-field>\n            </li>\n            <div class='alert' *ngIf = \"endDateGet.touched && endDateGet.invalid\"> Date is requred and must be great than  </div>\n            <div class='alert' *ngIf = \"endDateGet.mustBeLaterThan \">End Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    \n            <li class=\"item\" *ngIf =!_readonly>\n                <mat-form-field>\n                    <mat-label>Reason</mat-label>\n                        <mat-select [(value)]=\"reasonSelect\" (selectionChange)=\"editReason($event, 'reason')\"\n                        [formControl] = \"reasonFC\"  id='reasonId'>\n                                <mat-option  value=\"0\">Personal Vacation</mat-option>\n                                <mat-option  value=\"1\">Other</mat-option>\n                                <mat-option   value=\"2\">Meeting</mat-option>  \n                                \n                        </mat-select>\n                </mat-form-field>\n            </li>\n    <!--    This the readOnly version of the Reason control -->\n            <li class=\"wideItem\" *ngIf =_readonly>\n                <mat-form-field>\n                <mat-label class=\"smallLabel\"> Reason</mat-label>\n                <input matInput  [value]=\"reasons[reasonSelect]\" size = 40  [readonly] = \"_readonly\">\n                </mat-form-field>\n            </li>\n    \n        \n            <li style=\"width:150px\" *ngIf = \"!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)\" >\n                <mat-form-field  class=\"wideItem\">\n                    <mat-label class=\"smallLabel\"> Note:</mat-label>\n                    <textarea matInput  (change)=\"editReason($event, 'note')\" [value]=\"newTimeAwayBool ? ' ' : this.data2._data[this._id].note\"\n                        [formControl] = \"notesFC\"\n                        cdkTextareaAutosize [readonly]=\"_readonly\"\n                        #autosize=\"cdkTextareaAutosize\"\n                        cdkAutosizeMinRows=\"1\"\n                        cdkAutosizeMaxRows=\"5\"\n                        >\n                    </textarea>\n                </mat-form-field >\n            </li> \n        \n            <li class=\"item\" *ngIf = \"this.isApprover\" (click) = \"approve()\" >\n                    <button mat-raised-button>Approve </button>\n                </li>\n            \n            <li class=\"item\" *ngIf = \"this.reasonEdited && this.startDateEdited && endDateEdited\" >\n                    <button mat-raised-button  (click) =\"saveNewTimeAway()\">Save New Time Away </button>\n            </li>\n        </ul>\n\n</div>\n \n</div>\n<div id=\"datums\"  style=\"display:block\"> </div>\n<div id=\"datums2\"  style=\"display:block\"> </div>\n<div id=\"vidx\"  style=\"display:block\"> </div>\n\n\n<style type=\"text/css\" >\n    #timeline {\n        width: 100%;\n        height: 60%;\n        font-size:8pt;\n        font-family: sans-serif;\n        padding:0px;    \n    }\n      /* gray background in weekends, white text color */\n  .vis.timeline .timeaxis .grid.saturday,\n  .vis.timeline .timeaxis .grid.sunday {\n    background: green;\n    }\n</style>\n"
+module.exports = "\n<!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->\n\n<div >\n \n    <div id=\"container\">  \n        <div id=\"timeline\" #visjsTimeline *ngIf = \"redraw  && index == 0\"   (click) = \"clicked($event)\">\n        </div>\n        <input id=\"chData\"  >  \n    </div>      \n    <div *ngIf = \"!newTimeAway2\" >\n        <!------        This is the form used for adding new tAs --------------->\n        <button mat-raised-button (click) =\"setNewTimeAway2()\"  >New Time Away </button>\n    </div>\n \n<form [formGroup]=\"formG\" *ngIf = \"newTimeAway2\" (ngSubmit)=\"onSubmit()\">\n        <div class = \"heading\" > Enter New Time Away Parameters </div>\n    <mat-form-field class=\"item\">\n        <input matInput  placeholder= \"Start Date \"  formControlName=\"dateFrom\" type=\"date\" useValueAsDate />\n    </mat-form-field>   \n    <mat-form-field class=\"item\">\n        <input matInput  placeholder= \"End Date \"   formControlName=\"dateTo\" type=\"date\" useValueAsDate />\n    </mat-form-field>    \n    <mat-form-field>\n            <mat-label>Reason</mat-label>\n                <mat-select  \n                formControlName = \"reasonG\"  id='reasonId'>\n                        <mat-option  value=\"0\">Personal Vacation</mat-option>\n                        <mat-option  value=\"1\">Other</mat-option>\n                        <mat-option   value=\"2\">Meeting</mat-option>  \n                        \n                </mat-select>\n    </mat-form-field>\n    <mat-form-field  class=\"wideItem\">\n            <mat-label class=\"smallLabel\"> Note:</mat-label>\n            <textarea matInput  formControlName = \"noteG\"  cdkTextareaAutosize  #autosize=\"cdkTextareaAutosize\"  cdkAutosizeMinRows=\"1\"  cdkAutosizeMaxRows=\"5\" >\n            </textarea>\n        </mat-form-field > \n    <button mat-raised-button [disabled]=\"!formValidation\" title=\"Valid Start and End dates as well as Reason required\"  >Submit New Time Away</button>\n        <!-- <button type=\"submit\">Submit</button> -->\n\n    <div *ngIf=\"this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) \"\n        class=\"alert alert-danger\">\n            <div *ngIf=\"this.formG.controls.dateFrom.errors.required\">\n                Start Date is required.\n            </div>\n    </div>       \n    <div *ngIf=\"this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) \"\n         class=\"alert alert-danger\">\n        <div *ngIf=\"this.formG.controls.dateTo.errors.required\">\n           End Date is required.\n        </div>\n    </div>  \n    <div class=\"alert alert-danger\" *ngIf=\"formG.errors\"  > {{ formG.errors?.dates | json }} </div>    <!-- display Errors -->\n</form>\n\n<div id=\"controls\" [formGroup] = 'form' *ngIf = \"drawControls\" >\n        <ul *ngIf = \"this.showControls && this._id \" class=\"flex-container  \">\n            <li class=\"item\">\n                <mat-form-field  class=\"item\" >\n                    <input matInput [matDatepicker]=\"picker\" placeholder= \"Start Date \" id='startDateInput' [readonly] = \"_readonly\"\n                    (dateInput)=\"editDate('start', $event)\" (change) = \"clear()\" [formControl] = \"startDate\" formControlName = 'startDate'>\n                    <mat-datepicker-toggle matSuffix [for]=\"picker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                    <mat-datepicker #picker ></mat-datepicker>            \n                </mat-form-field>\n            </li>\n            <div class='alert' *ngIf = \"startDateGet.touched && startDateGet.invalid\"> Date is requred.  </div>          \n            <li class=\"item\">\n                <mat-form-field  class=\"item\" x>\n                    <input  matInput [matDatepicker]=\"epicker\" placeholder= \"End Date \" id='endDateInput'[readonly] = \"_readonly\"\n                    (dateInput)=\"editDate('end', $event)\" (change) = \"clear()\" [formControl] = \"endDate\"  >\n                    <mat-datepicker-toggle matSuffix [for]=\"epicker\" *ngIf = \"!this._readonly\" ></mat-datepicker-toggle>\n                    <mat-datepicker #epicker ></mat-datepicker>\n                </mat-form-field>\n            </li>\n            <div class='alert' *ngIf = \"endDateGet.touched && endDateGet.invalid\"> Date is requred and must be great than  </div>\n            <div class='alert' *ngIf = \"endDateGet.mustBeLaterThan \">End Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    \n            <li class=\"item\" *ngIf =!_readonly>\n                <mat-form-field>\n                    <mat-label>Reason</mat-label>\n                        <mat-select [(value)]=\"reasonSelect\" (selectionChange)=\"editReason($event, 'reason')\"\n                        [formControl] = \"reasonFC\"  id='reasonId'>\n                                <mat-option  value=\"0\">Personal Vacation</mat-option>\n                                <mat-option  value=\"1\">Other</mat-option>\n                                <mat-option   value=\"2\">Meeting</mat-option>  \n                                \n                        </mat-select>\n                </mat-form-field>\n            </li>\n    <!--    This the readOnly version of the Reason control -->\n            <li class=\"wideItem\" *ngIf =_readonly>\n                <mat-form-field>\n                <mat-label class=\"smallLabel\"> Reason</mat-label>\n                <input matInput  [value]=\"reasons[reasonSelect]\" size = 40  [readonly] = \"_readonly\">\n                </mat-form-field>\n            </li>\n    \n        \n            <li style=\"width:150px\" *ngIf = \"!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)\" >\n                <mat-form-field  class=\"wideItem\">\n                    <mat-label class=\"smallLabel\"> Note:</mat-label>\n                    <textarea matInput  (change)=\"editReason($event, 'note')\" [value]=\"newTimeAwayBool ? ' ' : this.data2._data[this._id].note\"\n                        [formControl] = \"notesFC\"\n                        cdkTextareaAutosize [readonly]=\"_readonly\"\n                        #autosize=\"cdkTextareaAutosize\"\n                        cdkAutosizeMinRows=\"1\"\n                        cdkAutosizeMaxRows=\"5\"\n                        >\n                    </textarea>\n                </mat-form-field >\n            </li> \n        \n            <li class=\"item\" *ngIf = \"this.isApprover\" (click) = \"approve()\" >\n                    <button mat-raised-button>Approve </button>\n                </li>\n            \n            <li class=\"item\" *ngIf = \"this.reasonEdited && this.startDateEdited && endDateEdited\" >\n                    <button mat-raised-button  (click) =\"saveNewTimeAway()\">Save New Time Away </button>\n            </li>\n        </ul>\n\n</div>\n \n</div>\n<div id=\"datums\"  style=\"display:block\"> </div>\n<div id=\"datums2\"  style=\"display:block\"> </div>\n<div id=\"vidx\"  style=\"display:block\"> </div>\n\n\n<style type=\"text/css\" >\n    #timeline {\n        width: 100%;\n        height: 60%;\n        font-size:8pt;\n        font-family: sans-serif;\n        padding:0px;    \n    }\n      /* gray background in weekends, white text color */\n  .vis.timeline .timeaxis .grid.saturday,\n  .vis.timeline .timeaxis .grid.sunday {\n    background: green;\n    }\n</style>\n"
 
 /***/ }),
 
@@ -832,7 +830,6 @@ var TimeLineComponent = /** @class */ (function () {
         this.nameToUserId = [{ lastName: '', userid: '' }];
         this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
         this.contentArray = [];
-        this.localAddId = 34343;
         this.newTimeAwayBool = false; // enable editing of existing tAs
         this.seP.whereColName = 'vidx';
         this.seP.tableName = 'vacation3';
@@ -849,37 +846,34 @@ var TimeLineComponent = /** @class */ (function () {
         this.newTimeAway2 = false;
     }
     TimeLineComponent.prototype.createForm = function () {
-        this.doValidation = false;
-        this.invalidFromDate = false;
+        this.doValidation = false; // used to enable Submit button
+        //   this.invalidFromDate = false;                                                           // mm
         this.formG = this.fb.group({
             dateTo: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
             dateFrom: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
             reasonG: [''],
             noteG: ['']
-        }, { validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG') });
+        }, { validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG') } // declare custom validator
+        );
     };
     TimeLineComponent.prototype.dateLessThan = function (from, to, reason) {
         var _this = this;
         return function (group) {
             var today = new Date();
-            var f = group.controls[from];
-            var t = group.controls[to];
-            var r = group.controls[reason];
-            if (t.value && f.value >= t.value) {
+            if (group.controls[from].value) { // if user has entered a value
+                var fDate = new Date(group.controls[from].value); // make a Date out of the userEntered String
+                if (fDate < today) // if it is before today
+                    return {
+                        dates: "Date must be in the future" // 
+                    };
+            }
+            if (group.controls[to].value && group.controls[from].value >= group.controls[to].value) {
                 return {
                     dates: "End Date must be after Start Date "
                 };
             }
-            if (f.value) {
-                var fDate = new Date(f.value);
-                if (fDate < today)
-                    return {
-                        dates: "Date must be in the future"
-                    };
-            }
-            if (f.value.length > 0 && f.value.length > 0 && r.value.length > 0) {
+            if (group.controls[from].value.length > 0 && group.controls[from].value.length > 0 && group.controls[reason].value.length > 0) {
                 _this.formValidation = true;
-                console.log("form valid " + _this.formValidation);
             }
             return {};
         };
@@ -925,19 +919,6 @@ var TimeLineComponent = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    /*
-    mustBeLaterThan(control: AbstractControl) : ValidationErrors | null {
-      if (this){
-        console.log("startDateEntered" + this.startDateEntered)
-      }
-      console.log("typeof " + typeof control.value);
-      let controlValueDate = new Date(control.value);
-      if (typeof control.value =='object' && this && (controlValueDate) <= this.startDateEntered)
-        return { mustBeLaterThan : true};
-      else
-        return null;
-    }
-    */
     TimeLineComponent.prototype.clicked = function (ev) {
         if (document.getElementById('datums2')) {
             this._content = document.getElementById('datums2').innerText;
@@ -999,7 +980,6 @@ var TimeLineComponent = /** @class */ (function () {
         }
     };
     TimeLineComponent.prototype.updateDB = function (sD, eD) {
-        console.log('sD is ' + sD + 'length is ' + sD.length);
         var dParams = {
             'action': 'edit',
             'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': this.data2._data[this._id].vidx,
@@ -1051,17 +1031,19 @@ var TimeLineComponent = /** @class */ (function () {
         var _this = this;
         var todayDate = new Date();
         var startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1); // move to first day of current month
+        var startDateForData = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1); // move to first day of current month
+        startDateForData.setDate(startDateForData.getDate() - 100); // go back 100 days to make sure everybody is on the list
         var endDate = new Date();
         var endDateShown = new Date();
         var numWeeks = 12;
         endDateShown.setDate(startDate.getDate() + numWeeks * 7); // set endDate of shown TimeLine for 2 months
-        endDate.setMonth(startDate.getMonth() + 4); // set 4 month interval for data collection
+        endDate.setMonth(startDate.getMonth() + 3); // set 4 month interval for data collection
         ////////////  go back for DEV only ///////////////
         //  startDate.setFullYear(startDate.getFullYear() - 1) ;                                  // for developement purpose use old data
         //  endDate.setFullYear(endDate.getFullYear() - 1) ;                                      // mm
         //  endDateShown.setFullYear(endDateShown.getFullYear() - 1) ;                            // mm
         // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
-        this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd'); // format it for dataBase startDate for getting tAs
+        this.startDateString = this.datePipe.transform(startDateForData, 'yyyy-MM-dd'); // format it for dataBase startDate for getting tAs
         this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd'); // mm for endDate
         this.endDateShownString = this.datePipe.transform(endDateShown, 'yyyy-MM-dd'); // start date for opening of tL
         this.startDateShownString = this.datePipe.transform(startDate, 'yyyy-MM-dd');
@@ -1085,7 +1067,6 @@ var TimeLineComponent = /** @class */ (function () {
             }
             var top = _this.nameList.length * 20;
             var topString = top.toString() + 'px';
-            //    document.getElementById('controls').style.setProperty('top', topString);
             _this.assignGroups(); // go thru tA's and assign each to proper Group
             _this.timeline = new vis.Timeline(_this.tlContainer, _this.data2, {});
             _this.timeline.setOptions(_this.options);
@@ -1152,7 +1133,7 @@ var TimeLineComponent = /** @class */ (function () {
         }
         this.nameList.sort(); // alphabetize the nameList
         var index = this.useridToUserkeys.map(function (e) { return e.userid; }).indexOf(this.userid); // find arrayIndex of userId
-        var uKey = this.useridToUserkeys[index].userkey; // the userKey of the loggedIn user
+        // const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
         this.userkey = this.useridToUserkeys[index].userkey; // the userKey of the loggedIn user
     };
     TimeLineComponent.prototype.assignGroups = function () {
@@ -1296,7 +1277,7 @@ var TimeLineComponent = /** @class */ (function () {
         this.timeline.itemsData.getDataSet().add(item); // add the new tA to local DataSet
         //   this.data2.update({id: this._id, reason: item.start});   
         // add the new tA to local DataSet
-        this.localAddId++; // increment the id so can add additional tAs
+        // this.localAddId++;                                                     // increment the id so can add additional tAs
         this.newTimeAwayBool = false; // enable editing of existing tAs
         this.getEditSvce.insert(params); //  insert into dB
     };
