@@ -69,7 +69,8 @@ export class MonthViewComponent implements OnInit {
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 2 );                         // first of Month is Saturday so need to step forward 2 days to Monday
     if (dowFD === 0 )
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
-    this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');;
+   
+      this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');;
 
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
     var startDateForGettingData = new Date()                                                     // define a date to set in the below loop
@@ -125,7 +126,9 @@ export class MonthViewComponent implements OnInit {
       */
       console.log("116" + this.daysS);
       ///////////  make the suceeding weeks  \\\\\\\\\\\\\\\\\\\\\\\\\\ 
-    for (let i=1; i < 6; i++){                                                                // max of 4 more weeks in calendar
+      if (dowFD == 0)
+        tmpDate = firstDateOnCalendar;
+      for (let i=1; i < 6; i++){                                                                // max of 4 more weeks in calendar
         for (let j= 0; j < 5; j++) {                                                           // the days of each week
           tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
           console.log("tmpDate is " + tmpDate);   
