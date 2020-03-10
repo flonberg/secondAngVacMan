@@ -31,8 +31,8 @@
       <tr *ngFor = " let week of daysS">
         <td  *ngFor=" let dayEl of week "  [class] = "dayEl.isInCurrMonth">
           <table style="width:100%;">
-       <!--  <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption> -->   
-            <caption *ngIf = "dayEl "> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption>
+            <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
+          <!--  <caption *ngIf = "dayEl "> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption> -->
             <tr *ngIf = "physicsMonthlyDuties" class="one"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>
             <tr *ngIf = "physicsMonthlyDuties" class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>
             <tr *ngIf = "physicsMonthlyDuties" class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>

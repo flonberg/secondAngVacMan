@@ -520,7 +520,7 @@ module.exports = "\n  body{\n    font-size:8pt;\n    font-family:sans-serif;\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"wholePage\">\n  <div id=\"header\" class=\"flex-container\">\n    <div>\n      <button (click) = 'nextMonth(-1)'  mat-raised-button class=\"accent\"  >Previous Month </button>\n    </div>\n    <div class=\"title\"> {{ monthName }}</div> \n    <div>\n    <button (click) = 'nextMonth(1)'   mat-raised-button class=\"accent\"  >Next Month </button>\n    </div>  \n    <div id=\"legend\">\n      <div>\n        <table class=\"smallTable\">\n            <tr class=\"one\"><th>MorningA-IORT</th></tr>\n            <tr class=\"two\"><th>MorningB</th></tr>\n            <tr class=\"three\"><th>EveningA</th></tr>\n            <tr class=\"four\"><th>EveningB</th></tr>\n        </table>\n      </div>    \n    </div>\n  </div>\n  \n  <div id=\"header\" class=\"flex-container\">\n    <table>\n      <tr class=\"dow\">\n          <th > Monday</th>\n          <th> Tuesday</th>\n          <th> Wednesday</th>\n          <th> Thursday</th>\n          <th> Friday</th>\n      </tr>\n      <tr *ngFor = \" let week of daysS\">\n        <td [class]=\"dayEl.isInCurrMonth\"   *ngFor=\" let dayEl of week \">\n   \n          <table style=\"width:100%;\">\n            <caption> {{ dayEl.dayNumber }} </caption>\n            <tr class=\"one\"><th>Mauceri</th></tr>\n            <tr class=\"two\"><th>2</th></tr>\n            <tr class=\"three\"><th>3</th></tr>\n            <tr class=\"four\"><th>4</th></tr>\n          </table>\n        </td>\n      </tr>\n      \n    </table>\n  </div>\n</div>    "
+module.exports = "<div class=\"wholePage\">\n  <div id=\"header\" class=\"flex-container\">\n    <div>\n      <button (click) = 'nextMonth(-1)'  mat-raised-button class=\"accent\"  >Previous Month </button>\n    </div>\n    <div class=\"title\"> {{ monthName }}</div> \n    <div>\n    <button (click) = 'nextMonth(1)'   mat-raised-button class=\"accent\"  >Next Month </button>\n    </div>  \n    <div id=\"legend\">\n      <div>\n        <table class=\"smallTable\">\n            <tr class=\"one\"><th>MorningA-IORT</th></tr>\n            <tr class=\"two\"><th>MorningB</th></tr>\n            <tr class=\"three\"><th>EveningA</th></tr>\n            <tr class=\"four\"><th>EveningB</th></tr>\n        </table>\n      </div>    \n    </div>\n  </div>\n  \n  <div id=\"header\" class=\"flex-container\">\n    <table>\n      <tr class=\"dow\">\n          <th > Monday</th>\n          <th> Tuesday</th>\n          <th> Wednesday</th>\n          <th> Thursday</th>\n          <th> Friday</th>\n      </tr>\n      <tr *ngFor = \" let week of daysS\">\n        <td  *ngFor=\" let dayEl of week \"  [class] = \"dayEl.isInCurrMonth\">\n          <table style=\"width:100%;\">\n       <!--  <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption> -->   \n            <caption *ngIf = \"dayEl \"> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"one\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"two\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"three\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>\n            <tr *ngIf = \"physicsMonthlyDuties\" class=\"four\"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>\n          </table>\n        </td>\n      </tr>\n      \n    </table>\n  </div>\n</div>    "
 
 /***/ }),
 
@@ -535,14 +535,18 @@ module.exports = "<div class=\"wholePage\">\n  <div id=\"header\" class=\"flex-c
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MonthViewComponent", function() { return MonthViewComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+
 
 
 
 var MonthViewComponent = /** @class */ (function () {
-    function MonthViewComponent(datePipe) {
+    // used to calculate a dayNumber to use as key
+    function MonthViewComponent(datePipe, http) {
         this.datePipe = datePipe;
+        this.http = http;
     }
     MonthViewComponent.prototype.ngOnInit = function () {
         this.nextMonth(0); // draw the calendar for current month
@@ -558,43 +562,80 @@ var MonthViewComponent = /** @class */ (function () {
             this.date = new Date(this.date.setMonth(this.date.getMonth() + this.monthNumber)); // make the new date
         this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy'); // used for the caption on the calendar                           // set the date, done by queryParam
         var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+        var firstDateOnCalendar = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
         var monthShowNumber = this.date.getMonth(); // use to grey out days NOT in monthShown
-        var dowFD = firstDayOfShownMonth.getDay(); // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, of firstDayOfMonthShown
+        var dowFD = firstDayOfShownMonth.getDay(); // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of 
+        //  if (dowFD == 0 || dowFD == 1)
+        //  firstDayOfShownMonth.setDate(firstDayOfShownMonth.getDate() + (2 - dowFD)); 
+        console.log("firstDayOfShownMonth is " + firstDayOfShownMonth);
+        console.log("first day of month" + dowFD);
         var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
         var lastDayNum = +this.datePipe.transform(lastDayPrevMonth, 'd'); //  e.g. for March   ->  31
+        //////////  use firstDayOnCal as dateSince to make array of physicsDuties     \\\\\\\\\\\\\\\\\
         var firstDayOnCal = lastDayNum - (dowFD - 2); // get dayNum of first Monday on Cal       //  E.g. April 1 is Wed. to firstDayShown is March 29, so firstDanOnCal = 29
+        /************  make the first day shown on the calendar  **********************/
+        if (dowFD !== 6 && dowFD !== 0)
+            firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() - (dowFD - 1)); // first of Month is a WeekDay so need to step back to Monday
+        if (dowFD === 6)
+            firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() + 2); // first of Month is Saturday so need to step forward 2 days to Monday
+        if (dowFD === 0)
+            firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() + 1); // first of Month is Sunday so need to step forward 1 day1 to Monday
+        this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');
+        ;
+        console.log("firstDareOnCalendar is " + firstDateOnCalendar);
+        console.log("startDateForGettingDataString " + this.startDateForGettingDataString + "  doWFD is " + dowFD);
+        if (dowFD == 1)
+            firstDayOnCal = 1;
         /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
+        var startDateForGettingData = new Date(); // define a date to set in the below loop
         if (dowFD > 0 && dowFD < 6) { // if the firstDayOfMonth is NOT Sat or Sun  
             for (var i = 0; i < 5; i++) { // make the 5 days of the first week;
                 if (!this.daysS[0]) //  if array row has not been defined
                     this.daysS[0] = Array(); // define the array for the Week
                 this.daysS[0][i] = {}; // define an instance of the daysS interface
                 this.daysS[0][i].dayNumber = firstDayOnCal; // set dayNumber element of interface
+                /************      first week   **********************/
                 if (i == 0) {
                     this.daysS[0][i].date = new Date(lastDayPrevMonth.getFullYear(), lastDayPrevMonth.getMonth(), firstDayOnCal); // set first date on Calendar in array
+                    if (dowFD == 1)
+                        this.daysS[0][i].date = firstDateOnCalendar;
+                    startDateForGettingData = this.daysS[0][i].date;
+                    if (dowFD == 1 || dowFD == 6) {
+                        startDateForGettingData = firstDayOfShownMonth;
+                        console.log("startDateForGettingData is reset to " + startDateForGettingData);
+                    }
                     this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
                     var diff = Math.abs(this.baseDate.getTime() - tmpDate.getTime());
-                    this.daysS[0][i].daysSince = Math.ceil(diff / (1000 * 3600 * 24));
+                    //       this.daysS[0][i].daysSince = Math.ceil(diff / (1000 * 3600 * 24)); 
                 }
                 firstDayOnCal++;
+                /**********    succeeding weeks  *********************/
                 if (i > 0) { // go to next day
-                    tmpDate = new Date(this.daysS[0][i - 1].date.getFullYear(), this.daysS[0][i - 1].date.getMonth(), this.daysS[0][i - 1].date.getDate()); // make a date to increment
-                    // from the previous entry in the loop
+                    startDateForGettingData = this.daysS[0][i].date;
+                    tmpDate = new Date(this.daysS[0][i - 1].date.getFullYear(), this.daysS[0][i - 1].date.getMonth(), this.daysS[0][i - 1].date.getDate()); // make a date to increment                                                                                           // from the previous entry in the loop
                     tmpDate.setDate(tmpDate.getDate() + 1); // increment the date
                     this.daysS[0][i].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate()); // put that date in the dateBox of the MonthStructure
                     this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
                     var diff = Math.abs(this.baseDate.getTime() - tmpDate.getTime());
-                    this.daysS[0][i].daysSince = Math.ceil(diff / (1000 * 3600 * 24));
+                    //        this.daysS[0][i].daysSince = Math.ceil(diff / (1000 * 3600 * 24)); 
                 }
                 if (firstDayOnCal == lastDayNum + 1) // if it is greater than lastDayOfMonth
                     firstDayOnCal = 1; // go to 1, for the first day of monthShown 
+                this.daysS[0][i].dateString = this.datePipe.transform(this.daysS[0][i].date, 'yyyy-MM-dd');
             }
+        }
+        if (dowFD == 1 || dowFD == 6) {
+            startDateForGettingData = firstDayOfShownMonth;
+            console.log("startDateForGettingData is reset to " + startDateForGettingData);
         }
         /////////////         take care of months which start on Sat or Sun                       \\\\\\\\\\\\\\\\\\\\\\\\\\\\
         if (dowFD == 6)
             tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 2); // if firstDayOfMonth is Sat. increment by 2 days
         if (dowFD == 0)
             tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 1); // if firstDayOfMonth is Sub. increment by 1 day  
+        if (dowFD == 1)
+            tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+        console.log("tmpDate is " + tmpDate);
         ///////////  make the suceeding weeks  \\\\\\\\\\\\\\\\\\\\\\\\\\ 
         for (var i = 1; i < 6; i++) { // max of 4 more weeks in calendar
             for (var j = 0; j < 5; j++) { // the days of each week
@@ -606,24 +647,39 @@ var MonthViewComponent = /** @class */ (function () {
                     this.daysS[i] = Array();
                 this.daysS[i][j] = {}; // define an instance of the daysS interface
                 this.daysS[i][j].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate()); // put date in daysS dataStructure.
+                this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
                 this.daysS[i][j].dayNumber = tmpDate.getDate();
                 this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
-                this.daysS[i][j].daysSince = this.daysSince(tmpDate);
+                //      this.daysS[i][j].daysSince = this.daysSince(tmpDate);     
             }
         }
-        console.log("i is ");
+        /*************      get the data  ************************/
+        this.getPhysicsMonthlyDuties();
     };
     MonthViewComponent.prototype.daysSince = function (d) {
         var diff = Math.abs(this.baseDate.getTime() - d.getTime());
         return Math.ceil(diff / (1000 * 3600 * 24));
     };
+    MonthViewComponent.prototype.getPhysicsMonthlyDuties = function () {
+        var _this = this;
+        var url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' + this.startDateForGettingDataString;
+        console.log("MonthView url is " + url);
+        this.http.get(url).subscribe(function (val) {
+            //    console.log(val);
+            _this.setPhysicsMonthlyDuties(val);
+        });
+    };
+    MonthViewComponent.prototype.setPhysicsMonthlyDuties = function (val) {
+        this.physicsMonthlyDuties = val;
+        console.log("160 pDM is " + this.physicsMonthlyDuties);
+    };
     MonthViewComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
             selector: 'app-month-view',
             template: __webpack_require__(/*! ./month-view.component.html */ "./src/app/month-view/month-view.component.html"),
             styles: [__webpack_require__(/*! ./month-view.component.css */ "./src/app/month-view/month-view.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common__WEBPACK_IMPORTED_MODULE_2__["DatePipe"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common__WEBPACK_IMPORTED_MODULE_3__["DatePipe"], _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
     ], MonthViewComponent);
     return MonthViewComponent;
 }());
@@ -805,7 +861,7 @@ var TimeLineComponent = /** @class */ (function () {
     TimeLineComponent.prototype.dateLessThan = function (from, to, reason) {
         var _this = this;
         return function (group) {
-            var today = new Date('2019-03-01');
+            var today = new Date();
             var f = group.controls[from];
             var t = group.controls[to];
             var r = group.controls[reason];
@@ -1325,7 +1381,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/franklinlonberg/Angular/vacMan5/VacManTimeline/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/franklinlonberg/Angular/vacMan3102020/VacManTimeline/src/main.ts */"./src/main.ts");
 
 
 /***/ })
