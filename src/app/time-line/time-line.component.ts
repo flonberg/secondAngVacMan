@@ -61,6 +61,7 @@ export class TimeLineComponent implements OnInit {
   endDate: FormControl;
   reasonFC: FormControl;
   notesFC: FormControl;
+  dateFrom: FormControl;
   reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
@@ -69,6 +70,7 @@ export class TimeLineComponent implements OnInit {
   _id: number;
   _content;                                           // store the item.content from click
   drawControls = true;
+  drawEditControls = false;
   isApprover: boolean;
   reasonSelect = '';
   newTimeAwayBool = false;
@@ -79,12 +81,12 @@ export class TimeLineComponent implements OnInit {
     reason: -1,
     Note: ''
   };
-  nameToUserId: nameToUserId[];                                       // used for assigning Groups
-  useridToUserkeys: useridToUserkey[];                                // mm
+  nameToUserId: nameToUserId[];
+  useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
   endDateEdited: boolean;
   reasonEdited: boolean;
-  seP = <SeditParams>{};                                              // define instance of SeditParams interface
+  seP = <SeditParams>{};  // define instance of SeditParams interface
   _vidx: string;
   endDateString: string;
   startDateString: string;
@@ -95,9 +97,10 @@ export class TimeLineComponent implements OnInit {
   form: FormGroup;
   cutOffDate: Date;
   startDateEntered: Date;
-  formG: FormGroup;
+  formG: FormGroup;                                       // FormGroup for Adding new tA
+  formEdit: FormGroup;                                    // Form Group for Editing tA
   doValidation: boolean;
- // invalidFromDate: boolean;
+  invalidFromDate: boolean;
   formValidation: boolean;
   newTimeAway2: boolean;
 
@@ -122,38 +125,54 @@ export class TimeLineComponent implements OnInit {
     }   )
     this.cutOffDate = new Date('2019-02-01');
     this.createForm();
+
     this.formValidation = false;
     this.newTimeAway2 = false;
   }
-  createForm() {                                                                                // Form for New tA
-    this.doValidation = false;                                                              // used to enable Submit button
- //   this.invalidFromDate = false;                                                           // mm
-    this.formG = this.fb.group({                                                            // fb is
+  createForm() {                                      // create the form for New tA
+    this.doValidation = false;
+    this.invalidFromDate = false;
+    this.formG = this.fb.group({                          // fb is
       dateTo: ['', Validators.required ],
       dateFrom: ['', Validators.required ],
       reasonG: [''],
       noteG: ['']
-    }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}                      // declare custom validator
+    }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
+    );
+  }
+
+  createEditForm() {                                      // create the form for New tA
+    this.doValidation = false;
+    this.invalidFromDate = false;
+    console.log("data  146 " + this.data2._data[this._id].start);
+    this.formEdit = this.fb.group({                          // fb is
+      dateToEdit: [this.data2._data[this._id].start, Validators.required ],
+      dateFromEdit: ['2019-01-01', Validators.required ],
+      reasonGEdit: [''],
+      noteGEdit: ['']
+    }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );
   }
   dateLessThan(from: string, to: string, reason: string) {
       return (group: FormGroup): {[key: string]: any} => 
       {
         let today = new Date(); 
-        if (group.controls[from].value ){                                                   // if user has entered a value
-          let fDate = new Date(group.controls[from].value);                                 // make a Date out of the userEntered String
-          if (fDate < today)                                                                // if it is before today
-          return {
-            dates: "Date must be in the future"                                             // 
-          };
-        }
         if (group.controls[to].value && group.controls[from].value >= group.controls[to].value) {
           return {
             dates: "End Date must be after Start Date "
           };
         }
+        if (group.controls[from].value ){
+          let fDate = new Date(group.controls[from].value);
+          if (fDate < today)
+          return {
+            dates: "Date must be in the future"
+          };
+
+        }
         if (group.controls[from].value.length > 0  && group.controls[from].value.length  > 0  && group.controls[reason].value.length  > 0){
           this.formValidation = true;
+          console.log("form valid " + this.formValidation)
         }
         return {};
     }
@@ -193,6 +212,7 @@ export class TimeLineComponent implements OnInit {
   }
 
   clicked(ev) {// this responds to ANY click in the div containing the calendar
+  
     if (document.getElementById('datums2'))     {
       this ._content = document.getElementById('datums2').innerText;
       if (this._content === 'new item') {
@@ -202,6 +222,7 @@ export class TimeLineComponent implements OnInit {
     let id = '';
     if (document.getElementById('datums')) {
         this._id = +document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet
+        this.createEditForm();
         id = document.getElementById('datums').innerText;        // get the id from the vis click
         console.log('box clicked on');
         if (!this.data2._data[id]) {                          // click was NOT in a tA box;
@@ -212,6 +233,7 @@ export class TimeLineComponent implements OnInit {
         this.seP.whereColVal = this.data2._data[this._id].vidx;
         if (this._id >= 0 ) {                                     // shows user had clicked a box
           this.showControls = true;                             // show editing controls
+          this.drawEditControls = true;
           }                                
         }
         console.log('clicked'  + this._id);
@@ -221,8 +243,10 @@ export class TimeLineComponent implements OnInit {
         this._readonly = true;
         }
     if (this.data2._data[id]) {                                    // if the timeAway is defined
-        
+    //  this.formEdit.controls['dateFromEdit'].setValue(this.data2._data[id].start);
+      //  this.form.controls['dept'].setValue(selected.id);
         this.startDate = new FormControl(new Date(this.data2._data[id].start), Validators.required);   // this is where the value is set
+        this.dateFrom = new FormControl(new Date(this.data2._data[id].start), Validators.required);   // this is where the value is set
         this.endDate = new FormControl(new Date(this.data2._data[id].end), Validators.required);
         this.reasonFC = new FormControl(this.data2._data[id].reason);
         this.notesFC = new FormControl(this.data2._data[id].note);
@@ -235,23 +259,26 @@ export class TimeLineComponent implements OnInit {
         this.isApprover = true;
       }
       /*******************          This is called anytime the user RELEASES the mouse click **********************/
-      /*******************          remove routine  **********************/
-    if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {
-        this.data2.remove({id: +document.getElementById('datums').innerText});    // remove the item from the dataSet
-        this.drawControls = false;                                  // turn off the edit Controls.
+      /*******************          remove routine triggered by a click on the 'x'           **********************/
+    if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {               // presence of the work 'remove' indicates user clicked 'x'
+        this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
+        this.drawControls = false;                                                            // turn off the edit Controls.
+        document.getElementById('datums2').innerText = "";                                    // clear it so that further clicks on tA don't result in delete
         const dParams = {
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
           'editColNames':['reasonIdx'],
           'editColVals':['99']
         };
-        const i = 0;
+  //   const i = 0;
         this.doREST(dParams);
-      } else {             /************    Edit Routine  ***************************************************/
+      } else {             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
           console.log("doRest");
-          this.updateDB(this.data2._data[id].start, this.data2._data[id].end);
+          this.updateDB_StartEnd(this.data2._data[id].start, this.data2._data[id].end);
       }
   }
-  updateDB(sD, eD) {
+  /************    specific update routine to update StartDate and EndDate of tA, when user drags a tA  ************/
+  updateDB_StartEnd(sD: string, eD: string) {
+    console.log('sD is ' + sD  + 'length is ' + sD.length);
       const dParams = {
       'action': 'edit',                                            // actions are 'edit', 'insert', 'delete'
       'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': this.data2._data[this._id].vidx,
@@ -288,10 +315,9 @@ export class TimeLineComponent implements OnInit {
   }
   setQueryParams(qP) {
     if (qP.userid) {
-      this.useridP = qP.userid;
+  //    this.useridP = qP.userid;
       this.userid = qP.userid;
     }
-    console.log( 'setA ' + this.userid);
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -301,29 +327,22 @@ export class TimeLineComponent implements OnInit {
     }
   }
   getTimelineData2() {
+    /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
+    const numWeeks = 8;                                                                 // number of weeks to show on the calendar
     const todayDate = new Date();
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
-    const startDateForData = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
-    startDateForData.setDate(startDateForData.getDate() - 100);                           // go back 100 days to make sure everybody is on the list
-    const endDate = new Date();
-    const endDateShown = new Date();
-    const numWeeks = 12;
-    endDateShown.setDate(startDate.getDate() + numWeeks * 7);                             // set endDate of shown TimeLine for 2 months
-    endDate.setMonth(startDate.getMonth() + 3);                                           // set 4 month interval for data collection
+    const endDate = new Date();                                                         // create new date to use for end                            
+    endDate.setMonth(startDate.getMonth() + 4);                                         // set a date to be the forward date of data collection
+    startDate.setMonth(startDate.getMonth() - 4);                                       // set date for backward data collection far enough back to get all users
+    this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
+    this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                // mm for endDate
+    /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
+    var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
+    var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
+    endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
+    const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid;
+    console.log('347 for Getting tA url is ' + url );
 
-    ////////////  go back for DEV only ///////////////
-  //  startDate.setFullYear(startDate.getFullYear() - 1) ;                                  // for developement purpose use old data
-  //  endDate.setFullYear(endDate.getFullYear() - 1) ;                                      // mm
-  //  endDateShown.setFullYear(endDateShown.getFullYear() - 1) ;                            // mm
-    // let yesterYear = new Date().setFullYear(today.getFullYear() - 1);
-    this.startDateString = this.datePipe.transform(startDateForData, 'yyyy-MM-dd');         // format it for dataBase startDate for getting tAs
-    this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                        // mm for endDate
-    this.endDateShownString = this.datePipe.transform(endDateShown, 'yyyy-MM-dd');          // start date for opening of tL
-    this.startDateShownString = this.datePipe.transform(startDate, 'yyyy-MM-dd');
-const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid;
-//const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid;
-
-    console.log(' url is ' + url );
     this.http.get(url).subscribe(
       (val) => {
         if (this.index === 0) {
@@ -341,16 +360,17 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
         }
         const top = this.nameList.length * 20;
         const topString = top.toString() + 'px';
+    //    document.getElementById('controls').style.setProperty('top', topString);
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-          document.getElementById('datums').innerHTML = properties.items  ;
-                     // store the id in the DOM for use by Angular
+          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the id of the item in the DataSet
+                                                                                        // store the id in the DOM for use by Angular to do edits ...
         });
-      function logEvent(event, properties) {
-        const log = document.getElementById('log');
+      function logEvent(event, properties) {                                            // used to capture event if user clicke 'x' to delete tA
+        const log = document.getElementById('log');                                     // so if 'remove' is found  
         const msg = document.createElement('div');
         document.getElementById('chData').innerHTML = properties.items .innerHTML = 'event=' + JSON.stringify(event) + ', ' +
             'properties=' + JSON.stringify(properties);
@@ -375,26 +395,10 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
         document.getElementById('datums').innerHTML = item.id;
         document.getElementById('datums2').innerHTML = callback;
       },
-
-  /*
-      onAdd: function(item, callback) {
-        if (item.content != null) {
-       //   var d = this.data;
-          const nextDay = new Date(item.start);
-          nextDay.setDate(item.start.getDate() + 1);
-          item.end = nextDay;
-          document.getElementById('datums').innerHTML = item.end;
-          callback(item); // send back adjusted item
-        }
-        else {
-          callback(null); // cancel updating the item
-        }
-      },
-      */
      // selectable: true,
-      start: new Date(this.startDateShownString),
+      start: startDateShown,
 //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-      end: new Date(this.endDateShownString),
+      end: endDateShown,
 //      end: new Date(new Date().getFullYear(), new Date().getMonth()+ 2, 1),
 
     };
@@ -412,7 +416,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     }
     this.nameList.sort();                                                 // alphabetize the nameList
     const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId
-   // const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
+    const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
     this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
   }
   assignGroups() {                                                                       // put each tA in proper group.
@@ -428,7 +432,6 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
   clear() {
     console.log('clear ' );
   }
-
   editReason(s, colName) {                                                 // used to edit Reason and Note datums
       const seP = <SeditParams>{};                                          // define instance of SeditParams interface
       seP.who = this.userid;
@@ -467,25 +470,24 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     this.doREST(this.seP);
   }
 
-  editDate(type: string, event: MatDatepickerInputEvent<Date>) {
+  editDate(type: string, event: any) {
+   console.log( 'editDate ' + this.data2._id);
+
     const s = this.formatDateForTimeline(event.value);                 // make the string for local update
+    const dateForDataSet = event.target.value + " 00:00:00";                 // add time for DataSet
+
+    this.seP.editColVal = event.target.value;
+    console.log('edtied local ');
     if (`${type}` === 'start') {
-      this.startDateEntered = event.value;
-      this.data2.update({id: this._id, start: s});                       // do the local update
-   //   this.data2.update({id:this._id, start: tst});                       // do the local update
-      this.seP.editColName = 'startDate';
-      this.seP.editColVal = s;
-      console.log('edtied local ');
-//      this.seP.editColVal = this.datePipe.transform(newDate, 'yyyy-MM-dd');
+      this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.startDateEdited = true;
+      this.seP.editColName = 'startDate';
     }                                                                   // update startDate
     if (`${type}` === 'end') {
-      this.data2.update({id: this._id, end: s});                         // update vis DataSet
-      // param for dB
+      this.data2.update({id: this._id, end: dateForDataSet});  
+                    // update vis DataSet
       this.seP.editColName = 'endDate';
-      this.seP.editColVal = s;   // mm
       this.endDateEdited = true;
-      console.log('edtied local ' + s);
     }
     this.getEditSvce.update(this.seP);                                  // do the dB edit.
   // this.timeline.redraw();
@@ -501,6 +503,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
     const s =  month + '-' + editTime.getDate() + '-' + editTime.getFullYear();
     return s;
   }
+
   /**************  format date as yyyy-mm-dd  for dataBase ********************/
   formatDateForTimeline(date) {
       const d = new Date(date);
@@ -563,9 +566,7 @@ const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?star
       };
     this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
  //   this.data2.update({id: this._id, reason: item.start});   
-                     // add the new tA to local DataSet
-
-   // this.localAddId++;                                                     // increment the id so can add additional tAs
+                     // add the new tA to local DataSet                                                 // increment the id so can add additional tAs
     this.newTimeAwayBool = false;                                         // enable editing of existing tAs
     this.getEditSvce.insert(params);                                    //  insert into dB
   }

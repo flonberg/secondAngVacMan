@@ -1,12 +1,10 @@
 
 <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
-
 <div >
- 
     <div id="container">  
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)">
         </div>
-        <input id="chData"  >  
+  
     </div>      
     <div *ngIf = "!newTimeAway2" >
         <!------        This is the form used for adding new tAs --------------->
@@ -14,12 +12,12 @@
     </div>
  
 <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
-        <div class = "heading" > Enter New Time Away Parameters </div>
+    <div class = "heading" > Enter New Time Away Paramters </div>
     <mat-form-field class="item">
-        <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate />
+        <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
     </mat-form-field>   
     <mat-form-field class="item">
-        <input matInput  placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
+        <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
     </mat-form-field>    
     <mat-form-field>
             <mat-label>Reason</mat-label>
@@ -51,8 +49,30 @@
            End Date is required.
         </div>
     </div>  
-    <div class="alert alert-danger" *ngIf="formG.errors"  > {{ formG.errors?.dates | json }} </div>    <!-- display Errors -->
+    <div class="alert alert-danger" *ngIf="formG.errors"  > {{ formG.errors?.dates | json }} </div>     
 </form>
+
+<!--          Edit tA  Controls   -->
+<!--
+<div *ngIf = "drawEditControls" class="container">
+       {{ data2._data[_id][start] }}
+    <div class = "heading" > Edit Time Away Paramters </div>
+    <div>
+    <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
+        <mat-form-field class="item">
+            <input matInput id="dateToEditID" placeholder= " Start Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly" type="date" useValueAsDate  value= '' />
+        </mat-form-field>   
+    </form>
+    </div>
+    <div>
+    <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
+            <mat-form-field class="item">
+                <input matInput  placeholder= " End Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" type="date" useValueAsDate value= '' />
+            </mat-form-field>   
+        </form>
+    </div>    
+</div>
+-->
 
 <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
         <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
@@ -64,7 +84,8 @@
                     <mat-datepicker #picker ></mat-datepicker>            
                 </mat-form-field>
             </li>
-            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>          
+            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
+                
             <li class="item">
                 <mat-form-field  class="item" x>
                     <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
@@ -122,16 +143,18 @@
 </div>
  
 </div>
-<div id="datums"  style="display:block"> </div>
-<div id="datums2"  style="display:block"> </div>
+<div id="datums"  style="display:block"> </div> <!----  Group Number-->
+<div id="datums2"  style="display:block"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:block"> </div>
+<div id="chData" style="display:block" > chData </div>  
 
 
 <style type="text/css" >
     #timeline {
         width: 100%;
         height: 60%;
-        font-size:8pt;
+        font-size:6pt;
+        color:green;
         font-family: sans-serif;
         padding:0px;    
     }

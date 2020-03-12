@@ -10,6 +10,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 0;
   width: auto;
 }
+.container {
+  display: flex;
+}
+.container > div {
+  flex: 1; /*grow*/
+}
 #container {
   border:solid;
   overflow:auto;
