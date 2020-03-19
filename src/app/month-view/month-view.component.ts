@@ -35,12 +35,15 @@ export class MonthViewComponent implements OnInit {
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
   constructor(private datePipe: DatePipe, private http: HttpClient ){ }
-
   ngOnInit(){
     this.nextMonth(0);                                                                      // draw the calendar for current month
     this.monthNumber = 0;                                                                   // number for going forward or back. 
   
   }
+  takeAduty(n, d){
+    console.log("takeAduty");
+  }
+
   nextMonth(nn)
   {
     this.daysS = Array(Array());                                                            // make array to hold daysS structures
