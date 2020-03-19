@@ -41,8 +41,10 @@ export class MonthViewComponent implements OnInit {
   
   }
   takeAduty(n, d){
-    console.log("takeAduty");
+    console.log("takeAduty" + n + "date" + d);
+    document.getElementById('myModal').style.display = "block";
   }
+
 
   nextMonth(nn)
   {
@@ -102,7 +104,7 @@ export class MonthViewComponent implements OnInit {
           startDateForGettingData = this.daysS[0][i].date;
           tmpDate =  new Date(this.daysS[0][i-1].date.getFullYear(), this.daysS[0][i-1].date.getMonth(), this.daysS[0][i-1].date.getDate()) // make a date to increment                                                                                           // from the previous entry in the loop
           tmpDate.setDate(tmpDate.getDate() + 1);   
-          console.log("tmpDate is " + tmpDate);                                            // increment the date
+                                        // increment the date
           this.daysS[0][i].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());                                                      // put that date in the dateBox of the MonthStructure
           this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
         }
@@ -134,7 +136,6 @@ export class MonthViewComponent implements OnInit {
       for (let i=1; i < 6; i++){                                                                // max of 4 more weeks in calendar
         for (let j= 0; j < 5; j++) {                                                           // the days of each week
           tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
-          console.log("tmpDate is " + tmpDate);   
           let dayNum = tmpDate.getDay();                                                      // get dayNum of week, this will be Saturday 
           if (dayNum == 6 )                                                                   // check if it is Saturday, 
             tmpDate.setDate(tmpDate.getDate() + 2);                                           // increment 2 days to get to Monday. 
