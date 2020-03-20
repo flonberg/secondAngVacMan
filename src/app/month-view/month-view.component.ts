@@ -16,6 +16,10 @@ interface dateBox {
     phys2: number
   }
 }
+interface physicsDuties {
+  id: number;
+  name: string;
+}
 @Component({
   selector: 'app-month-view',
   templateUrl: './month-view.component.html',
@@ -31,6 +35,8 @@ export class MonthViewComponent implements OnInit {
   monthNumber:number;
   baseDate: Date;    
   physicsMonthlyDuties: {};
+  physicsDuties: {};
+  phrase: string;
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
@@ -38,14 +44,24 @@ export class MonthViewComponent implements OnInit {
   ngOnInit(){
     this.nextMonth(0);                                                                      // draw the calendar for current month
     this.monthNumber = 0;                                                                   // number for going forward or back. 
-  
+    this.physicsDuties = {
+      20: 'MorningA/IORT',
+      21: "MorningB", 
+      10: "EveningA", 
+      22: "EveningB"
+    }
   }
   takeAduty(n, d){
     console.log("takeAduty" + n + "date" + d);
+    this.phrase = "You are assuming --- " + this.physicsDuties[n];
     document.getElementById('myModal').style.display = "block";
   }
-
-
+  confirmDuty(){
+    console.log("confirmDuty");
+  }
+  closeModal(){
+    document.getElementById('myModal').style.display = "none";
+  }
   nextMonth(nn)
   {
     this.daysS = Array(Array());                                                            // make array to hold daysS structures

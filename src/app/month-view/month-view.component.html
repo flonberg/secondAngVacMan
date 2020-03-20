@@ -33,10 +33,10 @@
           <table style="width:100%;">
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
           <!--  <caption *ngIf = "dayEl "> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption> -->
-            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(10, dayEl)" class="one"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>
-            <tr *ngIf = "physicsMonthlyDuties" class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>
-            <tr *ngIf = "physicsMonthlyDuties" class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>
-            <tr *ngIf = "physicsMonthlyDuties" class="four"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(20, dayEl)" class="one"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(21, dayEl)" class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(10, dayEl)" class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(22, dayEl)" class="four"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>
           </table>
         </td>
       </tr>
@@ -44,16 +44,15 @@
     </table>
   </div>
 </div>    
-<!-- Trigger/Open The Modal -->
-<button id="myBtn" (click)="openModal()">Open Modal</button>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
 
   <!-- Modal content -->
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Some text in the Modal..</p>
+    <span class="close" (click) = "closeModal()">&times;</span>
+    <p>Some text in the Modal..{{ phrase }}</p>
+    <button (click) = "confirmDuty()" >Take Duty</button>
   </div>
 
 </div>
