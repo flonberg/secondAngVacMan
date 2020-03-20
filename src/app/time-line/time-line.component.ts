@@ -315,11 +315,9 @@ export class TimeLineComponent implements OnInit {
   }
   setQueryParams(qP) {
     if (qP.userid) {
-  //    this.useridP = qP.userid;
       this.userid = qP.userid;
     }
   }
-
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     if (this.timelineContainer  ) {

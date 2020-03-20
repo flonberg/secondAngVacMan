@@ -37,6 +37,8 @@ export class MonthViewComponent implements OnInit {
   physicsMonthlyDuties: {};
   physicsDuties: {};
   phrase: string;
+  dayDutyTaken: string;
+  dutyTakenId: number;
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
@@ -54,10 +56,16 @@ export class MonthViewComponent implements OnInit {
   takeAduty(n, d){
     console.log("takeAduty" + n + "date" + d);
     this.phrase = "You are assuming --- " + this.physicsDuties[n];
+    this.dayDutyTaken = d.dateString;
+    this.dutyTakenId = n;
     document.getElementById('myModal').style.display = "block";
   }
   confirmDuty(){
     console.log("confirmDuty");
+    const editParams = {
+      'editColName': 'phys2',
+      
+    }
   }
   closeModal(){
     document.getElementById('myModal').style.display = "none";
