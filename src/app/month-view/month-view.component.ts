@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ActivatedRoute } from '@angular/router';
 
 interface dateBox {
   dayNumber: number;
@@ -39,11 +40,20 @@ export class MonthViewComponent implements OnInit {
   phrase: string;
   dayDutyTaken: string;
   dutyTakenId: number;
+  qParams: any;
+  loggedInUserKey: any;
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
-  constructor(private datePipe: DatePipe, private http: HttpClient ){ }
+  constructor(private datePipe: DatePipe, private http: HttpClient, private activatedRoute: ActivatedRoute, ){ }
   ngOnInit(){
+    this.activatedRoute                                             // point to the route clicked on
+    .queryParams                                                    // look at the queryParams
+    .subscribe(queryParams => {   
+      this.setQueryParams(queryParams)   
+                                   // get the data from REST database call.
+    });
+
     this.nextMonth(0);                                                                      // draw the calendar for current month
     this.monthNumber = 0;                                                                   // number for going forward or back. 
     this.physicsDuties = {
@@ -52,6 +62,10 @@ export class MonthViewComponent implements OnInit {
       10: "EveningA", 
       22: "EveningB"
     }
+  }
+  setQueryParams(qP){
+    this.qParams = qP;
+    console.log('qParams is ' + this.qParams['userid'])
   }
   takeAduty(n, d){
     console.log("takeAduty" + n + "date" + d);
@@ -181,17 +195,17 @@ export class MonthViewComponent implements OnInit {
     return Math.ceil(diff / (1000 * 3600 * 24)); 
   }
   getPhysicsMonthlyDuties(){
-    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' + this.startDateForGettingDataString;
+    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' + this.startDateForGettingDataString + '&userid=' + this.qParams['userid'];
     console.log("MonthView url is " + url);
     this.http.get(url).subscribe(
       (val) => {
-
         this.setPhysicsMonthlyDuties(val);
       }
     )
   }
   setPhysicsMonthlyDuties(val){
-    this.physicsMonthlyDuties = val;
+    this.physicsMonthlyDuties = val['data'];                        // the data to the monthly schedule
+    this.loggedInUserKey = val['userkey']                           // the userkey to be used for Take-A-Duty
   }
 }
 
