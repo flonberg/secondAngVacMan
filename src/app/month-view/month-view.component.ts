@@ -42,6 +42,7 @@ export class MonthViewComponent implements OnInit {
   dutyTakenId: number;
   qParams: any;
   loggedInUserKey: any;
+  dutyOrder: [];
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
@@ -61,6 +62,11 @@ export class MonthViewComponent implements OnInit {
       21: "MorningB", 
       10: "EveningA", 
       22: "EveningB"
+    }
+    for (let key of Object.keys(this.physicsDuties)) {
+
+      // ... do something with mealName
+      console.log("key is " + key);
     }
   }
   setQueryParams(qP){
