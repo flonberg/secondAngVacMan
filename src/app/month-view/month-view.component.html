@@ -33,10 +33,13 @@
           <table  style="width:100%;">
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
           <!--  <caption *ngIf = "dayEl "> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption> -->
-          
-         <tr  *ngFor="let item of physicsDuties | keyvalue"> <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]' >
-           {{ physicsMonthlyDuties[dayEl.dateString][item.key]['lNN'] }} </div> </tr> 
-
+      
+         <!--   <tr *ngFor="let item of physicsDuties | keyvalue: originalOrder">
+           <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]' 
+          class = item.value
+          >
+           {{ physicsMonthlyDuties[dayEl.dateString][item.key]['lNN'] }} -- {{ item.value }} </div> </tr> 
+         -->
           <tr *ngIf = "physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]" (click)="takeAduty(20, dayEl)" class="one">
               <th class = 'lUser'
               >{{  physicsMonthlyDuties[dayEl.dateString][20]['lNN']}}</th></tr>

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import { DatePipe } from '@angular/common';
+import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ActivatedRoute } from '@angular/router';
 
@@ -58,7 +58,7 @@ export class MonthViewComponent implements OnInit {
     this.nextMonth(0);                                                                      // draw the calendar for current month
     this.monthNumber = 0;                                                                   // number for going forward or back. 
     this.physicsDuties = {
-      20: 'MorningA/IORT',
+      20: 'MorningA-IORT',
       21: "MorningB", 
       10: "EveningA", 
       22: "EveningB"
@@ -69,6 +69,11 @@ export class MonthViewComponent implements OnInit {
       console.log("key is " + key);
     }
   }
+
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
+  }
+
   setQueryParams(qP){
     this.qParams = qP;
     console.log('qParams is ' + this.qParams['userid'])
