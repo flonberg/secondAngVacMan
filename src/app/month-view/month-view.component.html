@@ -33,10 +33,12 @@
           <table style="width:100%;">
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
           <!--  <caption *ngIf = "dayEl "> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption> -->
-            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(20, dayEl)" class="one"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][20]:''}}</th></tr>
-            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(21, dayEl)" class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][21]:''}}</th></tr>
-            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(10, dayEl)" class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][10]:''}}</th></tr>
-            <tr *ngIf = "physicsMonthlyDuties" (click)="takeAduty(22, dayEl)" class="four"><th>{{ physicsMonthlyDuties[dayEl.dateString] ? physicsMonthlyDuties[dayEl.dateString][22]:''}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]" (click)="takeAduty(20, dayEl)" class="one">
+              <th class = 'lUser'
+              >{{  physicsMonthlyDuties[dayEl.dateString][20]['lNN']}}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]" (click)="takeAduty(21, dayEl)" class="two"><th>{{ physicsMonthlyDuties[dayEl.dateString][21]['lNN'] }}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]" (click)="takeAduty(10, dayEl)" class="three"><th>{{ physicsMonthlyDuties[dayEl.dateString][10]['lNN'] }}</th></tr>
+            <tr *ngIf = "physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]" (click)="takeAduty(22, dayEl)" class="four"><th>{{ physicsMonthlyDuties[dayEl.dateString][22]['lNN'] }}</th></tr>
           </table>
         </td>
       </tr>

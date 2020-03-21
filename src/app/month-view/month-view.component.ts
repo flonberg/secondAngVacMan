@@ -155,20 +155,9 @@ export class MonthViewComponent implements OnInit {
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()- 1 ); 
       tmpDate = firstDateOnCalendar  ;
       startDateForGettingData = firstDayOfShownMonth;  
-      console.log("startDateForGettingData is reset to " + startDateForGettingData);  
+  
     }  
-    console.log("startDateForGettingData is reset to " + startDateForGettingData);  
-    /////////////         take care of months which start on Sat or Sun                       \\\\\\\\\\\\\\\\\\\\\\\\\\\\
-    /*
-    if (dowFD == 6)
-      tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 2);                  // if firstDayOfMonth is Sat. increment by 2 days
-    if (dowFD == 0)
-      tmpDate =  new Date(this.date.getFullYear(), this.date.getMonth(), 1);                  // if firstDayOfMonth is Sub. increment by 1 day  
-    if (dowFD == 1)
-      tmpDate = new Date(this.date.getFullYear(), this.date.getMonth(), 0); 
-      */
-      console.log("116" + this.daysS);
-      ///////////  make the suceeding weeks  \\\\\\\\\\\\\\\\\\\\\\\\\\ 
+
       if (dowFD == 0)
         tmpDate = firstDateOnCalendar;
       for (let i=1; i < 6; i++){                                                                // max of 4 more weeks in calendar
@@ -190,6 +179,9 @@ export class MonthViewComponent implements OnInit {
     this.getPhysicsMonthlyDuties();
 
   }
+  isLoggedInUser(){
+  
+  }
   daysSince(d:Date){
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
     return Math.ceil(diff / (1000 * 3600 * 24)); 
@@ -206,6 +198,7 @@ export class MonthViewComponent implements OnInit {
   setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];                        // the data to the monthly schedule
     this.loggedInUserKey = val['userkey']                           // the userkey to be used for Take-A-Duty
+    console.log('loggedInUserkey is ' + this.loggedInUserKey)
   }
 }
 

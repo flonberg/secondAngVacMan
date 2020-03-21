@@ -82,6 +82,9 @@ caption {
 .four {
     background-color:rgb(124, 124, 168)
     }
+.lUser {
+    color:red;
+}    
     .modal {
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
