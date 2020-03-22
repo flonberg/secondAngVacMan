@@ -73,18 +73,27 @@ caption {
       background-color:yellow;
       cursor: pointer;
   }
-  .two {
+.MorningA-IORT {
+    background-color:rgb(212, 212, 248);  
+}
+.MorningA-IORT:hover, .MorningB:hover, .EveningA:hover, .EveningB:hover {
+    background-color:yellow;
+    cursor: pointer;
+}
+.one:hover {
+    background-color:yellow;
+    cursor: pointer;
+}
+  .MorningB {
     background-color:rgb(181, 181, 221)
     }
-.three {
+.EveningA {
     background-color:rgb(153, 153, 214)
     }
-.four {
+.EveningB {
     background-color:rgb(124, 124, 168)
     }
- .MorningA-IORT{
-    background-color:rgb(212, 212, 248);  
- }   
+   
 .lUser {
     color:red;
 }    

@@ -34,11 +34,11 @@
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
           <!--  <caption *ngIf = "dayEl "> {{ dayEl.dateString  ? dayEl.dateString: ''}} </caption> -->
       
-         <tr *ngFor="let item of physicsDuties ">
-           <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]' 
-          class = item.value
+         <tr *ngFor="let item of physicsDutiesClass "  [class] = "item.dutyName" >  
+           <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]'      
           >
-           {{ physicsMonthlyDuties[dayEl.dateString][item]['lNN'] }} </div> </tr> 
+           {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }}  </div>
+           </tr> 
        
           <tr *ngIf = "physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]" (click)="takeAduty(item, dayEl)" class="one">
               <th class = 'lUser'

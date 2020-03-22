@@ -43,6 +43,7 @@ export class MonthViewComponent implements OnInit {
   qParams: any;
   loggedInUserKey: any;
   dutyOrder: [];
+  physicsDutiesClass: any;
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
@@ -64,6 +65,12 @@ export class MonthViewComponent implements OnInit {
       22: "EveningB"
     }
     this.physicsDuties = [20,21,10,22];
+    this.physicsDutiesClass = [
+      {'dutyId':20, 'dutyName':'MorningA-IORT', 'class':'one'},
+      {'dutyId':10, 'dutyName':'MorningB'},
+      {'dutyId':21, 'dutyName':'EveningA'},
+      {'dutyId':22, 'dutyName':'EveningB'},
+    ]
     
     for (let key of Object.keys(this.physicsDuties)) {
 
