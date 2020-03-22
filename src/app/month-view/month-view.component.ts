@@ -35,7 +35,7 @@ export class MonthViewComponent implements OnInit {
   date: Date;
   monthNumber:number;
   baseDate: Date;    
-  physicsMonthlyDuties: {};
+  physicsMonthlyDuties: [];
   physicsDuties: {};
   phrase: string;
   dayDutyTaken: string;
@@ -63,6 +63,8 @@ export class MonthViewComponent implements OnInit {
       10: "EveningA", 
       22: "EveningB"
     }
+    this.physicsDuties = [20,21,10,22];
+    
     for (let key of Object.keys(this.physicsDuties)) {
 
       // ... do something with mealName
