@@ -63,17 +63,12 @@ export class MonthViewComponent implements OnInit {
       {'dutyId':22, 'dutyName':'EveningB'},
     ]
   }
-  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
-    return 0;
-  }
-
   setQueryParams(qP){
     this.qParams = qP;
-    console.log('qParams is ' + this.qParams['userid'])
   }
   takeAduty(n, d){
     console.log("takeAduty" + n + "date" + d);
-    this.phrase = "You are assuming --- " + n;
+    this.phrase = "You are assuming --- " + n + " on " + d;
     this.dayDutyTaken = d.dateString;
     this.dutyTakenId = n;
     document.getElementById('myModal').style.display = "block";
