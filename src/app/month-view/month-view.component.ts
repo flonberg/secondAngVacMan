@@ -17,10 +17,7 @@ interface dateBox {
     phys2: number
   }
 }
-interface physicsDuties {
-  id: number;
-  name: string;
-}
+
 @Component({
   selector: 'app-month-view',
   templateUrl: './month-view.component.html',
@@ -58,27 +55,14 @@ export class MonthViewComponent implements OnInit {
 
     this.nextMonth(0);                                                                      // draw the calendar for current month
     this.monthNumber = 0;                                                                   // number for going forward or back. 
-    this.physicsDuties = {
-      20: 'MorningA-IORT',
-      21: "MorningB", 
-      10: "EveningA", 
-      22: "EveningB"
-    }
-    this.physicsDuties = [20,21,10,22];
+ 
     this.physicsDutiesClass = [
-      {'dutyId':20, 'dutyName':'MorningA-IORT', 'class':'one'},
+      {'dutyId':20, 'dutyName':'MorningA-IORT'},
       {'dutyId':10, 'dutyName':'MorningB'},
       {'dutyId':21, 'dutyName':'EveningA'},
       {'dutyId':22, 'dutyName':'EveningB'},
     ]
-    
-    for (let key of Object.keys(this.physicsDuties)) {
-
-      // ... do something with mealName
-      console.log("key is " + key);
-    }
   }
-
   originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
     return 0;
   }
@@ -89,7 +73,7 @@ export class MonthViewComponent implements OnInit {
   }
   takeAduty(n, d){
     console.log("takeAduty" + n + "date" + d);
-    this.phrase = "You are assuming --- " + this.physicsDuties[n];
+    this.phrase = "You are assuming --- " + n;
     this.dayDutyTaken = d.dateString;
     this.dutyTakenId = n;
     document.getElementById('myModal').style.display = "block";
@@ -100,6 +84,7 @@ export class MonthViewComponent implements OnInit {
       'editColName': 'phys2',
       
     }
+    document.getElementById('myModal').style.display = "none";
   }
   closeModal(){
     document.getElementById('myModal').style.display = "none";
