@@ -70,6 +70,7 @@ export class MonthViewComponent implements OnInit {
     this.phrase = "You are assuming --- " + n + " on " + d;
     this.dayDutyTaken = d.dateString;
     this.dutyTakenId = n;
+    var tst = this.physicsMonthlyDuties[d][n]['idx'];
     document.getElementById('myModal').style.display = "block";
   }
   confirmDuty(){
