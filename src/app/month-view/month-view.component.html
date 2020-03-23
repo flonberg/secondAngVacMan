@@ -24,7 +24,8 @@
         <td  *ngFor=" let dayEl of week "  [class] = "dayEl.isInCurrMonth">
           <table  style="width:100%;">
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
-            <tr *ngFor="let item of physicsDutiesClass "  [class] = "item.dutyName"  (click)="takeAduty(item.dutyId, dayEl.dateString)" >  
+            <tr *ngFor="let item of physicsDutiesClass "  [class] = "item.dutyName"  
+            (click)="takeAduty(item.dutyId, dayEl.dateString)" >  
               <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]  && physicsMonthlyDuties[dayEl.dateString][item.dutyId]'   >   
               {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }}  </div>
             </tr> 

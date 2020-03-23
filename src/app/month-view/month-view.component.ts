@@ -4,6 +4,7 @@ import {MatTableDataSource} from '@angular/material';
 import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ActivatedRoute } from '@angular/router';
+import { GenEditService } from '../gen-edit.service';
 
 interface dateBox {
   dayNumber: number;
@@ -40,10 +41,12 @@ export class MonthViewComponent implements OnInit {
   loggedInUserKey: any;
   dutyOrder: [];
   physicsDutiesClass: any;
+  idxForEdit: number;
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
-  constructor(private datePipe: DatePipe, private http: HttpClient, private activatedRoute: ActivatedRoute, ){ }
+  constructor(private datePipe: DatePipe, private http: HttpClient, 
+    private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService ){ }
   ngOnInit(){
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
@@ -70,15 +73,20 @@ export class MonthViewComponent implements OnInit {
     this.phrase = "You are assuming --- " + n + " on " + d;
     this.dayDutyTaken = d.dateString;
     this.dutyTakenId = n;
-    var tst = this.physicsMonthlyDuties[d][n]['idx'];
+    this.idxForEdit = this.physicsMonthlyDuties[d][n]['idx'];
     document.getElementById('myModal').style.display = "block";
   }
+  
   confirmDuty(){
     console.log("confirmDuty");
     const editParams = {
+      'tableName': 'PhysicsMonthlyDuty',
       'editColName': 'phys2',
-      
+      'editColVal': this.loggedInUserKey,
+      'whereColName': 'idx',
+      'whereColVal': this.idxForEdit,
     }
+    this.genEditSvce.update(editParams);
     document.getElementById('myModal').style.display = "none";
   }
   closeModal(){
