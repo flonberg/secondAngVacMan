@@ -5,6 +5,7 @@ import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ActivatedRoute } from '@angular/router';
 import { GenEditService } from '../gen-edit.service';
+//import { ConsoleReporter } from 'jasmine';
 
 interface dateBox {
   dayNumber: number;
@@ -35,8 +36,8 @@ export class MonthViewComponent implements OnInit {
   physicsMonthlyDuties: [];
   physicsDuties: {};
   phrase: string;
-  dayDutyTaken: string;
-  dutyTakenId: number;
+ // dayDutyTaken: string;
+ //dutyTakenId: number;
   qParams: any;
   loggedInUserKey: any;
   dutyOrder: [];
@@ -52,13 +53,12 @@ export class MonthViewComponent implements OnInit {
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {   
-      this.setQueryParams(queryParams)   
-                                   // get the data from REST database call.
+      this.qParams = queryParams;
     });
 
-    this.nextMonth(0);                                                                      // draw the calendar for current month
-    this.monthNumber = 0;                                                                   // number for going forward or back. 
- 
+    this.nextMonth(0);                                              // draw the calendar for current month
+    this.monthNumber = 0;                                           // number for going forward or back. 
+
     this.physicsDutiesClass = [
       {'dutyId':20, 'dutyName':'MorningA-IORT'},
       {'dutyId':10, 'dutyName':'MorningB'},
@@ -66,42 +66,32 @@ export class MonthViewComponent implements OnInit {
       {'dutyId':22, 'dutyName':'EveningB'},
     ]
   }
-  setQueryParams(qP){
-    this.qParams = qP;
-  }
   takeAduty(n, d){
-    console.log("takeAduty" + n + "date" + d);
-    this.phrase = "You are assuming --- " + n + " on " + d;
-    this.dayDutyTaken = d.dateString;
-    this.dutyTakenId = n;
-    this.idxForEdit = this.physicsMonthlyDuties[d][n]['idx'];
-    document.getElementById('myModal').style.display = "block";
+    const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == n);
+    console.log("udyte is " + physicsDutiesSelected);
+
+    this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + d;         // phrase for the Modal
+    //this.dayDutyTaken = d.dateString;
+   // this.dutyTakenId = n;
+    this.idxForEdit = this.physicsMonthlyDuties[d][n]['idx'];       // used to update the dB
+    document.getElementById('myModal').style.display = "block";     // show the modal 
   }
-
-
   confirmDuty(){
-    console.log("confirmDuty");
-    const editParams = {
+    const editParams = {                                            // build dS to user with genEditSvce.update
       'tableName': 'PhysicsMonthlyDuty',
       'editColName': 'phys2',
       'editColVal': this.loggedInUserKey,
       'whereColName': 'idx',
       'whereColVal': this.idxForEdit,
     }
-    const doc = document.getElementById(this.idxForEdit);
-    console.log("userLastName " + this.loggedInUserLastName)
-    document.getElementById('1111').innerText = 'changed';
-    document.getElementById(this.idxForEdit).innerText = this.loggedInUserLastName;
-    this.genEditSvce.update(editParams);
-  
-    document.getElementById('myModal').style.display = "none";
-  }
-  putInCoverer(m,n){
-    return m;
+    document.getElementById(this.idxForEdit).innerText = this.loggedInUserLastName;   // put swapperLastName in box
+    this.genEditSvce.update(editParams);                            // do the swap in the dB
+    document.getElementById('myModal').style.display = "none";      // clse the Modal
   }
   closeModal(){
     document.getElementById('myModal').style.display = "none";
   }
+  
   nextMonth(nn)
   {
     this.daysS = Array(Array());                                     // make array to hold daysS structures
@@ -111,12 +101,11 @@ export class MonthViewComponent implements OnInit {
     this.monthNumber += nn;                                        // nn will be either +1 of -1 to go forward or bacf
     if (nn != 0)                                                // if date has been changed by button  
       this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));     // make the new date
-    this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                       // used for the caption on the calendar                           // set the date, done by queryParam
+    this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                       // used for the caption on the calendar 
     var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);   
     var firstDateOnCalendar = new Date(this.date.getFullYear(), this.date.getMonth(), 1);   
     var monthShowNumber = this.date.getMonth();                                              // use to grey out days NOT in monthShown
     const dowFD = firstDayOfShownMonth.getDay();                                             // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of 
-  console.log("dowFD is " + dowFD);
     var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);                
     var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');     //  e.g. for March   ->  31
     //////////  use firstDayOnCal as dateSince to make array of physicsDuties     \\\\\\\\\\\\\\\\\
@@ -130,13 +119,11 @@ export class MonthViewComponent implements OnInit {
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 2 );                         // first of Month is Saturday so need to step forward 2 days to Monday
     if (dowFD === 0 )
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
-   
       this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');;
 
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
     var startDateForGettingData = new Date()                                                     // define a date to set in the below loop
     if (dowFD > 1 && dowFD < 6){                                                                 // if the firstDayOfMonth is NOT Sat or Sun  
-//      if (dowFD > 0 && dowFD < 6){                                                                 // if the firstDayOfMonth is NOT Sat or Sun  
       for (let i = 0;  i < 5; i++){                                                              // make the 5 days of the first week;
         if (!this.daysS[0])                                                                     //  if array row has not been defined
           this.daysS[0] = Array();                                                              // define the array for the Week
@@ -178,15 +165,15 @@ export class MonthViewComponent implements OnInit {
 
       if (dowFD == 0)
         tmpDate = firstDateOnCalendar;
-      for (let i=1; i < 6; i++){                                                                // max of 4 more weeks in calendar
-        for (let j= 0; j < 5; j++) {                                                           // the days of each week
+      for (let i=1; i < 6; i++){                                                              // max of 4 more weeks in calendar
+        for (let j= 0; j < 5; j++) {                                                          // the days of each week
           tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
           let dayNum = tmpDate.getDay();                                                      // get dayNum of week, this will be Saturday 
           if (dayNum == 6 )                                                                   // check if it is Saturday, 
             tmpDate.setDate(tmpDate.getDate() + 2);                                           // increment 2 days to get to Monday. 
-          if (!this.daysS[i])                                                                     //  if array row has not been defined
+          if (!this.daysS[i])                                                                 //  if array row has not been defined
               this.daysS[i] = Array();  
-              this.daysS[i][j] = <dateBox>{};                                                         // define an instance of the daysS interface
+              this.daysS[i][j] = <dateBox>{};                                                 // define an instance of the daysS interface
               this.daysS[i][j].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());    // put date in daysS dataStructure.
               this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
               this.daysS[i][j].dayNumber = tmpDate.getDate();
@@ -195,11 +182,8 @@ export class MonthViewComponent implements OnInit {
     }
     /*************      get the data  ************************/
     this.getPhysicsMonthlyDuties();
+}                                                                                               ////////  end of the routine to build the monthDisplay 
 
-  }
-  isLoggedInUser(){
-  
-  }
   daysSince(d:Date){
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
     return Math.ceil(diff / (1000 * 3600 * 24)); 
@@ -214,9 +198,9 @@ export class MonthViewComponent implements OnInit {
     )
   }
   setPhysicsMonthlyDuties(val){
-    this.physicsMonthlyDuties = val['data'];                        // the data to the monthly schedule
-    this.loggedInUserKey = val['userkey']                           // the userkey to be used for Take-A-Duty
-    this.loggedInUserLastName = val['userLastName']                           // the userkey to be used for Take-A-Duty
+    this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
+    this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
+    this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
     console.log('loggedInUserkey is ' + this.loggedInUserKey)
   }
 }
