@@ -42,6 +42,7 @@ export class MonthViewComponent implements OnInit {
   dutyOrder: [];
   physicsDutiesClass: any;
   idxForEdit: string;
+  loggedInUserLastName: string;
     
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
@@ -77,7 +78,7 @@ export class MonthViewComponent implements OnInit {
     document.getElementById('myModal').style.display = "block";
   }
 
-  
+
   confirmDuty(){
     console.log("confirmDuty");
     const editParams = {
@@ -88,8 +89,9 @@ export class MonthViewComponent implements OnInit {
       'whereColVal': this.idxForEdit,
     }
     const doc = document.getElementById(this.idxForEdit);
+    console.log("userLastName " + this.loggedInUserLastName)
     document.getElementById('1111').innerText = 'changed';
-    document.getElementById(this.idxForEdit).innerText = 'changed';
+    document.getElementById(this.idxForEdit).innerText = this.loggedInUserLastName;
     this.genEditSvce.update(editParams);
   
     document.getElementById('myModal').style.display = "none";
@@ -214,6 +216,7 @@ export class MonthViewComponent implements OnInit {
   setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];                        // the data to the monthly schedule
     this.loggedInUserKey = val['userkey']                           // the userkey to be used for Take-A-Duty
+    this.loggedInUserLastName = val['userLastName']                           // the userkey to be used for Take-A-Duty
     console.log('loggedInUserkey is ' + this.loggedInUserKey)
   }
 }
