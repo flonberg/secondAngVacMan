@@ -27,7 +27,6 @@ interface dateBox {
 export class MonthViewComponent implements OnInit {
   prevMonthLastDays:[];
   daysS: dateBox[][];
-  datStruc: any;
   monthName: string;
   date: Date;
   monthNumber:number;
@@ -86,12 +85,12 @@ export class MonthViewComponent implements OnInit {
   }
   nextMonth(nn)
   {
-    this.daysS = Array(Array());                                                            // make array to hold daysS structures
-    var tmpDate = new Date();                                                               // this is the date which will be incremented
-    this.date = new Date('2019-01-28');                                                     //  this will be set to today in production
+    this.daysS = Array(Array());                                     // make array to hold daysS structures
+    var tmpDate = new Date();                                       // this is the date which will be incremented
+    this.date = new Date('2019-01-28');                            //  this will be set to today in production
     this.baseDate = new Date('2018-01-01');
-    this.monthNumber += nn;                                                                 // nn will be either +1 of -1 to go forward or bacf
-    if (nn != 0)                                                                            // if date has been changed by button  
+    this.monthNumber += nn;                                        // nn will be either +1 of -1 to go forward or bacf
+    if (nn != 0)                                                // if date has been changed by button  
       this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));     // make the new date
     this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                       // used for the caption on the calendar                           // set the date, done by queryParam
     var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);   
@@ -100,7 +99,7 @@ export class MonthViewComponent implements OnInit {
     const dowFD = firstDayOfShownMonth.getDay();                                             // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of 
   console.log("dowFD is " + dowFD);
     var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);                
-    var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                          //  e.g. for March   ->  31
+    var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');     //  e.g. for March   ->  31
     //////////  use firstDayOnCal as dateSince to make array of physicsDuties     \\\\\\\\\\\\\\\\\
     var firstDayOnCal = lastDayNum - (dowFD -2);      // get dayNum of first Monday on Cal       //  E.g. April 1 is Wed. to firstDayShown is March 29, so firstDanOnCal = 29
     if (dowFD == 1)
