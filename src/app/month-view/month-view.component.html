@@ -25,9 +25,9 @@
           <table  style="width:100%;">
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
             <tr *ngFor="let item of physicsDutiesClass "  [class] = "item.dutyName"  (click)="takeAduty(item.dutyId, dayEl.dateString)" >  
-              <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString]  && physicsMonthlyDuties[dayEl.dateString][item.dutyId]' 
-              [id]="idxForEdit"  >   
-              {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }}  </div>
+              <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString] ' 
+              [id]="physicsMonthlyDuties[dayEl.dateString][item.dutyId]['idx']"  >   
+              {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }}  </div><div></div>
             </tr> 
           </table>
         </td>
@@ -35,7 +35,7 @@
     </table>
   </div>
 </div>    
-
+<div id='1111'> test9999 </div>
 <!-- The Modal -->
 <div id="myModal" class="modal">
 

@@ -77,6 +77,7 @@ export class MonthViewComponent implements OnInit {
     document.getElementById('myModal').style.display = "block";
   }
 
+  
   confirmDuty(){
     console.log("confirmDuty");
     const editParams = {
@@ -87,7 +88,8 @@ export class MonthViewComponent implements OnInit {
       'whereColVal': this.idxForEdit,
     }
     const doc = document.getElementById(this.idxForEdit);
-  
+    document.getElementById('1111').innerText = 'changed';
+    document.getElementById(this.idxForEdit).innerText = 'changed';
     this.genEditSvce.update(editParams);
   
     document.getElementById('myModal').style.display = "none";
