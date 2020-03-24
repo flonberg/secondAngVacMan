@@ -27,18 +27,14 @@ interface dateBox {
 })
 
 export class MonthViewComponent implements OnInit {
-  prevMonthLastDays:[];
   daysS: dateBox[][];
-  monthName: string;
+  monthName: string;                                                // used in .html
   date: Date;
-  monthNumber:number;
+  monthNumber:number;                                               // used to advance and go back months
   baseDate: Date;    
-  physicsMonthlyDuties: [];
-  physicsDuties: {};
-  phrase: string;
- // dayDutyTaken: string;
- //dutyTakenId: number;
-  qParams: any;
+  physicsMonthlyDuties: [];                                         // stores the data from PhysicMonthlyDuty table
+  phrase: string;                                                   // Shown in takeADuty Modal
+  qParams: any;                                                     // Used as a param for REST getDuties. 
   loggedInUserKey: any;
   dutyOrder: [];
   physicsDutiesClass: any;
@@ -66,13 +62,15 @@ export class MonthViewComponent implements OnInit {
       {'dutyId':22, 'dutyName':'EveningB'},
     ]
   }
+  isLoggedInUser(n){
+    if (this.loggedInUserKey == n)
+      return "theUser";
+    else
+      return "";  
+  }
   takeAduty(n, d){
     const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == n);
-    console.log("udyte is " + physicsDutiesSelected);
-
     this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + d;         // phrase for the Modal
-    //this.dayDutyTaken = d.dateString;
-   // this.dutyTakenId = n;
     this.idxForEdit = this.physicsMonthlyDuties[d][n]['idx'];       // used to update the dB
     document.getElementById('myModal').style.display = "block";     // show the modal 
   }
@@ -91,7 +89,6 @@ export class MonthViewComponent implements OnInit {
   closeModal(){
     document.getElementById('myModal').style.display = "none";
   }
-  
   nextMonth(nn)
   {
     this.daysS = Array(Array());                                     // make array to hold daysS structures
@@ -189,7 +186,8 @@ export class MonthViewComponent implements OnInit {
     return Math.ceil(diff / (1000 * 3600 * 24)); 
   }
   getPhysicsMonthlyDuties(){
-    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' + this.startDateForGettingDataString + '&userid=' + this.qParams['userid'];
+    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
+    + this.startDateForGettingDataString + '&userid=' + this.qParams['userid'];
     console.log("MonthView url is " + url);
     this.http.get(url).subscribe(
       (val) => {
