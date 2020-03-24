@@ -16,14 +16,13 @@ export class NavBarVMComponent implements OnInit {
           label: 'Vacation Manager',
           link: './VacMan',
           index: 0,
- 
       }, {
           label: 'Monthview',
           link: './MonthView',
           index: 1,
-
+      
       }
-  ];
+    ];
   }
 
   ngOnInit() {

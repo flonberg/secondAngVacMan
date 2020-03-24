@@ -62,7 +62,7 @@ export class MonthViewComponent implements OnInit {
       {'dutyId':22, 'dutyName':'EveningB'},
     ]
   }
-  isLoggedInUser(n){
+  isLoggedInUser(n){                                                // show the loggedInUser's duties in red
     if (this.loggedInUserKey == n)
       return "theUser";
     else
@@ -157,9 +157,7 @@ export class MonthViewComponent implements OnInit {
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()- 1 ); 
       tmpDate = firstDateOnCalendar  ;
       startDateForGettingData = firstDayOfShownMonth;  
-  
     }  
-
       if (dowFD == 0)
         tmpDate = firstDateOnCalendar;
       for (let i=1; i < 6; i++){                                                              // max of 4 more weeks in calendar

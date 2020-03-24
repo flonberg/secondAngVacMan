@@ -24,6 +24,7 @@ import { NavBarVMComponent } from './nav-bar-vm/nav-bar-vm.component';
 import { MatTabsModule } from '@angular/material';
 import { MonthViewComponent } from './month-view/month-view.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+//import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     TimeLineComponent,
     NavBarVMComponent,
     MonthViewComponent,
-  
   ],
   imports: [
     BrowserModule,
@@ -54,6 +54,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
       { path: 'WWD/:docidx', component: DoseFxComponent},
       { path: 'VacMan**', component: TimeLineComponent},
       { path: 'VacMan/:userid', component: TimeLineComponent},
+      { path: 'MonthView/PhysicsCoverage', component: MonthViewComponent},
      { path: '**', component: TimeLineComponent}
     ])
 
