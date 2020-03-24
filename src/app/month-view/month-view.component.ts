@@ -5,6 +5,7 @@ import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ActivatedRoute } from '@angular/router';
 import { GenEditService } from '../gen-edit.service';
+import { LogService } from '../log.service';
 //import { ConsoleReporter } from 'jasmine';
 
 interface dateBox {
@@ -40,27 +41,29 @@ export class MonthViewComponent implements OnInit {
   physicsDutiesClass: any;
   idxForEdit: string;
   loggedInUserLastName: string;
-    
+  startDateForGettingData: Date;  
   startDateForGettingDataString: string
   // used to calculate a dayNumber to use as key
   constructor(private datePipe: DatePipe, private http: HttpClient, 
-    private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService ){ }
+    private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService,
+    private logSvcs:LogService
+     ){ }
   ngOnInit(){
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {   
       this.qParams = queryParams;
     });
-
     this.nextMonth(0);                                              // draw the calendar for current month
     this.monthNumber = 0;                                           // number for going forward or back. 
-
     this.physicsDutiesClass = [
       {'dutyId':20, 'dutyName':'MorningA-IORT'},
       {'dutyId':10, 'dutyName':'MorningB'},
       {'dutyId':21, 'dutyName':'EveningA'},
       {'dutyId':22, 'dutyName':'EveningB'},
     ]
+    this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
+    this.logSvcs.logMessage('tst');
   }
   isLoggedInUser(n){                                                // show the loggedInUser's duties in red
     if (this.loggedInUserKey == n)
@@ -93,8 +96,10 @@ export class MonthViewComponent implements OnInit {
   {
     this.daysS = Array(Array());                                     // make array to hold daysS structures
     var tmpDate = new Date();                                       // this is the date which will be incremented
-    this.date = new Date('2019-01-28');                            //  this will be set to today in production
-    this.baseDate = new Date('2018-01-01');
+    this.date = new Date();                            //  this will be set to today in production
+//    this.date = new Date('2019-01-28');                            //  this will be set to today in production
+    this.baseDate = new Date('2010-01-01');
+
     this.monthNumber += nn;                                        // nn will be either +1 of -1 to go forward or bacf
     if (nn != 0)                                                // if date has been changed by button  
       this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));     // make the new date
@@ -116,7 +121,9 @@ export class MonthViewComponent implements OnInit {
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 2 );                         // first of Month is Saturday so need to step forward 2 days to Monday
     if (dowFD === 0 )
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
-      this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');;
+    this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');
+
+console.log('startDataDate ' +    this.startDateForGettingDataString  );
 
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
     var startDateForGettingData = new Date()                                                     // define a date to set in the below loop
