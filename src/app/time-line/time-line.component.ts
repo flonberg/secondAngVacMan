@@ -304,6 +304,7 @@ export class TimeLineComponent implements OnInit {
     return fD;
   }
   ngOnInit() {
+    this.getEditSvce.setPlatform(this.platform)                     // switch between BB and 242 databases. 
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {                                     // get the queryParams as Observable

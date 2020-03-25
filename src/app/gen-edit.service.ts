@@ -20,9 +20,12 @@ export interface SinsertParams {
 })
 export class GenEditService {
   url: string;
+  platform: string;
   constructor(private http: HttpClient) {
    }
-
+   setPlatform(s){
+     this.platform = s;
+   }
     update(dBParams){
       console.log('editPatams ', dBParams);
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTupdatePOST.php';
