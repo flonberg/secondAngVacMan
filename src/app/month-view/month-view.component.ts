@@ -205,6 +205,22 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
     this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
     this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
     console.log('loggedInUserkey is ' + this.loggedInUserKey)
+    for (var prop in this.physicsMonthlyDuties) {
+      console.log("prop " + prop);
+      break;
+    } 
+    for (var prop2 in this.physicsMonthlyDuties[prop]) {
+      console.log("prop2 " + prop2);
+      break;
+    } 
+    for (var prop3 in this.physicsMonthlyDuties[prop][prop2]) {
+      console.log("prop3 " + prop3);
+      break;
+    } 
+    const n = this.physicsMonthlyDuties[prop][prop2]['lNN'];
+    console.log("n is " + n);
+
+ 
   }
 }
 
