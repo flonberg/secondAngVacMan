@@ -43,6 +43,7 @@ interface useridToUserkey {
 
 export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
+  platform = "prod";
   tlContainer: any;
   timeline: any;
   data2: any;
@@ -288,7 +289,7 @@ export class TimeLineComponent implements OnInit {
    this.doREST(dParams);
   }
   doREST(dP) {
-    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php';
+    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
     this.http.post(url, JSON.stringify(dP)).subscribe(
       (val) => {
         console.log('POST call', val);
@@ -331,14 +332,15 @@ export class TimeLineComponent implements OnInit {
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     const endDate = new Date();                                                         // create new date to use for end                            
     endDate.setMonth(startDate.getMonth() + 4);                                         // set a date to be the forward date of data collection
-    startDate.setMonth(startDate.getMonth() - 4);                                       // set date for backward data collection far enough back to get all users
+    startDate.setMonth(startDate.getMonth() - 2);                                       // set date for backward data collection far enough back to get all users
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                // mm for endDate
     /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
     var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
-    const url = 'http://blackboard-dev.partners.org/dev/AngVacMan/getVacsBB.php?start=' + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid;
+    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' 
+        + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid + '&platform=' + this.platform;
     console.log('347 for Getting tA url is ' + url );
 
     this.http.get(url).subscribe(
