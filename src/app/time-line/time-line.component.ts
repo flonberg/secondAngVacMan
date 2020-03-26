@@ -472,7 +472,15 @@ export class TimeLineComponent implements OnInit {
     this.getEditSvce.update(this.seP);
    // this.doREST(this.seP);
   }
-
+  editDateX(st, event)
+  {
+    const dateForDataSet = "2020-01-03 00:00:00";  
+//    const dateForDataSet = event.target.value + " 00:00:00";  
+    this.data2.update({id: this._id, start: dateForDataSet}); 
+    console.log("dateForDat" + dateForDataSet);
+   // this.data2.remove(this._id);
+ 
+  }
   editDate(type: string, event: any) {
    console.log( 'editDate ' + this.data2._id);
 

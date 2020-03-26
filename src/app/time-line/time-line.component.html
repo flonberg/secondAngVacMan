@@ -79,7 +79,7 @@
             <li class="item">
                 <mat-form-field  class="item" >
                     <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
-                    (dateInput)="editDate('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
+                    (dateInput)="editDateX('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
                     <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
                     <mat-datepicker #picker ></mat-datepicker>            
                 </mat-form-field>
