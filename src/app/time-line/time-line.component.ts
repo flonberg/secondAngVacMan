@@ -146,10 +146,16 @@ export class TimeLineComponent implements OnInit {
   createEditForm() {                                      // create the form for New tA
     this.doValidation = false;
     this.invalidFromDate = false;
-    console.log("data  146 " + this.data2._data[this._id].start);
+    console.log("data  146 " + this.data2._data[this._id].start );
+    var startDateShown: string = this.data2._data[this._id].start;
+    var endDateShown = this.data2._data[this._id].end;
+   // var tmpDate = new Date(this.data2._data[this._id].start )
+    var tmpDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);
+    console.log("tmpDate is "  + tmpDate);
+    console.log("shown " + startDateShown);
     this.formEdit = this.fb.group({                          // fb is
-      dateToEdit: [this.data2._data[this._id].start, Validators.required ],
-      dateFromEdit: [this.data2._data[this._id].end, Validators.required ],
+      dateToEdit: [tmpDate, Validators.required ],
+      dateFromEdit: [endDateShown, Validators.required ],
       reasonGEdit: [''],
       noteGEdit: ['']
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
@@ -499,7 +505,7 @@ export class TimeLineComponent implements OnInit {
       this.seP.editColName = 'startDate';
     }                                                                   // update startDate
     if (`${type}` === 'end') {
-      this.data2.update({id: this._id, end: dateForDataSet}); 
+     this.data2.update({id: this._id, end: dateForDataSet}); 
     //  this.data2.remove(this._id); 
                     // update vis DataSet
       this.seP.editColName = 'endDate';

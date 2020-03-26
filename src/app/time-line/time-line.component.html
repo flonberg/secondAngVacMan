@@ -75,6 +75,16 @@
             </mat-form-field>   
         </form>
     </div>    
+    <mat-form-field>
+            <mat-label>Reason</mat-label>
+                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
+                [formControl] = "reasonFC"  id='reasonId'>
+                        <mat-option  value="0">Personal Vacation</mat-option>
+                        <mat-option  value="1">Other</mat-option>
+                        <mat-option   value="2">Meeting</mat-option>  
+                        
+                </mat-select>
+        </mat-form-field>
 </div>
 
 
