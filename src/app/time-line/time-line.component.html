@@ -12,7 +12,7 @@
     </div>
  
 
-    
+
 <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
     <div class = "heading" > Enter New Time Away Paramters </div>
     <mat-form-field class="item">
@@ -60,18 +60,18 @@
 
     <div class = "heading" > Edit Time Away Paramters </div>
     <div>
-    <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
-        <mat-form-field class="item">
-            <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly"
-             type="date" useValueAsDate  />
-        </mat-form-field>   
-    </form>
+        <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
+            <mat-form-field class="item">
+                <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly"
+                type="date" useValueAsDate  />
+            </mat-form-field>  
+        </form> 
     </div>
     <div>
-    <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
+        <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
             <mat-form-field class="item">
-                <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" 
-                type="date"  useValueAsDate  />
+                    <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" 
+                    type="date"  useValueAsDate  />
             </mat-form-field>   
         </form>
     </div>    
@@ -80,6 +80,7 @@
 
 <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
         <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
+<!--
             <li class="item">
                 <mat-form-field  class="item" >
                     <input matInput [matDatepicker]="picker" placeholder= "New Start Date " id='startDateInput' [readonly] = "_readonly"
@@ -112,6 +113,8 @@
                         </mat-select>
                 </mat-form-field>
             </li>
+        -->
+
     <!--    This the readOnly version of the Reason control -->
             <li class="wideItem" *ngIf =_readonly>
                 <mat-form-field>
@@ -124,7 +127,7 @@
             <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
                 <mat-form-field  class="wideItem">
                     <mat-label class="smallLabel"> Note:</mat-label>
-                    <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id].note"
+                    <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
                         [formControl] = "notesFC"
                         cdkTextareaAutosize [readonly]="_readonly"
                         #autosize="cdkTextareaAutosize"

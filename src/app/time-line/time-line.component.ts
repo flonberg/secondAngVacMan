@@ -149,7 +149,7 @@ export class TimeLineComponent implements OnInit {
     console.log("data  146 " + this.data2._data[this._id].start);
     this.formEdit = this.fb.group({                          // fb is
       dateToEdit: [this.data2._data[this._id].start, Validators.required ],
-      dateFromEdit: ['2019-01-01', Validators.required ],
+      dateFromEdit: [this.data2._data[this._id].end, Validators.required ],
       reasonGEdit: [''],
       noteGEdit: ['']
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
@@ -499,8 +499,8 @@ export class TimeLineComponent implements OnInit {
       this.seP.editColName = 'startDate';
     }                                                                   // update startDate
     if (`${type}` === 'end') {
-    //  this.data2.update({id: this._id, end: dateForDataSet}); 
-      this.data2.remove(this._id); 
+      this.data2.update({id: this._id, end: dateForDataSet}); 
+    //  this.data2.remove(this._id); 
                     // update vis DataSet
       this.seP.editColName = 'endDate';
       this.endDateEdited = true;
