@@ -21,6 +21,7 @@
     <mat-form-field class="item">
         <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
     </mat-form-field>    
+    
     <mat-form-field>
             <mat-label>Reason</mat-label>
                 <mat-select  
@@ -51,7 +52,7 @@
            End Date is required.
         </div>
     </div>  
-    <div class="alert alert-danger" *ngIf="formG.errors"  > {{ formG.errors?.dates | json }} </div>     
+    <div class="alert alert-danger" *ngIf="formG.errors"  >   {{  formG.errors?.dates | json }} </div>     
 </form>
 
 <!--          Edit tA  Controls   -->
@@ -60,21 +61,21 @@
 
     <div class = "heading" > Edit Time Away Paramters </div>
     <div>
-        <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
+ <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
             <mat-form-field class="item">
                 <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly"
                 type="date" useValueAsDate  />
             </mat-form-field>  
-        </form> 
-    </div>
-    <div>
-        <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
+   
+  
             <mat-form-field class="item">
                     <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>   
-        </form>
-    </div>    
+            <div class="alert alert-danger" *ngIf="formEdit.errors"  >  {{ formG.errors?.dates | json }} </div> 
+     
+</form>
+        
     <mat-form-field>
             <mat-label>Reason</mat-label>
                 <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"

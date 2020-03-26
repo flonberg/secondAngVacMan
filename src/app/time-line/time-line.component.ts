@@ -146,16 +146,11 @@ export class TimeLineComponent implements OnInit {
   createEditForm() {                                      // create the form for New tA
     this.doValidation = false;
     this.invalidFromDate = false;
-    console.log("data  146 " + this.data2._data[this._id].start );
-    var startDateShown: string = this.data2._data[this._id].start;
-    var endDateShown = this.data2._data[this._id].end;
-   // var tmpDate = new Date(this.data2._data[this._id].start )
-    var tmpDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);
-    console.log("tmpDate is "  + tmpDate);
-    console.log("shown " + startDateShown);
+    var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
+    var fromDate = new Date(this.data2._data[this._id].end).toISOString().slice(0,10);
     this.formEdit = this.fb.group({                          // fb is
-      dateToEdit: [tmpDate, Validators.required ],
-      dateFromEdit: [endDateShown, Validators.required ],
+      dateToEdit: [toDate, Validators.required ],
+      dateFromEdit: [fromDate, Validators.required ],
       reasonGEdit: [''],
       noteGEdit: ['']
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
