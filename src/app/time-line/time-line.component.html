@@ -11,6 +11,8 @@
         <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button>
     </div>
  
+
+    
 <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
     <div class = "heading" > Enter New Time Away Paramters </div>
     <mat-form-field class="item">
