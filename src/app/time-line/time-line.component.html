@@ -53,32 +53,34 @@
 </form>
 
 <!--          Edit tA  Controls   -->
-<!--
+
 <div *ngIf = "drawEditControls" class="container">
-       {{ data2._data[_id][start] }}
+
     <div class = "heading" > Edit Time Away Paramters </div>
     <div>
     <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
         <mat-form-field class="item">
-            <input matInput id="dateToEditID" placeholder= " Start Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly" type="date" useValueAsDate  value= '' />
+            <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly"
+             type="date" useValueAsDate  />
         </mat-form-field>   
     </form>
     </div>
     <div>
     <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
             <mat-form-field class="item">
-                <input matInput  placeholder= " End Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" type="date" useValueAsDate value= '' />
+                <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" 
+                type="date"  useValueAsDate  />
             </mat-form-field>   
         </form>
     </div>    
 </div>
--->
+
 
 <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
         <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
             <li class="item">
                 <mat-form-field  class="item" >
-                    <input matInput [matDatepicker]="picker" placeholder= "Start Date " id='startDateInput' [readonly] = "_readonly"
+                    <input matInput [matDatepicker]="picker" placeholder= "New Start Date " id='startDateInput' [readonly] = "_readonly"
                     (dateInput)="editDateX('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
                     <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
                     <mat-datepicker #picker ></mat-datepicker>            

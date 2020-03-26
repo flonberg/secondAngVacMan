@@ -474,8 +474,11 @@ export class TimeLineComponent implements OnInit {
   }
   editDateX(st, event)
   {
-    const dateForDataSet = "2020-01-03 00:00:00";  
+    var dateForDataSet = "2020-01-03 00:00:00";  
 //    const dateForDataSet = event.target.value + " 00:00:00";  
+    dateForDataSet = event.target.value
+    
+    this.datePipe.transform(event.target.value, 'yyyy-mm-dd')
     this.data2.update({id: this._id, start: dateForDataSet}); 
     console.log("dateForDat" + dateForDataSet);
    // this.data2.remove(this._id);
@@ -505,8 +508,7 @@ export class TimeLineComponent implements OnInit {
     }
     this.getEditSvce.update(this.seP);                                  // do the dB edit.
    // this.doRESTX(this.seP)
-    this.timeline.itemSet.items[this._id].repositionX();
-   this.timeline.redraw();
+ 
   }
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker
