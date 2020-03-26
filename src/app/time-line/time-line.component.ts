@@ -483,17 +483,20 @@ export class TimeLineComponent implements OnInit {
     console.log('edtied local ');
     if (`${type}` === 'start') {
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
+    
       this.startDateEdited = true;
       this.seP.editColName = 'startDate';
     }                                                                   // update startDate
     if (`${type}` === 'end') {
-      this.data2.update({id: this._id, end: dateForDataSet});  
+    //  this.data2.update({id: this._id, end: dateForDataSet}); 
+      this.data2.remove(this._id); 
                     // update vis DataSet
       this.seP.editColName = 'endDate';
       this.endDateEdited = true;
    
     }
     this.getEditSvce.update(this.seP);                                  // do the dB edit.
+   // this.doRESTX(this.seP)
     this.timeline.itemSet.items[this._id].repositionX();
    this.timeline.redraw();
   }
