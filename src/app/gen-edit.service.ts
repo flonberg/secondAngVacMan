@@ -44,5 +44,12 @@ export class GenEditService {
           console.log("POST call", val);
         });
     }
+    genDB_POST(dP){
+      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
+      this.http.post(url, JSON.stringify(dP)).subscribe(
+        (val) => {
+          console.log('POST call', val);
+        });
+    }
    
   }

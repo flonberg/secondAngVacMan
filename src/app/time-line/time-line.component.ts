@@ -43,7 +43,8 @@ interface useridToUserkey {
 
 export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
-  platform = "prod";
+  platform = "dev";
+//  platform = "prod";
   tlContainer: any;
   timeline: any;
   data2: any;
@@ -271,9 +272,9 @@ export class TimeLineComponent implements OnInit {
           'editColVals':['99']
         };
   //   const i = 0;
-        this.doREST(dParams);
+    //    this.doREST(dParams);
+        this.getEditSvce.genDB_POST(dParams);
       } else {             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
-          console.log("doRest");
           this.updateDB_StartEnd(this.data2._data[id].start, this.data2._data[id].end);
       }
   }
@@ -286,9 +287,10 @@ export class TimeLineComponent implements OnInit {
       'editColNames': ['startDate', 'endDate'],                    // editColNames and editColVals are one-to-one correspond
       'editColVals': [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ]
     };
-   this.doREST(dParams);
+  // this.doREST(dParams);
+   this.getEditSvce.genDB_POST(dParams);
   }
-  doREST(dP) {
+  doRESTX(dP) {
     const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
     this.http.post(url, JSON.stringify(dP)).subscribe(
       (val) => {
@@ -467,8 +469,8 @@ export class TimeLineComponent implements OnInit {
     this.seP.editColVal = '99';                                         // any smallInt > 0
     this.seP.whereColName = 'vidx';
     this.seP.whereColVal = document.getElementById('vidx').innerText; 
-  //  this.getEditSvce.update(this.seP);
-    this.doREST(this.seP);
+    this.getEditSvce.update(this.seP);
+   // this.doREST(this.seP);
   }
 
   editDate(type: string, event: any) {
@@ -489,9 +491,11 @@ export class TimeLineComponent implements OnInit {
                     // update vis DataSet
       this.seP.editColName = 'endDate';
       this.endDateEdited = true;
+   
     }
     this.getEditSvce.update(this.seP);                                  // do the dB edit.
-  // this.timeline.redraw();
+    this.timeline.itemSet.items[this._id].repositionX();
+   this.timeline.redraw();
   }
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker
