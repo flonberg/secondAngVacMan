@@ -5,10 +5,11 @@
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)">
         </div>
   
-    </div>      
-    <div *ngIf = "!newTimeAway2" >
-        <!------        This is the form used for adding new tAs --------------->
-        <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button>
+    </div>     
+            <!------        This is the form used for adding new tAs ---------------> 
+    <div *ngIf = "!newTimeAway2 " >
+        <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> As part of Whiteboard code standardization, this is a new version of the Vacation Manager. Scroll and zoom is implemented. You can also 
+        edit you Time Away by dragging it. 
     </div>
  
 
@@ -57,20 +58,18 @@
 
 <!--          Edit tA  Controls   -->
 
-        <form [formGroup]="formEdit" *ngIf = "drawEditControls" (ngSubmit)="onSubmit()">
-          
+        <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
+            <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
             <mat-form-field class="item">
                 <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly"
                 type="date" useValueAsDate  />
             </mat-form-field>  
           
-        
             <mat-form-field class="item">
                     <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>   
                    
-      
             <mat-form-field *ngIf = "!_readonly">
                 <mat-label>Reason</mat-label>
                     <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
@@ -78,10 +77,13 @@
                             <mat-option  value="0">Personal Vacation</mat-option>
                             <mat-option  value="1">Other</mat-option>
                             <mat-option   value="2">Meeting</mat-option>  
-                            
                     </mat-select>
             </mat-form-field>
-           
+            <mat-form-field *ngIf = "_readonly"> 
+                    <mat-label class="smallLabel"> Reason</mat-label>
+                    <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
+            </mat-form-field>
+
             <mat-form-field  class="wideItem">
                     <mat-label class="smallLabel"> Note:</mat-label>
                     <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
@@ -93,8 +95,6 @@
                         >
                     </textarea>
             </mat-form-field >
-
-
         </form>          
 
 
@@ -105,10 +105,7 @@
 
     <!--    This the readOnly version of the Reason control -->
             <li class="wideItem" *ngIf =_readonly>
-                <mat-form-field>
-                <mat-label class="smallLabel"> Reason</mat-label>
-                <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
-                </mat-form-field>
+              
             </li>
     
         
