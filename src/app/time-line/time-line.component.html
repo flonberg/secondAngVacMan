@@ -12,119 +12,96 @@
     </div>
  
 
+<!--         New Time Away Section   -->
+    <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
+        <div class = "heading" > Enter New Time Away Paramters </div>
+        <mat-form-field class="item">
+            <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
+        </mat-form-field>   
+        <mat-form-field class="item">
+            <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
+        </mat-form-field>    
+        
+        <mat-form-field>
+                <mat-label>Reason</mat-label>
+                    <mat-select  
+                    formControlName = "reasonG"  id='reasonId'>
+                            <mat-option  value="0">Personal Vacation</mat-option>
+                            <mat-option  value="1">Other</mat-option>
+                            <mat-option   value="2">Meeting</mat-option>  
+                            
+                    </mat-select>
+        </mat-form-field>
+        <mat-form-field  class="wideItem">
+                <mat-label class="smallLabel"> Note:</mat-label>
+                <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize"  cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
+                </textarea>
+            </mat-form-field > 
+        <button mat-raised-button [disabled]="!formValidation" title="Valid Start and End dates as well as Reason required"  >Submit New Time Away</button>
+            <!-- <button type="submit">Submit</button> -->
 
-<form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
-    <div class = "heading" > Enter New Time Away Paramters </div>
-    <mat-form-field class="item">
-        <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
-    </mat-form-field>   
-    <mat-form-field class="item">
-        <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
-    </mat-form-field>    
-    
-    <mat-form-field>
-            <mat-label>Reason</mat-label>
-                <mat-select  
-                formControlName = "reasonG"  id='reasonId'>
-                        <mat-option  value="0">Personal Vacation</mat-option>
-                        <mat-option  value="1">Other</mat-option>
-                        <mat-option   value="2">Meeting</mat-option>  
-                        
-                </mat-select>
-    </mat-form-field>
-    <mat-form-field  class="wideItem">
-            <mat-label class="smallLabel"> Note:</mat-label>
-            <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize"  cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
-            </textarea>
-        </mat-form-field > 
-    <button mat-raised-button [disabled]="!formValidation" title="Valid Start and End dates as well as Reason required"  >Submit New Time Away</button>
-        <!-- <button type="submit">Submit</button> -->
-
-    <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
-        class="alert alert-danger">
-            <div *ngIf="this.formG.controls.dateFrom.errors.required">
-                Start Date is required.
+        <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
+            class="alert alert-danger">
+                <div *ngIf="this.formG.controls.dateFrom.errors.required">
+                    Start Date is required.
+                </div>
+        </div>       
+        <div *ngIf="this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) "
+            class="alert alert-danger">
+            <div *ngIf="this.formG.controls.dateTo.errors.required">
+            End Date is required.
             </div>
-    </div>       
-    <div *ngIf="this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) "
-         class="alert alert-danger">
-        <div *ngIf="this.formG.controls.dateTo.errors.required">
-           End Date is required.
-        </div>
-    </div>  
-    <div class="alert alert-danger" *ngIf="formG.errors"  >   {{  formG.errors?.dates | json }} </div>     
-</form>
+        </div>  
+        <div class="alert alert-danger" *ngIf="formG.errors"  >   {{  formG.errors?.dates | json }} </div>     
+    </form>
 
 <!--          Edit tA  Controls   -->
 
-<div *ngIf = "drawEditControls" class="container">
-
-    <div class = "heading" > Edit Time Away Paramters </div>
-    <div>
- <form [formGroup]="formEdit"  (ngSubmit)="onSubmit()">
+        <form [formGroup]="formEdit" *ngIf = "drawEditControls" (ngSubmit)="onSubmit()">
+          
             <mat-form-field class="item">
                 <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly"
                 type="date" useValueAsDate  />
             </mat-form-field>  
-   
-  
+          
+        
             <mat-form-field class="item">
                     <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>   
-            <div class="alert alert-danger" *ngIf="formEdit.errors"  >  {{ formG.errors?.dates | json }} </div> 
-     
-</form>
-        
-    <mat-form-field>
-            <mat-label>Reason</mat-label>
-                <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
-                [formControl] = "reasonFC"  id='reasonId'>
-                        <mat-option  value="0">Personal Vacation</mat-option>
-                        <mat-option  value="1">Other</mat-option>
-                        <mat-option   value="2">Meeting</mat-option>  
-                        
-                </mat-select>
-        </mat-form-field>
-</div>
+                   
+      
+            <mat-form-field *ngIf = "!_readonly">
+                <mat-label>Reason</mat-label>
+                    <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
+                    [formControl] = "reasonFC"  id='reasonId'>
+                            <mat-option  value="0">Personal Vacation</mat-option>
+                            <mat-option  value="1">Other</mat-option>
+                            <mat-option   value="2">Meeting</mat-option>  
+                            
+                    </mat-select>
+            </mat-form-field>
+           
+            <mat-form-field  class="wideItem">
+                    <mat-label class="smallLabel"> Note:</mat-label>
+                    <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
+                        [formControl] = "notesFC"
+                        cdkTextareaAutosize [readonly]="_readonly"
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1"
+                        cdkAutosizeMaxRows="5"
+                        >
+                    </textarea>
+            </mat-form-field >
+
+
+        </form>          
+
 
 
 <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
         <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
-<!--
-            <li class="item">
-                <mat-form-field  class="item" >
-                    <input matInput [matDatepicker]="picker" placeholder= "New Start Date " id='startDateInput' [readonly] = "_readonly"
-                    (dateInput)="editDateX('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
-                    <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-                    <mat-datepicker #picker ></mat-datepicker>            
-                </mat-form-field>
-            </li>
-            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
-                
-            <li class="item">
-                <mat-form-field  class="item" x>
-                    <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
-                    (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate"  >
-                    <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-                    <mat-datepicker #epicker ></mat-datepicker>
-                </mat-form-field>
-            </li>
-            <div class='alert' *ngIf = "endDateGet.touched && endDateGet.invalid"> Date is requred and must be great than  </div>
-            <div class='alert' *ngIf = "endDateGet.mustBeLaterThan ">End Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
-            <li class="item" *ngIf =!_readonly>
-                <mat-form-field>
-                    <mat-label>Reason</mat-label>
-                        <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
-                        [formControl] = "reasonFC"  id='reasonId'>
-                                <mat-option  value="0">Personal Vacation</mat-option>
-                                <mat-option  value="1">Other</mat-option>
-                                <mat-option   value="2">Meeting</mat-option>  
-                                
-                        </mat-select>
-                </mat-form-field>
-            </li>
-        -->
+
 
     <!--    This the readOnly version of the Reason control -->
             <li class="wideItem" *ngIf =_readonly>
@@ -136,17 +113,7 @@
     
         
             <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
-                <mat-form-field  class="wideItem">
-                    <mat-label class="smallLabel"> Note:</mat-label>
-                    <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
-                        [formControl] = "notesFC"
-                        cdkTextareaAutosize [readonly]="_readonly"
-                        #autosize="cdkTextareaAutosize"
-                        cdkAutosizeMinRows="1"
-                        cdkAutosizeMaxRows="5"
-                        >
-                    </textarea>
-                </mat-form-field >
+              
             </li> 
         
             <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
@@ -182,3 +149,37 @@
     background: green;
     }
 </style>
+<!--
+            <li class="item">
+                <mat-form-field  class="item" >
+                    <input matInput [matDatepicker]="picker" placeholder= "New Start Date " id='startDateInput' [readonly] = "_readonly"
+                    (dateInput)="editDateX('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
+                    <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
+                    <mat-datepicker #picker ></mat-datepicker>            
+                </mat-form-field>
+            </li>
+            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
+                
+            <li class="item">
+                <mat-form-field  class="item" x>
+                    <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
+                    (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate"  >
+                    <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
+                    <mat-datepicker #epicker ></mat-datepicker>
+                </mat-form-field>
+            </li>
+            <div class='alert' *ngIf = "endDateGet.touched && endDateGet.invalid"> Date is requred and must be great than  </div>
+            <div class='alert' *ngIf = "endDateGet.mustBeLaterThan ">End Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
+            <li class="item" *ngIf =!_readonly>
+                <mat-form-field>
+                    <mat-label>Reason</mat-label>
+                        <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
+                        [formControl] = "reasonFC"  id='reasonId'>
+                                <mat-option  value="0">Personal Vacation</mat-option>
+                                <mat-option  value="1">Other</mat-option>
+                                <mat-option   value="2">Meeting</mat-option>  
+                                
+                        </mat-select>
+                </mat-form-field>
+            </li>
+        -->
