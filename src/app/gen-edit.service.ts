@@ -22,6 +22,7 @@ export class GenEditService {
   url: string;
   platform: string;
   constructor(private http: HttpClient) {
+    
    }
    setPlatform(s){
      this.platform = s;
@@ -50,6 +51,12 @@ export class GenEditService {
         (val) => {
           console.log('POST call', val);
         });
+    }
+    genGetPhysicsMonthlyDuties(startDateForGettingDataString, userid){
+      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
+      + startDateForGettingDataString + '&userid=' + userid +'&platform=' + this.platform;
+      console.log("MonthView url is " + url);
+      return this.http.get(url);
     }
    
   }

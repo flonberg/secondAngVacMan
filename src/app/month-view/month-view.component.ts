@@ -53,6 +53,7 @@ export class MonthViewComponent implements OnInit {
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {   
       this.qParams = queryParams;
+      this.genEditSvce.setPlatform(this.qParams.platform);                     // switch between BB and 242 databases. 
     });
     this.nextMonth(0);                                              // draw the calendar for current month
     this.monthNumber = 0;                                           // number for going forward or back. 
@@ -183,7 +184,13 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
         }
     }
     /*************      get the data  ************************/
-    this.getPhysicsMonthlyDuties();
+  //  this.getPhysicsMonthlyDuties();
+    this.genEditSvce.genGetPhysicsMonthlyDuties(this.startDateForGettingDataString, this.qParams['userid']  ).
+          subscribe(
+            (val) => {
+                this.setPhysicsMonthlyDuties(val);
+                  }
+            );
 }                                                                                               ////////  end of the routine to build the monthDisplay 
 
   daysSince(d:Date){
@@ -200,6 +207,8 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
       }
     )
   }
+ 
+
   setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
     this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty

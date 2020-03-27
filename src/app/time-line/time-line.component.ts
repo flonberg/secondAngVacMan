@@ -307,7 +307,7 @@ export class TimeLineComponent implements OnInit {
     return fD;
   }
   ngOnInit() {
-    this.getEditSvce.setPlatform(this.platform)                     // switch between BB and 242 databases. 
+    this.getEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {                                     // get the queryParams as Observable
@@ -321,6 +321,10 @@ export class TimeLineComponent implements OnInit {
   setQueryParams(qP) {
     if (qP.userid) {
       this.userid = qP.userid;
+    }
+    if (qP.platform) {
+      this.platform = qP.platform;
+      console.log("timeLine platform " + this.platform);
     }
   }
   // tslint:disable-next-line:use-life-cycle-interface
