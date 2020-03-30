@@ -5,7 +5,7 @@ import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } f
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -106,7 +106,7 @@ export class TimeLineComponent implements OnInit {
   formValidation: boolean;
   newTimeAway2: boolean;
 
-  constructor( private http: HttpClient, private getEditSvce: GenEditService,
+  constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
     this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
@@ -201,7 +201,7 @@ export class TimeLineComponent implements OnInit {
     params.colVal = [this.formG.value.dateFrom,  // colValues
       this.formG.value.dateTo, this.formG.value.reasonG,
       this.formG.value.noteG, this.userkey];
-      this.getEditSvce.insert(params);                                    //  insert into dB
+      this.genEditSvce.insert(params);                                    //  insert into dB
   }
   setIndex(n) {
     this.index = n;
@@ -274,7 +274,7 @@ export class TimeLineComponent implements OnInit {
         };
   //   const i = 0;
     //    this.doREST(dParams);
-        this.getEditSvce.genDB_POST(dParams);
+        this.genEditSvce.genDB_POST(dParams);
       } else {             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
           this.updateDB_StartEnd(this.data2._data[id].start, this.data2._data[id].end);
       }
@@ -289,7 +289,7 @@ export class TimeLineComponent implements OnInit {
       'editColVals': [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ]
     };
   // this.doREST(dParams);
-   this.getEditSvce.genDB_POST(dParams);
+   this.genEditSvce.genDB_POST(dParams);
   }
   doRESTX(dP) {
     const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
@@ -307,7 +307,10 @@ export class TimeLineComponent implements OnInit {
     return fD;
   }
   ngOnInit() {
-    this.getEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 
+
+    console.log(" the url is   "   + this.router.url);
+    this.router.url.indexOf('prod') > 0  ? this.genEditSvce.setPlatform('prod') : this.genEditSvce.setPlatform('dev')
+  //this.genEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {                                     // get the queryParams as Observable
@@ -462,7 +465,7 @@ export class TimeLineComponent implements OnInit {
         this.data2.update({id: this._id, note:  this.seP.editColVal});   
         if (colName=='reason')
         this.data2.update({id: this._id, reason:  this.seP.editColVal});               // update dateSet
-      this.getEditSvce.update(this.seP);                                // uses RESTupdatePOST.php
+      this.genEditSvce.update(this.seP);                                // uses RESTupdatePOST.php
       this.reasonEdited = true;                                         // has to be true to show Save Time Away button
     }
 
@@ -474,7 +477,7 @@ export class TimeLineComponent implements OnInit {
     this.seP.editColVal = '99';                                         // any smallInt > 0
     this.seP.whereColName = 'vidx';
     this.seP.whereColVal = document.getElementById('vidx').innerText; 
-    this.getEditSvce.update(this.seP);
+    this.genEditSvce.update(this.seP);
    // this.doREST(this.seP);
   }
   editDateX(st, event)
@@ -511,7 +514,7 @@ export class TimeLineComponent implements OnInit {
       this.endDateEdited = true;
    
     }
-    this.getEditSvce.update(this.seP);                                  // do the dB edit.
+    this.genEditSvce.update(this.seP);                                  // do the dB edit.
    // this.doRESTX(this.seP)
  
   }
@@ -591,6 +594,6 @@ export class TimeLineComponent implements OnInit {
  //   this.data2.update({id: this._id, reason: item.start});   
                      // add the new tA to local DataSet                                                 // increment the id so can add additional tAs
     this.newTimeAwayBool = false;                                         // enable editing of existing tAs
-    this.getEditSvce.insert(params);                                    //  insert into dB
+    this.genEditSvce.insert(params);                                    //  insert into dB
   }
 }

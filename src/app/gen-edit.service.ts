@@ -26,23 +26,25 @@ export class GenEditService {
    }
    setPlatform(s){
      this.platform = s;
+     console.log("setting platform  = "  + s);
    }
+   //////  does update of SINGLE column. Params in POST. Params are tableName, editColName, editColVal, whereColName, whereColVal  \\\\\
     update(dBParams){
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTupdatePOST.php';
-  //    const url = 'http://blackboard-dev.partners.org/dev/RESTupdatePOST.php';
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
        //   console.log("POST call", val);
         });
     }
+    //////  Inserts a single record. Uses : params.tablename= string; params.colName=[]; params.colVal = []; 
     insert(dBParams){
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTinsertPOST.php';
-  //    const url = 'http://blackboard-dev.partners.org/dev/RESTinsertPOST.php';
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
        //   console.log("POST call", val);
         });
     }
+    /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; 
     genDB_POST(dP){
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
       this.http.post(url, JSON.stringify(dP)).subscribe(
@@ -53,7 +55,6 @@ export class GenEditService {
     genGetPhysicsMonthlyDuties(startDateForGettingDataString, userid){
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
       + startDateForGettingDataString + '&userid=' + userid +'&platform=' + this.platform;
-      console.log("MonthView url is " + url);
       return this.http.get(url);
     }
    
