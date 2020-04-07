@@ -144,6 +144,8 @@ export class TimeLineComponent implements OnInit {
   }
 
   createEditForm() {                                      // create the form for New tA
+    console.log('147');
+    
     this.doValidation = false;
     this.invalidFromDate = false;
     var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
@@ -307,7 +309,6 @@ export class TimeLineComponent implements OnInit {
     return fD;
   }
   ngOnInit() {
-
     console.log(" the url is   "   + this.router.url);
     this.router.url.indexOf('prod') > 0  ? this.genEditSvce.setPlatform('prod') : this.genEditSvce.setPlatform('dev')
   //this.genEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 

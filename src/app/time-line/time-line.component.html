@@ -57,16 +57,19 @@
     </form>
 
 <!--          Edit tA  Controls   -->
+    <div> Name </div>
 
         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
             <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
             <mat-form-field class="item">
-                <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)"  formControlName="dateToEdit"  [readonly] = "_readonly"
+                <input matInput id="dateToEditID" placeholder= " Start-Date " (change)="editDate('start', $event)" 
+                 formControlName="dateToEdit"  [readonly] = "_readonly"
                 type="date" useValueAsDate  />
             </mat-form-field>  
           
             <mat-form-field class="item">
-                    <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)"  formControlName="dateFromEdit"  [readonly] = "_readonly" 
+                    <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)" 
+                     formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>   
                    
@@ -128,7 +131,7 @@
 <div id="datums"  style="display:block"> </div> <!----  Group Number-->
 <div id="datums2"  style="display:block"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:block"> </div>
-<div id="chData" style="display:block" > chData </div>  
+<div id="chData" style="display:block" > chData {{ id }}</div>  
 
 
 <style type="text/css" >
