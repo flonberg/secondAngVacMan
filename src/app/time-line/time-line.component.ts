@@ -143,10 +143,9 @@ export class TimeLineComponent implements OnInit {
     }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
     );
   }
-
+////////   This is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
     console.log('147');
-    
     this.doValidation = false;
     this.invalidFromDate = false;
     var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
