@@ -64,6 +64,7 @@ export class TimeLineComponent implements OnInit {
   reasonFC: FormControl;
   notesFC: FormControl;
   dateFrom: FormControl;
+  goAwayerName: FormControl;
   reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
@@ -151,6 +152,7 @@ export class TimeLineComponent implements OnInit {
     var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
     var fromDate = new Date(this.data2._data[this._id].end).toISOString().slice(0,10);
     this.formEdit = this.fb.group({                          // fb is
+      goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDate, Validators.required ],
       dateFromEdit: [fromDate, Validators.required ],
       reasonGEdit: [''],
@@ -247,9 +249,11 @@ export class TimeLineComponent implements OnInit {
         } else {
         this._readonly = true;
         }
+        /*
     if (this.data2._data[id]) {                                    // if the timeAway is defined
     //  this.formEdit.controls['dateFromEdit'].setValue(this.data2._data[id].start);
       //  this.form.controls['dept'].setValue(selected.id);
+        this.goAwayerName = new FormControl(new Date(this.data2._data[id].content), Validators.required);   // this is where the value is set
         this.startDate = new FormControl(new Date(this.data2._data[id].start), Validators.required);   // this is where the value is set
         this.dateFrom = new FormControl(new Date(this.data2._data[id].start), Validators.required);   // this is where the value is set
         this.endDate = new FormControl(new Date(this.data2._data[id].end), Validators.required);
@@ -260,6 +264,7 @@ export class TimeLineComponent implements OnInit {
           this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
           }
         }
+        */
     if (this.userid === 'napolitano' ) {                          // official 'approver'
         this.isApprover = true;
       }

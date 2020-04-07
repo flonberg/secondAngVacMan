@@ -57,7 +57,9 @@
     </form>
 
 <!--          Edit tA  Controls   -->
-    <div> Name </div>
+    <div *ngIf = "drawEditControls && !newTimeAway2 "  > 
+        <input id='goAwayerBox' readonly />
+    </div>
 
         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
             <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
