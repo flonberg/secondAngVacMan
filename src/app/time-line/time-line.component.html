@@ -19,7 +19,7 @@
         <mat-form-field class="item">
             <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
         </mat-form-field>   
-        <mat-form-field class="item">
+        <mat-f,orm-field class="item">
             <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
         </mat-form-field>    
         
@@ -101,11 +101,8 @@
             </mat-form-field >
         </form>          
 
-
-
 <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
         <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
-
 
     <!--    This the readOnly version of the Reason control -->
             <li class="wideItem" *ngIf =_readonly>

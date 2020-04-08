@@ -194,7 +194,7 @@ export class TimeLineComponent implements OnInit {
      //   const i = 0;
        //    this.doREST(dParams);
            this.genEditSvce.genDB_POST(dParams);
-         } else {             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
+         } else if (   this.data2._data[this._id]){             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
              this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
          }
      }
@@ -271,6 +271,7 @@ export class TimeLineComponent implements OnInit {
       this.formG.value.dateTo, this.formG.value.reasonG,
       this.formG.value.noteG, this.userkey];
       this.genEditSvce.insert(params);                                    //  insert into dB
+      this.newTimeAway2 = false;                                // turn off the controls
   }
   setIndex(n) {
     this.index = n;
@@ -286,7 +287,6 @@ export class TimeLineComponent implements OnInit {
 
   /************    specific update routine to update StartDate and EndDate of tA, when user drags a tA  ************/
   updateDB_StartEnd(sD: string, eD: string) {
-    console.log('sD is ' + sD  + 'length is ' + sD.length);
       const dParams = {
       'action': 'edit',                                            // actions are 'edit', 'insert', 'delete'
       'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': this.data2._data[this._id].vidx,
@@ -547,6 +547,7 @@ export class TimeLineComponent implements OnInit {
   setNewTimeAway2(){
     this.newTimeAway2 = true;
   }
+  /*
   newTimeAway() {
     this.showControls = true;                                         // show the dataEntry controls
     this._readonly = false;
@@ -554,34 +555,5 @@ export class TimeLineComponent implements OnInit {
     this.showControls = true;
     this.newTimeAwayBool = true;
   }
-
-  saveNewTimeAway() {
-    const params = <SinsertParams>{};
-    params.tableName = 'vacation3';
-    /**********  set up INSERT params as pair of 1-to-1 arrays of colNames -to- colVals  ******************/
-    params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
-    params.colVal = [this.formatDateForTimeline(this.startDate.value),  // colValues
-      this.formatDateForTimeline(this.endDate.value), this.reasonFC.value,
-       this.notesFC.value, this.userkey];
-    const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
-    const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
-    const lastItem = Object.keys(this.data2._data).length;
-    console.log("laseItem 569 is " + lastItem);
-
-    const item = {                                                      // set up dataStruct to add to timeLine DataSet
-      id: lastItem,
-      start: this.formatDateForTimeline(this.startDate.value),
-      end: this.formatDateForTimeline(this.endDate.value),
-      style: 'color:blue',
-      content: content,
-      group: groupNum,
-      reason: this.reasonFC.value,
-      note: this.notesFC.value
-      };
-    this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
- //   this.data2.update({id: this._id, reason: item.start});   
-                     // add the new tA to local DataSet                                                 // increment the id so can add additional tAs
-    this.newTimeAwayBool = false;                                         // enable editing of existing tAs
-    this.genEditSvce.insert(params);                                    //  insert into dB
-  }
+  */
 }
