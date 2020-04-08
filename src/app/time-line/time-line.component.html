@@ -57,14 +57,14 @@
     </form>
 
 <!--          Edit tA  Controls   -->
-    <div *ngIf = "drawEditControls && !newTimeAway2 "  > 
+    <div *ngIf = "drawEditControls && !newTimeAway2  && goAwayerBox"  > 
         <input id='goAwayerBox' readonly />
     </div>
         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
             <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
             <mat-form-field class="item">
                 <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (change)="editDate('start', $event)" 
-                 formControlName="dateToEditXX"  [readonly] = "_readonly"
+                 formControlName="dateToEdit"  [readonly] = "_readonly"
                 type="date" useValueAsDate  />
             </mat-form-field>  
           
@@ -109,27 +109,22 @@
 
     <!--    This the readOnly version of the Reason control -->
             <li class="wideItem" *ngIf =_readonly>
-              
             </li>
-    
-        
-            <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note && this.data2._data[this._id].note.length > 0)" >
-              
+            <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note
+                 && this.data2._data[this._id].note.length > 0)" >
             </li> 
-        
             <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
                     <button mat-raised-button>Approve </button>
                 </li>
-            
             <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
-                    <button mat-raised-button  (click) ="saveNewTimeAway()">Save New Time Away </button>
+            <button mat-raised-button  >Save New Time Away </button>    <!-- any button in a form triggers onSubmit, unless type='button-->
             </li>
         </ul>
 
 </div>
  
 </div>
-<div id="datums"  style="display:block"> </div> <!----  Group Number-->
+<div id="datums"  style="display:block"> </div> <!----  Gro  ??  id ??-->
 <div id="datums2"  style="display:block"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:block"> </div>
 <div id="chData" style="display:block" > chData {{ id }}</div>  

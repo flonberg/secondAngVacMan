@@ -132,6 +132,72 @@ export class TimeLineComponent implements OnInit {
     this.formValidation = false;
     this.newTimeAway2 = false;
   }
+  ngOnInit() {
+    console.log(" the url is   "   + this.router.url);
+    this.router.url.indexOf('prod') > 0  ? this.genEditSvce.setPlatform('prod') : this.genEditSvce.setPlatform('dev')
+  //this.genEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 
+    this.activatedRoute                                             // point to the route clicked on
+    .queryParams                                                    // look at the queryParams
+    .subscribe(queryParams => {                                     // get the queryParams as Observable
+      this.qP = queryParams;
+      this.setQueryParams(queryParams);
+     console.log(' this.userit ' + this.userid);
+        this.seP.who = this.userid;
+        this.getTimelineData2();                                      // get the data from REST database call.
+    });
+  }
+  clicked(ev) {// this responds to ANY click in the div containing the calendar
+  
+    //   if (document.getElementById('datums2'))     {
+      //   this._content = document.getElementById('datums2').innerText;
+       //  if (this._content === 'new item') {
+       //      this.drawControls = false;   
+       //:w  }
+    
+       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) {
+           this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
+           this.createEditForm();
+        //   id = document.getElementById('datums').innerText;        // get the id from the vis click
+           console.log('box clicked on');
+           if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
+             return;
+           }
+           this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
+           document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
+           this.seP.whereColVal = this.data2._data[this._id].vidx;
+           if (this._id >= 0 ) {                                     // shows user had clicked a box
+             this.showControls = true;                             // show editing controls
+             this.drawEditControls = true;
+             }                                
+           }
+           console.log('clicked'  + this._id);
+       if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
+           this._readonly = false;                                     // enable editing
+           } else {
+           this._readonly = true;
+           }
+    
+       if (this.userid === 'napolitano' ) {                          // official 'approver'
+           this.isApprover = true;
+         }
+         /*******************          This is called anytime the user RELEASES the mouse click **********************/
+         /*******************          remove routine triggered by a click on the 'x'           **********************/
+       if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {               // presence of the work 'remove' indicates user clicked 'x'
+          this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
+           this.drawEditControls = false;                                                            // turn off the edit Controls.
+           document.getElementById('datums2').innerText = "";                                    // clear it so that further clicks on tA don't result in delete
+           const dParams = {
+             'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
+             'editColNames':['reasonIdx'],
+             'editColVals':['99']
+           };
+     //   const i = 0;
+       //    this.doREST(dParams);
+           this.genEditSvce.genDB_POST(dParams);
+         } else {             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
+             this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
+         }
+     }
   createForm() {                                      // create the form for New tA
     this.doValidation = false;
     this.invalidFromDate = false;
@@ -185,9 +251,9 @@ export class TimeLineComponent implements OnInit {
   }
   /*********     This is where the new tA is intered in the local and dB tables  **********************/
   onSubmit() {
-    console.log("statue is " + this.formG.status + "formG.value is " + this.formG.value );
+    console.log("onSubmit is " + this.formG.status + "formG.value is " + this.formG.value );
     const item = {
-      id: Object.keys(this.data2._data).length,
+      id: Object.keys(this.data2._data).length + 3,                 // incase the user has DELETED a tA before adding
       start: this.formG.value.dateFrom + ' 00:00:00',
       end: this.formG.value.dateTo + ' 00:00:00',
       content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
@@ -195,8 +261,8 @@ export class TimeLineComponent implements OnInit {
       reason: this.formG.value.reasonG,
       note: this.formG.value.noteG,
     };
-    this.timeline.itemsData.getDataSet().add(item);                       // add the new tA to local DataSet
-    console.log("laseItem is " + item);
+    var tst = this.timeline.itemsData.getDataSet().add(item);      // add the new tA to local DataSet, tst is id added
+    console.log("laseItem is " + item + 'tst is ' + tst);
     const params = <SinsertParams>{};
     params.tableName = 'vacation3';
     /**********  set up INSERT params as pair of 1-to-1 arrays of colNames -to- colVals  ******************/
@@ -217,58 +283,7 @@ export class TimeLineComponent implements OnInit {
     return this.form.get('endDate');
   }
 
-  clicked(ev) {// this responds to ANY click in the div containing the calendar
-  
- //   if (document.getElementById('datums2'))     {
-      this ._content = document.getElementById('datums2').innerText;
-      if (this._content === 'new item') {
-          this.drawControls = false;   
-      }
- 
-    if (document.getElementById('datums')) {
-        this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
-        this.createEditForm();
-     //   id = document.getElementById('datums').innerText;        // get the id from the vis click
-        console.log('box clicked on');
-        if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
-          return;
-        }
-        this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
-        document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
-        this.seP.whereColVal = this.data2._data[this._id].vidx;
-        if (this._id >= 0 ) {                                     // shows user had clicked a box
-          this.showControls = true;                             // show editing controls
-          this.drawEditControls = true;
-          }                                
-        }
-        console.log('clicked'  + this._id);
-    if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
-        this._readonly = false;                                     // enable editing
-        } else {
-        this._readonly = true;
-        }
- 
-    if (this.userid === 'napolitano' ) {                          // official 'approver'
-        this.isApprover = true;
-      }
-      /*******************          This is called anytime the user RELEASES the mouse click **********************/
-      /*******************          remove routine triggered by a click on the 'x'           **********************/
-    if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {               // presence of the work 'remove' indicates user clicked 'x'
-        this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
-        this.drawControls = false;                                                            // turn off the edit Controls.
-        document.getElementById('datums2').innerText = "";                                    // clear it so that further clicks on tA don't result in delete
-        const dParams = {
-          'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
-          'editColNames':['reasonIdx'],
-          'editColVals':['99']
-        };
-  //   const i = 0;
-    //    this.doREST(dParams);
-        this.genEditSvce.genDB_POST(dParams);
-      } else {             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
-          this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
-      }
-  }
+
   /************    specific update routine to update StartDate and EndDate of tA, when user drags a tA  ************/
   updateDB_StartEnd(sD: string, eD: string) {
     console.log('sD is ' + sD  + 'length is ' + sD.length);
@@ -296,20 +311,7 @@ export class TimeLineComponent implements OnInit {
     const fD = m + '/' + dd + '/' + y;
     return fD;
   }
-  ngOnInit() {
-    console.log(" the url is   "   + this.router.url);
-    this.router.url.indexOf('prod') > 0  ? this.genEditSvce.setPlatform('prod') : this.genEditSvce.setPlatform('dev')
-  //this.genEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 
-    this.activatedRoute                                             // point to the route clicked on
-    .queryParams                                                    // look at the queryParams
-    .subscribe(queryParams => {                                     // get the queryParams as Observable
-      this.qP = queryParams;
-      this.setQueryParams(queryParams);
-     console.log(' this.userit ' + this.userid);
-        this.seP.who = this.userid;
-        this.getTimelineData2();                                      // get the data from REST database call.
-    });
-  }
+
   setQueryParams(qP) {
     if (qP.userid) {
       this.userid = qP.userid;
@@ -552,10 +554,7 @@ export class TimeLineComponent implements OnInit {
     this.showControls = true;
     this.newTimeAwayBool = true;
   }
-  saveNewTimeAway2(){
- 
-    console.log("222" + this.formG.controls.dateFrom.value);
-  }
+
   saveNewTimeAway() {
     const params = <SinsertParams>{};
     params.tableName = 'vacation3';
@@ -567,7 +566,7 @@ export class TimeLineComponent implements OnInit {
     const content = this.contentArray[this.userkey];                    // build the dataStruct to add to the timeLine DataSet
     const groupNum = this.groupsArray.indexOf(content);                 // the groupNumber of the item to be added
     const lastItem = Object.keys(this.data2._data).length;
-    console.log("laseItem is " + lastItem);
+    console.log("laseItem 569 is " + lastItem);
 
     const item = {                                                      // set up dataStruct to add to timeLine DataSet
       id: lastItem,
