@@ -219,23 +219,22 @@ export class TimeLineComponent implements OnInit {
 
   clicked(ev) {// this responds to ANY click in the div containing the calendar
   
-    if (document.getElementById('datums2'))     {
+ //   if (document.getElementById('datums2'))     {
       this ._content = document.getElementById('datums2').innerText;
       if (this._content === 'new item') {
           this.drawControls = false;   
       }
-    }
-    let id = '';
+ 
     if (document.getElementById('datums')) {
-        this._id = +document.getElementById('datums').innerText;     // id of the item clickedOn in the DataSet
+        this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
         this.createEditForm();
-        id = document.getElementById('datums').innerText;        // get the id from the vis click
+     //   id = document.getElementById('datums').innerText;        // get the id from the vis click
         console.log('box clicked on');
-        if (!this.data2._data[id]) {                          // click was NOT in a tA box;
+        if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
           return;
         }
         this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
-        document.getElementById('vidx').innerText = this.data2._data[id].vidx; // store the vidx for DELETE
+        document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
         this.seP.whereColVal = this.data2._data[this._id].vidx;
         if (this._id >= 0 ) {                                     // shows user had clicked a box
           this.showControls = true;                             // show editing controls
@@ -243,27 +242,12 @@ export class TimeLineComponent implements OnInit {
           }                                
         }
         console.log('clicked'  + this._id);
-    if ( this.data2._data[id] &&  this.data2._data[id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
+    if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
         this._readonly = false;                                     // enable editing
         } else {
         this._readonly = true;
         }
-        /*
-    if (this.data2._data[id]) {                                    // if the timeAway is defined
-    //  this.formEdit.controls['dateFromEdit'].setValue(this.data2._data[id].start);
-      //  this.form.controls['dept'].setValue(selected.id);
-        this.goAwayerName = new FormControl(new Date(this.data2._data[id].content), Validators.required);   // this is where the value is set
-        this.startDate = new FormControl(new Date(this.data2._data[id].start), Validators.required);   // this is where the value is set
-        this.dateFrom = new FormControl(new Date(this.data2._data[id].start), Validators.required);   // this is where the value is set
-        this.endDate = new FormControl(new Date(this.data2._data[id].end), Validators.required);
-        this.reasonFC = new FormControl(this.data2._data[id].reason);
-        this.notesFC = new FormControl(this.data2._data[id].note);
-        if (this.data2._data[id].reason || this.data2._data[id].reason === 0 ) {
-          this.reasonSelect = this.data2._data[id].reason.toString();     // expecting string
-          this.reasonFC.setValue(this.data2._data[id].reason.toString());  // needed for initial click
-          }
-        }
-        */
+ 
     if (this.userid === 'napolitano' ) {                          // official 'approver'
         this.isApprover = true;
       }
@@ -282,7 +266,7 @@ export class TimeLineComponent implements OnInit {
     //    this.doREST(dParams);
         this.genEditSvce.genDB_POST(dParams);
       } else {             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
-          this.updateDB_StartEnd(this.data2._data[id].start, this.data2._data[id].end);
+          this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
       }
   }
   /************    specific update routine to update StartDate and EndDate of tA, when user drags a tA  ************/
@@ -382,8 +366,8 @@ export class TimeLineComponent implements OnInit {
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the id of the item in the DataSet
-                                                                                        // store the id in the DOM for use by Angular to do edits ...
+          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet
+                                                                                        // store the _id in the DOM for use by Angular to do edits ...
         });
       function logEvent(event, properties) {                                            // used to capture event if user clicke 'x' to delete tA
         const log = document.getElementById('log');                                     // so if 'remove' is found  
