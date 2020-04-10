@@ -57,7 +57,7 @@
     </form>
 
 <!--          Edit tA  Controls   -->
-    <div *ngIf = "drawEditControls && !newTimeAway2  && goAwayerBox"  > 
+    <div *ngIf = "drawEditControls && !newTimeAway2 "  > 
         <input id='goAwayerBox' readonly />
     </div>
         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
@@ -124,7 +124,7 @@
 <div id="datums"  style="display:block"> </div> <!----  Gro  ??  id ??-->
 <div id="datums2"  style="display:block"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:block"> </div>
-<div id="chData" style="display:block" > chData {{ id }}</div>  
+<div id="chData" style="display:block" > chData </div>  
 
 
 <style type="text/css" >

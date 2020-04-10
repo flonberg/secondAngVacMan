@@ -73,10 +73,26 @@ export class MonthViewComponent implements OnInit {
       return "";  
   }
   takeAduty(n, d){
+    const v = this.isUserDutyTaker();
+    if (v === false){
+      return;
+    }
     const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == n);
     this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + d;         // phrase for the Modal
     this.idxForEdit = this.physicsMonthlyDuties[d][n]['idx'];       // used to update the dB
     document.getElementById('myModal').style.display = "block";     // show the modal 
+  }
+  isUserDutyTaker(){
+    var r = false;
+    Object.keys(this.physicsMonthlyDuties['users']).forEach(key => {
+      if (key === this.loggedInUserKey) {
+        console.log("Found.");
+        r = true;
+      }
+   
+  });
+  return r;
+  
   }
   confirmDuty(){
     const editParams = {                                            // build dS to user with genEditSvce.update
@@ -207,29 +223,37 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
       }
     )
   }
- 
-
   setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
     this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
     this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
+    
     console.log('loggedInUserkey is ' + this.loggedInUserKey)
+    /*
     for (var prop in this.physicsMonthlyDuties) {
-      console.log("prop " + prop);
+      const p1  = <any>this.physicsMonthlyDuties[prop]
+      console.log("prop " + this.physicsMonthlyDuties[prop]);
+      for (var propA in p1 ){
+        console.log(" propA is " + propA );
+        const p2 = <any>propA;
+        for (var propB in p2){
+          console.log("propB is " + propB);
+
+        }
+      }
       break;
     } 
     for (var prop2 in this.physicsMonthlyDuties[prop]) {
-      console.log("prop2 " + prop2);
+      console.log("prop2 " + this.physicsMonthlyDuties[prop2]);
       break;
     } 
     for (var prop3 in this.physicsMonthlyDuties[prop][prop2]) {
       console.log("prop3 " + prop3);
-      break;
+     // break;
     } 
-    const n = this.physicsMonthlyDuties[prop][prop2]['lNN'];
-    console.log("n is " + n);
-
- 
+    */
+    //const n = this.physicsMonthlyDuties[prop][prop2]['lNN'];
+    //console.log("n is " + n);
   }
 }
 

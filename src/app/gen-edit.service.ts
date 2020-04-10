@@ -57,5 +57,8 @@ export class GenEditService {
       + startDateForGettingDataString + '&userid=' + userid +'&platform=' + this.platform;
       return this.http.get(url);
     }
-   
+    ///////  test of get from ION  \\\\\\\\\\
+    IONgetterCustom(){
+      const url = "https://ion.mgh.harvard.edu/cgi-bin/imrtqa/TESTgetter.php";
+    }
   }
