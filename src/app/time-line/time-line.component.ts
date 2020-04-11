@@ -106,7 +106,6 @@ export class TimeLineComponent implements OnInit {
   invalidFromDate: boolean;
   formValidation: boolean;
   newTimeAway2: boolean;
-
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
     this.redraw = true;

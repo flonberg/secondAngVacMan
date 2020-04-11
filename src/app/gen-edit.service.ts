@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { WINDOW } from './window.provider';
 
 export interface SeditParams {
   tableName: string;
@@ -21,16 +22,29 @@ export interface SinsertParams {
 export class GenEditService {
   url: string;
   platform: string;
-  constructor(private http: HttpClient) {
+  host:string;
+  constructor(private http: HttpClient, @Inject(WINDOW) private window: Window
+    ) {
 
    }
    setPlatform(s){
      this.platform = s;
-     console.log("setting platform  = "  + s);
+     this.host = 'dev';                                          // set the dB host for the localhost version
+     console.log("window " + this.window.location.hostname);
+     // set the 
+     if ( this.window.location.hostname.indexOf('host') !== -1 ){
+       this.host = 'dev';
+     }
+     else {
+     this.window.location.hostname.indexOf('dev') !== -1 ? this.host = 'dev' : this.host='prod';
+     }
+    
+     console.log("setting platform  = "  + this.platform + 'host is ' + this.host);
    }
    //////  does update of SINGLE column. Params in POST. Params are tableName, editColName, editColVal, whereColName, whereColVal  \\\\\
     update(dBParams){
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTupdatePOST.php';
+
+      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTupdatePOST.php?host='+ this.host;
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
        //   console.log("POST call", val);
@@ -38,7 +52,7 @@ export class GenEditService {
     }
     //////  Inserts a single record. Uses : params.tablename= string; params.colName=[]; params.colVal = []; 
     insert(dBParams){
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTinsertPOST.php';
+      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTinsertPOST.php?host=' + this.host;
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
        //   console.log("POST call", val);
@@ -46,7 +60,8 @@ export class GenEditService {
     }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; 
     genDB_POST(dP){
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
+      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.host;
+      console.log("genBDPosrt url is " + url);
       this.http.post(url, JSON.stringify(dP)).subscribe(
         (val) => {
        //   console.log('POST call', val);
