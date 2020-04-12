@@ -28,19 +28,23 @@ export class GenEditService {
 
    }
    setPlatform(s){
-     this.platform = s;
-     this.host = 'dev';                                          // set the dB host for the localhost version
-     console.log("window " + this.window.location.hostname);
+                                       // set the dB host for the localhost version
+     console.log("window " + this.window.location.pathname);
      // set the 
-     if ( this.window.location.hostname.indexOf('host') !== -1 ){
-       this.host = 'dev';
-     }
-     else {
-     this.window.location.hostname.indexOf('dev') !== -1 ? this.host = 'dev' : this.host='prod';
-     }
+      this.host = 'prod';
+      if (this.window.location.pathname.indexOf('prod') !== -1 ){
+        this.host = 'prod';
+      }
+      if (this.window.location.pathname.indexOf('dev') !== -1 ){
+        this.host = 'dev';
+    }
+    console.log("setting hhost is  5.15 " + this.host);
+  }
+     
+     
     
-     console.log("setting platform  = "  + this.platform + 'host is ' + this.host);
-   }
+     
+  
    //////  does update of SINGLE column. Params in POST. Params are tableName, editColName, editColVal, whereColName, whereColVal  \\\\\
     update(dBParams){
 
@@ -69,7 +73,7 @@ export class GenEditService {
     }
     genGetPhysicsMonthlyDuties(startDateForGettingDataString, userid){
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
-      + startDateForGettingDataString + '&userid=' + userid +'&platform=' + this.platform;
+      + startDateForGettingDataString + '&userid=' + userid +'&platform=' + this.host;
       return this.http.get(url);
     }
     ///////  test of get from ION  \\\\\\\\\\
