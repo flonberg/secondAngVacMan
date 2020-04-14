@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WINDOW } from './window.provider';
+import { Observable } from 'rxjs';
 
 export interface SeditParams {
   tableName: string;
@@ -23,31 +24,35 @@ export class GenEditService {
   url: string;
   platform: string;
   host:string;
+  dBhost:string;
   constructor(private http: HttpClient, @Inject(WINDOW) private window: Window
-    ) {
+    ) { }
 
-   }
-   setPlatform(s){
-                                       // set the dB host for the localhost version
+   setPlatform(s){             // set the dB host for the localhost version                        
      console.log("window " + this.window.location.pathname);
-     // set the 
-      this.host = 'prod';
+      this.dBhost = 'prod';
       if (this.window.location.pathname.indexOf('prod') !== -1 ){
-        this.host = 'prod';
+        this.dBhost = 'prod';
       }
       if (this.window.location.pathname.indexOf('dev') !== -1 ){
-        this.host = 'dev';
+        this.dBhost = 'dev';
+      }
+    console.log("setting hhost is  5.15 " + this.dBhost);
+    return this.host;                           // for time-line which has its own REST
     }
-    console.log("setting hhost is  5.15 " + this.host);
-  }
-     
-     
     
-     
+    getTAs(startDateString, endDateString, userid, platform){
+      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' 
+      + startDateString + '&end=' + endDateString + '&userid=' + userid + '&platform=' + platform;
+      return this.http.get(url);
+    }  
+
   
+  genRest(dBParams, scriptName, hostName){
+    const url = 'http:/' + hostName + scriptName;
+  } 
    //////  does update of SINGLE column. Params in POST. Params are tableName, editColName, editColVal, whereColName, whereColVal  \\\\\
     update(dBParams){
-
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTupdatePOST.php?host='+ this.host;
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {

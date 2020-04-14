@@ -345,7 +345,8 @@ export class TimeLineComponent implements OnInit {
         + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid + '&platform=' + this.platform;
     console.log('347 for Getting tA url is ' + url );
 
-    this.http.get(url).subscribe(
+
+      this.genEditSvce.getTAs(this.startDateString,this.endDateString,this.userid,this.platform).subscribe(
       (val) => {
         if (this.index === 0) {
           this.data2 = new vis.DataSet(val);
