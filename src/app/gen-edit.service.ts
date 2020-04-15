@@ -1,6 +1,7 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WINDOW } from './window.provider';
+import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 
 export interface SeditParams {
@@ -11,6 +12,7 @@ export interface SeditParams {
   editColVal: string;
   newVal: string;
   who: String;
+
 }
 export interface SinsertParams {
   tableName: string;
@@ -20,16 +22,40 @@ export interface SinsertParams {
 @Injectable({
   providedIn: 'root'
 })
-export class GenEditService {
+export class GenEditService implements OnInit {
   url: string;
+  urlBase: string;
   platform: string;
   host:string;
   dBhost:string;
-  constructor(private http: HttpClient, @Inject(WINDOW) private window: Window
-    ) { }
-
-   setPlatform(s){             // set the dB host for the localhost version                        
-     console.log("window " + this.window.location.pathname);
+  angularRoute: String;
+  userid: String;
+  constructor(private http: HttpClient, @Inject(WINDOW) private window: Window,
+  private loc: Location
+    ) { 
+      
+    }
+  ngOnInit(){
+    this.angularRoute = this.loc.path();
+    
+//    const domainAndApp = url.replace(angularRoute, '');
+ //   console.log('angularRouts ' + angularRoute + 'url' + url );
+  }  
+  setUserId(s){               // get the userid from the router.queryParams.
+    this.userid = s;
+  }
+   
+   setPlatform(s){             // set the dB host for the localhost version      
+    this.angularRoute = this.loc.path();    
+    const wlr = window.location.href;       
+    if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
+      this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/';      //get data from BB  for localhost or BB 
+    }   
+    if ( window.location.href.indexOf('whiteboard') !== -1 ){
+      this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
+    }    
+    console.log('AngularRoute is  1129' + this.angularRoute); 
+    console.log("window " + this.window.location.pathname);
       this.dBhost = 'prod';
       if (this.window.location.pathname.indexOf('prod') !== -1 ){
         this.dBhost = 'prod';
@@ -40,14 +66,12 @@ export class GenEditService {
     console.log("setting hhost is  5.15 " + this.dBhost);
     return this.host;                           // for time-line which has its own REST
     }
-    
-    getTAs(startDateString, endDateString, userid, platform){
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' 
-      + startDateString + '&end=' + endDateString + '&userid=' + userid + '&platform=' + platform;
+    getTAs(startDateString, endDateString){
+      const url = this.urlBase + 'getVacsBB.php?start=' 
+      + startDateString + '&end=' + endDateString + '&userid=' + this.userid + '&host=localhost';
+      console.log('getTa url is ' + url);
       return this.http.get(url);
     }  
-
-  
   genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;
   } 

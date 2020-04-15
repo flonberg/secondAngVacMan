@@ -132,8 +132,8 @@ export class TimeLineComponent implements OnInit {
     this.newTimeAway2 = false;
   }
   ngOnInit() {
-    console.log(" the url is   "   + this.router.url);
-    this.router.url.indexOf('prod') > 0  ? this.genEditSvce.setPlatform('prod') : this.genEditSvce.setPlatform('dev')
+    console.log(" this.router.url is   "   + this.router.url);
+   // this.router.url.indexOf('prod') > 0  ? this.genEditSvce.setPlatform('prod') : this.genEditSvce.setPlatform('dev')
   //this.genEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
@@ -151,7 +151,7 @@ export class TimeLineComponent implements OnInit {
       //   this._content = document.getElementById('datums2').innerText;
        //  if (this._content === 'new item') {
        //      this.drawControls = false;   
-       //:w  }
+       // }
     
        if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) {
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
@@ -314,6 +314,7 @@ export class TimeLineComponent implements OnInit {
   setQueryParams(qP) {
     if (qP.userid) {
       this.userid = qP.userid;
+      this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
     }
     if (qP.platform) {
       this.platform = qP.platform;
@@ -326,6 +327,7 @@ export class TimeLineComponent implements OnInit {
       this.tlContainer = this.timelineContainer.nativeElement;
     }
   }
+  
   getTimelineData2() {
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
     const numWeeks = 8;                                                                 // number of weeks to show on the calendar
@@ -346,7 +348,7 @@ export class TimeLineComponent implements OnInit {
     console.log('347 for Getting tA url is ' + url );
 
 
-      this.genEditSvce.getTAs(this.startDateString,this.endDateString,this.userid,this.platform).subscribe(
+      this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {
         if (this.index === 0) {
           this.data2 = new vis.DataSet(val);

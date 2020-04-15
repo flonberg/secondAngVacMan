@@ -18,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TimeLineComponent } from './time-line/time-line.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NavBarVMComponent } from './nav-bar-vm/nav-bar-vm.component';
 
 import { MatTabsModule } from '@angular/material';
@@ -61,7 +61,7 @@ import { WINDOW_PROVIDERS } from './window.provider';
 
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-  providers: [DatePipe, TimeLineComponent,
+  providers: [DatePipe, TimeLineComponent, Location,
     WINDOW_PROVIDERS],
   bootstrap: [AppComponent],
  
