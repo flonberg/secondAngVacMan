@@ -145,56 +145,53 @@ export class TimeLineComponent implements OnInit {
         this.getTimelineData2();                                      // get the data from REST database call.
     });
   }
+     /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) {// this responds to ANY click in the div containing the calendar
-  
-    //   if (document.getElementById('datums2'))     {
-      //   this._content = document.getElementById('datums2').innerText;
-       //  if (this._content === 'new item') {
-       //      this.drawControls = false;   
-       // }
     
-       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) {
+       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
            this.createEditForm();
-        //   id = document.getElementById('datums').innerText;        // get the id from the vis click
-           console.log('box clicked on');
-           if (!this.data2._data[this._id]) {                          // click was NOT in a tA box;
-             return;
-           }
-           this._vidx = this.data2._data[this._id].vidx;              // store the vidx for editing
-           document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
-           this.seP.whereColVal = this.data2._data[this._id].vidx;
-           if (this._id >= 0 ) {                                     // shows user had clicked a box
-             this.showControls = true;                             // show editing controls
+       if (!this.data2._data[this._id]) {                                                        // click was NOT in a tA box;
+            return;
+          }
+        this._vidx = this.data2._data[this._id].vidx;                                           // store the vidx for editing
+        document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
+        this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  params used for editing tA
+           if (this._id >= 0 ) {                                                                // shows user had clicked a box
+             this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
              }                                
            }
            console.log('clicked'  + this._id);
-       if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner so make widgets editable
-           this._readonly = false;                                     // enable editing
-           } else {
-           this._readonly = true;
+       if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner 
+           this._readonly = false;                                                              // enable editing
+           } else {                                                                             // user is NOT tA owner
+           this._readonly = true;                                                                // make controls readOnly
            }
-    
-       if (this.userid === 'napolitano' ) {                          // official 'approver'
+       if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
-         /*******************          This is called anytime the user RELEASES the mouse click **********************/
+         var dParams = {                            // create a set of params to b used by genDB_POST to delete the tA
+          'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
+          'editColNames':['reasonIdx'],
+          'editColVals':['99']                                                             // reasonIdx is deleted flag.
+        };
          /*******************          remove routine triggered by a click on the 'x'           **********************/
-       if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {               // presence of the work 'remove' indicates user clicked 'x'
+       if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
           this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
-           this.drawEditControls = false;                                                            // turn off the edit Controls.
-           document.getElementById('datums2').innerText = "";                                    // clear it so that further clicks on tA don't result in delete
-           const dParams = {
-             'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
-             'editColNames':['reasonIdx'],
-             'editColVals':['99']
-           };
-     //   const i = 0;
-       //    this.doREST(dParams);
-           this.genEditSvce.genDB_POST(dParams);
-         } else if (   this.data2._data[this._id]){             /************  Edit StartDate and EndDate Routine triggered by drag *****************************/
-             this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
+           this.drawEditControls = false;                                                       // turn off the edit Controls.
+           document.getElementById('datums2').innerText = "";                                   // clear it so that further clicks on tA don't result in delete
+  
+           this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
+         } else if (   this.data2._data[this._id]){             // Ed/
+           //  this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
+             var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);
+             var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);
+             dParams.editColNames = ['startDate','endDate'];
+             dParams.editColVals = [startDateEdit,endDateEdit];
+             // convert to genDB_POST
+           this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
+
          }
      }
   createForm() {                                      // create the form for New tA
