@@ -171,17 +171,18 @@ export class TimeLineComponent implements OnInit {
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
-         var dParams = {                            // create a set of params to b used by genDB_POST to delete the tA
+         var dParams = {              // create a set of params to b used by genDB_POST to delete the tA
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
-          'editColNames':['reasonIdx'],
-          'editColVals':['99']                                                             // reasonIdx is deleted flag.
+          'editColNames':[],
+          'editColVals':[]                                       // reasonIdx is deleted flag.
         };
          /*******************          remove routine triggered by a click on the 'x'           **********************/
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
           this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
            this.drawEditControls = false;                                                       // turn off the edit Controls.
            document.getElementById('datums2').innerText = "";                                   // clear it so that further clicks on tA don't result in delete
-  
+          dParams.editColNames = ['reasonIdx'];
+          dParams.editColVals = ['99'];
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
          } else if (   this.data2._data[this._id]){             // Ed/
            //  this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
@@ -189,8 +190,7 @@ export class TimeLineComponent implements OnInit {
              var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);
              dParams.editColNames = ['startDate','endDate'];
              dParams.editColVals = [startDateEdit,endDateEdit];
-             // convert to genDB_POST
-           this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
+            this.genEditSvce.genDB_POST(dParams);               // use REST call to update the dataBase.
 
          }
      }
