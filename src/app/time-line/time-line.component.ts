@@ -24,15 +24,7 @@ interface newTAparams {
   reason: number;
   Note: string;
 }
-/*
-interface dB_POSTparams {
-  tableName: string,
-  whereColName: string,
-  whereColVal: string,
-  editColNames: string[],
-  editColVals: string[]
-}
-*/
+
 // tslint:disable-next-line:class-name
 interface nameToUserId {
   lastName: string;
