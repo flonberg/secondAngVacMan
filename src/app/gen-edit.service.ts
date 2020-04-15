@@ -12,7 +12,13 @@ export interface SeditParams {
   editColVal: string;
   newVal: string;
   who: String;
-
+}
+export interface dB_POSTparams {
+  tableName: string,
+  whereColName: string,
+  whereColVal: string,
+  editColNames: string[],
+  editColVals: string[]
 }
 export interface SinsertParams {
   tableName: string;

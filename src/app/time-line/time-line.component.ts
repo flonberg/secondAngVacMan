@@ -1,6 +1,6 @@
 import { editParam } from './../dose-fx/dose-fx.component';
 import { GenEditService, SinsertParams } from './../gen-edit.service';
-import { SeditParams } from './../gen-edit.service';
+import { SeditParams, dB_POSTparams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
@@ -24,6 +24,15 @@ interface newTAparams {
   reason: number;
   Note: string;
 }
+/*
+interface dB_POSTparams {
+  tableName: string,
+  whereColName: string,
+  whereColVal: string,
+  editColNames: string[],
+  editColVals: string[]
+}
+*/
 // tslint:disable-next-line:class-name
 interface nameToUserId {
   lastName: string;
@@ -45,6 +54,7 @@ export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
   platform = "dev";
 //  platform = "prod";
+  dB_PostParams: dB_POSTparams
   tlContainer: any;
   timeline: any;
   data2: any;
@@ -84,6 +94,14 @@ export class TimeLineComponent implements OnInit {
     reason: -1,
     Note: ''
   };
+  dB_PP: dB_POSTparams = {                          //  create instance of interface
+    tableName:'vacation3',
+    whereColName:'',
+    whereColVal: '',
+    editColNames: [],
+    editColVals: []
+  }
+  sEPP: SeditParams;
   nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
@@ -107,7 +125,7 @@ export class TimeLineComponent implements OnInit {
   formValidation: boolean;
   newTimeAway2: boolean;
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
-    private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {
+    private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
     this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
@@ -133,8 +151,6 @@ export class TimeLineComponent implements OnInit {
   }
   ngOnInit() {
     console.log(" this.router.url is   "   + this.router.url);
-   // this.router.url.indexOf('prod') > 0  ? this.genEditSvce.setPlatform('prod') : this.genEditSvce.setPlatform('dev')
-  //this.genEditSvce.setPlatform(this.platform);                     // switch between BB and 242 databases. 
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {                                     // get the queryParams as Observable
@@ -144,6 +160,8 @@ export class TimeLineComponent implements OnInit {
         this.seP.who = this.userid;
         this.getTimelineData2();                                      // get the data from REST database call.
     });
+                    // set the table name
+ 
   }
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) {// this responds to ANY click in the div containing the calendar
@@ -168,6 +186,7 @@ export class TimeLineComponent implements OnInit {
            } else {                                                                             // user is NOT tA owner
            this._readonly = true;                                                                // make controls readOnly
            }
+           
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
@@ -176,22 +195,24 @@ export class TimeLineComponent implements OnInit {
           'editColNames':[],
           'editColVals':[]                                       // reasonIdx is deleted flag.
         };
+        this.dB_PP.whereColName='vidx';
+        this.dB_PP.whereColVal = document.getElementById('vidx').innerText;
          /*******************          remove routine triggered by a click on the 'x'           **********************/
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
           this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
            this.drawEditControls = false;                                                       // turn off the edit Controls.
            document.getElementById('datums2').innerText = "";                                   // clear it so that further clicks on tA don't result in delete
-          dParams.editColNames = ['reasonIdx'];
-          dParams.editColVals = ['99'];
+           dParams.editColNames = ['reasonIdx'];
+           dParams.editColVals = ['99'];
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
          } else if (   this.data2._data[this._id]){             // Ed/
-           //  this.updateDB_StartEnd(this.data2._data[this._id].start, this.data2._data[this._id].end);
-             var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);
-             var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);
-             dParams.editColNames = ['startDate','endDate'];
-             dParams.editColVals = [startDateEdit,endDateEdit];
-            this.genEditSvce.genDB_POST(dParams);               // use REST call to update the dataBase.
-
+            var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);
+            var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);
+            dParams.editColNames = ['startDate','endDate'];
+            this.dB_PP.editColNames = ['startDate','endDate'];
+            this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
+            dParams.editColVals = [startDateEdit,endDateEdit];
+            this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
      }
   createForm() {                                      // create the form for New tA
@@ -499,13 +520,12 @@ export class TimeLineComponent implements OnInit {
     }                                                                   // update startDate
     if (`${type}` === 'end') {
      this.data2.update({id: this._id, end: dateForDataSet}); 
-    //  this.data2.remove(this._id); 
-                    // update vis DataSet
       this.seP.editColName = 'endDate';
+      
       this.endDateEdited = true;
-   
     }
     this.genEditSvce.update(this.seP);                                  // do the dB edit.
+  //  this.genEditSvce.genDB_POST(this.seP);
    // this.doRESTX(this.seP)
  
   }
