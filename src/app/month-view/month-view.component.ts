@@ -213,6 +213,7 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
     return Math.ceil(diff / (1000 * 3600 * 24)); 
   }
+  
   getPhysicsMonthlyDuties(){
     const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
     + this.startDateForGettingDataString + '&userid=' + this.qParams['userid'];
@@ -227,7 +228,6 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
     this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
     this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
     this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
-    
     console.log('loggedInUserkey is ' + this.loggedInUserKey)
     /*
     for (var prop in this.physicsMonthlyDuties) {
