@@ -88,8 +88,8 @@ export class TimeLineComponent implements OnInit {
   };
   dB_PP: dB_POSTparams = {                          //  create instance of interface
     tableName:'vacation3',
-    whereColName:'',
-    whereColVal: '',
+    whereColName:[],
+    whereColVal: [],
     editColNames: [],
     editColVals: []
   }
@@ -187,8 +187,9 @@ export class TimeLineComponent implements OnInit {
           'editColNames':[],
           'editColVals':[]                                       // reasonIdx is deleted flag.
         };
-        this.dB_PP.whereColName='vidx';
-        this.dB_PP.whereColVal = document.getElementById('vidx').innerText;
+        this.dB_PP.whereColName=['vidx','vidx'];
+        this.dB_PP.whereColVal = [document.getElementById('vidx').innerText,
+                                  document.getElementById('vidx').innerText ];
          /*******************          remove routine triggered by a click on the 'x'           **********************/
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
           this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
@@ -353,10 +354,10 @@ export class TimeLineComponent implements OnInit {
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
     this.genEditSvce.setPlatform('');
-    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' 
+  /*  const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' 
         + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid + '&platform=' + this.platform;
     console.log('347 for Getting tA url is ' + url );
-
+*/
 
       this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {

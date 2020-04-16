@@ -15,8 +15,8 @@ export interface SeditParams {
 }
 export interface dB_POSTparams {
   tableName: string,
-  whereColName: string,
-  whereColVal: string,
+  whereColName: string[],
+  whereColVal: string[],
   editColNames: string[],
   editColVals: string[]
 }
@@ -54,14 +54,15 @@ export class GenEditService implements OnInit {
    setPlatform(s){             // set the dB host for the localhost version      
     this.angularRoute = this.loc.path();    
     const wlr = window.location.href;       
+    console.log("window.location.herf is " + window.location.href);
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
       this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/';      //get data from BB  for localhost or BB 
     }   
     if ( window.location.href.indexOf('whiteboard') !== -1 ){
+      console.log(" dectected whiteboard so setting urlBase to whitboard");
       this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
     }    
-    console.log('AngularRoute is  1129' + this.angularRoute); 
-    console.log("window " + this.window.location.pathname);
+
       this.dBhost = 'prod';
       if (this.window.location.pathname.indexOf('prod') !== -1 ){
         this.dBhost = 'prod';
@@ -99,9 +100,10 @@ export class GenEditService implements OnInit {
     }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; 
     genDB_POST(dP){
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.host;
-      console.log("genBDPosrt url is " + url);
-      this.http.post(url, JSON.stringify(dP)).subscribe(
+   //   const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.host;
+      const url2 = this.urlBase + 'RESTgenDB_POST.php';
+      console.log("genBDPosrt url 2is " + url2);
+      this.http.post(url2, JSON.stringify(dP)).subscribe(
         (val) => {
        //   console.log('POST call', val);
         });
