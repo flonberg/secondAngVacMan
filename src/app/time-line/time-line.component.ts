@@ -17,21 +17,17 @@ import { throwIfEmpty } from 'rxjs/operators';
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 
-// tslint:disable-next-line:class-name
 interface newTAparams {
   startDate: string;
   endDate: string;
   reason: number;
   Note: string;
 }
-
-// tslint:disable-next-line:class-name
-interface nameToUserId {
+interface nameToUserId {                        // used to setGroups
   lastName: string;
   userid: string;
 }
-// tslint:disable-next-line:class-name
-interface useridToUserkey {
+interface useridToUserkey {                     // userd in setGroups
   userid: string;
   userkey: number;
 }
@@ -459,7 +455,8 @@ export class TimeLineComponent implements OnInit {
       this.seP.editColName = colName;
       if (s.value) {                                                     // if comes from a 'select' widget
         this.seP.editColVal = s.value;
-    }
+       
+      }
       if (s.target && s.target.value) {
         this.seP.editColVal = s.target.value;
       }
@@ -485,18 +482,7 @@ export class TimeLineComponent implements OnInit {
     this.genEditSvce.update(this.seP);
    // this.doREST(this.seP);
   }
-  editDateX(st, event)
-  {
-    var dateForDataSet = "2020-01-03 00:00:00";  
-//    const dateForDataSet = event.target.value + " 00:00:00";  
-    dateForDataSet = event.target.value
-    
-    this.datePipe.transform(event.target.value, 'yyyy-mm-dd')
-    this.data2.update({id: this._id, start: dateForDataSet}); 
-    console.log("dateForDat" + dateForDataSet);
-   // this.data2.remove(this._id);
  
-  }
   editDate(type: string, event: any) {
    console.log( 'editDate ' + this.data2._id);
 
@@ -504,21 +490,22 @@ export class TimeLineComponent implements OnInit {
     const dateForDataSet = event.target.value + " 00:00:00";                 // add time for DataSet
 
     this.seP.editColVal = event.target.value;
+    this.dB_PP.editColVals = [ event.target.value];
     console.log('edtied local ');
     if (`${type}` === 'start') {
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
-    
       this.startDateEdited = true;
       this.seP.editColName = 'startDate';
+      this.dB_PP.editColNames = ['startDate'];
     }                                                                   // update startDate
     if (`${type}` === 'end') {
      this.data2.update({id: this._id, end: dateForDataSet}); 
       this.seP.editColName = 'endDate';
-      
+      this.dB_PP.editColNames = ['endDate'];
       this.endDateEdited = true;
     }
-    this.genEditSvce.update(this.seP);                                  // do the dB edit.
-  //  this.genEditSvce.genDB_POST(this.seP);
+    //this.genEditSvce.update(this.seP);                                  // do the dB edit.
+    this.genEditSvce.genDB_POST(this.dB_PP);
    // this.doRESTX(this.seP)
  
   }

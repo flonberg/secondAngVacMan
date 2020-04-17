@@ -142,37 +142,3 @@
     background: green;
     }
 </style>
-<!--
-            <li class="item">
-                <mat-form-field  class="item" >
-                    <input matInput [matDatepicker]="picker" placeholder= "New Start Date " id='startDateInput' [readonly] = "_readonly"
-                    (dateInput)="editDateX('start', $event)" (change) = "clear()" [formControl] = "startDate" formControlName = 'startDate'>
-                    <mat-datepicker-toggle matSuffix [for]="picker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-                    <mat-datepicker #picker ></mat-datepicker>            
-                </mat-form-field>
-            </li>
-            <div class='alert' *ngIf = "startDateGet.touched && startDateGet.invalid"> Date is requred.  </div>
-                
-            <li class="item">
-                <mat-form-field  class="item" x>
-                    <input  matInput [matDatepicker]="epicker" placeholder= "End Date " id='endDateInput'[readonly] = "_readonly"
-                    (dateInput)="editDate('end', $event)" (change) = "clear()" [formControl] = "endDate"  >
-                    <mat-datepicker-toggle matSuffix [for]="epicker" *ngIf = "!this._readonly" ></mat-datepicker-toggle>
-                    <mat-datepicker #epicker ></mat-datepicker>
-                </mat-form-field>
-            </li>
-            <div class='alert' *ngIf = "endDateGet.touched && endDateGet.invalid"> Date is requred and must be great than  </div>
-            <div class='alert' *ngIf = "endDateGet.mustBeLaterThan ">End Date must be later than {{ startDateGet.mustBeLaterThan  }} </div>    
-            <li class="item" *ngIf =!_readonly>
-                <mat-form-field>
-                    <mat-label>Reason</mat-label>
-                        <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
-                        [formControl] = "reasonFC"  id='reasonId'>
-                                <mat-option  value="0">Personal Vacation</mat-option>
-                                <mat-option  value="1">Other</mat-option>
-                                <mat-option   value="2">Meeting</mat-option>  
-                                
-                        </mat-select>
-                </mat-form-field>
-            </li>
-        -->
