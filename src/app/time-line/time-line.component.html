@@ -76,9 +76,9 @@
                    
             <mat-form-field *ngIf = "!_readonly">
                 <mat-label>Reason</mat-label>
-                    <mat-select [(value)]="reasonSelect" (selectionChange)="editReason($event, 'reason')"
+                    <mat-select [(ngModel)]="reasonSelect" (selectionChange)="editDate('reason', $event)"
                     [formControl] = "reasonFC"  id='reasonId'>
-                            <mat-option  value="0">Personal Vacation</mat-option>
+                            <mat-option selected value="0">Personal Vacation</mat-option>
                             <mat-option  value="1">Other</mat-option>
                             <mat-option   value="2">Meeting</mat-option>  
                     </mat-select>

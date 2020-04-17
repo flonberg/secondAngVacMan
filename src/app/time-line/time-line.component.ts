@@ -183,9 +183,9 @@ export class TimeLineComponent implements OnInit {
           'editColNames':[],
           'editColVals':[]                                       // reasonIdx is deleted flag.
         };
-        this.dB_PP.whereColName=['vidx','vidx'];
-        this.dB_PP.whereColVal = [document.getElementById('vidx').innerText,
-                                  document.getElementById('vidx').innerText ];
+        this.dB_PP.whereColName=['vidx'];
+        this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
+                 
          /*******************          remove routine triggered by a click on the 'x'           **********************/
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
           this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
@@ -218,6 +218,7 @@ export class TimeLineComponent implements OnInit {
 ////////   This is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
     console.log('147');
+    this.reasonSelect = this.data2._data[this._id].reason.toString();
     this.doValidation = false;
     this.invalidFromDate = false;
     var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
@@ -226,11 +227,12 @@ export class TimeLineComponent implements OnInit {
       goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDate, Validators.required ],
       dateFromEdit: [fromDate, Validators.required ],
-      reasonGEdit: [''],
-      noteGEdit: ['']
+      reasonGEdit: ['test'],
+      noteGEdit: [ this.data2._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );
   }
+
   dateLessThan(from: string, to: string, reason: string) {
       return (group: FormGroup): {[key: string]: any} => 
       {
@@ -362,6 +364,7 @@ export class TimeLineComponent implements OnInit {
          } else {
           this.data2 = Array();
         }
+        console.log( 'data2   365');
                                                         // store data in this.data2
         this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);
@@ -444,21 +447,23 @@ export class TimeLineComponent implements OnInit {
   clear() {
     console.log('clear ' );
   }
-  editReason(s, colName) {                                                 // used to edit Reason and Note datums
+  editReason(s, colName) {                                              // used to edit Reason and Note datums
       const seP = <SeditParams>{};                                          // define instance of SeditParams interface
       seP.who = this.userid;
       seP.whereColName = 'vidx';
       seP.tableName = 'vacation3';
       if (this.data2._data[this._id] ) {
         this.seP.whereColVal = this.data2._data[this._id].vidx;
+      
       }
       this.seP.editColName = colName;
       if (s.value) {                                                     // if comes from a 'select' widget
         this.seP.editColVal = s.value;
-       
+        this.dB_PP.editColVals = [ s.value];
       }
       if (s.target && s.target.value) {
         this.seP.editColVal = s.target.value;
+        this.dB_PP.editColVals = [ s.target.value];
       }
       if (s === 1) {
         this.seP.editColVal = '1';
@@ -484,21 +489,28 @@ export class TimeLineComponent implements OnInit {
   }
  
   editDate(type: string, event: any) {
+   var dateForDataSet = ''; 
    console.log( 'editDate ' + this.data2._id);
-
-    const s = this.formatDateForTimeline(event.value);                 // make the string for local update
-    const dateForDataSet = event.target.value + " 00:00:00";                 // add time for DataSet
-
-    this.seP.editColVal = event.target.value;
-    this.dB_PP.editColVals = [ event.target.value];
+    if (type =='start' || type =='end'){                                  // if it is a date
+      const s = this.formatDateForTimeline(event.value);                 // make the string for local update
+      dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
+    }
+    if (event.target && event.target.value) 
+      this.dB_PP.editColVals = [ event.target.value];
+    if (event.value)  
+      this.dB_PP.editColVals = [ event.value];
     console.log('edtied local ');
-    if (`${type}` === 'start') {
+    if (type == 'reason'){
+      this.dB_PP.editColNames = ['reason'];
+      this.data2.update({id: this._id, reason: dateForDataSet});  
+    }
+    if (type === 'start') {
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.startDateEdited = true;
       this.seP.editColName = 'startDate';
       this.dB_PP.editColNames = ['startDate'];
     }                                                                   // update startDate
-    if (`${type}` === 'end') {
+    if (type === 'end') {
      this.data2.update({id: this._id, end: dateForDataSet}); 
       this.seP.editColName = 'endDate';
       this.dB_PP.editColNames = ['endDate'];
