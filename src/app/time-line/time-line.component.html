@@ -90,7 +90,7 @@
 
             <mat-form-field  class="wideItem">
                     <mat-label class="smallLabel"> Note:</mat-label>
-                    <textarea matInput  (change)="editReason($event, 'note')" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
+                    <textarea matInput  (change)="editDate( 'note', $event)" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
                         [formControl] = "notesFC"
                         cdkTextareaAutosize [readonly]="_readonly"
                         #autosize="cdkTextareaAutosize"

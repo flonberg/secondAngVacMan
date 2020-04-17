@@ -194,7 +194,7 @@ export class TimeLineComponent implements OnInit {
            dParams.editColNames = ['reasonIdx'];
            dParams.editColVals = ['99'];
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
-         } else if (   this.data2._data[this._id]){             // Ed/
+         } else if (   this.data2._data[this._id] ){             // Ed/
             var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);
             var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);
             dParams.editColNames = ['startDate','endDate'];
@@ -218,7 +218,7 @@ export class TimeLineComponent implements OnInit {
 ////////   This is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
     console.log('147');
-    this.reasonSelect = this.data2._data[this._id].reason.toString();
+    this.reasonSelect = this.data2._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
     var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
@@ -227,7 +227,7 @@ export class TimeLineComponent implements OnInit {
       goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDate, Validators.required ],
       dateFromEdit: [fromDate, Validators.required ],
-      reasonGEdit: ['test'],
+      reasonGEdit: [''],
       noteGEdit: [ this.data2._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );
@@ -515,6 +515,9 @@ export class TimeLineComponent implements OnInit {
       this.seP.editColName = 'endDate';
       this.dB_PP.editColNames = ['endDate'];
       this.endDateEdited = true;
+    }
+    if (type == 'note'){
+      this.dB_PP.editColNames = ['note'];
     }
     //this.genEditSvce.update(this.seP);                                  // do the dB edit.
     this.genEditSvce.genDB_POST(this.dB_PP);
