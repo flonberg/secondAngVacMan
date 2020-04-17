@@ -198,7 +198,7 @@ export class TimeLineComponent implements OnInit {
             var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);
             var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);
             dParams.editColNames = ['startDate','endDate'];
-            this.dB_PP.editColNames = ['startDate','endDate'];
+            this.dB_PP.editColNames = ['startDate','endDate'];      
             this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
             dParams.editColVals = [startDateEdit,endDateEdit];
             this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
@@ -494,6 +494,7 @@ export class TimeLineComponent implements OnInit {
     if (type =='start' || type =='end'){                                  // if it is a date
       const s = this.formatDateForTimeline(event.value);                 // make the string for local update
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
+      
     }
     if (event.target && event.target.value) 
       this.dB_PP.editColVals = [ event.target.value];
@@ -518,6 +519,7 @@ export class TimeLineComponent implements OnInit {
     }
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];
+      this.dB_PP.editColVals = [ event.target.value];
     }
     //this.genEditSvce.update(this.seP);                                  // do the dB edit.
     this.genEditSvce.genDB_POST(this.dB_PP);
