@@ -488,17 +488,16 @@ export class TimeLineComponent implements OnInit {
    // this.doREST(this.seP);
   }
  
-  editDate(type: string, event: any) {
+  editDate(type: string, event: any) {                                  // editDate is used for ALL fields
    var dateForDataSet = ''; 
    console.log( 'editDate ' + this.data2._id);
     if (type =='start' || type =='end'){                                  // if it is a date
       const s = this.formatDateForTimeline(event.value);                 // make the string for local update
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
-      
     }
-    if (event.target && event.target.value) 
+    if (event.target && event.target.value)                               // the editColVal can be a target.balue
       this.dB_PP.editColVals = [ event.target.value];
-    if (event.value)  
+    if (event.value)                                                      // or it can be an event.value
       this.dB_PP.editColVals = [ event.value];
     console.log('edtied local ');
     if (type == 'reason'){
