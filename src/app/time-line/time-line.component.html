@@ -61,20 +61,20 @@
         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
             <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
             <mat-form-field class="item">
-                <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (change)="editDate('start', $event)" 
+                <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (change)="editGen('start', $event)" 
                  formControlName="dateToEdit"  [readonly] = "_readonly"
                 type="date" useValueAsDate  />
             </mat-form-field>  
           
             <mat-form-field class="item">
-                    <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editDate('end', $event)" 
+                    <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editGen('end', $event)" 
                      formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>   
                    
             <mat-form-field *ngIf = "!_readonly">
                 <mat-label>Reason</mat-label>
-                    <mat-select [(ngModel)]="reasonSelect" (selectionChange)="editDate('reason', $event)"
+                    <mat-select [(ngModel)]="reasonSelect" (selectionChange)="editGen('reason', $event)"
                     [formControl] = "reasonFC"  id='reasonId'>
                             <mat-option selected value="0">Personal Vacation</mat-option>
                             <mat-option  value="1">Other</mat-option>
@@ -88,7 +88,7 @@
 
             <mat-form-field  class="wideItem">
                     <mat-label class="smallLabel"> Note:</mat-label>
-                    <textarea matInput  (change)="editDate( 'note', $event)" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
+                    <textarea matInput  (change)="editGen( 'note', $event)" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
                         [formControl] = "notesFC"
                         cdkTextareaAutosize [readonly]="_readonly"
                         #autosize="cdkTextareaAutosize"

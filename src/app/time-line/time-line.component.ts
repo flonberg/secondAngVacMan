@@ -488,9 +488,9 @@ export class TimeLineComponent implements OnInit {
    // this.doREST(this.seP);
   }
  
-  editDate(type: string, event: any) {                                  // editDate is used for ALL fields
+  editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
-   console.log( 'editDate ' + this.data2._id);
+   console.log( 'editGen ' + this.data2._id);
     if (type =='start' || type =='end'){                                  // if it is a date
       const s = this.formatDateForTimeline(event.value);                 // make the string for local update
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
