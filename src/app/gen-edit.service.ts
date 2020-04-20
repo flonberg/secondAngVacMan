@@ -56,6 +56,9 @@ export class GenEditService   {
     return this.host;                           // for time-line which has its own REST
     }
     getTAs(startDateString, endDateString){
+      if (!this.urlBase){
+        this.setPlatform();
+      }
       const url = this.urlBase + 'getVacsBB.php?start=' 
       + startDateString + '&end=' + endDateString + '&userid=' + this.userid + '&host=localhost';
       console.log('getTa url is ' + url);
@@ -84,6 +87,9 @@ export class GenEditService   {
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; 
     genDB_POST(dP){
    //   const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.host;
+      if (!this.urlBase){
+        this.setPlatform();
+      }
       const url2 = this.urlBase + 'RESTgenDB_POST.php';
       console.log("genBDPosrt url 2is " + url2);
       this.http.post(url2, JSON.stringify(dP)).subscribe(
