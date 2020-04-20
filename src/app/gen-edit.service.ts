@@ -28,31 +28,21 @@ export interface SinsertParams {
 @Injectable({
   providedIn: 'root'
 })
-export class GenEditService implements OnInit {
+export class GenEditService   {
   url: string;
   urlBase: string;
   platform: string;
   host:string;
-  dBhost:string;
-  angularRoute: String;
+
   userid: String;
-  constructor(private http: HttpClient, @Inject(WINDOW) private window: Window,
-  private loc: Location
-    ) { 
-      
-    }
-  ngOnInit(){
-    this.angularRoute = this.loc.path();
-    
-//    const domainAndApp = url.replace(angularRoute, '');
- //   console.log('angularRouts ' + angularRoute + 'url' + url );
-  }  
+  constructor(private http: HttpClient, @Inject(WINDOW) private window: Window) { }
+
   setUserId(s){               // get the userid from the router.queryParams.
     this.userid = s;
   }
    
-   setPlatform(s){             // set the dB host for the localhost version      
-    this.angularRoute = this.loc.path();    
+   setPlatform(){             // set the dB host for the localhost version      
+  //  this.angularRoute = this.loc.path();    
     const wlr = window.location.href;       
     console.log("window.location.herf is " + window.location.href);
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
@@ -63,14 +53,6 @@ export class GenEditService implements OnInit {
       this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
     }    
 
-      this.dBhost = 'prod';
-      if (this.window.location.pathname.indexOf('prod') !== -1 ){
-        this.dBhost = 'prod';
-      }
-      if (this.window.location.pathname.indexOf('dev') !== -1 ){
-        this.dBhost = 'dev';
-      }
-    console.log("setting hhost is  5.15 " + this.dBhost);
     return this.host;                           // for time-line which has its own REST
     }
     getTAs(startDateString, endDateString){
@@ -92,7 +74,8 @@ export class GenEditService implements OnInit {
     }
     //////  Inserts a single record. Uses : params.tablename= string; params.colName=[]; params.colVal = []; 
     insert(dBParams){
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTinsertPOST.php?host=' + this.host;
+   //   const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTinsertPOST.php?host=' + this.host;
+      const url = this.urlBase + 'RESTinsertPOST.php';
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
        //   console.log("POST call", val);

@@ -351,7 +351,7 @@ export class TimeLineComponent implements OnInit {
     var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
-    this.genEditSvce.setPlatform('');
+    this.genEditSvce.setPlatform();
   /*  const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' 
         + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid + '&platform=' + this.platform;
     console.log('347 for Getting tA url is ' + url );
