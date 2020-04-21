@@ -453,45 +453,21 @@ export class TimeLineComponent implements OnInit {
   clear() {
     console.log('clear ' );
   }
-  editReason(s, colName) {                                              // used to edit Reason and Note datums
-      const seP = <SeditParams>{};                                          // define instance of SeditParams interface
-      seP.who = this.userid;
-      seP.whereColName = '';
-      seP.tableName = 'vacation3';
-      if (this.data2._data[this._id] ) {
-        this.seP.whereColVal = this.data2._data[this._id].vidx;
-      this.dB_PP.whereColName = ['vidx'];
-      }
-      this.seP.editColName = colName;
-      if (s.value) {                                                     // if comes from a 'select' widget
-        this.seP.editColVal = s.value;
-        this.dB_PP.editColVals = [ s.value];
-      }
-      if (s.target && s.target.value) {
-        this.seP.editColVal = s.target.value;
-        this.dB_PP.editColVals = [ s.target.value];
-      }
-      if (s === 1) {
-        this.seP.editColVal = '1';
-      }
-      if (colName=='note')
-        this.data2.update({id: this._id, note:  this.seP.editColVal});   
-        if (colName=='reason')
-        this.data2.update({id: this._id, reason:  this.seP.editColVal});               // update dateSet
-     // this.genEditSvce.update(this.seP);  
-      this.genEditSvce.genDB_POST(this.seP);                              // uses RESTupdatePOST.php
-      this.reasonEdited = true;                                         // has to be true to show Save Time Away button
-    }
 
       /*************  remove the tA from display working, needs dataBase part **************/
   remove() {
     this.data2.remove(this._id);                                         // remove LOCALLY
     this.showControls = false;                                          // turn off controls
-    this.seP.editColName = 'reasonIdx';                                 // reasonIdx is the DELETE signal column
-    this.seP.editColVal = '99';                                         // any smallInt > 0
-    this.seP.whereColName = 'vidx';
-    this.seP.whereColVal = document.getElementById('vidx').innerText; 
-    this.genEditSvce.update(this.seP);
+//    this.seP.editColName = 'reasonIdx';                  // reasonIdx is the DELETE signal column
+    this.dB_PP.editColNames = ['reasonIdx'];
+//    this.seP.editColVal = '99';                                         // any smallInt > 0
+    this.dB_PP.editColVals = ['99'];
+  //  this.seP.whereColName = 'vidx';
+    this.dB_PP.whereColName = ['vidx'];
+ //   this.seP.whereColVal = document.getElementById('vidx').innerText; 
+    this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
+   // this.genEditSvce.update(this.seP);
+    this.genEditSvce.genDB_POST(this.dB_PP);
    // this.doREST(this.seP);
   }
  
@@ -526,6 +502,9 @@ export class TimeLineComponent implements OnInit {
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];
       this.dB_PP.editColVals = [ event.target.value];
+    }
+    if (type =='reason'){
+
     }
     //this.genEditSvce.update(this.seP);                                  // do the dB edit.
     this.genEditSvce.genDB_POST(this.dB_PP);
@@ -565,7 +544,7 @@ export class TimeLineComponent implements OnInit {
     this.data2.update({id: this._id, style: 'color:blue'});
 
     this.data2._data[this._id].approved = 1;
-    this.editReason(1, 'approved');
+ //   this.editReason(1, 'approved');
   }
   setNewTimeAway2(){
     this.newTimeAway2 = true;
