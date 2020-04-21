@@ -89,6 +89,11 @@ export class TimeLineComponent implements OnInit {
     editColNames: [],
     editColVals: []
   }
+  SinsertPP: SinsertParams = {
+    tableName:'vacation3',
+    colName:[],
+    colVal:[]
+  }
   sEPP: SeditParams;
   nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
@@ -278,9 +283,14 @@ export class TimeLineComponent implements OnInit {
     params.colVal = [this.formG.value.dateFrom,  // colValues
       this.formG.value.dateTo, this.formG.value.reasonG,
       this.formG.value.noteG, this.userkey];
-      this.genEditSvce.insert(params);                                    //  insert into dB
+    //  this.genEditSvce.insert(params);                                    //  insert into dB
       this.newTimeAway2 = false;                                // turn off the controls
-  }
+      this.SinsertPP.colName= ['startDate', 'endDate' , 'reason', 'note', 'userid']; 
+      this.SinsertPP.colVal = [this.formG.value.dateFrom,  // colValues
+        this.formG.value.dateTo, this.formG.value.reasonG,
+        this.formG.value.noteG, this.userkey];
+        this.genEditSvce.insert(this.SinsertPP);    
+    }
   setIndex(n) {
     this.index = n;
     console.log('index is ' + this.index);
