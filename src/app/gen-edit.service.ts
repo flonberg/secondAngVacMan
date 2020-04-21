@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { WINDOW } from './window.provider';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
+//import { start } from 'repl';
 
 export interface SeditParams {
   tableName: string;
@@ -63,7 +64,19 @@ export class GenEditService   {
       + startDateString + '&end=' + endDateString + '&userid=' + this.userid + '&host=localhost';
       console.log('getTa url is ' + url);
       return this.http.get(url);
-    }  
+    } 
+    getPhysicsMonthlyDuties(startDateString, userid){
+      if (!this.urlBase){
+        this.setPlatform();
+      }
+      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
+          + startDateString + '&userid=' + userid;
+      const url2 = this.urlBase + 'getPhysicsDuties.php?dateSince=' + startDateString + '&userid=' + userid;
+      console.log("MonthView url is " + url);
+      console.log("MonthView url2 is " + url2);
+      return this.http.get(url2)
+      
+    } 
   genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;
   } 
