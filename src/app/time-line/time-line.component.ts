@@ -43,10 +43,10 @@ export class TimeLineComponent implements OnInit {
   platform = "dev";
 //  platform = "prod";
   dB_PostParams: dB_POSTparams
-  tlContainer: any;
+  tlContainer: any;                                     // the div for the timeLie
   timeline: any;
-  data2: any;
-  options: {};
+  data2: any;                                           // the dS for the tA data
+  options: {};                                          // options for timeLIne
   groups: any;
   groupsArray: any;
   contentArray: any;
@@ -94,7 +94,7 @@ export class TimeLineComponent implements OnInit {
     colName:[],
     colVal:[]
   }
-  sEPP: SeditParams;
+ // sEPP: SeditParams;
   nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
@@ -283,13 +283,9 @@ export class TimeLineComponent implements OnInit {
     params.colVal = [this.formG.value.dateFrom,  // colValues
       this.formG.value.dateTo, this.formG.value.reasonG,
       this.formG.value.noteG, this.userkey];
-    //  this.genEditSvce.insert(params);                                    //  insert into dB
+      this.genEditSvce.insert(params);                                    //  insert into dB
       this.newTimeAway2 = false;                                // turn off the controls
-      this.SinsertPP.colName= ['startDate', 'endDate' , 'reason', 'note', 'userid']; 
-      this.SinsertPP.colVal = [this.formG.value.dateFrom,  // colValues
-        this.formG.value.dateTo, this.formG.value.reasonG,
-        this.formG.value.noteG, this.userkey];
-        this.genEditSvce.insert(this.SinsertPP);    
+     
     }
   setIndex(n) {
     this.index = n;
@@ -460,11 +456,11 @@ export class TimeLineComponent implements OnInit {
   editReason(s, colName) {                                              // used to edit Reason and Note datums
       const seP = <SeditParams>{};                                          // define instance of SeditParams interface
       seP.who = this.userid;
-      seP.whereColName = 'vidx';
+      seP.whereColName = '';
       seP.tableName = 'vacation3';
       if (this.data2._data[this._id] ) {
         this.seP.whereColVal = this.data2._data[this._id].vidx;
-      
+      this.dB_PP.whereColName = ['vidx'];
       }
       this.seP.editColName = colName;
       if (s.value) {                                                     // if comes from a 'select' widget
@@ -482,7 +478,8 @@ export class TimeLineComponent implements OnInit {
         this.data2.update({id: this._id, note:  this.seP.editColVal});   
         if (colName=='reason')
         this.data2.update({id: this._id, reason:  this.seP.editColVal});               // update dateSet
-      this.genEditSvce.update(this.seP);                                // uses RESTupdatePOST.php
+     // this.genEditSvce.update(this.seP);  
+      this.genEditSvce.genDB_POST(this.seP);                              // uses RESTupdatePOST.php
       this.reasonEdited = true;                                         // has to be true to show Save Time Away button
     }
 
