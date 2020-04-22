@@ -262,49 +262,41 @@ export class TimeLineComponent implements OnInit {
         return {};
     }
   }
-  /*********     This is where the new tA is intered in the local and dB tables  **********************/
-  onSubmit() {
-    console.log("onSubmit is " + this.formG.status + "formG.value is " + this.formG.value );
-    const item = {
-      id: Object.keys(this.data2._data).length + 3,                 // incase the user has DELETED a tA before adding
-      start: this.formG.value.dateFrom + ' 00:00:00',
-      end: this.formG.value.dateTo + ' 00:00:00',
-      content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
-      group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
-      reason: this.formG.value.reasonG,
-      note: this.formG.value.noteG,
-    };
-    var tst = this.timeline.itemsData.getDataSet().add(item);      // add the new tA to local DataSet, tst is id added
-    console.log("laseItem is " + item + 'tst is ' + tst);
-    const params = <SinsertParams>{};
-    params.tableName = 'vacation3';
-    /**********  set up INSERT params as pair of 1-to-1 arrays of colNames -to- colVals  ******************/
-    params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
-    params.colVal = [this.formG.value.dateFrom,  // colValues
-      this.formG.value.dateTo, this.formG.value.reasonG,
-      this.formG.value.noteG, this.userkey];
 
-      this.SinsertPP.colVal = [this.formG.value.dateFrom,  // colValues
+  onSubmit() {
+    const item = {
+        id: Object.keys(this.data2._data).length + 3,                 // incase the user has DELETED a tA before adding
+        start: this.formG.value.dateFrom + ' 00:00:00',
+        end: this.formG.value.dateTo + ' 00:00:00',
+        content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
+        group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
+        reason: this.formG.value.reasonG,
+        note: this.formG.value.noteG,
+      };
+    var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSet
+        /*********     Add to dataBase  **********************/
+    const params = <SinsertParams>{};                                 // create instance of INSERT interface
+        params.tableName = 'vacation3';
+        params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
+        params.colVal = [this.formG.value.dateFrom,  // colValues
         this.formG.value.dateTo, this.formG.value.reasonG,
         this.formG.value.noteG, this.userkey];
-     //   this.genEditSvce.insert(params);                 //  insert into dB
-        this.genEditSvce.insert(this.SinsertPP);                 //  insert into dB
-      this.newTimeAway2 = false;                                // turn off the controls  
-    }
-  setIndex(n) {
-    this.index = n;
-    console.log('index is ' + this.index);
+    this.genEditSvce.insert(params);                                  //  insert into dB
+    this.newTimeAway2 = false;                                        // turn off the controls  
   }
-  get startDateGet(){
-    return this.form.get('startDate');
-  }
-  get endDateGet(){
-    return this.form.get('endDate');
-  }
-
-
+  /*
+  get startDateGet(){ return this.form.get('startDate');}
+  get endDateGet(){return this.form.get('endDate');}
+  */
   /************    specific update routine to update StartDate and EndDate of tA, when user drags a tA  ************/
   updateDB_StartEnd(sD: string, eD: string) {
+      const upDateParams = <dB_POSTparams>{
+        tableName:'vacation3',
+        whereColName:['vidx'],
+        whereColVal:[this.data2._data[this._id].vidx],
+        editColNames: ['startDate', 'endDate'],
+        editColVals: [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ]
+      };
       const dParams = {
       'action': 'edit',                                            // actions are 'edit', 'insert', 'delete'
       'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': this.data2._data[this._id].vidx,
@@ -312,7 +304,8 @@ export class TimeLineComponent implements OnInit {
       'editColVals': [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ]
     };
   // this.doREST(dParams);
-   this.genEditSvce.genDB_POST(dParams);
+   this.genEditSvce.genDB_POST(upDateParams);
+//   this.genEditSvce.genDB_POST(dParams);
   }
   doRESTX(dP) {
     const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
