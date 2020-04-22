@@ -1,16 +1,16 @@
 <div class = "tab">
   <nav  >
     <button 
-      class="button"
        *ngFor="let routeLink of routeLinks; let i = index;"
+       [ngClass]=" index == i ? 'button' : 'buttonSel' "
        [routerLink]="routeLink.link"
        routerLinkActive="tab-link-active"
        queryParamsHandling="merge"
        #rla="routerLinkActive"
-       (click)="tlc.setIndex(i)"
+       (click)="setIndex(i)"
         [routerLinkActiveOptions]="{exact: false}"
     >
-        {{routeLink.label }}
+        {{routeLink.label }} 
     </button>
   </nav>
 </div>

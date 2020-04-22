@@ -275,7 +275,7 @@ export class TimeLineComponent implements OnInit {
       };
     var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSet
         /*********     Add to dataBase  **********************/
-    const params = <SinsertParams>{};                                 // create instance of INSERT interface
+    const params = <SinsertParams>{};                                // create instance of interface
         params.tableName = 'vacation3';
         params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
         params.colVal = [this.formG.value.dateFrom,  // colValues
@@ -297,23 +297,9 @@ export class TimeLineComponent implements OnInit {
         editColNames: ['startDate', 'endDate'],
         editColVals: [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ]
       };
-      const dParams = {
-      'action': 'edit',                                            // actions are 'edit', 'insert', 'delete'
-      'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': this.data2._data[this._id].vidx,
-      'editColNames': ['startDate', 'endDate'],                    // editColNames and editColVals are one-to-one correspond
-      'editColVals': [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ]
-    };
-  // this.doREST(dParams);
    this.genEditSvce.genDB_POST(upDateParams);
-//   this.genEditSvce.genDB_POST(dParams);
   }
-  doRESTX(dP) {
-    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.platform;
-    this.http.post(url, JSON.stringify(dP)).subscribe(
-      (val) => {
-        console.log('POST call', val);
-      });
-  }
+
   formatDateYYYymmdd(d) {
     const date = new Date(d);
     const y = date.getFullYear();
@@ -500,13 +486,7 @@ export class TimeLineComponent implements OnInit {
       this.dB_PP.editColNames = ['note'];
       this.dB_PP.editColVals = [ event.target.value];
     }
-    if (type =='reason'){
-
-    }
-    //this.genEditSvce.update(this.seP);                                  // do the dB edit.
-    this.genEditSvce.genDB_POST(this.dB_PP);
-   // this.doRESTX(this.seP)
- 
+    this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
   }
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker

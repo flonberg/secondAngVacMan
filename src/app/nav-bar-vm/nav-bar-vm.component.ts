@@ -6,11 +6,17 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './nav-bar-vm.component.html',
   styleUrls: ['./nav-bar-vm.component.css']
 })
-export class NavBarVMComponent implements OnInit {
+export class NavBarVMComponent {
   routeLinks: any[];
   userid: String;
+  index: number;
+  button:string;
+  buttonSel: string;
   constructor(private tlc: TimeLineComponent) { 
     this.userid = tlc.userid;
+    this.button= "button ";
+    this.buttonSel = "buttonSel";
+    this.index = 0;
     this.routeLinks = [
       {
           label: 'Vacation Manager',
@@ -24,8 +30,9 @@ export class NavBarVMComponent implements OnInit {
       }
     ];
   }
-
-  ngOnInit() {
+  setIndex(n){
+    this.index = n;
   }
+
 
 }

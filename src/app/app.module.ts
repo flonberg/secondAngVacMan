@@ -18,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TimeLineComponent } from './time-line/time-line.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe, Location, CommonModule } from '@angular/common';
 import { NavBarVMComponent } from './nav-bar-vm/nav-bar-vm.component';
 
 import { MatTabsModule } from '@angular/material';
@@ -35,6 +35,7 @@ import { WINDOW_PROVIDERS } from './window.provider';
     TimeLineComponent,
     NavBarVMComponent,
     MonthViewComponent,
+
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,7 @@
   
   /* Style the buttons inside the tab */
   .button {
-    background-color: inherit;
+    background-color: rgb(230, 187, 187);
     float: left;
     border: none;
     outline: none;
@@ -13,6 +13,7 @@
     padding: 8px 10px;
     transition: 0.3s;
     font-size: 14px;
+    font-style:underline;
     border:solid;
     border-color:gray;
     border-top-left-radius: 15px;
@@ -23,13 +24,33 @@
  .button:hover {
     background-color: rgb(231, 154, 154);
   }
-  .button.active {
+  .buttonSel {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 8px 10px;
+    transition: 0.3s;
+    font-size: 14px;
     font-style:underline;
+    fontstyle:bold;
+    border:solid;
+    border-color:gray;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
   }
   
+  /* Change background color of buttons on hover */
+ .buttonSel:hover {
+    background-color: rgb(231, 154, 154);
+  }
+  
+
   /* Create an active/current tablink class */
  .button.active {
     background-color: rgb(97, 89, 89);
+    font-style:underline;
   }
   
   /* Style the tab content */
