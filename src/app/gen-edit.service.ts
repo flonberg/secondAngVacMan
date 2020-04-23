@@ -69,11 +69,7 @@ export class GenEditService   {
       if (!this.urlBase){
         this.setPlatform();
       }
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
-          + startDateString + '&userid=' + userid;
       const url2 = this.urlBase + 'getPhysicsDuties.php?dateSince=' + startDateString + '&userid=' + userid;
-      console.log("MonthView url is " + url);
-      console.log("MonthView url2 is " + url2);
       return this.http.get(url2)
       
     } 

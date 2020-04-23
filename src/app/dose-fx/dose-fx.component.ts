@@ -105,6 +105,7 @@ export class DoseFxComponent implements OnInit {
       });   
    
   }
+  /*
   editVal($event, colName){
     this.editParamSet.editParams[0].colName = colName;
   
@@ -124,4 +125,5 @@ export class DoseFxComponent implements OnInit {
     } 
     this.DoseFxSvce.update(this.editParamSet)                             // do the update. 
   }
+  */
 }
