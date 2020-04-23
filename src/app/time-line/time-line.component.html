@@ -2,9 +2,7 @@
 <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
 <div >
     <div id="container">  
-        <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)">
-        </div>
-  
+        <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)"> </div>
     </div>     
             <!------        This is the form used for adding new tAs ---------------> 
     <div *ngIf = "!newTimeAway2 " >

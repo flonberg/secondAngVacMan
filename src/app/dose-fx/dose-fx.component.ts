@@ -105,25 +105,5 @@ export class DoseFxComponent implements OnInit {
       });   
    
   }
-  /*
-  editVal($event, colName){
-    this.editParamSet.editParams[0].colName = colName;
-  
-    if ( $event.target )                                  // for 'input' fields
-      this.editParamSet.editParams[0].editVal = $event.target.value;
-    if ( $event.value )                                   // for 'select' fields
-      this.editParamSet.editParams[0].editVal = $event.value;
-    if (colName == 'fxDose' && +this.form.get('Dose').value > 0 ) {       // if enteredVal is fxDose and Dose > 0 set numFx=Dose/fxDose
-      const numFxE = +this.form.get('Dose').value/ $event.target.value;   // calulate Dose/fxDose
-      this.form.get('numFx').setValue(numFxE);                            // set value of numFx in form
-      const pushVal: editParam = {                                        // create a editParam to push onto editParamSet
-        colName: 'numFx',
-        editVal: String(numFxE)
-      }
-      this.editParamSet.editParams.push(pushVal);                         // push 
-
-    } 
-    this.DoseFxSvce.update(this.editParamSet)                             // do the update. 
-  }
-  */
+ 
 }

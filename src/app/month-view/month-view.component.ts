@@ -82,18 +82,19 @@ export class MonthViewComponent implements OnInit {
     this.idxForEdit = this.physicsMonthlyDuties[d][n]['idx'];       // used to update the dB
     document.getElementById('myModal').style.display = "block";     // show the modal 
   }
+  public openNewTab() {
+    window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=3', '_blank');
+  }
   isUserDutyTaker(){
     var r = false;
     Object.keys(this.physicsMonthlyDuties['users']).forEach(key => {
       if (key === this.loggedInUserKey) {
         console.log("Found.");
         r = true;
-      }
-   
-  });
-  return r;
-  
-  }
+        }
+      });
+    return r;
+    } 
   confirmDuty(){
     const editParams = {                                            // build dS to user with genEditSvce.update
       'tableName': 'PhysicsMonthlyDuty',

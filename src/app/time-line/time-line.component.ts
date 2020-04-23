@@ -157,11 +157,11 @@ export class TimeLineComponent implements OnInit {
  
   }
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
-  clicked(ev) {// this responds to ANY click in the div containing the calendar
-    
+  clicked(ev) {// this responds to ANY click-RELEASE in the div containing the calendar
+    console.log ("clicked" + ev);
        if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
-           this.createEditForm();
+           this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
        if (!this.data2._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
           }
@@ -199,17 +199,19 @@ export class TimeLineComponent implements OnInit {
            dParams.editColNames = ['reasonIdx'];
            dParams.editColVals = ['99'];
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
-         } else if (   this.data2._data[this._id] ){             // Ed/
-            var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);
-            var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);
-            dParams.editColNames = ['startDate','endDate'];
+       } /************  if 'remove' is NOT found the startDate and endDate are edited on page and in dB */
+         else if (   this.data2._data[this._id] ){             // Ed/
+            var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);    // format the date for use in dataBase
+            var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);        //    "
+          //  dParams.editColNames = ['startDate','endDate'];
             this.dB_PP.editColNames = ['startDate','endDate'];      
             this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
-            dParams.editColVals = [startDateEdit,endDateEdit];
+           // dParams.editColVals = [startDateEdit,endDateEdit];
             this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
      }
-  createForm() {                                      // create the form for New tA
+     /*********  create the editTa widgets. Run by the constructor  ***********/
+  createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
     this.invalidFromDate = false;
     this.formG = this.fb.group({                          // fb is
@@ -220,7 +222,7 @@ export class TimeLineComponent implements OnInit {
     }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
     );
   }
-////////   This is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
+////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
     console.log('147');
     this.reasonSelect = this.data2._data[this._id].reason.toString(); // set selected
@@ -370,8 +372,7 @@ export class TimeLineComponent implements OnInit {
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet
-                                                                                        // store the _id in the DOM for use by Angular to do edits ...
+          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
         });
       function logEvent(event, properties) {                                            // used to capture event if user clicke 'x' to delete tA
         const log = document.getElementById('log');                                     // so if 'remove' is found  
