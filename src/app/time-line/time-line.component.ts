@@ -342,12 +342,6 @@ export class TimeLineComponent implements OnInit {
     var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
-   // this.genEditSvce.setPlatform();
-  /*  const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getVacsBB.php?start=' 
-        + this.startDateString + '&end=' + this.endDateString + '&userid=' + this.userid + '&platform=' + this.platform;
-    console.log('347 for Getting tA url is ' + url );
-*/
-
       this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {
         if (this.index === 0) {
@@ -357,6 +351,7 @@ export class TimeLineComponent implements OnInit {
         }
         console.log( 'data2   365');
                                                         // store data in this.data2
+        this.removeBads();                                                
         this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);
         let i = 0;                                           // make a dataStruct for the groups
@@ -405,31 +400,34 @@ export class TimeLineComponent implements OnInit {
 //      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       end: endDateShown,
 //      end: new Date(new Date().getFullYear(), new Date().getMonth()+ 2, 1),
-
     };
   }                                                           // end of getTimelineData2
-  setGroups(s) {                                                           // make a list of all user forWhich vacs have been found
+  removeBads(){
+    for (let key in this.data2._data){
+      if (this.data2._data[key].start > this.data2._data[key].end){
+        delete this.data2._data[key];
+      }
+    }
+  }
+  /**********  make a dataStructure to hold all names of tA holders  */
+  setGroups(s) {                                                           // s is the timeline dataSet
     this.nameList = new Array();
     this.groupsArray = new Array();
-    for (let i = 0; i < s.length; i++) {                                        // step thru the data
-      if (this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already there
-        this.nameList.push( s._data[i].content);
-        this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };
-        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };
+    for (let i = 0; i < s.length; i++) {                                   // step thru the data
+      if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
+        this.nameList.push( s._data[i].content);                           // put it in the dS 
+        this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };// make dS of lastName ; userkey
+        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };// dS userid : userkey
         this.contentArray[s._data[i].userkey] = s._data[i].content;         // used to get 'content' param to add to dataSet.
-      }                     // add name
-    }
-    console.log("timeline 422");
+      }                         }
     this.nameList.sort();                                                 // alphabetize the nameList
-    const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId
-  //  const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
-    
-    if (this.useridToUserkeys[index])
+    const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId    
+    if (this.useridToUserkeys[index])                               // Someone may use page who is NOT a goAwayer. 
       this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
   }
-  assignGroups() {                                                                       // put each tA in proper group.
+  assignGroups() {                                                     // put each tA in proper group.
     for (const property in this.data2._data ) {
-      if (this.data2._data.hasOwnProperty(property)) {
+      if (this.data2._data.hasOwnProperty(property)) {                // 'hasOwnProperty' is typescript to see it a p is in arry
         this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content);  // set the correct groupNumber
         if (this.data2._data[property].approved === 1) {
           this.data2._data[property].style = 'color:green';
@@ -437,25 +435,15 @@ export class TimeLineComponent implements OnInit {
       }
     }
   }
-  clear() {
-    console.log('clear ' );
-  }
-
       /*************  remove the tA from display working, needs dataBase part **************/
   remove() {
     this.data2.remove(this._id);                                         // remove LOCALLY
-    this.showControls = false;                                          // turn off controls
-//    this.seP.editColName = 'reasonIdx';                  // reasonIdx is the DELETE signal column
-    this.dB_PP.editColNames = ['reasonIdx'];
-//    this.seP.editColVal = '99';                                         // any smallInt > 0
-    this.dB_PP.editColVals = ['99'];
-  //  this.seP.whereColName = 'vidx';
+    this.showControls = false;                                          // turn off controls             
+    this.dB_PP.editColNames = ['reasonIdx'];                            // the col which holds the DELETE sign
+    this.dB_PP.editColVals = ['99'];                                    // the DELETE code
     this.dB_PP.whereColName = ['vidx'];
- //   this.seP.whereColVal = document.getElementById('vidx').innerText; 
-    this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
-   // this.genEditSvce.update(this.seP);
-    this.genEditSvce.genDB_POST(this.dB_PP);
-   // this.doREST(this.seP);
+    this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]  // the DOM element link to the timeline
+    this.genEditSvce.genDB_POST(this.dB_PP);                            // do the dB operation
   }
  
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
