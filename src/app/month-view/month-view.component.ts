@@ -72,23 +72,27 @@ export class MonthViewComponent implements OnInit {
     else
       return "";  
   }
-  takeAduty(n, d){
+  takeAduty(nDutyId, dDayNum){
     const v = this.isUserDutyTaker();
     if (v === false){
+      window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=66582 , _blank');
+   //   this.openNewTab();
       return;
     }
-    const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == n);
-    this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + d;         // phrase for the Modal
-    this.idxForEdit = this.physicsMonthlyDuties[d][n]['idx'];       // used to update the dB
+    const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
+    this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + dDayNum;         // phrase for the Modal
+    this.idxForEdit = this.physicsMonthlyDuties[dDayNum][nDutyId]['idx'];       // used to update the dB
     document.getElementById('myModal').style.display = "block";     // show the modal 
   }
-  public openNewTab() {
-    window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=3', '_blank');
-  }
+//  public openNewTab() {
+  //  window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=3' + this.physicsMonthlyDuties , '_blank');
+ // }
   isUserDutyTaker(){
     var r = false;
+    console.log('loggedInUserKey is ' + this.loggedInUserKey);
     Object.keys(this.physicsMonthlyDuties['users']).forEach(key => {
-      if (key === this.loggedInUserKey) {
+      console.log('key is ' + key );
+      if (+key === this.loggedInUserKey) {
         console.log("Found.");
         r = true;
         }
@@ -201,9 +205,8 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
         }
     }
     /*************      get the data  ************************/
-  //  this.getPhysicsMonthlyDuties();
-  //this.genEditSvce.genGetPhysicsMonthlyDuties(this.startDateForGettingDataString, this.qParams['userid']  ).
-  this.genEditSvce.getPhysicsMonthlyDuties(this.startDateForGettingDataString, this.qParams['userid']  ).
+
+    this.genEditSvce.getPhysicsMonthlyDuties(this.startDateForGettingDataString, this.qParams['userid']  ).
           subscribe(
             (val) => {
                 this.setPhysicsMonthlyDuties(val);
@@ -215,48 +218,12 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
     return Math.ceil(diff / (1000 * 3600 * 24)); 
   }
-/*
-  getPhysicsMonthlyDuties(){
-    const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
-    + this.startDateForGettingDataString + '&userid=' + this.qParams['userid'];
-    console.log("MonthView url is " + url);
-    this.http.get(url).subscribe(
-      (val) => {
-        this.setPhysicsMonthlyDuties(val);
-      }
-    )
-  }
-  */
+
   setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
     this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
     this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
-    console.log('loggedInUserkey is ' + this.loggedInUserKey)
-    /*
-    for (var prop in this.physicsMonthlyDuties) {
-      const p1  = <any>this.physicsMonthlyDuties[prop]
-      console.log("prop " + this.physicsMonthlyDuties[prop]);
-      for (var propA in p1 ){
-        console.log(" propA is " + propA );
-        const p2 = <any>propA;
-        for (var propB in p2){
-          console.log("propB is " + propB);
-
-        }
-      }
-      break;
-    } 
-    for (var prop2 in this.physicsMonthlyDuties[prop]) {
-      console.log("prop2 " + this.physicsMonthlyDuties[prop2]);
-      break;
-    } 
-    for (var prop3 in this.physicsMonthlyDuties[prop][prop2]) {
-      console.log("prop3 " + prop3);
-     // break;
-    } 
-    */
-    //const n = this.physicsMonthlyDuties[prop][prop2]['lNN'];
-    //console.log("n is " + n);
+    console.log('226 loggedInUserkey is ' + this.loggedInUserKey)
   }
 }
 

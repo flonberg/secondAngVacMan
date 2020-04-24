@@ -42,7 +42,7 @@ export class GenEditService   {
     this.userid = s;
   }
    
-   setPlatform(){             // set the dB host for the localhost version      
+  setPlatform(){             // set the dB host for the localhost version      
   //  this.angularRoute = this.loc.path();    
     const wlr = window.location.href;       
     console.log("window.location.herf is " + window.location.href);
@@ -56,7 +56,7 @@ export class GenEditService   {
 
     return this.host;                           // for time-line which has its own REST
     }
-    getTAs(startDateString, endDateString){
+  getTAs(startDateString, endDateString){
       if (!this.urlBase){
         this.setPlatform();
       }
@@ -65,7 +65,7 @@ export class GenEditService   {
       console.log('getTa url is ' + url);
       return this.http.get(url);
     } 
-    getPhysicsMonthlyDuties(startDateString, userid){
+  getPhysicsMonthlyDuties(startDateString, userid){
       if (!this.urlBase){
         this.setPlatform();
       }
@@ -77,7 +77,7 @@ export class GenEditService   {
     const url = 'http:/' + hostName + scriptName;
   } 
    //////  does update of SINGLE column. Params in POST. Params are tableName, editColName, editColVal, whereColName, whereColVal  \\\\\
-    update(dBParams){
+  update(dBParams){
       const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTupdatePOST.php?host='+ this.host;
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
@@ -85,8 +85,7 @@ export class GenEditService   {
         });
     }
     //////  Inserts a single record. Uses : params.tablename= string; params.colName=[]; params.colVal = []; 
-    insert(dBParams){
-   //   const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTinsertPOST.php?host=' + this.host;
+  insert(dBParams){
       const url = this.urlBase + 'RESTinsertPOST.php';
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
@@ -94,8 +93,7 @@ export class GenEditService   {
         });
     }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; 
-    genDB_POST(dP){
-   //   const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/RESTgenDB_POST.php?platform=' + this.host;
+  genDB_POST(dP){
       if (!this.urlBase){
         this.setPlatform();
       }
@@ -106,11 +104,7 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
-    genGetPhysicsMonthlyDuties(startDateForGettingDataString, userid){
-      const url = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/getPhysicsDuties.php?dateSince=' 
-      + startDateForGettingDataString + '&userid=' + userid +'&platform=' + this.host;
-      return this.http.get(url);
-    }
+ 
     ///////  test of get from ION  \\\\\\\\\\
     IONgetterCustom(){
       const url = "https://ion.mgh.harvard.edu/cgi-bin/imrtqa/TESTgetter.php";

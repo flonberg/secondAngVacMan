@@ -421,8 +421,8 @@ export class TimeLineComponent implements OnInit {
     }
     this.nameList.sort();                                                 // alphabetize the nameList
     const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId
-    const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
-    this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
+  //  const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
+    //this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
   }
   assignGroups() {                                                                       // put each tA in proper group.
     for (const property in this.data2._data ) {
