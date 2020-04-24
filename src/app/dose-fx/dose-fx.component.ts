@@ -87,6 +87,7 @@ export class DoseFxComponent implements OnInit {
     'beamType': new FormControl(this.selectedBeamType),
     'generalConsideration': new FormControl(''),
   });
+  editVal(s,n){}
   ngOnInit() {
     this.route.paramMap.subscribe(params => {                             // get the data from the url GET line
         this.editParamSet.docidx = +params.get('docidx'); 
@@ -105,5 +106,7 @@ export class DoseFxComponent implements OnInit {
       });   
    
   }
+
+
  
 }

@@ -72,11 +72,11 @@ export class MonthViewComponent implements OnInit {
     else
       return "";  
   }
+
   takeAduty(nDutyId, dDayNum){
     const v = this.isUserDutyTaker();
     if (v === false){
       window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=66582 , _blank');
-   //   this.openNewTab();
       return;
     }
     const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
@@ -84,14 +84,14 @@ export class MonthViewComponent implements OnInit {
     this.idxForEdit = this.physicsMonthlyDuties[dDayNum][nDutyId]['idx'];       // used to update the dB
     document.getElementById('myModal').style.display = "block";     // show the modal 
   }
-//  public openNewTab() {
-  //  window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=3' + this.physicsMonthlyDuties , '_blank');
- // }
+
   isUserDutyTaker(){
     var r = false;
     console.log('loggedInUserKey is ' + this.loggedInUserKey);
     Object.keys(this.physicsMonthlyDuties['users']).forEach(key => {
-      if (+key === this.loggedInUserKey) {
+      console.log('key is ' + key + 'loggedInUserKey is ' + this.loggedInUserKey)
+      if (+key === +this.loggedInUserKey) {
+        console.log(" r is true");
         r = true;
         }
       });
