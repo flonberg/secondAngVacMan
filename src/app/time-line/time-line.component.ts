@@ -419,10 +419,13 @@ export class TimeLineComponent implements OnInit {
         this.contentArray[s._data[i].userkey] = s._data[i].content;         // used to get 'content' param to add to dataSet.
       }                     // add name
     }
+    console.log("timeline 422");
     this.nameList.sort();                                                 // alphabetize the nameList
     const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId
   //  const uKey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
-    //this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
+    
+    if (this.useridToUserkeys[index])
+      this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
   }
   assignGroups() {                                                                       // put each tA in proper group.
     for (const property in this.data2._data ) {

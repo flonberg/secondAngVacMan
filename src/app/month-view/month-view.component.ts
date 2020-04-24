@@ -91,9 +91,7 @@ export class MonthViewComponent implements OnInit {
     var r = false;
     console.log('loggedInUserKey is ' + this.loggedInUserKey);
     Object.keys(this.physicsMonthlyDuties['users']).forEach(key => {
-      console.log('key is ' + key );
       if (+key === this.loggedInUserKey) {
-        console.log("Found.");
         r = true;
         }
       });
