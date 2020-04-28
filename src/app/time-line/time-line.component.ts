@@ -117,6 +117,7 @@ export class TimeLineComponent implements OnInit {
   invalidFromDate: boolean;
   formValidation: boolean;
   newTimeAway2: boolean;
+  notice: any;
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
     this.redraw = true;
@@ -152,16 +153,26 @@ export class TimeLineComponent implements OnInit {
      console.log(' this.userit ' + this.userid);
       this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
-      this.getNotice(this.seP.who);
+     
+      const getParams = <dB_GETparams>{
+        tableName:'notice',
+        whereColName:['UserId'],
+        whereColVal:[ this.seP.who],
+        getColName:['vacMan', ]
+      };
+       this.genEditSvce.genDB_GET(getParams).subscribe( val=>{
+         this.notice = val;
+         console.log(" 165  notice is " + this.notice);
+       });
     });
 
   }
   getNotice(UserId){
       const getParams = <dB_GETparams>{
-        tableName:'mailList',
+        tableName:'notice',
         whereColName:['UserId'],
         whereColVal:[UserId],
-        getColName:['vacMan']
+        getColName:['vacMan', ]
       };
    this.genEditSvce.genDB_GET(getParams);
   }

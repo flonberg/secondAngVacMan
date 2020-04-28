@@ -122,10 +122,7 @@ export class GenEditService   {
       }
       const url2 = this.urlBase + 'genGETterPOST.php';
       console.log("genBDPosrt url 2is " + url2);
-      this.http.post(url2, JSON.stringify(dP)).subscribe(
-        (val) => {
-       //   console.log('POST call', val);
-        });
+      return this.http.post(url2, JSON.stringify(dP));
     }
     ///////  test of get from ION  \\\\\\\\\\
     IONgetterCustom(){
