@@ -1,5 +1,5 @@
 import { editParam } from './../dose-fx/dose-fx.component';
-import { GenEditService, SinsertParams } from './../gen-edit.service';
+import { GenEditService, SinsertParams, dB_GETparams } from './../gen-edit.service';
 import { SeditParams, dB_POSTparams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -150,11 +150,20 @@ export class TimeLineComponent implements OnInit {
       this.qP = queryParams;
       this.setQueryParams(queryParams);
      console.log(' this.userit ' + this.userid);
-        this.seP.who = this.userid;
-        this.getTimelineData2();                                      // get the data from REST database call.
+      this.seP.who = this.userid;
+      this.getTimelineData2();                                      // get the data from REST database call.
+      this.getNotice(this.seP.who);
     });
-                    // set the table name
- 
+
+  }
+  getNotice(UserId){
+      const getParams = <dB_GETparams>{
+        tableName:'mailList',
+        whereColName:['UserId'],
+        whereColVal:[UserId],
+        getColName:['vacMan']
+      };
+   this.genEditSvce.genDB_GET(getParams);
   }
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) {// this responds to ANY click-RELEASE in the div containing the calendar
@@ -162,7 +171,8 @@ export class TimeLineComponent implements OnInit {
        if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
            this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
-       if (!this.data2._data[this._id]) {                                                        // click was NOT in a tA box;
+       /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
+           if (!this.data2._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
           }
         this._vidx = this.data2._data[this._id].vidx;                                           // store the vidx for editing
@@ -344,7 +354,7 @@ export class TimeLineComponent implements OnInit {
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
       this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {
-        if (this.index === 0) {
+        if (this.index === 0) {                                           //  ??? this is always 0 
           this.data2 = new vis.DataSet(val);
          } else {
           this.data2 = Array();
@@ -445,7 +455,6 @@ export class TimeLineComponent implements OnInit {
     this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]  // the DOM element link to the timeline
     this.genEditSvce.genDB_POST(this.dB_PP);                            // do the dB operation
   }
- 
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
    console.log( 'editGen ' + this.data2._id);

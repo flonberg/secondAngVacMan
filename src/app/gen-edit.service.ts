@@ -14,6 +14,13 @@ export interface SeditParams {
   newVal: string;
   who: String;
 }
+export interface dB_GETparams {
+  tableName: string,
+  getColName: string[],
+  whereColName: string[],
+  whereColVal: string[],
+}
+
 export interface dB_POSTparams {
   tableName: string,
   whereColName: string[],
@@ -92,7 +99,9 @@ export class GenEditService   {
        //   console.log("POST call", val);
         });
     }
-    /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; 
+    /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
+      ////// whereColName = [];  whereColVal = [] \\\\\
+    /////  Use for EDITing  \\\\\\\\\\\
   genDB_POST(dP){
       if (!this.urlBase){
         this.setPlatform();
@@ -104,7 +113,20 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
+   /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\
  
+    /////  Use for GETting  \\\\\\\\\\\
+    genDB_GET(dP){
+      if (!this.urlBase){
+        this.setPlatform();
+      }
+      const url2 = this.urlBase + 'genGETterPOST.php';
+      console.log("genBDPosrt url 2is " + url2);
+      this.http.post(url2, JSON.stringify(dP)).subscribe(
+        (val) => {
+       //   console.log('POST call', val);
+        });
+    }
     ///////  test of get from ION  \\\\\\\\\\
     IONgetterCustom(){
       const url = "https://ion.mgh.harvard.edu/cgi-bin/imrtqa/TESTgetter.php";
