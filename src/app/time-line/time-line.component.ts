@@ -150,22 +150,27 @@ export class TimeLineComponent implements OnInit {
     .subscribe(queryParams => {                                     // get the queryParams as Observable
       this.qP = queryParams;
       this.setQueryParams(queryParams);
-     console.log(' this.userit ' + this.userid);
       this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
-     
-      const getParams = <dB_GETparams>{
-        tableName:'notice',
-        whereColName:['UserId'],
-        whereColVal:[ this.seP.who],
-        getColName:['vacMan', ]
-      };
-       this.genEditSvce.genDB_GET(getParams).subscribe( val=>{
-         this.notice = val;
-         console.log(" 165  notice is " + this.notice);
-       });
+      this.checkIfNoticeNeeded();
     });
-
+  }
+  checkIfNoticeNeeded(){                                             // The NoticeModal is used to inform of changes
+    const getParams = <dB_GETparams>{                               // set the parameters for the genDB_GET interface
+      tableName:'notice',
+      whereColName:['UserId'],
+      whereColVal:[ this.seP.who],
+      getColName:['vacMan', ]
+      };
+    this.genEditSvce.genDB_GET(getParams).subscribe( val=>{         // get the datum from the notice table
+       this.notice = val;                                           // save the resule
+       if (!this.notice || this.notice[0]['vacMan']== 0){           // it NOT FOUND or 0
+        document.getElementById('noticeModal').style.display = "block";     // show the modal 
+       }
+     });
+  }
+  closeModal(){
+    document.getElementById('noticeModal').style.display = "none"; 
   }
   getNotice(UserId){
       const getParams = <dB_GETparams>{

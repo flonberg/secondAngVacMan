@@ -9,7 +9,17 @@
         <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> As part of Whiteboard code standardization, this is a new version of the Vacation Manager. Scroll and zoom is implemented. You can also 
         edit you Time Away by dragging it. 
     </div>
- 
+    <div id="noticeModal" class="modal">
+            <div class="modal-content">
+              <button mat-raised-button   > I don't need to see this again.  </button>
+              <span class="close" (click) = "closeModal()">&times;</span>
+              <p> This new page is part of upgrade of Whiteboard to current techonolgy.</p>
+                <p> You can change you timeAway by dragging it.
+                  The 'x' will delete the timeAway.
+              </p>
+            </div>
+          
+    </div>
 
 <!--         New Time Away Section   -->
     <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
