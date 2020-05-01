@@ -152,14 +152,14 @@ export class TimeLineComponent implements OnInit {
       this.setQueryParams(queryParams);
       this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
-      this.checkIfNoticeNeeded();
+      this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
   }
   checkIfNoticeNeeded(){                                             // The NoticeModal is used to inform of changes
     const getParams = <dB_GETparams>{                               // set the parameters for the genDB_GET interface
       tableName:'notice',
       whereColName:['UserId'],
-      whereColVal:[ this.seP.who],
+      whereColVal:[ this.seP.who],                                  // the UserId of the loggedInUser
       getColName:['vacMan', ]
       };
     this.genEditSvce.genDB_GET(getParams).subscribe( val=>{         // get the datum from the notice table
@@ -171,6 +171,19 @@ export class TimeLineComponent implements OnInit {
   }
   closeModal(){
     document.getElementById('noticeModal').style.display = "none"; 
+  }
+  cancelNotice(){                                                   // 
+    console.log('cancel Notice');
+    const gP = <dB_POSTparams>{
+      tableName: 'notice',
+      whereColName: ['UserId'],
+      whereColVal: [this.userid],
+      editColNames: ['vacMan'],
+      editColVals: ['1'],
+      insert: true
+    }
+    this.genEditSvce.genDB_POST(gP);
+    this.closeModal();
   }
   getNotice(UserId){
       const getParams = <dB_GETparams>{
@@ -260,7 +273,7 @@ export class TimeLineComponent implements OnInit {
       goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDate, Validators.required ],
       dateFromEdit: [fromDate, Validators.required ],
-      reasonGEdit: [''],
+      reasonGEdit: [this.reasonSelect],
       noteGEdit: [ this.data2._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );

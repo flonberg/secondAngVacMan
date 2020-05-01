@@ -26,7 +26,8 @@ export interface dB_POSTparams {
   whereColName: string[],
   whereColVal: string[],
   editColNames: string[],
-  editColVals: string[]
+  editColVals: string[],
+  insert?: boolean                                      // INSERT edited ROW if NOT found
 }
 export interface SinsertParams {
   tableName: string;

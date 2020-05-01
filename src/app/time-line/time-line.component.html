@@ -6,19 +6,16 @@
     </div>     
             <!------        This is the form used for adding new tAs ---------------> 
     <div *ngIf = "!newTimeAway2 " >
-        <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> As part of Whiteboard code standardization, this is a new version of the Vacation Manager. Scroll and zoom is implemented. You can also 
-        edit you Time Away by dragging it. 
+        <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
     </div>
     <div id="noticeModal" class="modal">
             <div class="modal-content">
-              <button mat-raised-button   > I don't need to see this again.  </button>
-              <span class="close" (click) = "closeModal()">&times;</span>
-              <p> This new page is part of upgrade of Whiteboard to current techonolgy.</p>
-                <p> You can change you timeAway by dragging it.
-                  The 'x' will delete the timeAway.
-              </p>
+                <span class="close" (click) = "closeModal()">&times;</span>
+                <p> This new page is part of upgrade of Whiteboard to current techonolgy.</p>
+                <p> You can change you timeAway by dragging it. </p>
+                <p> The 'x' will delete the timeAway. </p>
+                <button mat-raised-button  (click)='cancelNotice()' > I don't need to see this again.  </button>
             </div>
-          
     </div>
 
 <!--         New Time Away Section   -->
@@ -79,11 +76,10 @@
                      formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>   
-                   
             <mat-form-field *ngIf = "!_readonly">
                 <mat-label>Reason</mat-label>
                     <mat-select [(ngModel)]="reasonSelect" (selectionChange)="editGen('reason', $event)"
-                    [formControl] = "reasonFC"  id='reasonId'>
+                    [formControl] = "reasonFC" id='reasonId'>
                             <mat-option selected value="0">Personal Vacation</mat-option>
                             <mat-option  value="1">Other</mat-option>
                             <mat-option   value="2">Meeting</mat-option>  
