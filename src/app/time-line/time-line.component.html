@@ -42,8 +42,10 @@
                 <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize"  cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
                 </textarea>
         </mat-form-field > 
-        <button mat-raised-button [disabled]="!formValidation" title="Valid Start and End dates as well as Reason required"  >Submit New Time Away</button>
-            <!-- <button type="submit">Submit</button> -->
+        <!-- type='submit' is the default, must specify another type to avoid submitting  -->
+        <button mat-raised-button [disabled]="!formValidation" 
+            title="Valid Start and End dates as well as Reason required"  >Submit New Time-Away</button>
+       
 
         <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
             class="alert alert-danger">

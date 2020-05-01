@@ -306,7 +306,7 @@ export class TimeLineComponent implements OnInit {
 
   onSubmit() {
     const item = {
-        id: Object.keys(this.data2._data).length + 3,                 // incase the user has DELETED a tA before adding
+        id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
         start: this.formG.value.dateFrom + ' 00:00:00',
         end: this.formG.value.dateTo + ' 00:00:00',
         content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
