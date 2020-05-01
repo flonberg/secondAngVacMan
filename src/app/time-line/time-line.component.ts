@@ -138,7 +138,7 @@ export class TimeLineComponent implements OnInit {
       'note': this.notesFC = new FormControl("-"),
     }   )
     this.cutOffDate = new Date('2019-02-01');
-  //  this.createForm();
+    this.createForm();
 
     this.formValidation = false;
     this.newTimeAway2 = false;
@@ -249,7 +249,7 @@ export class TimeLineComponent implements OnInit {
             this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
      }
-     /*********  create the editTa widgets. Run by the constructor  ***********/
+     /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
     this.invalidFromDate = false;
@@ -273,7 +273,7 @@ export class TimeLineComponent implements OnInit {
       goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDate, Validators.required ],
       dateFromEdit: [fromDate, Validators.required ],
-      reasonGEdit: [this.reasonSelect],
+      reasonGEdit: [''],
       noteGEdit: [ this.data2._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );
