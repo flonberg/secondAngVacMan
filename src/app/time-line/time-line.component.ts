@@ -138,7 +138,7 @@ export class TimeLineComponent implements OnInit {
       'note': this.notesFC = new FormControl("-"),
     }   )
     this.cutOffDate = new Date('2019-02-01');
-    this.createForm();
+  //  this.createForm();
 
     this.formValidation = false;
     this.newTimeAway2 = false;
