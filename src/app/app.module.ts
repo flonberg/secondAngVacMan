@@ -25,6 +25,7 @@ import { MatTabsModule } from '@angular/material';
 import { MonthViewComponent } from './month-view/month-view.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { WINDOW_PROVIDERS } from './window.provider';
+import { NoticeComponent } from './notice/notice.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -35,6 +36,7 @@ import { WINDOW_PROVIDERS } from './window.provider';
     TimeLineComponent,
     NavBarVMComponent,
     MonthViewComponent,
+    NoticeComponent,
 
   ],
   imports: [

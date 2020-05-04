@@ -77,12 +77,11 @@
                      formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>   
-    
             <mat-form-field *ngIf = "!_readonly">
                 <mat-label>Reason</mat-label>
                     <mat-select [(value)]='reasonSelect' (selectionChange)="editGen('reason', $event)"
                     id='reasonId'>
-                            <mat-option selected value="0">Personal Vacation</mat-option>
+                            <mat-option  value="0">Personal Vacation</mat-option>
                             <mat-option  value="1">Other</mat-option>
                             <mat-option   value="2">Meeting</mat-option>  
                     </mat-select>

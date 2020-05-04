@@ -63,7 +63,7 @@ export class TimeLineComponent implements OnInit {
   notesFC: FormControl;
   dateFrom: FormControl;
   goAwayerName: FormControl;
-  reasonStrings: String[];
+ // reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
   _readonly: boolean;
@@ -73,7 +73,7 @@ export class TimeLineComponent implements OnInit {
   drawControls = true;
   drawEditControls = false;
   isApprover: boolean;
-  reasonSelect = '';
+  reasonSelect = '';                                  // the reason from dataBase
   newTimeAwayBool = false;
   saveTimeAwayBool = false;
   newTAparams: newTAparams = {
@@ -269,7 +269,7 @@ export class TimeLineComponent implements OnInit {
     this.invalidFromDate = false;
     var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
     var fromDate = new Date(this.data2._data[this._id].end).toISOString().slice(0,10);
-    this.formEdit = this.fb.group({                          // fb is
+    this.formEdit = this.fb.group({                          // fb ison
       goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDate, Validators.required ],
       dateFromEdit: [fromDate, Validators.required ],
@@ -303,7 +303,6 @@ export class TimeLineComponent implements OnInit {
         return {};
     }
   }
-
   onSubmit() {
     const item = {
         id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
