@@ -8,6 +8,7 @@
     <div *ngIf = "!newTimeAway2 " >
         <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
     </div>
+    <app-notice [name] = 'this.userid'></app-notice>
     <div id="noticeModal" class="modal">
             <div class="modal-content">
                 <span class="close" (click) = "closeModal()">&times;</span>

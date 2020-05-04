@@ -165,7 +165,7 @@ export class TimeLineComponent implements OnInit {
     this.genEditSvce.genDB_GET(getParams).subscribe( val=>{         // get the datum from the notice table
        this.notice = val;                                           // save the resule
        if (!this.notice || this.notice[0]['vacMan']== 0){           // it NOT FOUND or 0
-        document.getElementById('noticeModal').style.display = "block";     // show the modal 
+        document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
        }
      });
   }
