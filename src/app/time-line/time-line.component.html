@@ -8,16 +8,10 @@
     <div *ngIf = "!newTimeAway2 " >
         <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
     </div>
-    <app-notice [name] = 'this.userid'></app-notice>
-    <div id="noticeModal" class="modal">
-            <div class="modal-content">
-                <span class="close" (click) = "closeModal()">&times;</span>
-                <p> This new page is part of upgrade of Whiteboard to current techonolgy.</p>
-                <p> You can change you timeAway by dragging it. </p>
-                <p> The 'x' will delete the timeAway. </p>
-                <button mat-raised-button  (click)='cancelNotice()' > I don't need to see this again.  </button>
-            </div>
-    </div>
+    <app-notice [name] = 'this.userid'
+    [masterArray]="masterArray"
+    ></app-notice>
+
 
 <!--         New Time Away Section   -->
     <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">

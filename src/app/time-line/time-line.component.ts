@@ -56,6 +56,9 @@ export class TimeLineComponent implements OnInit {
 //  idSel: String;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
+  masterArray = ['This new page is part of upgrade of Whiteboard to current techonolgy.',
+                'You can change you timeAway by dragging it.',
+                'The x will delete the timeAway. '];
   reason: String;
   startDate: FormControl;
   endDate: FormControl;

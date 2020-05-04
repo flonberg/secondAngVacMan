@@ -1,11 +1,9 @@
 
 <div id="noticeModalComponent" class="modal">
-    {{ userid }}
     <div class="modal-content">
         <span class="close" (click) = "closeModal()">&times;</span>
-        <p> This new page is part of upgrade of Whiteboard to current techonolgy.</p>
-        <p> You can change you timeAway by dragging it. </p>
-        <p> The 'x' will delete the timeAway. </p>
+       <p *ngFor = "let line of masterArray">
+        {{ line }}  </p> 
         <button mat-raised-button  (click)='cancelNotice()' > I don't need to see this again.  </button>
     </div>
 </div>

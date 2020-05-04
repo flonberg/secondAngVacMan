@@ -9,9 +9,17 @@ import { GenEditService, SinsertParams, dB_GETparams, dB_POSTparams } from './..
 export class NoticeComponent implements OnInit {
   @Input() visible: boolean;
   @Input() userid: string;
-  constructor(private genEditSvce: GenEditService) { }
+  @Input() masterArray : string[];
+  phraseA: string[];
+  constructor(private genEditSvce: GenEditService) {
+    this.phraseA = new Array();
+
+   }
 
   ngOnInit() {
+    console.log('init' + this.masterArray)
+  
+ 
   }
   closeModal(){
     document.getElementById('noticeModalComponent').style.display = "none"; 
@@ -33,4 +41,5 @@ export class NoticeComponent implements OnInit {
   set name(name: string) {
     this.userid = (name && name.trim()) ;
   }
+  
 }
