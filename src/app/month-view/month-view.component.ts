@@ -74,9 +74,10 @@ export class MonthViewComponent implements OnInit {
   }
 
   takeAduty(nDutyId, dDayNum){
-    const v = this.isUserDutyTaker();
-    if (v === false){
-      window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=66582 , _blank');
+  //  const v = this.isUserDutyTaker();
+    if (this.isUserDutyTaker() !== true){
+      window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
+      + this.physicsMonthlyDuties[dDayNum][nDutyId]['pid'] + '  , _blank');
       return;
     }
     const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
@@ -86,17 +87,21 @@ export class MonthViewComponent implements OnInit {
   }
 
   isUserDutyTaker(){
+    if (!this.loggedInUserKey){
+      return false;
+    }
+    return true;
+    /*
     var r = false;
     console.log('loggedInUserKey is ' + this.loggedInUserKey);
     Object.keys(this.physicsMonthlyDuties['users']).forEach(key => {
-      console.log('key is ' + key + 'loggedInUserKey is ' + this.loggedInUserKey)
       if (+key === +this.loggedInUserKey) {
-        console.log(" r is true");
-        r = true;
+        return true;
         }
       });
     return r;
-    } 
+    */
+   } 
   confirmDuty(){
     const editParams = {                                            // build dS to user with genEditSvce.update
       'tableName': 'PhysicsMonthlyDuty',
