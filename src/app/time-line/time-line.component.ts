@@ -344,6 +344,7 @@ export class TimeLineComponent implements OnInit {
   }
 
   formatDateYYYymmdd(d) {
+    const test = 3.14;
     const date = new Date(d);
     const y = date.getFullYear();
     const m = date.getMonth() + 1;
