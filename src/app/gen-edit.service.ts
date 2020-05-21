@@ -68,9 +68,10 @@ export class GenEditService   {
       if (!this.urlBase){
         this.setPlatform();
       }
-      const url = this.urlBase + 'getVacsBB.php?start=' 
+     // const url = this.urlBase + 'getVacsBB.php?start=' 
+      const url = this.urlBase + 'RESThub.php?dataS=getTa&start=' 
       + startDateString + '&end=' + endDateString + '&userid=' + this.userid + '&host=localhost';
-      console.log('getTa url is ' + url);
+      console.log('getTa url is 5-21' + url);
       return this.http.get(url);
     } 
   getPhysicsMonthlyDuties(startDateString, userid){
