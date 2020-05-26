@@ -199,7 +199,6 @@ export class TimeLineComponent implements OnInit {
   }
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) {// this responds to ANY click-RELEASE in the div containing the calendar
-    console.log ("clicked" + ev);
        if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
            this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
