@@ -42,6 +42,7 @@ export class TimeLineComponent implements OnInit {
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
   data2: any;                                           // the dS for the tA data
+  data3: any;
   options: {};                                          // options for timeLIne
   groups: any;
   groupsArray: any;
@@ -52,9 +53,8 @@ export class TimeLineComponent implements OnInit {
 //  idSel: String;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
-  masterArray = ['This new page is part of upgrade of Whiteboard to current techonolgy.',
-                'You can change you timeAway by dragging it.',
-                'The x will delete the timeAway. '];
+  masterArray = ['This new page is part of upgrade of Whiteboard to current techonolgy.'
+                ];
   reason: String;
   startDate: FormControl;
   endDate: FormControl;
@@ -382,7 +382,9 @@ export class TimeLineComponent implements OnInit {
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
       this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {
-        if (this.index === 0) {                                           //  ??? this is always 0 
+        if (this.index === 0) {    
+          const rData = val;
+          this.data3 = new vis.DataSet();                                       //  ??? this is always 0 
           this.data2 = new vis.DataSet(val);
          } else {
           this.data2 = Array();
