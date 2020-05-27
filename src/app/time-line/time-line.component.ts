@@ -421,13 +421,15 @@ export class TimeLineComponent implements OnInit {
     );
 
     this.options = {
-  /*   editable: {
+      selectable: true,
+      /*
+    editable: {
         updateTime: true,  // drag items horizontally
-      //  updateGroup: true, // drag items from one group to another
-        remove: false,       // delete an item by tapping the delete button top right
+        updateGroup: true, // drag items from one group to another
+        remove: true,       // delete an item by tapping the delete button top right
         add: true,         // add new items by double tapping
       },
-      */
+  */
       onAdd: function (item, callback) {
         document.getElementById('datums').innerHTML = item.group;
         document.getElementById('datums2').innerHTML = item.start;
