@@ -8,6 +8,7 @@ import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, 
 import { HttpClient } from '@angular/common/http';
 
 import { DatePipe } from '@angular/common';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 declare var require: any;
@@ -38,11 +39,11 @@ export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
   platform = "dev";
 //  platform = "prod";
+rData:any;
   dB_PostParams: dB_POSTparams
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
   data2: any;                                           // the dS for the tA data
-  data3: any;
   options: {};                                          // options for timeLIne
   groups: any;
   groupsArray: any;
@@ -383,9 +384,10 @@ export class TimeLineComponent implements OnInit {
       this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {
         if (this.index === 0) {    
-          const rData = val;
-          this.data3 = new vis.DataSet();                                       //  ??? this is always 0 
+          this.rData = val;
+                                         //  ??? this is always 0 
           this.data2 = new vis.DataSet(val);
+ 
          } else {
           this.data2 = Array();
         }
@@ -403,7 +405,21 @@ export class TimeLineComponent implements OnInit {
         const topString = top.toString() + 'px';
     //    document.getElementById('controls').style.setProperty('top', topString);
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
+      //  this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
+     //   this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
+     /*   const item2 = {
+          id: Object.keys(this.data2._data).length + 100,                 // incase the user has DELETED a tA before adding
+          className:'kung',
+          start: '2020-05-20 00:00:00 ',
+          end: '2020-05-26 00:00:00 ',
+          content: this.rData[20].content,                    // build the dataStruct to add to the timeLine DataSet,
+          group: 6,
+          reason: this.rData[20].reason,
+          note: this.rData[20].note,
+        };
+        this.timeline.itemsData.getDataSet().add(item2);
+        */
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine

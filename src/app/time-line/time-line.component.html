@@ -4,6 +4,7 @@
     <div id="container">  
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)"> </div>
     </div>     
+
             <!------        This is the form used for adding new tAs ---------------> 
     <div *ngIf = "!newTimeAway2 " >
         <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
