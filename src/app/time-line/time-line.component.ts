@@ -2,17 +2,13 @@ import { editParam } from './../dose-fx/dose-fx.component';
 import { GenEditService, SinsertParams, dB_GETparams } from './../gen-edit.service';
 import { SeditParams, dB_POSTparams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { ActivatedRoute, Router } from '@angular/router';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
+//import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
+
 import { DatePipe } from '@angular/common';
-import { resetFakeAsyncZone } from '@angular/core/testing';
-import { throwIfEmpty } from 'rxjs/operators';
+
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -92,11 +88,12 @@ export class TimeLineComponent implements OnInit {
     editColNames: [],
     editColVals: []
   }
+  /*
   SinsertPP: SinsertParams = {
     tableName:'vacation3',
     colName:['startDate', 'endDate' , 'reason', 'note', 'userid'],
     colVal:[]
-  }
+  }*/
  // sEPP: SeditParams;
   nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
@@ -422,14 +419,13 @@ export class TimeLineComponent implements OnInit {
 
     this.options = {
       selectable: true,
-      /*
     editable: {
         updateTime: true,  // drag items horizontally
         updateGroup: true, // drag items from one group to another
         remove: true,       // delete an item by tapping the delete button top right
         add: true,         // add new items by double tapping
       },
-  */
+  
       onAdd: function (item, callback) {
         document.getElementById('datums').innerHTML = item.group;
         document.getElementById('datums2').innerHTML = item.start;
@@ -519,6 +515,12 @@ export class TimeLineComponent implements OnInit {
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];
       this.dB_PP.editColVals = [ event.target.value];
+    }
+    if (type == 'del'){
+      this.seP.editColName = 'reasonIdx';
+      this.dB_PP.editColNames = ['reasonIdx'];
+      this.dB_PP.editColVals = [ '99'];
+      this.data2.remove({id: this._id })
     }
     this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
   }
