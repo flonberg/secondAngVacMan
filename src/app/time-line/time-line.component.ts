@@ -163,12 +163,15 @@ rData:any;
       whereColVal:[ this.seP.who],                                  // the UserId of the loggedInUser
       getColName:['vacMan', ]
       };
+      console.log("166");
+    this.genEditSvce.simpleGet(getParams);  
     this.genEditSvce.genDB_GET(getParams).subscribe( val=>{         // get the datum from the notice table
        this.notice = val;                                           // save the resule
        if (!this.notice || this.notice[0]['vacMan']== 0){           // it NOT FOUND or 0
         document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
        }
      });
+   
   }
   closeModal(){
     document.getElementById('noticeModal').style.display = "none"; 
@@ -380,7 +383,8 @@ rData:any;
     /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
     var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
-    endDateShown.setDate(startDate.getDate() + numWeeks * 7);                           // set endDate of shown TimeLine for 2 months
+    endDateShown.setDate(startDate.getDate() + numWeeks * 7);   
+  //  this.genEditSvce.genGet(object                        // set endDate of shown TimeLine for 2 months
       this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {
         if (this.index === 0) {    
@@ -403,23 +407,9 @@ rData:any;
         }
         const top = this.nameList.length * 20;
         const topString = top.toString() + 'px';
-    //    document.getElementById('controls').style.setProperty('top', topString);
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
-      //  this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
-     //   this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
-     /*   const item2 = {
-          id: Object.keys(this.data2._data).length + 100,                 // incase the user has DELETED a tA before adding
-          className:'kung',
-          start: '2020-05-20 00:00:00 ',
-          end: '2020-05-26 00:00:00 ',
-          content: this.rData[20].content,                    // build the dataStruct to add to the timeLine DataSet,
-          group: 6,
-          reason: this.rData[20].reason,
-          note: this.rData[20].note,
-        };
-        this.timeline.itemsData.getDataSet().add(item2);
-        */
+  
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
@@ -437,13 +427,13 @@ rData:any;
 
     this.options = {
       selectable: true,
-    editable: {
+      /* editable: {
         updateTime: true,  // drag items horizontally
         updateGroup: true, // drag items from one group to another
         remove: true,       // delete an item by tapping the delete button top right
         add: true,         // add new items by double tapping
       },
-  
+      */
       onAdd: function (item, callback) {
         document.getElementById('datums').innerHTML = item.group;
         document.getElementById('datums2').innerHTML = item.start;

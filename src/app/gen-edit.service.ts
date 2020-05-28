@@ -61,19 +61,48 @@ export class GenEditService   {
       console.log(" dectected whiteboard so setting urlBase to whitboard");
       this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
     }    
-
     return this.host;                           // for time-line which has its own REST
     }
+  simpleGet(p){
+    var i = 0;
+    var getStr = "";
+    for (const property in p) {
+      if (i++ == 0)
+        getStr += "?"+`${property}`+"="+`${p[property]}`;
+      else
+        getStr += "&"+`${property}`+"="+`${p[property]}`;
+    }
+    console.log(getStr);
+  }  
+  genDB_POST(dP){
+      if (!this.urlBase){
+        this.setPlatform();
+      }
+      const url2 = this.urlBase + 'RESTgenDB_POST.php';
+      console.log("genBDPosrt url 2is " + url2);
+      this.http.post(url2, JSON.stringify(dP)).subscribe(
+        (val) => {
+       //   console.log('POST call', val);
+        });
+    }
+ 
   getTAs(startDateString, endDateString){
       if (!this.urlBase){
         this.setPlatform();
       }
-     // const url = this.urlBase + 'getVacsBB.php?start=' 
       const url = this.urlBase + 'RESThub.php?dataS=getTa&start=' 
       + startDateString + '&end=' + endDateString + '&userid=' + this.userid + '&host=' + this.urlBase;
       console.log('getTa url is 5-21' + url);
       return this.http.get(url);
     } 
+  genDB_GET(dP){
+      if (!this.urlBase){
+        this.setPlatform();
+      }
+      const url2 = this.urlBase + 'genGETterPOST.php';
+      console.log("genBDPosrt url 2is " + url2);
+      return this.http.post(url2, JSON.stringify(dP));
+    }
   getPhysicsMonthlyDuties(startDateString, userid){
       if (!this.urlBase){
         this.setPlatform();
@@ -104,28 +133,11 @@ export class GenEditService   {
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
       ////// whereColName = [];  whereColVal = [] \\\\\
     /////  Use for EDITing  \\\\\\\\\\\
-  genDB_POST(dP){
-      if (!this.urlBase){
-        this.setPlatform();
-      }
-      const url2 = this.urlBase + 'RESTgenDB_POST.php';
-      console.log("genBDPosrt url 2is " + url2);
-      this.http.post(url2, JSON.stringify(dP)).subscribe(
-        (val) => {
-       //   console.log('POST call', val);
-        });
-    }
+
    /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\
  
     /////  Use for GETting  \\\\\\\\\\\
-    genDB_GET(dP){
-      if (!this.urlBase){
-        this.setPlatform();
-      }
-      const url2 = this.urlBase + 'genGETterPOST.php';
-      console.log("genBDPosrt url 2is " + url2);
-      return this.http.post(url2, JSON.stringify(dP));
-    }
+ 
     ///////  test of get from ION  \\\\\\\\\\
     IONgetterCustom(){
       const url = "https://ion.mgh.harvard.edu/cgi-bin/imrtqa/TESTgetter.php";
