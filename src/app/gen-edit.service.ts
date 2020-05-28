@@ -67,12 +67,15 @@ export class GenEditService   {
     var i = 0;
     var getStr = "";
     for (const property in p) {
-      if (i++ == 0)
-        getStr += "?"+`${property}`+"="+`${p[property]}`;
-      else
+    //  if (i++ == 0)
+     //   getStr += "?"+`${property}`+"="+`${p[property]}`;
+    //  else
         getStr += "&"+`${property}`+"="+`${p[property]}`;
     }
-    console.log(getStr);
+    //const url = this.urlBase + "RESThub.php?dataS=getSimple"+getStr;
+    const url = this.urlBase + "RESThub.php?dataS=getSimple" + getStr;
+    console.log("76 ffff " + url);
+    return this.http.get(url) 
   }  
   genDB_POST(dP){
       if (!this.urlBase){
