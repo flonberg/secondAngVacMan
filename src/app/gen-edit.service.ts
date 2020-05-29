@@ -127,12 +127,21 @@ export class GenEditService   {
     }
     //////  Inserts a single record. Uses : params.tablename= string; params.colName=[]; params.colVal = []; 
   insert(dBParams){
-      const url = this.urlBase + 'RESTinsertPOST.php';
+    //const url = this.urlBase + 'RESTinsertPOST.php';
+    /*
+    const url = this.urlBase + 'RESTinsertPOST.php';
       this.http.post(url, JSON.stringify(dBParams)).subscribe(
         (val) => {
        //   console.log("POST call", val);
         });
-    }
+        */
+    const url2 = this.urlBase + 'RESTgenDB_POST.php';
+    console.log("insert url is " + url2);
+    this.http.post(url2, JSON.stringify(dBParams)).subscribe(
+      (val) => {
+     //   console.log("POST call", val);
+      });
+  }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
       ////// whereColName = [];  whereColVal = [] \\\\\
     /////  Use for EDITing  \\\\\\\\\\\
