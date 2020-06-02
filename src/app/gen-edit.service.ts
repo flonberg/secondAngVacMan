@@ -54,8 +54,11 @@ export class GenEditService   {
   //  this.angularRoute = this.loc.path();    
     const wlr = window.location.href;       
     console.log("window.location.herf is " + window.location.href);
+  //  if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
+ //     this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/';      //get data from BB  for localhost or BB 
+ //   }   
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
-      this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/';      //get data from BB  for localhost or BB 
+      this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
     }   
     if ( window.location.href.indexOf('whiteboard') !== -1 ){
       console.log(" dectected whiteboard so setting urlBase to whitboard");
@@ -88,13 +91,20 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
- 
+  getHUBPhysicsMonthlyDuties(){
+    if (!this.urlBase){
+      this.setPlatform();
+    }
+    const url = this.urlBase + 'RESThub.php?dataS=getPMD=&userid=' + this.userid ;
+    console.log('getTa url is 5-21' + url);
+    return this.http.get(url);
+  }
   getTAs(startDateString, endDateString){
       if (!this.urlBase){
         this.setPlatform();
       }
       const url = this.urlBase + 'RESThub.php?dataS=getTa&start=' 
-      + startDateString + '&end=' + endDateString + '&userid=' + this.userid + '&host=' + this.urlBase;
+      + startDateString + '&end=' + endDateString + '&userid=' + this.userid ;
       console.log('getTa url is 5-21' + url);
       return this.http.get(url);
     } 
@@ -111,8 +121,10 @@ export class GenEditService   {
         this.setPlatform();
       }
       const url2 = this.urlBase + 'getPhysicsDuties.php?dateSince=' + startDateString + '&userid=' + userid;
+      //const url2 = this.urlBase + 'RESThub.php?dataS=getPhysicsMonthlyDuties&userid=' + userid;
+      console.log("getEdit 115 url is " + url2);
       return this.http.get(url2)
-      
+    
     } 
   genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;
@@ -127,20 +139,9 @@ export class GenEditService   {
     }
     //////  Inserts a single record. Uses : params.tablename= string; params.colName=[]; params.colVal = []; 
   insert(dBParams){
-    //const url = this.urlBase + 'RESTinsertPOST.php';
-    /*
-    const url = this.urlBase + 'RESTinsertPOST.php';
-      this.http.post(url, JSON.stringify(dBParams)).subscribe(
-        (val) => {
-       //   console.log("POST call", val);
-        });
-        */
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
     console.log("insert url is " + url2);
-    this.http.post(url2, JSON.stringify(dBParams)).subscribe(
-      (val) => {
-     //   console.log("POST call", val);
-      });
+    return this.http.post(url2, JSON.stringify(dBParams));
   }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
       ////// whereColName = [];  whereColVal = [] \\\\\

@@ -215,19 +215,20 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
                 this.setPhysicsMonthlyDuties(val);
                   }
             );
+   // this.genEditSvce.getHUBPhysicsMonthlyDuties();
 }                                                                                               ////////  end of the routine to build the monthDisplay 
 
+setPhysicsMonthlyDuties(val){
+  this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
+  this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
+  this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
+  console.log('226 loggedInUserkey is ' + this.loggedInUserKey)
+}
   daysSince(d:Date){
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
     return Math.ceil(diff / (1000 * 3600 * 24)); 
   }
 
-  setPhysicsMonthlyDuties(val){
-    this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
-    this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
-    this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
-    console.log('226 loggedInUserkey is ' + this.loggedInUserKey)
-  }
 }
 
    

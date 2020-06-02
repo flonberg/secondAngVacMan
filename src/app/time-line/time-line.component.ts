@@ -153,7 +153,7 @@ rData:any;
       this.setQueryParams(queryParams);
       this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
-      this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
+  //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
   }
   checkIfNoticeNeeded(){                                             // The NoticeModal is used to inform of changes
@@ -332,7 +332,10 @@ rData:any;
         params.colVal = [this.formG.value.dateFrom,  // colValues
         this.formG.value.dateTo, this.formG.value.reasonG,
         this.formG.value.noteG, this.userkey];
-    this.genEditSvce.insert(params);                                  //  insert into dB
+    this.genEditSvce.insert(params).subscribe(
+      (val) => {
+        console.log("POST call", val);
+      });                                  //  insert into dB
     this.newTimeAway2 = false;                                        // turn off the controls  
   }
   /*
