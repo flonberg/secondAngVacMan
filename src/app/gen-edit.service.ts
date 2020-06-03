@@ -97,7 +97,8 @@ export class GenEditService   {
     }
     const url = this.urlBase + 'RESThub.php?dataS=getPMD=&userid=' + this.userid ;
     console.log('getTa url is 5-21' + url);
-    return this.http.get(url);
+    return this.http.get(url)
+     
   }
   getTAs(startDateString, endDateString){
       if (!this.urlBase){

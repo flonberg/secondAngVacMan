@@ -208,14 +208,24 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
         }
     }
     /*************      get the data  ************************/
-
+/*
     this.genEditSvce.getPhysicsMonthlyDuties(this.startDateForGettingDataString, this.qParams['userid']  ).
           subscribe(
             (val) => {
                 this.setPhysicsMonthlyDuties(val);
                   }
             );
-   // this.genEditSvce.getHUBPhysicsMonthlyDuties();
+  */
+    this.genEditSvce.getHUBPhysicsMonthlyDuties().subscribe(
+      (res) => {
+        console.log(res)
+        this.setPhysicsMonthlyDuties(res);
+      },
+      err => {
+        console.log("error 223");
+        console.log(err);
+      }
+    );
 }                                                                                               ////////  end of the routine to build the monthDisplay 
 
 setPhysicsMonthlyDuties(val){
