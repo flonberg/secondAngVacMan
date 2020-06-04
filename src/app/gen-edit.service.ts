@@ -95,7 +95,9 @@ export class GenEditService   {
     if (!this.urlBase){
       this.setPlatform();
     }
-    const url = this.urlBase + 'RESThub.php?dataS=getPMD=&userid=' + this.userid ;
+    const selStr =  "SELECT *  FROM physicists p LEFT JOIN users u USING (UserKey ) WHERE active = 1";
+  //  const post = {"pTableName" : "physicists", "uTableName" : "users", "cKey":"UserKey", "whereClause":"WHERE active=1"};
+    const url = this.urlBase + 'RESThub.php?dataS=getPMD=&userid=' + this.userid + '&selStr='+ selStr;
     console.log('getTa url is 5-21' + url);
     return this.http.get(url)
      
