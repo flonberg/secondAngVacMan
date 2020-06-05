@@ -230,9 +230,9 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
 
 setPhysicsMonthlyDuties(val){
   this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
-  this.loggedInUserKey = val['userkey']                                                       // the userkey to be used for Take-A-Duty
-  this.loggedInUserLastName = val['userLastName']                                             // the userkey to be used for Take-A-Duty
-  console.log('226 loggedInUserkey is ' + this.loggedInUserKey)
+  this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty
+  this.loggedInUserLastName = val['loggedInUserLastName']                                             // the userkey to be used for Take-A-Duty
+  console.log('226 loggedInUserkey is ffff' + this.loggedInUserKey)
 }
   daysSince(d:Date){
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());
