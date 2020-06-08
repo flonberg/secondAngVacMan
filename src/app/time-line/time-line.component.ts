@@ -328,10 +328,12 @@ rData:any;
         /*********     Add to dataBase  **********************/
     const params = <SinsertParams>{};                                // create instance of interface
         params.tableName = 'vacation3';
+        params.action = 'doInsert';
         params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
-        params.colVal = [this.formG.value.dateFrom,  // colValues
-        this.formG.value.dateTo, this.formG.value.reasonG,
-        this.formG.value.noteG, this.userkey];
+        params.colVal = [this.formG.value.dateFrom,  // colValues 
+            this.formG.value.dateTo, this.formG.value.reasonG,
+            this.formG.value.noteG, this.userkey];
+        console.log("336   ggg" + this.formG);
     this.genEditSvce.insert(params).subscribe(
       (val) => {
         console.log("POST call", val);

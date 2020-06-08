@@ -33,6 +33,7 @@ export interface SinsertParams {
   tableName: string;
   colName: string[];
   colVal: string[];
+  action: string;
 }
 @Injectable({
   providedIn: 'root'
@@ -127,7 +128,7 @@ export class GenEditService   {
       //const url2 = this.urlBase + 'RESThub.php?dataS=getPhysicsMonthlyDuties&userid=' + userid;
       console.log("getEdit 115 url is " + url2);
       return this.http.get(url2)
-    
+
     } 
   genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;
