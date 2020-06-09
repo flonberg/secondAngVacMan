@@ -240,8 +240,7 @@ rData:any;
         };
         this.dB_PP.whereColName=['vidx'];
         this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
-                 
-         /*******************          remove routine triggered by a click on the 'x'           **********************/
+console.log( " 243 ");
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
           this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
            this.drawEditControls = false;                                                       // turn off the edit Controls.
@@ -257,7 +256,7 @@ rData:any;
             this.dB_PP.editColNames = ['startDate','endDate'];      
             this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
            // dParams.editColVals = [startDateEdit,endDateEdit];
-            this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
+         //   this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
      }
      /*********  This is used by the New TimeAway  ***********/
@@ -329,6 +328,7 @@ rData:any;
     const params = <SinsertParams>{};                                // create instance of interface
         params.tableName = 'vacation3';
         params.action = 'doInsert';
+        params.needEmail = 'SendApprovalEmail';
         params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
         params.colVal = [this.formG.value.dateFrom,  // colValues 
             this.formG.value.dateTo, this.formG.value.reasonG,
@@ -538,6 +538,7 @@ rData:any;
       this.dB_PP.editColVals = [ event.target.value];
     }
     if (type == 'del'){
+      this.drawEditControls = false;
       this.seP.editColName = 'reasonIdx';
       this.dB_PP.editColNames = ['reasonIdx'];
       this.dB_PP.editColVals = [ '99'];
