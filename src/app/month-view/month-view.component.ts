@@ -216,7 +216,8 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
                   }
             );
   */
-    this.genEditSvce.getHUBPhysicsMonthlyDuties().subscribe(
+  //  this.genEditSvce.getHUBPhysicsMonthlyDuties().subscribe(
+      this.genEditSvce.getPMDs().subscribe(
       (res) => {
         console.log(res)
         this.setPhysicsMonthlyDuties(res);

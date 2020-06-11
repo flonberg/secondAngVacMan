@@ -100,18 +100,27 @@ export class GenEditService   {
     const selStr =  "SELECT *  FROM physicists p LEFT JOIN users u USING (UserKey ) WHERE active = 1";
   //  const post = {"pTableName" : "physicists", "uTableName" : "users", "cKey":"UserKey", "whereClause":"WHERE active=1"};
     const url = this.urlBase + 'RESThub.php?dataS=getPMD=&userid=' + this.userid + '&selStr='+ selStr;
-    console.log('getTa url is 5-21' + url);
-    return this.http.get(url)
+    const url2 = this.urlBase + 'REST_GET.php?action=getPMD&userid=' + this.userid;
+    console.log('getTa url is 5-21' + url2);
+    return this.http.get(url2)
      
   }
   getTAs(startDateString, endDateString){
-      if (!this.urlBase){
-        this.setPlatform();
+      if (!this.urlBase){           
+        this.setPlatform();                   // sets the platform to BB or 242
       }
-      const url = this.urlBase + 'RESThub.php?dataS=getTa&start=' 
-      + startDateString + '&end=' + endDateString + '&userid=' + this.userid ;
-      console.log('getTa url is 5-21' + url);
-      return this.http.get(url);
+        const url2 = this.urlBase + 'REST_GET.php?action=getTAs&start=' 
+          + startDateString + '&end=' + endDateString + '&userid=' + this.userid ;
+      console.log('getTa url is 5-21' + url2);
+      return this.http.get(url2);
+    } 
+  getPMDs(){
+      if (!this.urlBase){           
+        this.setPlatform();                   // sets the platform to BB or 242
+      }
+      const url2 = this.urlBase + 'REST_GET.php?action=getPMDs&userid=' + this.userid ;
+      console.log('getTa url is 5-21' + url2);
+      return this.http.get(url2);
     } 
   genDB_GET(dP){
       if (!this.urlBase){

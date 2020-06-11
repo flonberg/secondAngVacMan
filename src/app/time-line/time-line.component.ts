@@ -383,7 +383,8 @@ console.log( " 243 ");
     }
   }
   
-  getTimelineData2() {
+  getTimelineData2() 
+  {
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
     const numWeeks = 8;                                                                 // number of weeks to show on the calendar
     const todayDate = new Date();
@@ -397,14 +398,12 @@ console.log( " 243 ");
     var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);   
-  //  this.genEditSvce.genGet(object                        // set endDate of shown TimeLine for 2 months
       this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       (val) => {
         if (this.index === 0) {    
           this.rData = val;
                                          //  ??? this is always 0 
           this.data2 = new vis.DataSet(val);
- 
          } else {
           this.data2 = Array();
         }
@@ -437,16 +436,8 @@ console.log( " 243 ");
       }
     }
     );
-
     this.options = {
       selectable: true,
-      /* editable: {
-        updateTime: true,  // drag items horizontally
-        updateGroup: true, // drag items from one group to another
-        remove: true,       // delete an item by tapping the delete button top right
-        add: true,         // add new items by double tapping
-      },
-      */
       onAdd: function (item, callback) {
         document.getElementById('datums').innerHTML = item.group;
         document.getElementById('datums2').innerHTML = item.start;
@@ -455,11 +446,8 @@ console.log( " 243 ");
         document.getElementById('datums').innerHTML = item.id;
         document.getElementById('datums2').innerHTML = callback;
       },
-     // selectable: true,
       start: startDateShown,
-//      start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       end: endDateShown,
-//      end: new Date(new Date().getFullYear(), new Date().getMonth()+ 2, 1),
     };
   }                                                           // end of getTimelineData2
   removeBads(){
