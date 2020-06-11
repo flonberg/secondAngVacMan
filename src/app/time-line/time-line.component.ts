@@ -87,7 +87,8 @@ rData:any;
     whereColName:[],
     whereColVal: [],
     editColNames: [],
-    editColVals: []
+    editColVals: [],
+    action:''
   }
   /*
   SinsertPP: SinsertParams = {
@@ -129,8 +130,8 @@ rData:any;
     this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
     this.contentArray = [];
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
-    this.seP.whereColName = 'vidx';
-    this.seP.tableName = 'vacation3';
+   // this.seP.whereColName = 'vidx';
+  //  this.seP.tableName = 'vacation3';
     this.index = 0;
     this.form = new FormGroup({
       'startDate': this.startDate = new FormControl('', Validators.required),
@@ -151,7 +152,7 @@ rData:any;
     .subscribe(queryParams => {                                     // get the queryParams as Observable
       this.qP = queryParams;
       this.setQueryParams(queryParams);
-      this.seP.who = this.userid;
+   //   this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
   //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
@@ -160,7 +161,7 @@ rData:any;
     const getParams = <dB_GETparams>{                               // set the parameters for the genDB_GET interface
       tableName:'notice',
       whereColName:['UserId'],
-      whereColVal:[ this.seP.who],                                  // the UserId of the loggedInUser
+      whereColVal:[ this.userid],                                  // the UserId of the loggedInUser
       getColName:['vacMan', ]
       };
       console.log("166");
@@ -218,7 +219,7 @@ rData:any;
           }
         this._vidx = this.data2._data[this._id].vidx;                                           // store the vidx for editing
         document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
-        this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  params used for editing tA
+     //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  params used for editing tA
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
@@ -234,6 +235,7 @@ rData:any;
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
+         
          var dParams = {              // create a set of params to b used by genDB_POST to delete the tA
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
           'editColNames':[],
@@ -250,7 +252,7 @@ console.log( " 243 ");
            dParams.editColNames = ['reasonIdx'];
            dParams.editColVals = ['99'];
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
-       } /************  if 'remove' is NOT found the startDate and endDate are edited on page and in dB */
+       } 
          else if (   this.data2._data[this._id] ){             // Ed/
             var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);    // format the date for use in dataBase
             var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);        //    "
@@ -260,9 +262,11 @@ console.log( " 243 ");
             this.dB_PP.action = 'editAndLog';
 
            // dParams.editColVals = [startDateEdit,endDateEdit];
-            this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
+           console.log("timeline 265");
+           // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
-    }       /*******  end of clicked() */
+         
+    }       /*******  end of clicked */
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
@@ -520,12 +524,12 @@ console.log( " 243 ");
     if (type === 'start') {
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.startDateEdited = true;
-      this.seP.editColName = 'startDate';
+   //   this.seP.editColName = 'startDate';
       this.dB_PP.editColNames = ['startDate'];
     }                                                                   // update startDate
     if (type === 'end') {
      this.data2.update({id: this._id, end: dateForDataSet}); 
-      this.seP.editColName = 'endDate';
+   //   this.seP.editColName = 'endDate';
       this.dB_PP.editColNames = ['endDate'];
       this.endDateEdited = true;
     }
@@ -535,11 +539,12 @@ console.log( " 243 ");
     }
     if (type == 'del'){
       this.drawEditControls = false;
-      this.seP.editColName = 'reasonIdx';
+    //  this.seP.editColName = 'reasonIdx';
       this.dB_PP.editColNames = ['reasonIdx'];
       this.dB_PP.editColVals = [ '99'];
       this.data2.remove({id: this._id })
     }
+    this.dB_PP.action='editAndLog';
     this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
   }
   makeDateString(event) {
