@@ -207,7 +207,8 @@ rData:any;
    this.genEditSvce.genDB_GET(getParams);
   }
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
-  clicked(ev) {// this responds to ANY click-RELEASE in the div containing the calendar
+  clicked(ev) 
+  {// this responds to ANY click-RELEASE in the div containing the calendar
        if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
            this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
@@ -236,7 +237,8 @@ rData:any;
          var dParams = {              // create a set of params to b used by genDB_POST to delete the tA
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
           'editColNames':[],
-          'editColVals':[]                                       // reasonIdx is deleted flag.
+          'editColVals':[],
+          'action': 'editAndLog'                                       // reasonIdx is deleted flag.
         };
         this.dB_PP.whereColName=['vidx'];
         this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
@@ -255,10 +257,12 @@ console.log( " 243 ");
           //  dParams.editColNames = ['startDate','endDate'];
             this.dB_PP.editColNames = ['startDate','endDate'];      
             this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
+            this.dB_PP.action = 'editAndLog';
+
            // dParams.editColVals = [startDateEdit,endDateEdit];
-         //   this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
+            this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
-     }
+    }       /*******  end of clicked() */
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
@@ -313,6 +317,7 @@ console.log( " 243 ");
         return {};
     }
   }
+
   onSubmit() {
     const item = {
         id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
@@ -327,13 +332,15 @@ console.log( " 243 ");
         /*********     Add to dataBase  **********************/
     const params = <SinsertParams>{};                                // create instance of interface
         params.tableName = 'vacation3';
-        params.action = 'doInsert';
-        params.needEmail = 'SendApprovalEmail';
+        params.action = 'insertRecGen';
+
         params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
         params.colVal = [this.formG.value.dateFrom,  // colValues 
             this.formG.value.dateTo, this.formG.value.reasonG,
             this.formG.value.noteG, this.userkey];
-        console.log("336   ggg" + this.formG);
+        console.log("336   ggg" + this.rData.loggedInUserRank);
+        if (this.rData.loggedInUserRank)
+           params.needEmail = 'SendApprovalEmail';
     this.genEditSvce.insert(params).subscribe(
       (val) => {
         console.log("POST call", val);
@@ -347,6 +354,7 @@ console.log( " 243 ");
   /************    specific update routine to update StartDate and EndDate of tA, when user drags a tA  ************/
   updateDB_StartEnd(sD: string, eD: string) {
       const upDateParams = <dB_POSTparams>{
+        action:'editAndLog',
         tableName:'vacation3',
         whereColName:['vidx'],
         whereColVal:[this.data2._data[this._id].vidx],
@@ -403,7 +411,7 @@ console.log( " 243 ");
         if (this.index === 0) {    
           this.rData = val;
                                          //  ??? this is always 0 
-          this.data2 = new vis.DataSet(val);
+          this.data2 = new vis.DataSet(this.rData['data']);
          } else {
           this.data2 = Array();
         }

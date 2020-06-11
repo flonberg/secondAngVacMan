@@ -22,6 +22,7 @@ export interface dB_GETparams {
 }
 
 export interface dB_POSTparams {
+  action: string,
   tableName: string,
   whereColName: string[],
   whereColVal: string[],
