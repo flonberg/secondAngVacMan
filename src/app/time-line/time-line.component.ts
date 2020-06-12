@@ -88,6 +88,7 @@ rData:any;
     whereColVal: [],
     editColNames: [],
     editColVals: [],
+    userid: '',
     action:''
   }
   /*
@@ -193,6 +194,7 @@ rData:any;
       whereColVal: [this.userid],
       editColNames: ['vacMan'],
       editColVals: ['1'],
+      userid: this.userid,
       insert: true
     }
     this.genEditSvce.genDB_POST(gP);
@@ -337,7 +339,7 @@ console.log( " 243 ");
     const params = <SinsertParams>{};                                // create instance of interface
         params.tableName = 'vacation3';
         params.action = 'insertRecGen';
-
+      
         params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
         params.colVal = [this.formG.value.dateFrom,  // colValues 
             this.formG.value.dateTo, this.formG.value.reasonG,
@@ -363,8 +365,10 @@ console.log( " 243 ");
         whereColName:['vidx'],
         whereColVal:[this.data2._data[this._id].vidx],
         editColNames: ['startDate', 'endDate'],
-        editColVals: [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ]
+        editColVals: [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ],
+        userid: this.userid
       };
+      console.log("371");
    this.genEditSvce.genDB_POST(upDateParams);
   }
 
@@ -545,8 +549,10 @@ console.log( " 243 ");
       this.data2.remove({id: this._id })
     }
     this.dB_PP.action='editAndLog';
+    this.dB_PP.userid = <string>this.userid;
     this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
   }
+  
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker
     const month = editTime.getMonth() + 1;                                // get month to assemble to edit

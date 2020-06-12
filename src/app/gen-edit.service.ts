@@ -28,6 +28,7 @@ export interface dB_POSTparams {
   whereColVal: string[],
   editColNames: string[],
   editColVals: string[],
+  userid: string,
   insert?: boolean                                      // INSERT edited ROW if NOT found
 }
 export interface SinsertParams {
@@ -35,6 +36,7 @@ export interface SinsertParams {
   colName: string[];
   colVal: string[];
   action: string;
+  userid: string;
   needEmail?: string;
 }
 @Injectable({
