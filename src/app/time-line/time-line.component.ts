@@ -361,7 +361,7 @@ console.log( " 243 ");
           }
           params.email = mP;
         
-    console.log("336   ggg" + this.rData.loggedInUserRank);
+    console.log("336 test commit" + this.rData.loggedInUserRank);
     this.genEditSvce.insert(params).subscribe(
       (val) => {
         console.log("POST call", val);
