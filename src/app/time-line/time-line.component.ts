@@ -435,6 +435,7 @@ console.log( " 243 ");
           this.rData = val;
                                          //  ??? this is always 0 
           this.data2 = new vis.DataSet(this.rData['data']);
+          console.log("my object: %o", this.data2);
          } else {
           this.data2 = Array();
         }
