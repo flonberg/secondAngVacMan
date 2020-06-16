@@ -435,10 +435,11 @@ console.log( " 243 ");
           this.rData = val;
                                          //  ??? this is always 0 
           this.data2 = new vis.DataSet(this.rData['data']);
-          console.log("my object: %o", this.data2);
+     
          } else {
           this.data2 = Array();
         }
+        console.log("rData: %o", this.rData);
         console.log( 'data2   365');
                                                         // store data in this.data2
         this.removeBads();                                                
