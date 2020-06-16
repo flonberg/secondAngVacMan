@@ -37,6 +37,7 @@ export interface SinsertParams {
   colVal: string[];
   action: string;
   userid: string;
+  email: any
   needEmail?: string;
 }
 @Injectable({

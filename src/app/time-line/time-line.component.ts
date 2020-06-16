@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { DatePipe } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -89,7 +89,7 @@ rData:any;
     editColNames: [],
     editColVals: [],
     userid: '',
-    action:''
+    action: ''
   }
   /*
   SinsertPP: SinsertParams = {
@@ -98,6 +98,8 @@ rData:any;
     colVal:[]
   }*/
  // sEPP: SeditParams;
+ loggedInLastName: string;
+ loggedInFirstName: string;
   nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
@@ -146,8 +148,9 @@ rData:any;
     this.formValidation = false;
     this.newTimeAway2 = false;
   }
+  
   ngOnInit() {
-    console.log(" this.router.url is   "   + this.router.url);
+    console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {                                     // get the queryParams as Observable
@@ -195,6 +198,7 @@ rData:any;
       editColNames: ['vacMan'],
       editColVals: ['1'],
       userid: this.userid,
+      action: 'editAndLog',
       insert: true
     }
     this.genEditSvce.genDB_POST(gP);
@@ -237,7 +241,7 @@ rData:any;
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
-         
+      
          var dParams = {              // create a set of params to b used by genDB_POST to delete the tA
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
           'editColNames':[],
@@ -339,14 +343,25 @@ console.log( " 243 ");
     const params = <SinsertParams>{};                                // create instance of interface
         params.tableName = 'vacation3';
         params.action = 'insertRecGen';
-      
         params.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
         params.colVal = [this.formG.value.dateFrom,  // colValues 
             this.formG.value.dateTo, this.formG.value.reasonG,
             this.formG.value.noteG, this.userkey];
-        console.log("336   ggg" + this.rData.loggedInUserRank);
-        if (this.rData.loggedInUserRank)
-           params.needEmail = 'SendApprovalEmail';
+ 
+          const link =`https://blackboard-dev.partners.org/dev/FJL/AngProd/dist/material-demo/index.html?userid=napolitano`;
+          const msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+            <p>` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like to schedule some time away. </p>
+            <p> You can approve this time away using the below link: </p>` + link;
+          const mP = {
+            subject:'Time Away',
+            message: msg,
+            headers: '',
+            mailToNames: ['Frank Lonberg'],
+            mailToAddresses: ['flonberg@partners.org'], 
+          }
+          params.email = mP;
+        
+    console.log("336   ggg" + this.rData.loggedInUserRank);
     this.genEditSvce.insert(params).subscribe(
       (val) => {
         console.log("POST call", val);
@@ -486,8 +501,11 @@ console.log( " 243 ");
       }                         }
     this.nameList.sort();                                                 // alphabetize the nameList
     const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId    
-    if (this.useridToUserkeys[index])                               // Someone may use page who is NOT a goAwayer. 
-      this.userkey = this.useridToUserkeys[index].userkey;                   // the userKey of the loggedIn user
+    if (this.useridToUserkeys[index]) {                              // Someone may use page who is NOT a goAwayer. 
+      this.userkey = this.useridToUserkeys[index].userkey;  
+      this.loggedInLastName = s._data[index].LastName;
+      this.loggedInFirstName = s._data[index].FirstName;
+      }                 // the userKey of the loggedIn user
   }
   assignGroups() {                                                     // put each tA in proper group.
     for (const property in this.data2._data ) {
@@ -552,7 +570,7 @@ console.log( " 243 ");
     this.dB_PP.userid = <string>this.userid;
     this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
   }
-  
+
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker
     const month = editTime.getMonth() + 1;                                // get month to assemble to edit
