@@ -89,7 +89,13 @@ rData:any;
     editColNames: [],
     editColVals: [],
     userid: '',
-    action: ''
+    action: '',
+    needEmail: '',
+    email: {
+      mailToAddresses:[''],
+      msg: '',
+      subject:''
+    }
   }
   /*
   SinsertPP: SinsertParams = {
@@ -246,11 +252,11 @@ rData:any;
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
           'editColNames':[],
           'editColVals':[],
-          'action': 'editAndLog'                                       // reasonIdx is deleted flag.
+          'action': 'editAndLog'                                     
         };
         this.dB_PP.whereColName=['vidx'];
         this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
-console.log( " 243 ");
+console.log( " 243 this.userid is " + this.userid);
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
           this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
            this.drawEditControls = false;                                                       // turn off the edit Controls.
@@ -327,7 +333,6 @@ console.log( " 243 ");
         return {};
     }
   }
-
   onSubmit() {
     const item = {
         id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
@@ -348,10 +353,11 @@ console.log( " 243 ");
             this.formG.value.dateTo, this.formG.value.reasonG,
             this.formG.value.noteG, this.userkey];
  
-          const link =`https://blackboard-dev.partners.org/dev/FJL/AngProd/dist/material-demo/index.html?userid=napolitano`;
+          const link =`http://blackboard-dev.partners.org/dev/FJL/AngProd/dist/material-demo/index.html?userid=napolitano`;
           const msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
             <p>` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like to schedule some time away. </p>
-            <p> You can approve this time away using the below link: </p>` + link;
+            <p> You can approve this time away using the below link: </p>
+            <a href=`+ link + `> Time away schedule. </a>`
           const mP = {
             subject:'Time Away',
             message: msg,
@@ -548,14 +554,21 @@ console.log( " 243 ");
     if (type === 'start') {
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.startDateEdited = true;
-   //   this.seP.editColName = 'startDate';
       this.dB_PP.editColNames = ['startDate'];
+      this.dB_PP.needEmail="dateChange";
+      const link =`http://blackboard-dev.partners.org/dev/FJL/AngProd/dist/material-demo/index.html?userid=napolitano`;
+      this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+      <p>` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like to schedule some time away. </p>
+      <p> You can approve this time away using the below link: </p>
+      <a href=`+ link + `> Time away schedule. </a>`
+      this.dB_PP.email.mailToAddresses[0] = "bnapolitano@partners.org";
+      this.dB_PP.email.subject='Time Away';
     }                                                                   // update startDate
     if (type === 'end') {
      this.data2.update({id: this._id, end: dateForDataSet}); 
-   //   this.seP.editColName = 'endDate';
       this.dB_PP.editColNames = ['endDate'];
       this.endDateEdited = true;
+      this.dB_PP.needEmail="dateChange";
     }
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];
@@ -567,6 +580,11 @@ console.log( " 243 ");
       this.dB_PP.editColNames = ['reasonIdx'];
       this.dB_PP.editColVals = [ '99'];
       this.data2.remove({id: this._id })
+    }
+    if (type == 'approve'){
+      this.dB_PP.editColNames = ['approved'];
+      this.dB_PP.editColVals = [ '1'];
+      this.data2.update({id: this._id, style:'color:blue' })
     }
     this.dB_PP.action='editAndLog';
     this.dB_PP.userid = <string>this.userid;

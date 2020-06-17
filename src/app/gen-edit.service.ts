@@ -29,7 +29,13 @@ export interface dB_POSTparams {
   editColNames: string[],
   editColVals: string[],
   userid: string,
-  insert?: boolean                                      // INSERT edited ROW if NOT found
+  insert?: boolean ,
+  needEmail?: string,
+  email?: {
+    mailToAddresses:[string],
+    msg: string,
+    subject: string
+  };                                     // INSERT edited ROW if NOT found
 }
 export interface SinsertParams {
   tableName: string;

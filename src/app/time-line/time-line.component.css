@@ -10,7 +10,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 0;
   width: auto;
 }
-
+.vis-item.red {
+  color: white;
+  background-color: red;
+  border-color: darkred;
+}
 .container {
   display: flex;
   flex-direction: row;

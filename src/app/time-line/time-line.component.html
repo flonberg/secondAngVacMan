@@ -101,6 +101,9 @@
             <div  *ngIf = "!_readonly" >   
                     <button  mat-raised-button  type='button' (click) = "editGen('del', $event)">Delete </button>  
             </div>
+            <div  *ngIf = "isApprover" >   
+                <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
+        </div>
         </form>          
 
 <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
@@ -112,9 +115,6 @@
             <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note
                  && this.data2._data[this._id].note.length > 0)" >
             </li> 
-            <li class="item" *ngIf = "this.isApprover" (click) = "approve()" >
-                    <button mat-raised-button>Approve </button>
-                </li>
             <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
             <button mat-raised-button  >Save New Time Away </button>    <!-- any button in a form triggers onSubmit, unless type='button-->
             </li>
