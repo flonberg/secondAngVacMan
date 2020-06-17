@@ -32,7 +32,7 @@ export interface dB_POSTparams {
   insert?: boolean ,
   needEmail?: string,
   email?: {
-    mailToAddresses:[string],
+    mailToAddresses:string[],
     msg: string,
     subject: string
   };                                     // INSERT edited ROW if NOT found

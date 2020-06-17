@@ -92,7 +92,7 @@ rData:any;
     action: '',
     needEmail: '',
     email: {
-      mailToAddresses:[''],
+      mailToAddresses: [],
       msg: '',
       subject:''
     }
@@ -551,17 +551,20 @@ console.log( " 243 this.userid is " + this.userid);
       this.dB_PP.editColNames = ['reason'];
       this.data2.update({id: this._id, reason: dateForDataSet});  
     }
+
     if (type === 'start') {
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.startDateEdited = true;
       this.dB_PP.editColNames = ['startDate'];
       this.dB_PP.needEmail="dateChange";
+      console.log("urlBase " + this.genEditSvce.urlBase);
       const link =`http://blackboard-dev.partners.org/dev/FJL/AngProd/dist/material-demo/index.html?userid=napolitano`;
       this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p>` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like to schedule some time away. </p>
+      <p>` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has changed the time of their time away. </p>
       <p> You can approve this time away using the below link: </p>
       <a href=`+ link + `> Time away schedule. </a>`
-      this.dB_PP.email.mailToAddresses[0] = "bnapolitano@partners.org";
+   //   this.dB_PP.email.mailToAddresses[1] = "bnapolitano@partners.org";
+      this.dB_PP.email.mailToAddresses[0] = "flonberg@partners.org";
       this.dB_PP.email.subject='Time Away';
     }                                                                   // update startDate
     if (type === 'end') {
