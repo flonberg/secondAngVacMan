@@ -43,8 +43,12 @@ export interface SinsertParams {
   colVal: string[];
   action: string;
   userid: string;
-  email: any
   needEmail?: string;
+  email?: {
+    mailToAddresses:string[],
+    msg: string,
+    subject: string
+  };   
 }
 @Injectable({
   providedIn: 'root'
