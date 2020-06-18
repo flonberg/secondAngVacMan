@@ -88,7 +88,7 @@ export class GenEditService   {
     for (const property in p) {
     //  if (i++ == 0)
      //   getStr += "?"+`${property}`+"="+`${p[property]}`;
-    //  else
+    //  elset
         getStr += "&"+`${property}`+"="+`${p[property]}`;
     }
     //const url = this.urlBase + "RESThub.php?dataS=getSimple"+getStr;

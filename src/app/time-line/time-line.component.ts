@@ -358,7 +358,6 @@ console.log( " 243 this.userid is " + this.userid);
     var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSet
         /*********     Add to dataBase  **********************/
         this.insertP = <SinsertParams>{};                                // create instance of interface
-     console.log(" 361  fffff ");
         this.insertP.tableName = 'vacation3';
         this.insertP.action = 'insertRecGen';
         this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
@@ -367,15 +366,13 @@ console.log( " 243 this.userid is " + this.userid);
         this.formG.value.noteG, this.userkey];
           const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
           this.insertP.email = {
-          msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+            msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
             <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
             <p> You can approve this Time Away using the below link: </p>
             <a href=`+ link + `> Time away schedule. </a>`,
             mailToAddresses : Array("flonberg@partners.org","flonberg@gmail.com"),
             subject: "Time Away"
           };
-         
-        
     console.log("336 test commit" + this.rData.loggedInUserRank);
     this.genEditSvce.insert(this.insertP).subscribe(
       (val) => {
@@ -561,6 +558,7 @@ console.log( " 243 this.userid is " + this.userid);
       this.data2.update({id: this._id, reason: dateForDataSet});  
     }
     if (type === 'start' || type === 'end') {
+      console.log("561 wwwwwwww");
     const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
       this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
       <p>A Time Away for ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has changed. </p>
@@ -573,13 +571,16 @@ console.log( " 243 this.userid is " + this.userid);
     if (type === 'start') {
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.startDateEdited = true;
-      this.dB_PP.editColNames = ['startDate'];
+      this.dB_PP.editColNames = ['startDate','approved'];
+      this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
     }                                                                   // update startDate
     if (type === 'end') {
      this.data2.update({id: this._id, end: dateForDataSet}); 
-      this.dB_PP.editColNames = ['endDate'];
+     this.data2.update({id: this._id, style:'color:red' })
       this.endDateEdited = true;
+      this.dB_PP.editColNames = ['endDate','approved'];
+      this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
     }
     if (type == 'note'){
