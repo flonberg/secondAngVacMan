@@ -557,14 +557,13 @@ console.log( " 243 this.userid is " + this.userid);
       this.startDateEdited = true;
       this.dB_PP.editColNames = ['startDate'];
       this.dB_PP.needEmail="dateChange";
-      console.log("urlBase " + this.genEditSvce.urlBase);
-      const link =`http://blackboard-dev.partners.org/dev/FJL/AngProd/dist/material-demo/index.html?userid=napolitano`;
+      const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
       this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
       <p>` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has changed the time of their time away. </p>
       <p> You can approve this time away using the below link: </p>
       <a href=`+ link + `> Time away schedule. </a>`
-   //   this.dB_PP.email.mailToAddresses[1] = "bnapolitano@partners.org";
       this.dB_PP.email.mailToAddresses[0] = "flonberg@partners.org";
+      this.dB_PP.email.mailToAddresses[1] = "flonberg@gmail.com";
       this.dB_PP.email.subject='Time Away';
     }                                                                   // update startDate
     if (type === 'end') {
