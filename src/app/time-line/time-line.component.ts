@@ -360,10 +360,10 @@ console.log( " 243 this.userid is " + this.userid);
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
         this.insertP.action = 'insertRecGen';
-        this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid'];  // names of columns to INSERT
+        this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
         this.insertP.colVal = [this.formG.value.dateFrom,  // colValues 
         this.formG.value.dateTo, this.formG.value.reasonG,
-        this.formG.value.noteG, this.userkey];
+        this.formG.value.noteG, this.userkey], '0';
           const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
           this.insertP.email = {
             msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
@@ -556,15 +556,15 @@ console.log( " 243 this.userid is " + this.userid);
       this.dB_PP.editColNames = ['reason'];
       this.data2.update({id: this._id, reason: dateForDataSet});  
     }
-    if (type === 'start' || type === 'end' ) {
+    if (type === 'start' || type === 'end' && this.data2._data[this._id]['approved'] == 1 ) {
       console.log("561 wwwwwwww");
-    const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
+      const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
       this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
       <p>A Time Away for ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has changed. </p>
       <p> You can approve this time away using the below link: </p>
       <a href=`+ link + `> Time away schedule. </a>`
       this.dB_PP.email.mailToAddresses[0] = "flonberg@partners.org";
-      this.dB_PP.email.mailToAddresses[1] = "flonberg@gmail.com";
+     // this.dB_PP.email.mailToAddresses[1] = "flonberg@gmail.com";
       this.dB_PP.email.subject='Time Away';
     }
     if (type === 'start') {
