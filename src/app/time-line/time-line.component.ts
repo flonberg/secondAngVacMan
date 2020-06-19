@@ -441,7 +441,8 @@ console.log( " 243 this.userid is " + this.userid);
     var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);   
-      this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
+   //   this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
+      this.genEditSvce.getTAs().subscribe(
       (val) => {
         if (this.index === 0) {    
           this.rData = val;

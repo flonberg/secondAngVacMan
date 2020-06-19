@@ -16,9 +16,7 @@
       </div>    
     </div>
   </div>
-  
-
-  
+  <p *ngIf = "loggedInUserKey" class="heading" >  To Assume a Duty, click on physicist's name. </p>
   <div id="header" class="flex-container">
     <table>
       <tr class="dow"> <th > Monday</th> <th> Tuesday</th><th> Wednesday</th><th> Thursday</th> <th> Friday</th>
@@ -32,7 +30,7 @@
               <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString] ' 
               [id]="physicsMonthlyDuties[dayEl.dateString][item.dutyId]['idx']" 
               [class] = "isLoggedInUser( physicsMonthlyDuties[dayEl.dateString][item.dutyId]['UserKey'])" >   
-              {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }}  </div><div></div>
+              {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }} </div><div></div>
             </tr> 
           </table>
         </td>

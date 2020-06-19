@@ -119,12 +119,11 @@ export class GenEditService   {
     return this.http.get(url2)
      
   }
-  getTAs(startDateString, endDateString){
+  getTAs(){
       if (!this.urlBase){           
         this.setPlatform();                   // sets the platform to BB or 242
       }
-        const url2 = this.urlBase + 'REST_GET.php?action=getTAs&start=' 
-          + startDateString + '&end=' + endDateString + '&userid=' + this.userid ;
+      const url2 = this.urlBase + 'REST_GET.php?action=getTAs&userid=' + this.userid ;
       console.log('getTa url is 5-21' + url2);
       return this.http.get(url2);
     } 
