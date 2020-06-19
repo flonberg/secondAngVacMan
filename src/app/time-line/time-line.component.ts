@@ -445,9 +445,7 @@ console.log( " 243 this.userid is " + this.userid);
       (val) => {
         if (this.index === 0) {    
           this.rData = val;
-                                         //  ??? this is always 0 
           this.data2 = new vis.DataSet(this.rData['data']);
-     
          } else {
           this.data2 = Array();
         }
@@ -543,7 +541,8 @@ console.log( " 243 this.userid is " + this.userid);
   }
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
-   console.log( 'editGen ' + this.data2._id);
+   const shownId = this._id;
+   console.log( 'editGen ' + this.data2._data[this._id]['approved'] + "thisis" + shownId);
     if (type =='start' || type =='end'){                                  // if it is a date
       const s = this.formatDateForTimeline(event.value);                 // make the string for local update
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
@@ -557,7 +556,7 @@ console.log( " 243 this.userid is " + this.userid);
       this.dB_PP.editColNames = ['reason'];
       this.data2.update({id: this._id, reason: dateForDataSet});  
     }
-    if (type === 'start' || type === 'end') {
+    if (type === 'start' || type === 'end' ) {
       console.log("561 wwwwwwww");
     const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
       this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
