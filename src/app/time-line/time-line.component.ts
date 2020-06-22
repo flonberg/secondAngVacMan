@@ -319,6 +319,13 @@ console.log( " 243 this.userid is " + this.userid);
       noteGEdit: [ this.data2._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );
+    this.makeDateLabels();
+  }
+  makeDateLabels(){
+    
+    var sDate = new Date(this.data2._data[this._id].start); 
+    var day = sDate.getDay();
+    console.log("date " + sDate);
   }
 
   dateLessThan(from: string, to: string, reason: string) {
