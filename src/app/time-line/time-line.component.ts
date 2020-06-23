@@ -28,6 +28,9 @@ interface useridToUserkey {                     // userd in setGroups
   userid: string;
   userkey: number;
 }
+interface dN {
+  dayName:string;
+}
 
 @Component({
   selector: 'app-time-line',
@@ -109,6 +112,7 @@ rData:any;
       subject:''
     }
   }
+
   /*
   SinsertPP: SinsertParams = {
     tableName:'vacation3',
@@ -141,8 +145,12 @@ rData:any;
   formValidation: boolean;
   newTimeAway2: boolean;
   notice: any;
+  dNA: any;
+
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
+
+    this.dNA = [];
     this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
@@ -322,10 +330,25 @@ console.log( " 243 this.userid is " + this.userid);
     this.makeDateLabels();
   }
   makeDateLabels(){
-    
+    const dName = ["Mon","Tues","Wed","Thurs","Fri"];
+    const mName = ["Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
     var sDate = new Date(this.data2._data[this._id].start); 
-    var day = sDate.getDay();
-    console.log("date " + sDate);
+    var day = sDate.getDay()-1;
+    var date = sDate.getDate();
+    var monthNum = sDate.getMonth()-1;
+
+    console.log("date " + dName[day]);
+    for (let i = 0; i < 15; i++){
+      if (dName[day]){
+        this.dNA.push( {"dayName": dName[day], "date": date, "monthName":mName[monthNum]});
+      }
+      sDate.setDate(sDate.getDate() + 1);
+      if (sDate > new Date(this.data2._data[this._id].end))
+        break;
+      day = sDate.getDay()-1;
+      date = sDate.getDate();
+      monthNum = sDate.getMonth();
+    }
   }
 
   dateLessThan(from: string, to: string, reason: string) {
