@@ -1,23 +1,21 @@
 <div class="wholePage">
   <div id="header" class="flex-container">
     <div>
-
       <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
     </div>
     <div class="title"> {{ monthName }}</div> 
     <div>
     <button (click) = 'nextMonth(1)'   mat-raised-button class="accent"  >Next Month </button>
     </div>  
-    <div id="legend">
+    <div id="legend">  </div>
       <div>
-        <table class="smallTable">
+        <table class="tinyTable">
           <tr *ngFor="let item of physicsDuties | keyvalue">
-            {{item.key}}:{{item.value}}
+           <td > {{item.key}}:{{item.value.name}} </td>
           </tr>
- 
         </table>
       </div>    
-    </div>
+  
   </div>
   <p *ngIf = "loggedInUserKey" class="heading" >  To Assume a Duty, click on physicist's name. </p>
   <div id="header" class="flex-container">

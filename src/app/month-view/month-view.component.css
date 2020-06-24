@@ -40,12 +40,20 @@ td {
 .accent {
     background-color: var(--accent);
 }
-
+.tinyTable {
+    table-layout:fixed;
+    width:200px;
+}
+.tinyTable tr {
+    line-height: 14px;
+}
 .smallTable {
     table-layout:fixed;
     width:200px;
     height:40px;;
+   
 }
+
 tr {
     color:black;
 }
