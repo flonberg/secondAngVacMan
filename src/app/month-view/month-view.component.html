@@ -1,22 +1,41 @@
 <div class="wholePage">
-  <div id="header" class="flex-container">
-    <div>
-      <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
+  <div class="headClass">
+    <table class="tinyTable">
+      <tr>
+        <td class="small">test</td>
+        <td   class="small">
+          <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
+        </td>
+        <td class="small">
+          <table class="tinyTable">
+            <tr *ngFor="let item of physicsDuties | keyvalue">
+            <td  class="tiny"> {{item.key}}:{{item.value.name}} </td>
+            </tr>
+          </table>
+        </td>   
+      </tr>
+    </table>
+  <!--<table style="height:80%;">
+    <tr>
+      <td>
+        <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
+      </td>
+      <td class="title"> {{ monthName }}</td> 
+      <td>
+      <button (click) = 'nextMonth(1)'   mat-raised-button class="accent"  >Next Month </button>
+      </td>  
+      <td id="legend">  </td>
+        <td>
+          <table class="tinyTable">
+            <tr *ngFor="let item of physicsDuties | keyvalue">
+            <td > {{item.key}}:{{item.value.name}} </td>
+            </tr>
+          </table>
+        </td>    
+      </tr>
+    </table>
+  -->
     </div>
-    <div class="title"> {{ monthName }}</div> 
-    <div>
-    <button (click) = 'nextMonth(1)'   mat-raised-button class="accent"  >Next Month </button>
-    </div>  
-    <div id="legend">  </div>
-      <div>
-        <table class="tinyTable">
-          <tr *ngFor="let item of physicsDuties | keyvalue">
-           <td > {{item.key}}:{{item.value.name}} </td>
-          </tr>
-        </table>
-      </div>    
-  
-  </div>
   <p *ngIf = "loggedInUserKey" class="heading" >  To Assume a Duty, click on physicist's name. </p>
   <div id="header" class="flex-container">
     <table>

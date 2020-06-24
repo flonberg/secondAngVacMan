@@ -18,6 +18,14 @@ td {
     font-family:sans-serif;
   
 }
+td.small {
+    height:200px;
+    border:none;
+}
+td.tiny {
+    height:20px;
+    border:none;
+}
 
 .inMonth {
     background-color: rgb(245, 230, 230);  
@@ -27,7 +35,11 @@ td {
 }
 #header {
     text-align: center;
+    
 
+}
+.headClass {
+    background-color:white;
 }
 #legend {
     height: 80px;
