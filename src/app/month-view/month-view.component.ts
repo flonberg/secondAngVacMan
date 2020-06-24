@@ -33,6 +33,7 @@ export class MonthViewComponent implements OnInit {
   date: Date;
   monthNumber:number;                                               // used to advance and go back months
   baseDate: Date;    
+  physicsDuties:any;
   physicsMonthlyDuties: [];                                         // stores the data from PhysicMonthlyDuty table
   phrase: string;                                                   // Shown in takeADuty Modal
   qParams: any;                                                     // Used as a param for REST getDuties. 
@@ -235,7 +236,10 @@ setPhysicsMonthlyDuties(val){
   if (val['loggedInUserKey'])                                                       // the data to the monthly schedule
     this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty                                            // the userkey to be used for Take-A-Duty
   if (val['loggedInUserLastName'])                                             // the userkey to be used for Take-A-Duty
-    this.loggedInUserLastName = val['loggedInUserLastName']                                             // the userkey to be used for Take-A-Duty
+    this.loggedInUserLastName = val['loggedInUserLastName']
+  this.physicsDuties = Array();      
+  if (val['PhysicsDuties'])  
+    this.physicsDuties= val['PhysicsDuties'];                                       // the userkey to be used for Take-A-Duty
   console.log('226 loggedInUserkey is' + this.loggedInUserKey + 'lastName' + this.loggedInUserLastName) 
 }
   daysSince(d:Date){

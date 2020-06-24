@@ -11,7 +11,10 @@
     <div id="legend">
       <div>
         <table class="smallTable">
-            <tr *ngFor="let item of physicsDutiesClass "  [class] = "item.dutyName"> {{ item.dutyName }} </tr>
+          <tr *ngFor="let item of physicsDuties | keyvalue">
+            {{item.key}}:{{item.value}}
+          </tr>
+ 
         </table>
       </div>    
     </div>
