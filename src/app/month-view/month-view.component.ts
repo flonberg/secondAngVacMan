@@ -42,7 +42,8 @@ export class MonthViewComponent implements OnInit {
   idxForEdit: string;
   loggedInUserLastName: string;
   startDateForGettingData: Date;  
-  startDateForGettingDataString: string
+  startDateForGettingDataString: string;
+  toPageID: string;
   // used to calculate a dayNumber to use as key
   constructor(private datePipe: DatePipe, private http: HttpClient, 
     private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService,
@@ -72,17 +73,25 @@ export class MonthViewComponent implements OnInit {
     else
       return "";  
   }
+  pagePhysicist(){
+    console.log("pagePhysicist " + this.toPageID);
+      window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
+      + this.toPageID  + '  , _blank');
+      document.getElementById('myModal').style.display = "none";  
+      return;
+  }
 
   takeAduty(nDutyId, dDayNum){
   //  const v = this.isUserDutyTaker();
     if (this.isUserDutyTaker() !== true){
       window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
-      + this.physicsMonthlyDuties[dDayNum][nDutyId]['pid'] + '  , _blank');
+      + this.physicsMonthlyDuties[dDayNum][nDutyId]['id'] + '  , _blank');
       return;
     }
     const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
     this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + dDayNum;         // phrase for the Modal
     this.idxForEdit = this.physicsMonthlyDuties[dDayNum][nDutyId]['idx'];       // used to update the dB
+    this.toPageID = this.physicsMonthlyDuties[dDayNum][nDutyId]['id'];
     document.getElementById('myModal').style.display = "block";     // show the modal 
   }
 
@@ -208,7 +217,7 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
         }
     }
     /*************      get the data  ************************/
-
+console.log( " 211");
       this.genEditSvce.getPMDs().subscribe(
       (res) => {
         console.log(res)
@@ -222,10 +231,12 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
 }                                                                                               ////////  end of the routine to build the monthDisplay 
 
 setPhysicsMonthlyDuties(val){
-  this.physicsMonthlyDuties = val['data'];                                                    // the data to the monthly schedule
-  this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty
-  this.loggedInUserLastName = val['loggedInUserLastName']                                             // the userkey to be used for Take-A-Duty
-  console.log('226 loggedInUserkey is ffff' + this.loggedInUserKey)
+  this.physicsMonthlyDuties = val['data'];   
+  if (val['loggedInUserKey'])                                                       // the data to the monthly schedule
+    this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty                                            // the userkey to be used for Take-A-Duty
+  if (val['loggedInUserLastName'])                                             // the userkey to be used for Take-A-Duty
+    this.loggedInUserLastName = val['loggedInUserLastName']                                             // the userkey to be used for Take-A-Duty
+  console.log('226 loggedInUserkey is' + this.loggedInUserKey + 'lastName' + this.loggedInUserLastName) 
 }
   daysSince(d:Date){
     var diff = Math.abs(this.baseDate.getTime() - d.getTime());

@@ -27,10 +27,12 @@
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
             <tr *ngFor="let item of physicsDutiesClass "  [class] = "item.dutyName" 
              (click)="takeAduty(item.dutyId, dayEl.dateString)" >  
-              <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString] ' 
+            <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString] && physicsMonthlyDuties[dayEl.dateString][item.dutyId] ' 
               [id]="physicsMonthlyDuties[dayEl.dateString][item.dutyId]['idx']" 
               [class] = "isLoggedInUser( physicsMonthlyDuties[dayEl.dateString][item.dutyId]['UserKey'])" >   
-              {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }} </div><div></div>
+              {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }} 
+            </div>
+            <div></div>
             </tr> 
           </table>
         </td>
@@ -41,7 +43,7 @@
 <!-- The Modal -->
 <div id="myModal" class="modal">
   <div class="modal-content">
-    <button mat-raised-button   > Page </button>
+    <button mat-raised-button (click) = "pagePhysicist()"  > Page Physicist </button>
     <span class="close" (click) = "closeModal()">&times;</span>
     <p>{{ phrase }}</p>
     <button (click) = "confirmDuty()" >Take Duty</button>
