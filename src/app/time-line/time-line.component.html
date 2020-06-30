@@ -29,6 +29,7 @@
                 <mat-label>Reason</mat-label>
                     <mat-select  
                     formControlName = "reasonG"  id='reasonId'>
+                            
                             <mat-option  value="0">Personal Vacation</mat-option>
                             <mat-option  value="1">Other</mat-option>
                             <mat-option   value="2">Meeting</mat-option>  
@@ -100,23 +101,40 @@
                         >
                     </textarea>
             </mat-form-field >
-            <mat-form-field  *ngIf = "!_readonly" >   
-                    <button [formControl] = "deleteControl" mat-raised-button  type='button' (click) = "editGen('del', $event)">Delete </button>  
-            </mat-form-field>
+            <div  *ngIf = "!_readonly" >   
+                    <button  mat-raised-button  type='button' (click) = "editGen('del', $event)">Delete </button>  
+            </div>
+
             <div  *ngIf = "isApprover" >   
                 <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
             </div>
         </form>       
         <div *ngIf = "drawEditControls && !newTimeAway2 "> 
-            <table >
-                <caption>Coverage</caption>
+            <table>
                 <tr>
-                    <td *ngFor = "let d of dNA">{{ d.dayName }}</td>
+                    <td> 
+                        <mat-label>Coverer  </mat-label>
+                            <mat-select    name = "coverer"  id='covererUserKey' >
+                                <mat-option *ngFor = "let item of rData['users'] | keyvalue"
+                                 value="0"> {{item.value }} </mat-option>
+                
+                                    <mat-option  value="1">Other</mat-option>
+                                    <mat-option   value="2">Meeting</mat-option>  
+                        </mat-select>
+                    </td>
+                    <td>
+                        <table >
+                            <caption>Coverage ---</caption>
+                            <tr>
+                                <td *ngFor = "let d of dNA">{{ d.dayName }}</td>
+                            </tr>
+                            <tr>
+                                <td *ngFor = "let d of dNA">{{ d.monthName }} {{ d.date }}</td>
+                            </tr>
+                        </table> 
+                    </td>
                 </tr>
-                <tr>
-                    <td *ngFor = "let d of dNA">{{ d.monthName }} {{ d.date }}</td>
-                </tr>
-            </table> 
+            </table>
         </div>  
 
 
