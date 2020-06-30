@@ -88,3 +88,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color:red;
   font-weight: bold;
 }  
+.mat-form-field {
+  padding:20px;
+}
+.item {
+  width:100px;
+}
+.medium {
+  width:140px;
+}

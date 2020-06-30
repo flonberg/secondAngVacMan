@@ -334,15 +334,19 @@ console.log( " 243 this.userid is " + this.userid);
     const dName = ["Mon","Tues","Wed","Thurs","Fri"];
     const mName = ["Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
     var sDate = new Date(this.data2._data[this._id].start); 
+    const vidx = this.data2._data[this._id].vidx;
+    const goAwayerUserKey = this.data2._data[this._id].userkey;
     this.dNA = Array();
     var day = sDate.getDay()-1;
     var date = sDate.getDate();
     var monthNum = sDate.getMonth()-1;
-
     console.log("date " + dName[day]);
     for (let i = 0; i < 15; i++){
+      var dateString = this.datePipe.transform(sDate,"yyyy-dd-dd");
       if (dName[day]){
-        this.dNA.push( {"dayName": dName[day], "date": date, "monthName":mName[monthNum]});
+        this.dNA.push( {"dayName": dName[day], "date": date, 
+          "monthName":mName[monthNum], "dateString":dateString,"dayOfTA":i,
+          "vidx":vidx, "goAwayerUserKey": goAwayerUserKey});
       }
       sDate.setDate(sDate.getDate() + 1);
       if (sDate > new Date(this.data2._data[this._id].end))
@@ -351,6 +355,7 @@ console.log( " 243 this.userid is " + this.userid);
       date = sDate.getDate();
       monthNum = sDate.getMonth();
     }
+    console.log("dNA is %o", this.dNA);
   }
 
   dateLessThan(from: string, to: string, reason: string) {

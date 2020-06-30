@@ -13,7 +13,7 @@
     [masterArray]="masterArray"
     ></app-notice>
 
-
+    <div class = 'contDiv'>
 <!--         New Time Away Section  text to test Git   -->
     <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
         <div class = "heading" > Enter New Time Away Paramters </div>
@@ -24,12 +24,10 @@
             <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
         </mat-form-field>    
         
-
-        <mat-form-field>
+        <mat-form-field  appearance="none">
                 <mat-label>Reason</mat-label>
                     <mat-select  
                     formControlName = "reasonG"  id='reasonId'>
-                            
                             <mat-option  value="0">Personal Vacation</mat-option>
                             <mat-option  value="1">Other</mat-option>
                             <mat-option   value="2">Meeting</mat-option>  
@@ -43,7 +41,6 @@
         <!-- type='submit' is the default, must specify another type to avoid submitting  -->
         <button mat-raised-button [disabled]="!formValidation" 
             title="Valid Start and End dates as well as Reason required"  >Submit New Time-Away</button>
-       
 
         <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
             class="alert alert-danger">
@@ -63,11 +60,12 @@
 
 <!--          Edit tA  Controls   -->
     <div style="text-align:center">
+      <table><tr><td>
         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
             <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
-            <mat-form-field class="item">
+            <mat-form-field class="item" >
                 <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (change)="editGen('start', $event)" 
-                 formControlName="dateToEdit"  [readonly] = "_readonly"
+                 formControlName="dateToEdit"  [readonly] = "_readonly" 
                 type="date" useValueAsDate  />
             </mat-form-field>  
           
@@ -76,7 +74,8 @@
                      formControlName="dateFromEdit"  [readonly] = "_readonly" 
                     type="date"  useValueAsDate  />
             </mat-form-field>  
-            <mat-form-field *ngIf = "!_readonly">
+
+            <mat-form-field *ngIf = "!_readonly" class="medium">
                 <mat-label>Reason</mat-label>
                     <mat-select [(value)]='reasonSelect' (selectionChange)="editGen('reason', $event)"
                     id='reasonId'>
@@ -85,7 +84,7 @@
                             <mat-option   value="2">Meeting</mat-option>  
                     </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf = "_readonly"> 
+            <mat-form-field *ngIf = "_readonly" appearance="none" > 
                     <mat-label class="smallLabel"> Reason</mat-label>
                     <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
             </mat-form-field>
@@ -101,12 +100,14 @@
                         >
                     </textarea>
             </mat-form-field >
-          
-
             <div  *ngIf = "isApprover" >   
                 <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
             </div>
-        </form>       
+        </form> </td>
+        <td  *ngIf = "!_readonly"  >  <button mat-raised-button color="primary" (click) = "editGen('del',$event)" >Delete</button> </td>
+    </tr></table>
+
+      </div>      
         <div *ngIf = "drawEditControls && !newTimeAway2 "> 
             <table>
                 <tr>
@@ -128,7 +129,7 @@
                             </tr>
                             <tr><th>First Cov. </th>
                                     <td *ngFor = "let d of dNA">
-                                     <mat-checkbox class="example-margin"></mat-checkbox>
+                                     <mat-checkbox class="example-margin"    ></mat-checkbox>
                                   
                                     </td>
                             </tr>
