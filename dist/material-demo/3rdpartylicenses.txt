@@ -525,6 +525,8 @@ MIT
 
 @angular/material/autocomplete
 
+@angular/material/checkbox
+
 zone.js
 MIT
 The MIT License
