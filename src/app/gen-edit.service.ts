@@ -80,6 +80,10 @@ export class GenEditService   {
       console.log(" dectected whiteboard so setting urlBase to whitboard");
       this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
     }    
+    if ( window.location.href.indexOf('cat') !== -1 ){
+      console.log(" dectected balckcat so setting urlBase to whitboard");
+      this.urlBase = 'https://blackcat.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
+    }    
     return this.host;                           // for time-line which has its own REST
     }
   simpleGet(p){
