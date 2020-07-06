@@ -43,6 +43,8 @@ export class TimeLineComponent implements OnInit {
   platform = "dev";
 //  platform = "prod";
 rData:any;
+  nominatedCoverer: number;
+  covererDates= [];
   dB_PostParams: dB_POSTparams
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
@@ -187,6 +189,22 @@ rData:any;
       this.getTimelineData2();                                      // get the data from REST database call.
   //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
+  }
+  setCoverer(i){
+    console.log(" setCoverer %o",  i);
+    this.nominatedCoverer = i;
+  }
+  storeCovererDate(d){
+    this.covererDates.push(d);
+    console.log("CovererDates %o", this.covererDates);
+    this.insertP = <SinsertParams>{};                                // create instance of interface
+    this.insertP.tableName = 'vacCov2';
+    this.insertP.action = 'insertRecGen';
+    this.insertP.colName  = ['vidx','covDate','dutyId','covererUserKey','enteredWhen','goAwayerUserKey'];  // names of columns to INSERT
+
+  }
+  enterInDbAndEmail(){
+    console.log("enterinDb %0", this.covererDates);
   }
   checkIfNoticeNeeded(){                                             // The NoticeModal is used to inform of changes
     const getParams = <dB_GETparams>{                               // set the parameters for the genDB_GET interface
