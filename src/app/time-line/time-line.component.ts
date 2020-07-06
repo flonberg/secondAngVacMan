@@ -44,7 +44,10 @@ export class TimeLineComponent implements OnInit {
 //  platform = "prod";
 rData:any;
   nominatedCoverer: number;
+  nomCoverers: [];
   covererDates= [];
+  covererName = "";
+  showCoverers = false;
   dB_PostParams: dB_POSTparams
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
@@ -148,12 +151,13 @@ rData:any;
   formValidation: boolean;
   newTimeAway2: boolean;
   notice: any;
-  dNA: any;
+  dateLabels: any;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
 
-    this.dNA = [];
+    this.dateLabels = [];
+    this.nomCoverers = [];
     this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
@@ -195,8 +199,21 @@ rData:any;
     this.nominatedCoverer = i;
   }
   storeCovererDate(d){
+    d.covererUserKey = this.nominatedCoverer;                       // store the nominated coverer UserKey 
+
+
+    Object.keys(this.rData['users']).forEach(key => {
+      if (this.rData['users'][key].index === this.nominatedCoverer  ) {
+          console.log("Found." + key);
+          this.covererName = key;
+      }
+  });
+
+   
+    console.log(" rData %o", this.rData['users']);
     this.covererDates.push(d);
-    console.log("CovererDates %o", this.covererDates);
+
+    console.log("CovererDates %o", d);
     this.insertP = <SinsertParams>{};                                // create instance of interface
     this.insertP.tableName = 'vacCov2';
     this.insertP.action = 'insertRecGen';
@@ -204,7 +221,8 @@ rData:any;
 
   }
   enterInDbAndEmail(){
-    console.log("enterinDb %0", this.covererDates);
+    console.log("enterinDb %o", this.covererDates);
+    this.showCoverers = true;
   }
   checkIfNoticeNeeded(){                                             // The NoticeModal is used to inform of changes
     const getParams = <dB_GETparams>{                               // set the parameters for the genDB_GET interface
@@ -348,13 +366,14 @@ console.log( " 243 this.userid is " + this.userid);
     );
     this.makeDateLabels();
   }
+
   makeDateLabels(){
     const dName = ["Mon","Tues","Wed","Thurs","Fri"];
     const mName = ["Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
     var sDate = new Date(this.data2._data[this._id].start); 
     const vidx = this.data2._data[this._id].vidx;
     const goAwayerUserKey = this.data2._data[this._id].userkey;
-    this.dNA = Array();
+    this.dateLabels = Array();
     var day = sDate.getDay()-1;
     var date = sDate.getDate();
     var monthNum = sDate.getMonth()-1;
@@ -362,7 +381,7 @@ console.log( " 243 this.userid is " + this.userid);
     for (let i = 0; i < 15; i++){
       var dateString = this.datePipe.transform(sDate,"yyyy-dd-dd");
       if (dName[day]){
-        this.dNA.push( {"dayName": dName[day], "date": date, 
+        this.dateLabels.push( {"dayName": dName[day], "date": date, 
           "monthName":mName[monthNum], "dateString":dateString,"dayOfTA":i,
           "vidx":vidx, "goAwayerUserKey": goAwayerUserKey});
       }
@@ -373,7 +392,7 @@ console.log( " 243 this.userid is " + this.userid);
       date = sDate.getDate();
       monthNum = sDate.getMonth();
     }
-    console.log("dNA is %o", this.dNA);
+    console.log("dateLabels is %o", this.dateLabels);
   }
 
   dateLessThan(from: string, to: string, reason: string) {

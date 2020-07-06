@@ -122,19 +122,20 @@
                         <table >
                             <caption>Coverage ---</caption>
                             <tr><td></td>
-                                <td *ngFor = "let d of dNA">{{ d.dayName }}</td>
+                                <td *ngFor = "let d of dateLabels">{{ d.dayName }}</td>
                             </tr>
                             <tr><td></td>
-                                <td *ngFor = "let d of dNA">{{ d.monthName }} {{ d.date }}</td>
+                                <td *ngFor = "let d of dateLabels">{{ d.monthName }} {{ d.date }}</td>
                             </tr>
                             <tr><th>First Cov. </th>
-                                    <td *ngFor = "let d of dNA">
+                                    <td *ngFor = "let d of dateLabels">
+                                    <div *ngIf = "showCoverers"> {{ d.covererUserKey }} </div>    
                                      <mat-checkbox class="example-margin"  (click)="storeCovererDate(d)"  ></mat-checkbox>
                                     </td>
                                     <td><button mat-raised-button (click) = "enterInDbAndEmail()" >Send Emails to Covers </button> </td>
                             </tr>          
                             <tr><th>Second Cov. </th>
-                                    <td *ngFor = "let d of dNA">
+                                    <td *ngFor = "let d of dateLabels">
                                      <mat-checkbox class="example-margin"></mat-checkbox>
                                   
                                     </td>
