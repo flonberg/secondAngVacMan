@@ -158,6 +158,7 @@ rData:any;
   notice: any;
   dateLabels: any;
   covererToggle: boolean;
+  coverageAlastName: string;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  

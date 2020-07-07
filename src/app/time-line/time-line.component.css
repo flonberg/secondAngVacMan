@@ -10,6 +10,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 0;
   width: auto;
 }
+
+input.large {
+  font-size:12pt;;
+}
 .vis-item.red {
   color: white;
   background-color: red;
@@ -22,6 +26,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .container > div {
   flex: 1; /*grow*/
+}
+.parentCenter {
+  text-align: center;
 }
 #container {
   border:solid;

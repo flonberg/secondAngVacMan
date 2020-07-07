@@ -105,15 +105,15 @@
             </div>
         </form> </td>
         <td  *ngIf = "!_readonly"  >  <button mat-raised-button color="primary" (click) = "editGen('del',$event)" >Delete</button> </td>
-    </tr></table>
+     </tr></table>
 
-      </div>      
-        <div *ngIf = "drawEditControls && !newTimeAway2 "> 
-            <table style = "width:70%;">
+    </div >      
+        <div *ngIf = "drawEditControls && !newTimeAway2 " class="parentCenter"> 
+            <table *ngIf = "!_readonly" style = "width:60%; ">
                 <tr>
                     <th *ngIf = "covererToggle ">Chose First Coverer </th>
                     <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
-                    <th></th>
+                    <th colspan="2">Coverers </th>
                 </tr>
                 <tr>
                     <td> 
@@ -122,25 +122,23 @@
                                 value="item.value" (click) = "selectCoverer(item.key, item.value) "> {{item.key }} </mat-option>
                         </mat-select>
                     </td>
-                    <td>
-                        <table >
-                            <tr><th></th>  <th> </th>    
-                            </tr>   
-                            <tr>
-                                <td><input matInput placeholder="First Coverage "  [value]= "this.covererName"></td>
-                                <td><input matInput placeholder="Second Coverage " [value]= "this.covererName2" ></td>
-                                <td><button mat-raised-button (click) = "storeCovererDate($event)" >Send Emails to Covers </button> </td>
-                            </tr>       
-                        </table> 
-                    </td>
+                        <td><input  class="large" size=15 matInput  [value]= "this.covererName"></td>
+                        <td><input class="large"   size=15  matInput  [value]= "this.covererName2" ></td>
+                        <td ><button  *ngIf = "this.covererUserKey > 0 "  mat-raised-button (click) = "storeCovererDate($event)" >Send Emails to Covers </button> </td>
+                </tr>
+            </table>
+            <table *ngIf = "_readonly" style = "width:30%; ">
+       
+                    <caption> Coverers  </caption>
+           
+                <tr>
+                    <td> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
+                    <td> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
                 </tr>
             </table>
         </div>  
-
-
         <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
                 <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
-
             <!--    This the readOnly version of the Reason control -->
                     <li class="wideItem" *ngIf =_readonly>
                     </li>
@@ -151,8 +149,8 @@
                     <button mat-raised-button  >Save New Time Away </button>    <!-- any button in a form triggers onSubmit, unless type='button-->
                     </li>
                 </ul>
-
         </div>
+
     </div>    
         
 </div>
