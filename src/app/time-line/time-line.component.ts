@@ -44,6 +44,7 @@ export class TimeLineComponent implements OnInit {
 //  platform = "prod";
 rData:any;
   nominatedCoverer: number;
+  nominatedCoverer2: number;
   nomCoverers: [];
   covererDates= [];
   covererName = "";
@@ -152,6 +153,8 @@ rData:any;
   newTimeAway2: boolean;
   notice: any;
   dateLabels: any;
+  nominatedCovererUserKey: number;
+  covererToggle: boolean;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
@@ -180,6 +183,7 @@ rData:any;
 
     this.formValidation = false;
     this.newTimeAway2 = false;
+    this.covererToggle = true;
   }
   
   ngOnInit() {
@@ -194,31 +198,34 @@ rData:any;
   //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
   }
-  setCoverer(i){
+  selectCoverer(d){
+    console.log("selectCoverer " + d);
+    this.covererName = d;
+    this.covererToggle = ! this.covererToggle;
+  }
+  setCoverer(n){
+    console.log(" setCoverer %o",  n);
+    this.covererName = n;
+  }
+  setCoverer2(i){
     console.log(" setCoverer %o",  i);
-    this.nominatedCoverer = i;
+    this.nominatedCoverer2 = i;
   }
   storeCovererDate(d){
     d.covererUserKey = this.nominatedCoverer;                       // store the nominated coverer UserKey 
-
-
     Object.keys(this.rData['users']).forEach(key => {
-      if (this.rData['users'][key].index === this.nominatedCoverer  ) {
+      if (this.rData['users'][key].index === d ) {
           console.log("Found." + key);
           this.covererName = key;
       }
-  });
-
-   
+    });
     console.log(" rData %o", this.rData['users']);
     this.covererDates.push(d);
-
     console.log("CovererDates %o", d);
     this.insertP = <SinsertParams>{};                                // create instance of interface
     this.insertP.tableName = 'vacCov2';
     this.insertP.action = 'insertRecGen';
     this.insertP.colName  = ['vidx','covDate','dutyId','covererUserKey','enteredWhen','goAwayerUserKey'];  // names of columns to INSERT
-
   }
   enterInDbAndEmail(){
     console.log("enterinDb %o", this.covererDates);

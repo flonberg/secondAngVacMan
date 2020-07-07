@@ -109,37 +109,32 @@
 
       </div>      
         <div *ngIf = "drawEditControls && !newTimeAway2 "> 
-            <table>
+            <table style = "width:70%;">
+                <tr>
+                        <th *ngIf = "covererToggle ">Chose First Coverer </th>
+                        <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
+                    <th></th>
+                </tr>
                 <tr>
                     <td> 
-                        <mat-label>Coverer  </mat-label>
-                            <mat-select    name = "coverer"  id='covererUserKey' >
-                                <mat-option *ngFor = "let item of rData['users'] | keyvalue" (click)="setCoverer(item.value)"
-                                 value="item.value"> {{item.key }} </mat-option>
+                        <mat-select    name = "coverer"  id='covererUserKey' >
+                            <mat-option *ngFor = "let item of rData['users'] | keyvalue" (click)="setCoverer(item.value)"
+                                value="item.value" (click) = "selectCoverer(item.key) "> {{item.key }} </mat-option>
                         </mat-select>
                     </td>
                     <td>
                         <table >
-                            <caption>Coverage ---</caption>
-                            <tr><td></td>
-                                <td *ngFor = "let d of dateLabels">{{ d.dayName }}</td>
-                            </tr>
-                            <tr><td></td>
-                                <td *ngFor = "let d of dateLabels">{{ d.monthName }} {{ d.date }}</td>
-                            </tr>
-                            <tr><th>First Cov. </th>
-                                    <td *ngFor = "let d of dateLabels">
-                                    <div *ngIf = "showCoverers"> {{ d.covererUserKey }} </div>    
-                                     <mat-checkbox class="example-margin"  (click)="storeCovererDate(d)"  ></mat-checkbox>
-                                    </td>
-                                    <td><button mat-raised-button (click) = "enterInDbAndEmail()" >Send Emails to Covers </button> </td>
-                            </tr>          
-                            <tr><th>Second Cov. </th>
-                                    <td *ngFor = "let d of dateLabels">
-                                     <mat-checkbox class="example-margin"></mat-checkbox>
-                                  
-                                    </td>
-                            </tr>
+                            <tr><th></th>  <th> </th>    
+                            </tr>   
+                            <tr>
+                                <td><input matInput placeholder="First Coverage "  [value]= "this.covererName"></td>
+                                <td><mat-checkbox class="example-margin" (click) = "setCoverer()"></mat-checkbox></td> 
+ 
+                                <td><input matInput placeholder="Second Coverage "></td>
+                                <td><mat-checkbox class="example-margin"></mat-checkbox></td>
+                                <td><button mat-raised-button (click) = "enterInDbAndEmail()" >Send Emails to Covers </button> </td>
+                            </tr>       
+
                         </table> 
                     </td>
                 </tr>
