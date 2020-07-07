@@ -48,6 +48,10 @@ rData:any;
   nomCoverers: [];
   covererDates= [];
   covererName = "";
+  covererName2 = "";
+  covererUserKey: number;
+  covererUserKey2: number;
+  
   showCoverers = false;
   dB_PostParams: dB_POSTparams
   tlContainer: any;                                     // the div for the timeLie
@@ -153,7 +157,6 @@ rData:any;
   newTimeAway2: boolean;
   notice: any;
   dateLabels: any;
-  nominatedCovererUserKey: number;
   covererToggle: boolean;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
@@ -184,6 +187,8 @@ rData:any;
     this.formValidation = false;
     this.newTimeAway2 = false;
     this.covererToggle = true;
+    this.covererUserKey = -1;
+    this.covererUserKey2 = -1;
   }
   
   ngOnInit() {
@@ -198,34 +203,32 @@ rData:any;
   //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
   }
-  selectCoverer(d){
-    console.log("selectCoverer " + d);
-    this.covererName = d;
-    this.covererToggle = ! this.covererToggle;
+  selectCoverer(n, i ){
+    if (this.covererToggle ){
+      this.covererName = n;
+      this.covererUserKey = i;
+    }
+    else {
+      this.covererName2 = n;  
+      this.covererUserKey2 = i;    
+    }
+    this.covererToggle = !this.covererToggle;
   }
-  setCoverer(n){
-    console.log(" setCoverer %o",  n);
-    this.covererName = n;
-  }
-  setCoverer2(i){
-    console.log(" setCoverer %o",  i);
-    this.nominatedCoverer2 = i;
-  }
-  storeCovererDate(d){
-    d.covererUserKey = this.nominatedCoverer;                       // store the nominated coverer UserKey 
-    Object.keys(this.rData['users']).forEach(key => {
-      if (this.rData['users'][key].index === d ) {
-          console.log("Found." + key);
-          this.covererName = key;
-      }
-    });
-    console.log(" rData %o", this.rData['users']);
-    this.covererDates.push(d);
-    console.log("CovererDates %o", d);
-    this.insertP = <SinsertParams>{};                                // create instance of interface
-    this.insertP.tableName = 'vacCov2';
-    this.insertP.action = 'insertRecGen';
-    this.insertP.colName  = ['vidx','covDate','dutyId','covererUserKey','enteredWhen','goAwayerUserKey'];  // names of columns to INSERT
+
+  storeCovererDate(){                    // store the nominated coverer UserKey 
+    console.log(" rData %o", this.rData['data'][this._id]['vidx']);
+    const vidx = this.rData['data'][this._id]['vidx'];              // the vidx to be edited. 
+    const upDateParams = <dB_POSTparams>{
+      action:'editAndLog',
+      tableName:'vacation3',
+      whereColName:['vidx'],
+      whereColVal:[this.data2._data[this._id].vidx],
+      editColNames: ['coverageA', 'coverageB'],
+      editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
+      userid: this.userid
+    };
+    console.log("371");
+    this.genEditSvce.genDB_POST(upDateParams);
   }
   enterInDbAndEmail(){
     console.log("enterinDb %o", this.covererDates);

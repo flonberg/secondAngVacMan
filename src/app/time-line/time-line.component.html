@@ -111,15 +111,15 @@
         <div *ngIf = "drawEditControls && !newTimeAway2 "> 
             <table style = "width:70%;">
                 <tr>
-                        <th *ngIf = "covererToggle ">Chose First Coverer </th>
-                        <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
+                    <th *ngIf = "covererToggle ">Chose First Coverer </th>
+                    <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
                     <th></th>
                 </tr>
                 <tr>
                     <td> 
                         <mat-select    name = "coverer"  id='covererUserKey' >
-                            <mat-option *ngFor = "let item of rData['users'] | keyvalue" (click)="setCoverer(item.value)"
-                                value="item.value" (click) = "selectCoverer(item.key) "> {{item.key }} </mat-option>
+                            <mat-option *ngFor = "let item of rData['users'] | keyvalue" 
+                                value="item.value" (click) = "selectCoverer(item.key, item.value) "> {{item.key }} </mat-option>
                         </mat-select>
                     </td>
                     <td>
@@ -128,13 +128,9 @@
                             </tr>   
                             <tr>
                                 <td><input matInput placeholder="First Coverage "  [value]= "this.covererName"></td>
-                                <td><mat-checkbox class="example-margin" (click) = "setCoverer()"></mat-checkbox></td> 
- 
-                                <td><input matInput placeholder="Second Coverage "></td>
-                                <td><mat-checkbox class="example-margin"></mat-checkbox></td>
-                                <td><button mat-raised-button (click) = "enterInDbAndEmail()" >Send Emails to Covers </button> </td>
+                                <td><input matInput placeholder="Second Coverage " [value]= "this.covererName2" ></td>
+                                <td><button mat-raised-button (click) = "storeCovererDate($event)" >Send Emails to Covers </button> </td>
                             </tr>       
-
                         </table> 
                     </td>
                 </tr>
