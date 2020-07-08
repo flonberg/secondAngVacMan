@@ -132,10 +132,13 @@
                     <caption> Coverers  </caption>
                 <tr> 
                     <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
-                    <td  *ngIf = "coverageA_isLoggedInUser">  
-                            <button  mat-raised-button class="small" type='button' (click) = "editGen('approve', $event)">Accept </button>  
+                    <td  *ngIf = "coverageA_isLoggedInUser  && coverageAclass=='NotAccepted'">  
+                            <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covA_Duty')">Accept </button>  
                     </td>
                     <td [class] = "coverageBclass" > {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
+                    <td  *ngIf = "coverageB_isLoggedInUser && coverageBclass=='NotAccepted'">  
+                            <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covB_Duty')">Accept </button>  
+                    </td>
                 </tr>
             </table>
         </div>  

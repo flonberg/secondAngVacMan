@@ -219,6 +219,24 @@ rData:any;
     }
     this.covererToggle = !this.covererToggle;
   }
+  acceptCoverage(e){
+    console.log("cover %o", e);
+    if (e == 'covA_Duty')
+      this.coverageAclass = "Accepted";
+    if (e == 'covB_Duty')
+      this.coverageBclass = "Accepted";
+    const upDateParams = <dB_POSTparams>{
+      action:'editAndLog',
+      tableName:'vacation3',
+      whereColName:['vidx'],
+      whereColVal:[this.data2._data[this._id].vidx],
+      editColNames: [e],
+      editColVals: [ "1"  ],
+      userid: this.userid
+    };
+    console.log("371");
+  this.genEditSvce.genDB_POST(upDateParams);
+  }
 
   storeCovererDate(){                    // store the nominated coverer UserKey 
     console.log(" rData %o", this.rData['data'][this._id]['vidx']);
