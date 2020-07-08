@@ -159,6 +159,8 @@ rData:any;
   dateLabels: any;
   covererToggle: boolean;
   coverageAlastName: string;
+  coverageAclass:string;
+  coverageBclass:string;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
@@ -315,7 +317,16 @@ rData:any;
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
-      
+      /***********  Set Class for Coverers display,  according to Acceptance */   
+      if ( this.data2._data[this._id]['covA_Duty'] == '1')
+         this.coverageAclass = "Accepted";
+         else
+           this.coverageAclass = "NotAccepted";
+      if ( this.data2._data[this._id]['covB_Duty'] == '1')
+           this.coverageBclass = "Accepted";
+           else
+             this.coverageBclass = "NotAccepted";     
+    console.log("coverageAclass" + this.coverageAclass);   
          var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
           'editColNames':[],
@@ -324,9 +335,10 @@ rData:any;
         };
         this.dB_PP.whereColName=['vidx'];
         this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
-console.log( " 243 this.userid is " + this.userid);
+
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
-          this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
+    
+       this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
            this.drawEditControls = false;                                                       // turn off the edit Controls.
            document.getElementById('datums2').innerText = "";                                   // clear it so that further clicks on tA don't result in delete
            dParams.editColNames = ['reasonIdx'];
@@ -334,6 +346,7 @@ console.log( " 243 this.userid is " + this.userid);
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
        } 
          else if (   this.data2._data[this._id] ){             // Ed/
+ 
             var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);    // format the date for use in dataBase
             var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);        //    "
           //  dParams.editColNames = ['startDate','endDate'];
@@ -342,7 +355,7 @@ console.log( " 243 this.userid is " + this.userid);
             this.dB_PP.action = 'editAndLog';
 
            // dParams.editColVals = [startDateEdit,endDateEdit];
-           console.log("timeline 265");
+
            // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
          
@@ -550,7 +563,6 @@ console.log( " 243 this.userid is " + this.userid);
         const topString = top.toString() + 'px';
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
         this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
-  
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
@@ -562,8 +574,8 @@ console.log( " 243 this.userid is " + this.userid);
         document.getElementById('chData').innerHTML = properties.items .innerHTML = 'event=' + JSON.stringify(event) + ', ' +
             'properties=' + JSON.stringify(properties);
         log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
+        }
       }
-    }
     );
     this.options = {
       selectable: true,
@@ -578,7 +590,10 @@ console.log( " 243 this.userid is " + this.userid);
       start: startDateShown,
       end: endDateShown,
     };
-  }                                                           // end of getTimelineData2
+  }    
+  setCoverageAcceptances(){
+
+  }                                                       // end of getTimelineData2
   removeBads(){
     for (let key in this.data2._data){
       if (this.data2._data[key].start > this.data2._data[key].end){

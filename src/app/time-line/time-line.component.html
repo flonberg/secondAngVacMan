@@ -128,12 +128,11 @@
                 </tr>
             </table>
             <table *ngIf = "_readonly" style = "width:30%; ">
-       
                     <caption> Coverers  </caption>
            
-                <tr>
-                    <td> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
-                    <td> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
+                <tr> 
+                    <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
+                    <td [class] = "coverageBclass" > {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
                 </tr>
             </table>
         </div>  

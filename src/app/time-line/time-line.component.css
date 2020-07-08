@@ -10,7 +10,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 0;
   width: auto;
 }
-
+td.Accepted {
+  color:green;
+}
+td.NotAccepted {
+  color:red;
+}
 input.large {
   font-size:12pt;;
 }
