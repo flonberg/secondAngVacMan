@@ -161,6 +161,8 @@ rData:any;
   coverageAlastName: string;
   coverageAclass:string;
   coverageBclass:string;
+  coverageA_isLoggedInUser:boolean;
+  coverageB_isLoggedInUser:boolean;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
@@ -308,6 +310,7 @@ rData:any;
              }                                
            }
            console.log('clicked'  + this._id);
+      /*******  classify loggedInUser as tA Owner or coverer */     
        if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner 
            this._readonly = false;                                                              // enable editing
            } else {                                                                             // user is NOT tA owner
@@ -326,6 +329,14 @@ rData:any;
            this.coverageBclass = "Accepted";
            else
              this.coverageBclass = "NotAccepted";     
+      /***********  Set if loggedInUser it the Coverer  */
+      if  (this.data2._data[this._id]['coverageA'] ==   this.rData['loggedInUserKey']){
+        this.coverageA_isLoggedInUser = true;
+      }
+      if  (this.data2._data[this._id]['coverageB'] ==   this.rData['loggedInUserKey']){
+        this.coverageB_isLoggedInUser = true;
+      }
+
     console.log("coverageAclass" + this.coverageAclass);   
          var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
           'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
@@ -590,7 +601,10 @@ rData:any;
       start: startDateShown,
       end: endDateShown,
     };
-  }    
+  }  
+  setLoggedInUserKey(){
+
+  }  
   setCoverageAcceptances(){
 
   }                                                       // end of getTimelineData2

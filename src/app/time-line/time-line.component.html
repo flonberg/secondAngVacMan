@@ -9,6 +9,7 @@
     <div *ngIf = "!newTimeAway2 " >
         <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
     </div>
+
     <app-notice [name] = 'this.userid'
     [masterArray]="masterArray"
     ></app-notice>
@@ -129,9 +130,11 @@
             </table>
             <table *ngIf = "_readonly" style = "width:30%; ">
                     <caption> Coverers  </caption>
-           
                 <tr> 
                     <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
+                    <td  *ngIf = "coverageA_isLoggedInUser">  
+                            <button  mat-raised-button class="small" type='button' (click) = "editGen('approve', $event)">Accept </button>  
+                    </td>
                     <td [class] = "coverageBclass" > {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
                 </tr>
             </table>

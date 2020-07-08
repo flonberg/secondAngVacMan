@@ -10,14 +10,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 0;
   width: auto;
 }
+.mat-raised-button.small {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  min-height: 20px;
+  vertical-align: top;
+  font-size: 10px;
+  padding: 0 0;
+  margin: 0;
+}
+
 td.Accepted {
   color:green;
 }
 td.NotAccepted {
   color:red;
 }
+caption {
+  font-size:12pt;
+}
 input.large {
-  font-size:12pt;;
+  font-size:12pt;
 }
 .vis-item.red {
   color: white;
