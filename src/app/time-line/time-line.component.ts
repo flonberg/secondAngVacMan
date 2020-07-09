@@ -163,6 +163,7 @@ rData:any;
   coverageBclass:string;
   coverageA_isLoggedInUser:boolean;
   coverageB_isLoggedInUser:boolean;
+  keyFromQP: number;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
@@ -194,6 +195,7 @@ rData:any;
     this.covererToggle = true;
     this.covererUserKey = -1;
     this.covererUserKey2 = -1;
+    this.keyFromQP= -1;
   }
   
   ngOnInit() {
@@ -205,9 +207,12 @@ rData:any;
       this.setQueryParams(queryParams);
    //   this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
+
   //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
+
   }
+
   selectCoverer(n, i ){
     if (this.covererToggle ){
       this.covererName = n;
@@ -595,8 +600,16 @@ rData:any;
          } else {
           this.data2 = Array();
         }
-        console.log("rData: %o", this.rData);
+        console.log("rData: %o", this.rData['data']);
         console.log( 'data2   365');
+        if (this.qP['vidx']){
+          Object.keys(this.rData['data']).forEach(key => {
+            if (this.rData['data'][key].vidx === Number(this.qP['vidx'])) {
+              this.keyFromQP = Number(key);
+                console.log("Found.");
+            }
+        });
+        }
                                                         // store data in this.data2
         this.removeBads();                                                
         this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
@@ -637,6 +650,11 @@ rData:any;
       start: startDateShown,
       end: endDateShown,
     };
+   
+    
+      
+  
+
   }  
   setLoggedInUserKey(){
 

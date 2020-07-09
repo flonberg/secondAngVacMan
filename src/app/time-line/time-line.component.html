@@ -126,14 +126,13 @@
                     </td>
                         <td><input  class="large" size=15 matInput 
                             [value]= "this.covererName ? this.covererName : this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']] "></td>
-                        <td><input class="large"   size=15  matInput 
+                        <td><input class="large"   size=15  matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]  || this.covererName2 "
                              [value]= "this.covererName2  ? this.covererName2 : this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]" ></td>
                         <td ><button  *ngIf = "this.covererUserKey > 0 "  mat-raised-button (click) = "storeCovererDate($event)" >Send Emails to Covers </button> </td>
                 </tr>
             </table>
             <!--        Read Only Coverers Display        -->
-            <table *ngIf = "_readonly" style = "width:30%; ">
-                    
+            <table *ngIf = "_readonly" style = "width:30%; ">       
                 <tr> 
                     <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
                     <td  *ngIf = "coverageA_isLoggedInUser  && coverageAclass=='NotAccepted'">  
@@ -161,6 +160,10 @@
         </div>
 
     </div>    
+    <div *ngIf = "qP['mode'] = 'acceptCov'">
+       {{ this.keyFromQP }}
+
+    </div>
         
 </div>
 <div id="datums"  style="display:none"> </div> <!----  Gro  ??  id ??-->
