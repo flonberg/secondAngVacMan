@@ -212,12 +212,14 @@ rData:any;
     if (this.covererToggle ){
       this.covererName = n;
       this.covererUserKey = i;
+      this.covererName2='';
     }
     else {
       this.covererName2 = n;  
       this.covererUserKey2 = i;    
     }
     this.covererToggle = !this.covererToggle;
+ 
   }
   acceptCoverage(e){
     console.log("cover %o", e);
@@ -241,6 +243,14 @@ rData:any;
   storeCovererDate(){                    // store the nominated coverer UserKey 
     console.log(" rData %o", this.rData['data'][this._id]['vidx']);
     const vidx = this.rData['data'][this._id]['vidx'];              // the vidx to be edited. 
+    if (!this.covererToggle){
+      var mailKey = this.covererUserKey;
+    }
+    if (this.covererToggle){
+      var mailKey = this.covererUserKey2;
+    }
+      const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=` 
+          +this.rData['UserDataByKey'][mailKey]['UserId'] + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
@@ -248,7 +258,15 @@ rData:any;
       whereColVal:[this.data2._data[this._id].vidx],
       editColNames: ['coverageA', 'coverageB'],
       editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
-      userid: this.userid
+      userid: this.userid,   
+      email:{
+        mailToAddresses: this.rData['emailByKey'][mailKey],
+        msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+        <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. </p>
+        <p> You can accept coverage for this Time Away using the below link: </p>
+        <a href=`+ link + `> Time away schedule. </a>`,
+        subject: "sub"
+      }
     };
     console.log("371");
     this.genEditSvce.genDB_POST(upDateParams);
@@ -656,9 +674,9 @@ rData:any;
     for (const property in this.data2._data ) {
       if (this.data2._data.hasOwnProperty(property)) {                // 'hasOwnProperty' is typescript to see it a p is in arry
         this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content);  // set the correct groupNumber
-        if (this.data2._data[property].approved === 1) {
-          this.data2._data[property].style = 'color:green';
-        }
+    //  if (this.data2._data[property].approved === 1) {
+      //    this.data2._data[property].style = 'color:green';
+      //  }
       }
     }
   }
