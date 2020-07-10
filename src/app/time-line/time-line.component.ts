@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { DatePipe } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
+import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } from '@angular/material';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -248,14 +248,24 @@ console.log("213");
   storeCovererDate(){                    // store the nominated coverer UserKey 
     console.log(" rData %o", this.rData['data'][this._id]['vidx']);
     const vidx = this.rData['data'][this._id]['vidx'];              // the vidx to be edited. 
+    this.rData['emailByKey']['116'] = "flonberg@partners.org";
     if (!this.covererToggle){
-      var mailKey = this.covererUserKey;
+      var mailKey1 = this.covererUserKey;
+      mailKey1 = 116;                         // don't send to actual people in DEV mode
     }
     if (this.covererToggle){
-      var mailKey = this.covererUserKey2;
+      var mailKey2= this.covererUserKey2;
     }
-      const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=` 
-          +this.rData['UserDataByKey'][mailKey]['UserId'] + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
+    var mTA = ["flonberg@partners.org"];
+//    var mTA = this.rData['emailByKey'][mailKey1];
+    var link =this.genEditSvce.urlBase +`/acceptCov.php?userkey1=` 
+          +mailKey1 + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
+    if (mailKey2){
+      link += "&mailKey1=" + mailKey2; 
+      mTA.push("flonberg@gmail.com")
+//      mTA.push(this.rData['emailByKey'][mailKey2])
+    }     
+    console.log("link is " + link);
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
@@ -265,10 +275,10 @@ console.log("213");
       editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
       userid: this.userid,   
       email:{
-        mailToAddresses: this.rData['emailByKey'][mailKey],
+        mailToAddresses: mTA,
         msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
         <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. </p>
-        <p> You can accept coverage for this Time Away using the below link: </p>
+        <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
         <a href=`+ link + `> Time away schedule. </a>`,
         subject: "sub"
       }
@@ -601,8 +611,7 @@ console.log("213");
          } else {
           this.data2 = Array();
         }
-        console.log("rData: %o", this.rData['data']);
-
+        console.log("rData: %o", this.rData);
         if (this.qP['vidx']){
           Object.keys(this.rData['data']).forEach(key => {
             if (this.rData['data'][key].vidx === Number(this.qP['vidx'])) {
