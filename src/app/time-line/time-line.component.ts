@@ -210,7 +210,7 @@ rData:any;
 
   //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
-
+console.log("213");
   }
 
   selectCoverer(n, i ){
@@ -582,7 +582,8 @@ rData:any;
     const numWeeks = 8;                                                                 // number of weeks to show on the calendar
     const todayDate = new Date();
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
-    const endDate = new Date();                                                         // create new date to use for end                            
+    const endDate = new Date();  
+                                                      // create new date to use for end                            
     endDate.setMonth(startDate.getMonth() + 4);                                         // set a date to be the forward date of data collection
     startDate.setMonth(startDate.getMonth() - 2);                                       // set date for backward data collection far enough back to get all users
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
@@ -601,7 +602,7 @@ rData:any;
           this.data2 = Array();
         }
         console.log("rData: %o", this.rData['data']);
-        console.log( 'data2   365');
+
         if (this.qP['vidx']){
           Object.keys(this.rData['data']).forEach(key => {
             if (this.rData['data'][key].vidx === Number(this.qP['vidx'])) {
