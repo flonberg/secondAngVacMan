@@ -244,7 +244,12 @@ console.log("213");
     console.log("371");
   this.genEditSvce.genDB_POST(upDateParams);
   }
-
+  setColorForCoverage(s){
+    if ( s && s == 1)
+      return 'covered';
+    else
+      return 'notCovered';  
+  }
   storeCovererDate(){                    // store the nominated coverer UserKey 
     console.log(" rData %o", this.rData['data'][this._id]['vidx']);
     const vidx = this.rData['data'][this._id]['vidx'];              // the vidx to be edited. 
@@ -258,7 +263,7 @@ console.log("213");
     }
     var mTA = ["flonberg@partners.org"];
 //    var mTA = this.rData['emailByKey'][mailKey1];
-    var link1 = this.genEditSvce.urlBase +`/acceptCovA.php?covererAUserkey=` 
+    var link1 = this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
           + this.covererUserKey + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
     if (mailKey2){
       var link2 =this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
