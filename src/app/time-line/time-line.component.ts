@@ -537,7 +537,7 @@ console.log("213");
         this.insertP.colVal = [this.formG.value.dateFrom,  // colValues 
         this.formG.value.dateTo, this.formG.value.reasonG,
         this.formG.value.noteG, this.userkey], '0';
-          const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
+          const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
           this.insertP.email = {
             msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
             <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
