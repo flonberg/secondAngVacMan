@@ -251,21 +251,32 @@ console.log("213");
     this.rData['emailByKey']['116'] = "flonberg@partners.org";
     if (!this.covererToggle){
       var mailKey1 = this.covererUserKey;
-      mailKey1 = 116;                         // don't send to actual people in DEV mode
+     // mailKey1 = this.covererUserKey2;                         // don't send to actual people in DEV mode
     }
     if (this.covererToggle){
       var mailKey2= this.covererUserKey2;
     }
     var mTA = ["flonberg@partners.org"];
 //    var mTA = this.rData['emailByKey'][mailKey1];
-    var link =this.genEditSvce.urlBase +`/acceptCov.php?userkey1=` 
-          +mailKey1 + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
+    var link1 = this.genEditSvce.urlBase +`/acceptCovA.php?covererAUserkey=` 
+          + this.covererUserKey + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
     if (mailKey2){
-      link += "&mailKey1=" + mailKey2; 
-      mTA.push("flonberg@gmail.com")
+      var link2 =this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
+      + this.covererUserKey2 + '&mode=acceptCovB&vidx=' + this.data2._data[this._id].vidx;
+      mTA.push("flonberg@gmail.com")        // CHANGE TO ACTUAL COVERERADDRESS WHEN GOING TO PRODUCTION 
 //      mTA.push(this.rData['emailByKey'][mailKey2])
     }     
-    console.log("link is " + link);
+    console.log("link is " + link1);
+    var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+    <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. 
+     starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
+     through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
+    <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
+    <p><a href=`+ link1 + `> Accept  ` + this.covererName + ` coverage. </a></p>
+    `;
+    if (this.covererUserKey2 > 0 ){
+      message +=  `<p> <a href=`+ link2 + `> Accept  ` + this.covererName2 + `  coverage. </a></p>`;
+    }
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
@@ -276,14 +287,11 @@ console.log("213");
       userid: this.userid,   
       email:{
         mailToAddresses: mTA,
-        msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-        <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. </p>
-        <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
-        <a href=`+ link + `> Time away schedule. </a>`,
-        subject: "sub"
+        msg : message,
+        subject: "TEST EMAIL PLEASE DISREGARD "
       }
     };
-    console.log("371");
+    console.log("371fff");
     this.genEditSvce.genDB_POST(upDateParams);
   }
   enterInDbAndEmail(){
@@ -739,7 +747,7 @@ console.log("213");
       console.log("561 wwwwwwww");
       const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
       this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p>A Time Away for ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has changed. </p>
+      <p>A Time Away for ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `  ` + this.loggedInLastName + ` has changed. </p>
       <p> You can approve this time away using the below link: </p>
       <a href=`+ link + `> Time away schedule. </a>`
       this.dB_PP.email.mailToAddresses[0] = "flonberg@partners.org";
