@@ -164,10 +164,11 @@ rData:any;
   coverageA_isLoggedInUser:boolean;
   coverageB_isLoggedInUser:boolean;
   keyFromQP: number;
+  ret: any;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
-
+      this.ret = 1;
     this.dateLabels = [];
     this.nomCoverers = [];
     this.redraw = true;
@@ -546,12 +547,18 @@ console.log("213");
             mailToAddresses : Array("flonberg@partners.org","flonberg@gmail.com"),
             subject: "Time Away"
           };
-    console.log("336 test commit" + this.rData.loggedInUserRank);
-    this.genEditSvce.insert(this.insertP).subscribe(
-      (val) => {
-        console.log("POST call", val);
-      });                                  //  insert into dB
+   
+   this.genEditSvce.insert(this.insertP).subscribe(
+    (response) => {
+      this.storeFromPOST( response.json());
+
+    })     
+    console.log("336 test commit" + this.ret);
     this.newTimeAway2 = false;                                        // turn off the controls  
+  }
+  storeFromPOST(s){
+    this.ret = s;
+    console.log("store" + this.ret);
   }
   /*
   get startDateGet(){ return this.form.get('startDate');}
@@ -618,6 +625,7 @@ console.log("213");
    //   this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
       this.genEditSvce.getTAs().subscribe(
       (val) => {
+        console.log("627  val " + val);
         if (this.index === 0) {    
           this.rData = val;
           this.data2 = new vis.DataSet(this.rData['data']);

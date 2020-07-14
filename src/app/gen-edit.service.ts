@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { WINDOW } from './window.provider';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
+import { map } from "rxjs/operators";
 //import { start } from 'repl';
 
 export interface SeditParams {
@@ -125,7 +126,7 @@ export class GenEditService   {
      
   }
 
-  
+
   getTAs(){
       if (!this.urlBase){           
         this.setPlatform();                   // sets the platform to BB or 242
@@ -175,7 +176,9 @@ export class GenEditService   {
   insert(dBParams){
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
     console.log("insert url is " + url2);
-    return this.http.post(url2, JSON.stringify(dBParams));
+    return this.http.post(url2, JSON.stringify(dBParams)).pipe(map((response: Response) => {
+      return response;     
+  }));
   }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
       ////// whereColName = [];  whereColVal = [] \\\\\
