@@ -111,6 +111,7 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
+
   getHUBPhysicsMonthlyDuties(){
     if (!this.urlBase){
       this.setPlatform();
@@ -123,6 +124,8 @@ export class GenEditService   {
     return this.http.get(url2)
      
   }
+
+  
   getTAs(){
       if (!this.urlBase){           
         this.setPlatform();                   // sets the platform to BB or 242
