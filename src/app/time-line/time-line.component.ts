@@ -559,7 +559,7 @@ console.log("213");
       'action': 'sendEmail',
       'address':'flonberg@partners.org',              // change to Brian
       'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
+      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away from AAAA to BBBB. </p>
       <p> You can approve this Time Away using the below link: </p>
       <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Time away schedule. </a>`,
       } ;
