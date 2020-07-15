@@ -87,6 +87,14 @@ export class GenEditService   {
     }    
     return this.host;                           // for time-line which has its own REST
     }
+  getFromFile(){
+    if (!this.urlBase){           
+      this.setPlatform();                   // sets the platform to BB or 242
+    }
+    const url2 = this.urlBase + 'REST_GET.php?action=getFromFile';
+    console.log('getTa url is getFromFile' + url2);
+    return this.http.get(url2);
+  }  
   simpleGet(p){
     var i = 0;
     var getStr = "";

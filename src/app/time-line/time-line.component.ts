@@ -557,6 +557,11 @@ console.log("213");
     })     
     console.log("336 test commit %o", this.ret);
     this.newTimeAway2 = false;                                        // turn off the controls  
+    this.genEditSvce.getFromFile().subscribe(
+      (response) => {
+        console.log("getFromFile response %o", response);
+      }
+    )
   }
   storeFromPOST(s){
     this.ret = s.toString();
