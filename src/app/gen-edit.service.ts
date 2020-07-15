@@ -87,6 +87,7 @@ export class GenEditService   {
     }    
     return this.host;                           // for time-line which has its own REST
     }
+    
   getFromFile(){
     if (!this.urlBase){           
       this.setPlatform();                   // sets the platform to BB or 242
@@ -109,6 +110,7 @@ export class GenEditService   {
     console.log("76 ffff " + url);
     return this.http.get(url) 
   }  
+  
   genDB_POST(dP){
       if (!this.urlBase){
         this.setPlatform();

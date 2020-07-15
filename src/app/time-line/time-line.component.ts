@@ -520,16 +520,7 @@ console.log("213");
     }
   }
   onSubmit() {
-    const item = {
-        id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
-        start: this.formG.value.dateFrom + ' 00:00:00',
-        end: this.formG.value.dateTo + ' 00:00:00',
-        content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
-        group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
-        reason: this.formG.value.reasonG,
-        note: this.formG.value.noteG,
-      };
-    var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSet
+ 
         /*********     Add to dataBase  **********************/
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
@@ -556,16 +547,45 @@ console.log("213");
 
     })     
     console.log("336 test commit %o", this.ret);
-    this.newTimeAway2 = false;                                        // turn off the controls  
+    this.newTimeAway2 = false;    
+                                 // turn off the controls  
     this.genEditSvce.getFromFile().subscribe(
       (response) => {
         console.log("getFromFile response %o", response);
+        this.ret = this.storeFromPOST(response);
       }
     )
+    const mP = {
+      'action': 'sendEmail',
+      'address':'flonberg@partners.org',              // change to Brian
+      'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
+      <p> You can approve this Time Away using the below link: </p>
+      <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.ret + `> Time away schedule. </a>`,
+      } ;
+      this.genEditSvce.insert2(mP).subscribe(
+        (response)=>{
+          console.log("emailService");
+        }
+      );  
+    const item = {
+      id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
+      start: this.formG.value.dateFrom + ' 00:00:00',
+      end: this.formG.value.dateTo + ' 00:00:00',
+      content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
+      group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
+      reason: this.formG.value.reasonG,
+      note: this.formG.value.noteG,
+      vidx: this.ret 
+    };
+    var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSet
   }
   storeFromPOST(s){
-    this.ret = s.toString();
+    this.ret = s;
     console.log("store %o",  this.ret);
+    var idx = s.arg;
+    console.log("idx is " + idx);
+    return idx;
   }
   /*
   get startDateGet(){ return this.form.get('startDate');}
