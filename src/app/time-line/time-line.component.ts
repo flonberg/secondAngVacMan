@@ -548,17 +548,19 @@ console.log("213");
             subject: "Time Away"
           };
    
-   this.genEditSvce.insert(this.insertP).subscribe(
+   this.genEditSvce.insert2(this.insertP).subscribe(
     (response) => {
-      this.storeFromPOST( response.json());
+      this.ret =  response.toString;
+      console.log( "rrrrrr %o", response.toString );
+      this.storeFromPOST(response);
 
     })     
-    console.log("336 test commit" + this.ret);
+    console.log("336 test commit %o", this.ret);
     this.newTimeAway2 = false;                                        // turn off the controls  
   }
   storeFromPOST(s){
-    this.ret = s;
-    console.log("store" + this.ret);
+    this.ret = s.toString();
+    console.log("store %o",  this.ret);
   }
   /*
   get startDateGet(){ return this.form.get('startDate');}

@@ -180,6 +180,12 @@ export class GenEditService   {
       return response;     
   }));
   }
+  insert2(dBParams){
+    const url2 = this.urlBase + 'RESTgenDB_POST.php';
+    console.log("insert url is " + url2);
+    return this.http.post(url2, JSON.stringify(dBParams))
+ 
+  }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
       ////// whereColName = [];  whereColVal = [] \\\\\
     /////  Use for EDITing  \\\\\\\\\\\
