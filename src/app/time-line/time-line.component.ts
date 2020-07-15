@@ -561,13 +561,14 @@ console.log("213");
       'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
       <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
       <p> You can approve this Time Away using the below link: </p>
-      <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.ret + `> Time away schedule. </a>`,
+      <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Time away schedule. </a>`,
       } ;
-      this.genEditSvce.insert2(mP).subscribe(
+     this.genEditSvce.insert2(mP).subscribe(
         (response)=>{
           console.log("emailService");
         }
       );  
+      
     const item = {
       id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
       start: this.formG.value.dateFrom + ' 00:00:00',
