@@ -41,11 +41,11 @@ td.tiny {
 }
 #header {
     text-align: center;
-    
-
+    padding:40px;
 }
 .headClass {
     background-color:white;
+    text-align: center;
 }
 #legend {
     height: 80px;
@@ -101,32 +101,32 @@ caption {
 
 
 .one, .MorningA-IORT {
-    background-color:#faaa7f;
+    background-color:#fcc9ae;
     height:10px;
     border:none;
 } 
 .two, .MorningB {
-    background-color:#f8c990;
+    background-color:#fcdfbc;
     height:10px;
     border:none;
 }   
 .three, .EveningA {
-    background-color:#f9df4f;
+    background-color:#fceb8e;
     height:10px;
     border:none;
 }  
 .four, .EveningB {
-    background-color:#beb96d;
+    background-color:#ccccc5;
     height:10px;
     border:none;
 }  
 .five,.Float1 {
-    background-color:#aad48a;
+    background-color:#cce9b6;
     height:10px;
     border:none;
 }  
 .six, .Float2  {
-    background-color:#7baf9f;
+    background-color:#a4c2b9;
     height:10px;
     border:none;
 }    
