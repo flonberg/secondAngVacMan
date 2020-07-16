@@ -539,7 +539,7 @@ console.log("213");
             subject: "Time Away"
           };
    
-   this.genEditSvce.insert2(this.insertP).subscribe(
+   this.genEditSvce.genPOST(this.insertP).subscribe(
     (response) => {
       this.ret =  response.toString;
       console.log( "rrrrrr %o", response.toString );
@@ -563,7 +563,7 @@ console.log("213");
       <p> You can approve this Time Away using the below link: </p>
       <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Approve Time Away </a>`,
       } ;
-     this.genEditSvce.insert2(mP).subscribe(
+     this.genEditSvce.genPOST(mP).subscribe(
         (response)=>{
           console.log("emailService");
         }

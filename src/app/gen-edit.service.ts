@@ -190,7 +190,7 @@ export class GenEditService   {
       return response;     
   }));
   }
-  insert2(dBParams){
+  genPOST(dBParams){
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
     console.log("insert url is " + url2);
     return this.http.post(url2, JSON.stringify(dBParams))

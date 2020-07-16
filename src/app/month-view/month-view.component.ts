@@ -64,6 +64,8 @@ export class MonthViewComponent implements OnInit {
       {'dutyId':10, 'dutyName':'MorningB'},
       {'dutyId':21, 'dutyName':'EveningA'},
       {'dutyId':22, 'dutyName':'EveningB'},
+      {'dutyId':25, 'dutyName':'FloatA'},
+      {'dutyId':26, 'dutyName':'FloatB'},
     ]
     this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
     this.logSvcs.logMessage('tst');

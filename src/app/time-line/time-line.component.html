@@ -128,7 +128,8 @@
                 </tr>
             </table>
             <!--        Read Only Coverers Display        -->
-            <table *ngIf = "_readonly" style = "width:30%; ">       
+            <table *ngIf = "_readonly" style = "width:30%; ">   
+                <caption> Coverers </caption>    
                 <tr> 
                     <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
                     <td  *ngIf = "coverageA_isLoggedInUser  && coverageAclass=='NotAccepted'">  

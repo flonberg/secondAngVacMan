@@ -6,13 +6,17 @@
         <td   class="small">
           <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
         </td>
-        <td class="small">
-          <table class="tinyTable">
-            <tr *ngFor="let item of physicsDuties | keyvalue">
-            <td  class="tiny"> {{item.key}}:{{item.value.name}} </td>
-            </tr>
-          </table>
-        </td>   
+       <td  class='large'> {{ monthName }} </td>
+        <td   class="small">
+            <button (click) = 'nextMonth(1)'  mat-raised-button class="accent"  >Next Month </button>
+          </td>
+          <td class="small">
+              <table class="tinyTable">
+                <tr *ngFor="let item of physicsDuties | keyvalue">
+                <td  class="tiny"> {{item.key}}:{{item.value.name}} </td>
+                </tr>
+              </table>
+            </td>  
       </tr>
     </table>
   <!--<table style="height:80%;">
