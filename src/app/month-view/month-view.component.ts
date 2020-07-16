@@ -45,6 +45,7 @@ export class MonthViewComponent implements OnInit {
   startDateForGettingData: Date;  
   startDateForGettingDataString: string;
   toPageID: string;
+  colors:string[];
   // used to calculate a dayNumber to use as key
   constructor(private datePipe: DatePipe, private http: HttpClient, 
     private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService,
@@ -64,11 +65,12 @@ export class MonthViewComponent implements OnInit {
       {'dutyId':10, 'dutyName':'MorningB'},
       {'dutyId':21, 'dutyName':'EveningA'},
       {'dutyId':22, 'dutyName':'EveningB'},
-      {'dutyId':25, 'dutyName':'FloatA'},
-      {'dutyId':26, 'dutyName':'FloatB'},
+      {'dutyId':25, 'dutyName':'Float1'},
+      {'dutyId':26, 'dutyName':'Float2'},
     ]
     this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
     this.logSvcs.logMessage('tst');
+    this.colors = ['one','two','three','four','five','six'];
   }
   isLoggedInUser(n){                                                // show the loggedInUser's duties in red
     if (this.loggedInUserKey == n)

@@ -93,23 +93,43 @@ caption {
     font-size:100%;
   }
 
-.MorningA-IORT {
-    background-color:rgb(212, 212, 248);  
-}
+
 .MorningA-IORT:hover, .MorningB:hover, .EveningA:hover, .EveningB:hover {
     background-color:yellow;
     cursor: pointer;
 }
 
-.MorningB {
-    background-color:rgb(181, 181, 221)
-    }
-.EveningA {
-    background-color:rgb(153, 153, 214)
-    }
-.EveningB {
-    background-color:rgb(124, 124, 168)
-    }
+
+.one, .MorningA-IORT {
+    background-color:#faaa7f;
+    height:10px;
+    border:none;
+} 
+.two, .MorningB {
+    background-color:#f8c990;
+    height:10px;
+    border:none;
+}   
+.three, .EveningA {
+    background-color:#f9df4f;
+    height:10px;
+    border:none;
+}  
+.four, .EveningB {
+    background-color:#beb96d;
+    height:10px;
+    border:none;
+}  
+.five,.Float1 {
+    background-color:#aad48a;
+    height:10px;
+    border:none;
+}  
+.six, .Float2  {
+    background-color:#7baf9f;
+    height:10px;
+    border:none;
+}    
 .theUser {
     color: red;
 }   

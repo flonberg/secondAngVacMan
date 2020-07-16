@@ -13,32 +13,13 @@
           <td class="small">
               <table class="tinyTable">
                 <tr *ngFor="let item of physicsDuties | keyvalue">
-                <td  class="tiny"> {{item.key}}:{{item.value.name}} </td>
+                <td  [class] = "item.value.cN" > {{item.value.name}} </td>
                 </tr>
               </table>
             </td>  
       </tr>
     </table>
-  <!--<table style="height:80%;">
-    <tr>
-      <td>
-        <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
-      </td>
-      <td class="title"> {{ monthName }}</td> 
-      <td>
-      <button (click) = 'nextMonth(1)'   mat-raised-button class="accent"  >Next Month </button>
-      </td>  
-      <td id="legend">  </td>
-        <td>
-          <table class="tinyTable">
-            <tr *ngFor="let item of physicsDuties | keyvalue">
-            <td > {{item.key}}:{{item.value.name}} </td>
-            </tr>
-          </table>
-        </td>    
-      </tr>
-    </table>
-  -->
+ 
     </div>
   <p *ngIf = "loggedInUserKey" class="heading" >  To Assume a Duty, click on physicist's name. </p>
   <div id="header" class="flex-container">
@@ -53,7 +34,8 @@
              (click)="takeAduty(item.dutyId, dayEl.dateString)" >  
             <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString] && physicsMonthlyDuties[dayEl.dateString][item.dutyId] ' 
               [id]="physicsMonthlyDuties[dayEl.dateString][item.dutyId]['idx']" 
-              [class] = "isLoggedInUser( physicsMonthlyDuties[dayEl.dateString][item.dutyId]['UserKey'])" >   
+              [class] = "isLoggedInUser( physicsMonthlyDuties[dayEl.dateString][item.dutyId]['UserKey'])"
+               >   
               {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }} 
             </div>
             <div></div>
