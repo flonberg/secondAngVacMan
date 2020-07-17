@@ -58,6 +58,7 @@ export class MonthViewComponent implements OnInit {
       this.qParams = queryParams;
       this.genEditSvce.setPlatform();                     // switch between BB and 242 databases. 
     });
+    console.log(" 61  qp %o", this.qParams['userid']);
     this.nextMonth(0);                                              // draw the calendar for current month
     this.monthNumber = 0;                                           // number for going forward or back. 
     this.physicsDutiesClass = [
@@ -223,7 +224,7 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
     }
     /*************      get the data  ************************/
 console.log( " 211");
-      this.genEditSvce.getPMDs().subscribe(
+      this.genEditSvce.getPMDs(this.qParams['userid']).subscribe(
       (res) => {
         console.log(res)
         this.setPhysicsMonthlyDuties(res);
@@ -237,6 +238,7 @@ console.log( " 211");
 
 setPhysicsMonthlyDuties(val){
   this.physicsMonthlyDuties = val['data'];   
+  console.log("241 %o", val)
   if (val['loggedInUserKey'])                                                       // the data to the monthly schedule
     this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty                                            // the userkey to be used for Take-A-Duty
   if (val['loggedInUserLastName'])                                             // the userkey to be used for Take-A-Duty

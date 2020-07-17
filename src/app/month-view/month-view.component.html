@@ -20,23 +20,23 @@
       </tr>
     </table>
  
-    </div>
+</div>
   <p *ngIf = "loggedInUserKey" class="heading" >  To Assume a Duty, click on physicist's name. </p>
-  <div id="header" >
+<div id="header" >
     <table>
       <tr class="dow"> <th > Monday</th> <th> Tuesday</th><th> Wednesday</th><th> Thursday</th> <th> Friday</th>
       </tr>
       <tr *ngFor = " let week of daysS">
         <td  *ngFor=" let dayEl of week "  [class] = "dayEl.isInCurrMonth">
-          <table  style="width:100%;">
+          <table class="tinyTable" style="width:100%;">
             <caption> {{ dayEl.dayNumber  ? dayEl.dayNumber : ''}} </caption>   
             <tr *ngFor="let item of physicsDutiesClass "  [class] = "item.dutyName" 
              (click)="takeAduty(item.dutyId, dayEl.dateString)" >  
             <div *ngIf = 'physicsMonthlyDuties  && physicsMonthlyDuties[dayEl.dateString] && physicsMonthlyDuties[dayEl.dateString][item.dutyId] ' 
               [id]="physicsMonthlyDuties[dayEl.dateString][item.dutyId]['idx']" 
               [class] = "isLoggedInUser( physicsMonthlyDuties[dayEl.dateString][item.dutyId]['UserKey'])"
-               >   
-              {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }} 
+               >   {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }}
+   
             </div>
             <div></div>
             </tr> 

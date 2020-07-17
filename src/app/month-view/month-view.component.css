@@ -11,6 +11,11 @@
     font-size:200% !important;
     color:blue;
 }
+table.small {
+    border:none;
+  
+    height:30px;
+}
 td {
     border:solid;
     width: 200px;
@@ -31,12 +36,22 @@ td.large {
 td.tiny {
     height:20px;
     border:none;
+    text-align: right;
 }
+button.tiny{
 
-.inMonth {
-    background-color: rgb(245, 230, 230);  
+        width: 2px;
+        height: 2px;
+        padding: 0px;
+        box-sizing: border-box;
+        border: 0;
+        background: red;
+
 }
 .outMonth {
+    background-color: rgb(245, 230, 230);  
+}
+.inMonth {
     background-color: var(--disable)
 }
 #header {
@@ -103,32 +118,32 @@ caption {
 .one, .MorningA-IORT {
     background-color:#fcc9ae;
     height:10px;
-    border:none;
+    border: 1px outset #ccc;
 } 
 .two, .MorningB {
     background-color:#fcdfbc;
     height:10px;
-    border:none;
+    border: 1px outset #ccc;
 }   
 .three, .EveningA {
     background-color:#fceb8e;
     height:10px;
-    border:none;
+    border: 1px outset #ccc;
 }  
 .four, .EveningB {
     background-color:#ccccc5;
     height:10px;
-    border:none;
+    border: 1px outset #ccc;
 }  
 .five,.Float1 {
     background-color:#cce9b6;
     height:10px;
-    border:none;
+    border: 1px outset #ccc;
 }  
 .six, .Float2  {
     background-color:#a4c2b9;
     height:10px;
-    border:none;
+    border: 1px outset #ccc;
 }    
 .theUser {
     color: red;
