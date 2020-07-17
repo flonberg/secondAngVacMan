@@ -58,7 +58,6 @@ export class MonthViewComponent implements OnInit {
       this.qParams = queryParams;
       this.genEditSvce.setPlatform();                     // switch between BB and 242 databases. 
     });
-
     this.nextMonth(0);                                              // draw the calendar for current month
     this.monthNumber = 0;                                           // number for going forward or back. 
     this.physicsDutiesClass = [

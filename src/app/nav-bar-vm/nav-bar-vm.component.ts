@@ -25,9 +25,12 @@ export class NavBarVMComponent {
       }, {
           label: 'Monthview',
           link: './MonthView',
-          index: 1,
-      
-      }
+          index: 1,   
+      }, {
+        label: 'My Duties',
+        link: './MyDuties',
+        index: 2,   
+    }
     ];
   }
   setIndex(n){

@@ -26,6 +26,7 @@ import { MonthViewComponent } from './month-view/month-view.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { WINDOW_PROVIDERS } from './window.provider';
 import { NoticeComponent } from './notice/notice.component';
+import { MyDutiesComponent } from './my-duties/my-duties.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -36,6 +37,7 @@ import { NoticeComponent } from './notice/notice.component';
     TimeLineComponent,
     NavBarVMComponent,
     MonthViewComponent,
+    MyDutiesComponent,
     NoticeComponent,
 
   ],
@@ -55,10 +57,9 @@ import { NoticeComponent } from './notice/notice.component';
     MatAutocompleteModule,
     RouterModule.forRoot([
       { path: 'MonthView', component: MonthViewComponent },
-      { path: 'WWD/:docidx', component: DoseFxComponent},
       { path: 'VacMan**', component: TimeLineComponent},
       { path: 'VacMan/:userid', component: TimeLineComponent},
-      { path: 'MonthView/PhysicsCoverage', component: MonthViewComponent},
+      { path: 'MyDuties', component:MyDutiesComponent},
      { path: '**', component: TimeLineComponent}
     ])
 
