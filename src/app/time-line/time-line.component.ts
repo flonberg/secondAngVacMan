@@ -541,13 +541,13 @@ console.log("213");
           };
    
    this.genEditSvce.genPOST(this.insertP)
-   /*.subscribe(                                          // can't subscribe to POST REST calls ?????
+   .subscribe(                                          // can't subscribe to POST REST calls ?????
     (response) => {
       this.ret =  response.toString;
       console.log( "rrrrrr %o", response.toString );
       this.storeFromPOST(response);
     })   
-    */  
+   
     console.log("336 this.ret %o", this.ret);
     this.newTimeAway2 = false;    
                                  // turn off the controls  
@@ -569,7 +569,7 @@ console.log("213");
       this.genEditSvce.getFromFile().subscribe(
         (response) => {
           console.log("getFromFile response %o", response);
-          this.ret = this.storeFromPOST(response);
+      //    this.ret = this.storeFromPOST(response);
         }
       )
 

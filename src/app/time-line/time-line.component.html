@@ -113,7 +113,7 @@
                     <th colspan="2">Coverers </th>
                 </tr>
                 <tr><th></th><th> First Coverer</th><th>Second Coverer</th></tr>
-                <tr>
+                <tr  *ngIf="this.rData['data'][this._id]">
                     <td> 
                         <mat-select    name = "coverer"  id='covererUserKey' >
                             <mat-option *ngFor = "let item of rData['users'] | keyvalue" 
