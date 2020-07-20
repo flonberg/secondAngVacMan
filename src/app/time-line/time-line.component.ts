@@ -519,7 +519,8 @@ console.log("213");
         return {};
     }
   }
-  onSubmit() {
+  onSubmit() 
+  {
  
         /*********     Add to dataBase  **********************/
         this.insertP = <SinsertParams>{};                                // create instance of interface
@@ -539,22 +540,18 @@ console.log("213");
             subject: "Time Away"
           };
    
-   this.genEditSvce.genPOST(this.insertP).subscribe(
+   this.genEditSvce.genPOST(this.insertP)
+   /*.subscribe(                                          // can't subscribe to POST REST calls ?????
     (response) => {
       this.ret =  response.toString;
       console.log( "rrrrrr %o", response.toString );
       this.storeFromPOST(response);
-
-    })     
-    console.log("336 test commit %o", this.ret);
+    })   
+    */  
+    console.log("336 this.ret %o", this.ret);
     this.newTimeAway2 = false;    
                                  // turn off the controls  
-    this.genEditSvce.getFromFile().subscribe(
-      (response) => {
-        console.log("getFromFile response %o", response);
-        this.ret = this.storeFromPOST(response);
-      }
-    )
+  
     const mP = {
       'action': 'sendEmail',
       'address':'flonberg@partners.org',              // change to Brian
@@ -563,29 +560,38 @@ console.log("213");
       <p> You can approve this Time Away using the below link: </p>
       <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Approve Time Away </a>`,
       } ;
-     this.genEditSvce.genPOST(mP).subscribe(
+     this.genEditSvce.genPOST(mP)
+     /*.subscribe(
         (response)=>{
           console.log("emailService");
+        }tim
+      );  */
+      this.genEditSvce.getFromFile().subscribe(
+        (response) => {
+          console.log("getFromFile response %o", response);
+          this.ret = this.storeFromPOST(response);
         }
-      );  
-      
+      )
+
+  }
+  storeFromPOST(s){
+    this.ret = s;
+    console.log("store %o",  this.ret);                               // stores the vacation3 vidx to a
+    var idx = s.arg;
+    console.log("idx is " + idx);
     const item = {
-      id: Object.keys(this.data2._data).length + 43,                 // incase the user has DELETED a tA before adding
+      id: Object.keys(this.data2._data).length + 1,                 // incase the user has DELETED a tA before adding
       start: this.formG.value.dateFrom + ' 00:00:00',
       end: this.formG.value.dateTo + ' 00:00:00',
       content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
       group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
       reason: this.formG.value.reasonG,
       note: this.formG.value.noteG,
-      vidx: this.ret 
+      className: this.userid,
+      vidx: this.ret['arg']
     };
-    var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSet
-  }
-  storeFromPOST(s){
-    this.ret = s;
-    console.log("store %o",  this.ret);
-    var idx = s.arg;
-    console.log("idx is " + idx);
+    var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSe
+    console.log("593 %o", item);
     return idx;
   }
   /*

@@ -136,6 +136,11 @@ export class GenEditService   {
      
   }
 */
+  getLastIdx(){
+    const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';
+    console.log('getMyDuties url is ' + url2);
+    return this.http.get(url2);
+  }
   getMyDuties(UserId){
     if (!this.urlBase){           
       this.setPlatform();                   // sets the platform to BB or 242
