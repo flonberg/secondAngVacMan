@@ -140,7 +140,7 @@ export class GenEditService   {
     const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';
     console.log('getMyDuties url is ' + url2);
     return this.http.get(url2);
-  }
+    }
   getMyDuties(UserId){
     if (!this.urlBase){           
       this.setPlatform();                   // sets the platform to BB or 242
@@ -208,7 +208,7 @@ export class GenEditService   {
     }
     */
 
-    
+
   genPOST(dBParams){
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
     return this.http.post(url2, JSON.stringify(dBParams), { responseType: 'text' as 'json' });

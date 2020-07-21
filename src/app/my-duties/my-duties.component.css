@@ -1,0 +1,11 @@
+table {
+    table-layout:fixed;
+    width:400px;
+}
+caption {
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }

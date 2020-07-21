@@ -34,7 +34,14 @@ export class MyDutiesComponent implements OnInit {
     }
     setMyDuties(p){
       this.myDuties = p;
+      console.log("myDuties are %o", this.myDuties);
     
+    }
+    isOdd(n){
+      if (n % 2 == 0)
+        return 'even';
+      else 
+        return 'odd';   
     }
 
 }

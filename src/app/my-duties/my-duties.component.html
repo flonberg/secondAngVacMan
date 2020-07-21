@@ -1,4 +1,11 @@
-<p>
-  my-duties works!
-</p>
-  
+
+  <div>
+    <table>
+      <caption> Duties </caption>
+      <tr *ngFor="let item of myDuties | keyvalue; let ind=index;" >
+        <td> {{ item.value.date }} </td>
+        <td> {{ item.value.dName }} </td>
+        <td> {{ item.value.timeSpan }} </td>
+      </tr>
+    </table>
+  </div>
