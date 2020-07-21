@@ -545,11 +545,8 @@ console.log("213");
     (response) => {
       this.retFromPost(response);
     })   
-   
-    console.log("336 this.ret %o", this.ret);
     this.newTimeAway2 = false;    
-                                 // turn off the controls  
-  
+    /*************  Parameters for NeedToApprove Email  */
     const mP = {
       'action': 'sendEmail',
       'address':'flonberg@partners.org',              // change to Brian
@@ -564,16 +561,8 @@ console.log("213");
           console.log("emailService");
         }
       ); 
-      /*
-      this.genEditSvce.getFromFile().subscribe(
-        (response) => {
-          console.log("getFromFile response %o", response);
-         // this.retFromPost(response);
-        }
-      )
-      */
   }
- 
+ /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
     this.ret = s;
     console.log("store %o",  this.ret);                               // stores the vacation3 vidx to a

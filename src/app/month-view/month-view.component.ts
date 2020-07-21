@@ -118,16 +118,24 @@ export class MonthViewComponent implements OnInit {
    } 
   confirmDuty(){
     const editParams = {                                            // build dS to user with genEditSvce.update
+      'action': 'editAndLog',
       'tableName': 'PhysicsMonthlyDuty',
-      'editColName': 'phys2',
-      'editColVal': this.loggedInUserKey,
+      'editColNames': ['phys2'],
+      'editColVals': [this.loggedInUserKey],
       'whereColName': 'idx',
       'whereColVal': this.idxForEdit,
     }
     document.getElementById(this.idxForEdit).innerText = this.loggedInUserLastName;   // put swapperLastName in box
-    this.genEditSvce.update(editParams);                            // do the swap in the dB
+    this.genEditSvce.genPOST(editParams).subscribe(
+      (response)=>{
+        console.log("emailService");
+      }
+    );                             // do the swap in the dB
+//    this.genEditSvce.update(editParams);                            // do the swap in the dB
+    console.log(" 131   hhhhhhhh  genPOST ");
     document.getElementById('myModal').style.display = "none";      // clse the Modal
   }
+
   closeModal(){
     document.getElementById('myModal').style.display = "none";
   }
