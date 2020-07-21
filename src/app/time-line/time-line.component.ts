@@ -543,9 +543,7 @@ console.log("213");
    this.genEditSvce.genPOST(this.insertP)
    .subscribe(                                          // can't subscribe to POST REST calls ?????
     (response) => {
-      this.ret =  response.toString;
-      console.log( "rrrrrr %o", response.toString );
-      this.storeFromPOST(response);
+      this.retFromPost(response);
     })   
    
     console.log("336 this.ret %o", this.ret);
@@ -566,15 +564,17 @@ console.log("213");
           console.log("emailService");
         }
       ); 
+      /*
       this.genEditSvce.getFromFile().subscribe(
         (response) => {
           console.log("getFromFile response %o", response);
-      //    this.ret = this.storeFromPOST(response);
+         // this.retFromPost(response);
         }
       )
-
+      */
   }
-  storeFromPOST(s){
+ 
+  retFromPost(s){
     this.ret = s;
     console.log("store %o",  this.ret);                               // stores the vacation3 vidx to a
     var idx = s.arg;
