@@ -131,20 +131,7 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
-  /*
-  getHUBPhysicsMonthlyDuties(){
-    if (!this.urlBase){
-      this.setPlatform();
-    }
-  //  const selStr =  "SELECT *  FROM physicists p LEFT JOIN users u USING (UserKey ) WHERE active = 1";
-  //  const post = {"pTableName" : "physicists", "uTableName" : "users", "cKey":"UserKey", "whereClause":"WHERE active=1"};
-  //  const url = this.urlBase + 'RESThub.php?dataS=getPMD=&userid=' + this.userid + '&selStr='+ selStr;
-    const url2 = this.urlBase + 'REST_GET.php?action=getPMD&userid=' + this.userid;
-    console.log('getTa url is 5-21' + url2);
-    return this.http.get(url2)
-     
-  }
-*/
+
 
   getLastIdx(){
     const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';

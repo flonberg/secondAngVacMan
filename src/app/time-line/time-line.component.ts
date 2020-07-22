@@ -136,6 +136,7 @@ rData:any;
  // sEPP: SeditParams;
  loggedInLastName: string;
  loggedInFirstName: string;
+ loggedInRank: string;
   nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
@@ -319,19 +320,25 @@ console.log("213");
     this.genEditSvce.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
       this.notice = val;   
       console.log("169  notice is  %o", this.notice);                                        // save the resule
-      if (!this.notice || this.notice['vacMan']== 0){           // it NOT FOUND or 0
+      if (this.notice &&  this.notice['vacMan']== 0)          // it r 0
        document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
+      if (!this.notice ) {         // it NOT FOUND or 0
+        document.getElementById('noticeModalComponent').style.display = "block";  
+        this.insertP = <SinsertParams>{};                                // create instance of interface
+        this.insertP.tableName = 'notice';
+        this.insertP.action = 'insertRecGen';
+        this.insertP.colName  = ['vacMan', 'UserId'];  // names of columns to INSERT
+        this.insertP.colVal = ['0',<string>this.userid]
+     
+       
+        this.genEditSvce.genPOST(this.insertP)
+        .subscribe(                                          // can't subscribe to POST REST calls ?????
+        (response) => {
+          ;
+        })
       }
-    });;
-    /*
-    this.genEditSvce.genDB_GET(getParams).subscribe( val=>{         // get the datum from the notice table
-       this.notice = val;   
-       console.log("174" + this.notice);                                        // save the resule
-       if (!this.notice || this.notice[0]['vacMan']== 0){           // it NOT FOUND or 0
-        document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
-       }
-     });
- */
+    
+    });
   }
   closeModal(){
     document.getElementById('noticeModal').style.display = "none"; 
@@ -390,21 +397,23 @@ console.log("213");
            this.isApprover = true;
          }
       /***********  Set Class for Coverers display,  according to Acceptance */   
-      if ( this.data2._data[this._id]['covA_Duty'] == '1')
-         this.coverageAclass = "Accepted";
-         else
-           this.coverageAclass = "NotAccepted";
-      if ( this.data2._data[this._id]['covB_Duty'] == '1')
-           this.coverageBclass = "Accepted";
-           else
-             this.coverageBclass = "NotAccepted";     
-      /***********  Set if loggedInUser it the Coverer  */
-      if  (this.data2._data[this._id]['coverageA'] ==   this.rData['loggedInUserKey']){
-        this.coverageA_isLoggedInUser = true;
-      }
-      if  (this.data2._data[this._id]['coverageB'] ==   this.rData['loggedInUserKey']){
-        this.coverageB_isLoggedInUser = true;
-      }
+      if ( this.data2._data[this._id]     )  { 
+        if ( this.data2._data[this._id]['covA_Duty'] == '1')
+          this.coverageAclass = "Accepted";
+          else
+            this.coverageAclass = "NotAccepted";
+        if ( this.data2._data[this._id]['covB_Duty'] == '1')
+            this.coverageBclass = "Accepted";
+            else
+                this.coverageBclass = "NotAccepted";     
+        /***********  Set if loggedInUser it the Coverer  */
+        if  (this.data2._data[this._id]['coverageA'] ==   this.rData['loggedInUserKey']){
+          this.coverageA_isLoggedInUser = true;
+        }
+        if  (this.data2._data[this._id]['coverageB'] ==   this.rData['loggedInUserKey']){
+          this.coverageB_isLoggedInUser = true;
+        }
+    }
 
     console.log("coverageAclass" + this.coverageAclass);   
          var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
@@ -532,16 +541,17 @@ console.log("213");
         this.insertP.action = 'insertRecGen';
         this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
         this.insertP.colVal = [this.formG.value.dateFrom,  // colValues 
-        this.formG.value.dateTo, this.formG.value.reasonG,
-        this.formG.value.noteG, this.userkey], '0';
-          const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
-          this.insertP.email = {
-            msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-            <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
-            <p> You can approve this Time Away using the below link: </p>
-            <a href=`+ link + `> Time away schedule. </a>`,
-            mailToAddresses : Array("flonberg@partners.org","flonberg@gmail.com"),
-            subject: "Time Away"
+          this.formG.value.dateTo, this.formG.value.reasonG,
+          this.formG.value.noteG, this.userkey], '0';
+        const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
+        console.log("544  insertP is %o", this.insertP);
+        this.insertP.email = {
+              msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+              <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
+              <p> You can approve this Time Away using the below link: </p>
+              <a href=`+ link + `> Time away schedule. </a>`,
+              mailToAddresses : Array("flonberg@partners.org","flonberg@gmail.com"),
+              subject: "Time Away"
           };
    
    this.genEditSvce.genPOST(this.insertP)
@@ -559,12 +569,13 @@ console.log("213");
       <p> You can approve this Time Away using the below link: </p>
       <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Approve Time Away </a>`,
       } ;
-     this.genEditSvce.genPOST(mP)
+   /*  this.genEditSvce.genPOST(mP)
      .subscribe(
         (response)=>{
           console.log("emailService");
         }
       ); 
+      */
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
@@ -642,7 +653,7 @@ console.log("213");
     const endDate = new Date();  
                                                       // create new date to use for end                            
     endDate.setMonth(startDate.getMonth() + 4);                                         // set a date to be the forward date of data collection
-    startDate.setMonth(startDate.getMonth() - 2);                                       // set date for backward data collection far enough back to get all users
+    startDate.setMonth(startDate.getMonth() - 12);                                       // set date for backward data collection far enough back to get all users
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                // mm for endDate
     /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
@@ -744,6 +755,7 @@ console.log("213");
       this.userkey = this.useridToUserkeys[index].userkey;  
       this.loggedInLastName = s._data[index].LastName;
       this.loggedInFirstName = s._data[index].FirstName;
+      this.loggedInRank = s._data[index].rank;
       }                 // the userKey of the loggedIn user
   }
   assignGroups() {                                                     // put each tA in proper group.
