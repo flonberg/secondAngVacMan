@@ -70,7 +70,6 @@ rData:any;
   masterArray = ['This new page is part of upgrade of Whiteboard.',
   'To see details, or edit a TimeAway, click on that TimeAway. ',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
-
                 ];
   reason: String;
   startDate: FormControl;
@@ -212,8 +211,7 @@ rData:any;
       this.setQueryParams(queryParams);
    //   this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
-
-      this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
+      this.genEditSvce.checkIfNoticeNeeded('vacMan');                                   // see if a notice of a change is needed
     });
 console.log("213");
   }
@@ -308,38 +306,7 @@ console.log("213");
     console.log("enterinDb %o", this.covererDates);
     this.showCoverers = true;
   }
-  checkIfNoticeNeeded(){                                             // The NoticeModal is used to inform of changes
-    const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
-      action:'simpleGet',
-      tableName:'notice',
-      whereColName:'UserId',
-      whereColVal: this.userid,                                  // the UserId of the loggedInUser
-      getColName:'vacMan', 
-      };
-      console.log("166");
-    this.genEditSvce.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
-      this.notice = val;   
-      console.log("169  notice is  %o", this.notice);                                        // save the resule
-      if (this.notice &&  this.notice['vacMan']== 0)          // it r 0
-       document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
-      if (!this.notice ) {         // it NOT FOUND or 0
-        document.getElementById('noticeModalComponent').style.display = "block";  
-        this.insertP = <SinsertParams>{};                                // create instance of interface
-        this.insertP.tableName = 'notice';
-        this.insertP.action = 'insertRecGen';
-        this.insertP.colName  = ['vacMan', 'UserId'];  // names of columns to INSERT
-        this.insertP.colVal = ['0',<string>this.userid]
-     
-       
-        this.genEditSvce.genPOST(this.insertP)
-        .subscribe(                                          // can't subscribe to POST REST calls ?????
-        (response) => {
-          ;
-        })
-      }
-    
-    });
-  }
+  
   closeModal(){
     document.getElementById('noticeModal').style.display = "none"; 
   }
@@ -561,21 +528,22 @@ console.log("213");
     })   
     this.newTimeAway2 = false;    
     /*************  Parameters for NeedToApprove Email  */
-    const mP = {
-      'action': 'sendEmail',
-      'address':'flonberg@partners.org',              // change to Brian
-      'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away from AAAA to BBBB. </p>
-      <p> You can approve this Time Away using the below link: </p>
-      <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Approve Time Away </a>`,
-      } ;
-   /*  this.genEditSvce.genPOST(mP)
-     .subscribe(
-        (response)=>{
-          console.log("emailService");
-        }
-      ); 
-      */
+    if (this.rData.loggedInRank < 5){                   // if loggedInUser is Dosim.
+      const mP = {
+        'action': 'sendEmail',
+        'address':'flonberg@partners.org',              // change to Brian
+        'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+        <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away from AAAA to BBBB. </p>
+        <p> You can approve this Time Away using the below link: </p>
+        <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Approve Time Away </a>`,
+        } ;
+      this.genEditSvce.genPOST(mP)
+      .subscribe(
+          (response)=>{
+            console.log("emailService");
+          }
+        ); 
+      }
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
@@ -755,7 +723,6 @@ console.log("213");
       this.userkey = this.useridToUserkeys[index].userkey;  
       this.loggedInLastName = s._data[index].LastName;
       this.loggedInFirstName = s._data[index].FirstName;
-      this.loggedInRank = s._data[index].rank;
       }                 // the userKey of the loggedIn user
   }
   assignGroups() {                                                     // put each tA in proper group.

@@ -69,6 +69,7 @@ export class GenEditService   {
   host:string;
 
   userid: String;
+  notice:any;
   constructor(private http: HttpClient, @Inject(WINDOW) private window: Window) { }
 
   setUserId(s){               // get the userid from the router.queryParams.
@@ -95,7 +96,35 @@ export class GenEditService   {
     }    
     return this.host;                           // for time-line which has its own REST
     }
-    
+    checkIfNoticeNeeded(name){                                             // The NoticeModal is used to inform of changes
+      const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
+        action:'simpleGet',
+        tableName:'notice',
+        whereColName:'UserId',
+        whereColVal: this.userid,                                  // the UserId of the loggedInUser
+        getColName:name, 
+        };
+        console.log("166");
+      this.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
+        this.notice = val;   
+        console.log("169  notice is  %o", this.notice);                                        // save the resule
+        if (this.notice &&  this.notice['vacMan']== 0)          // it r 0
+         document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
+        if (!this.notice ) {         // it NOT FOUND or 0
+          document.getElementById('noticeModalComponent').style.display = "block";  
+          const insertP = <SinsertParams>{};                                // create instance of interface
+          insertP.tableName = 'notice';
+          insertP.action = 'insertRecGen';
+          insertP.colName  = ['vacMan', 'UserId'];  // names of columns to INSERT
+          insertP.colVal = ['0',<string>this.userid]
+          this.genPOST(insertP)
+          .subscribe(                                          // can't subscribe to POST REST calls ?????
+          (response) => {
+            ;
+          })
+        }
+      });
+    }  
   getFromFile(){
     if (!this.urlBase){           
       this.setPlatform();                   // sets the platform to BB or 242
