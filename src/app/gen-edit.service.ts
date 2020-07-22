@@ -16,10 +16,18 @@ export interface SeditParams {
   who: String;
 }
 export interface dB_GETparams {
+  action: string,
   tableName: string,
   getColName: string[],
   whereColName: string[],
   whereColVal: string[],
+}
+export interface dB_SimpleGETparams {
+  action: string,
+  tableName: string,
+  getColName: string,
+  whereColName: string,
+  whereColVal: string,
 }
 
 export interface dB_POSTparams {
@@ -99,6 +107,7 @@ export class GenEditService   {
   simpleGet(p){
     var i = 0;
     var getStr = "";
+    console.log("103 property %o", p);
     for (const property in p) {
     //  if (i++ == 0)
      //   getStr += "?"+`${property}`+"="+`${p[property]}`;
@@ -106,7 +115,7 @@ export class GenEditService   {
         getStr += "&"+`${property}`+"="+`${p[property]}`;
     }
     //const url = this.urlBase + "RESThub.php?dataS=getSimple"+getStr;
-    const url = this.urlBase + "RESThub.php?dataS=getSimple" + getStr;
+    const url = this.urlBase + "REST_GET.php?dataS=getSimple" + getStr;
     console.log("76 ffff " + url);
     return this.http.get(url) 
   }  
@@ -136,6 +145,7 @@ export class GenEditService   {
      
   }
 */
+
   getLastIdx(){
     const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';
     console.log('getMyDuties url is ' + url2);

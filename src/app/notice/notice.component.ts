@@ -18,8 +18,6 @@ export class NoticeComponent implements OnInit {
 
   ngOnInit() {
     console.log('init' + this.masterArray)
-  
- 
   }
   closeModal(){
     document.getElementById('noticeModalComponent').style.display = "none"; 
@@ -27,6 +25,7 @@ export class NoticeComponent implements OnInit {
   cancelNotice(){                                                   // 
     console.log('cancel Notice');
     const gP = <dB_POSTparams>{
+      action:'editAndLog',
       tableName: 'notice',
       whereColName: ['UserId'],
       whereColVal: [this.userid],

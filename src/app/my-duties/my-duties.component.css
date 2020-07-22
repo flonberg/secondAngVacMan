@@ -9,3 +9,9 @@ caption {
 tr:nth-child(even) {
     background-color: #f2f2f2;
   }
+  .center {
+    margin: auto;
+    width: 60%;
+  
+    padding: 10px;
+  }  

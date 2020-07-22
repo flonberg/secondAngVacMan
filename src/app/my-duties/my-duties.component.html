@@ -1,6 +1,6 @@
 
-  <div>
-    <table>
+  <div class='center'>
+    <table *ngIf="myDuties">
       <caption> Duties </caption>
       <tr *ngFor="let item of myDuties | keyvalue; let ind=index;" >
         <td> {{ item.value.date }} </td>

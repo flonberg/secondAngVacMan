@@ -1,5 +1,5 @@
 import { editParam } from './../dose-fx/dose-fx.component';
-import { GenEditService, SinsertParams, dB_GETparams } from './../gen-edit.service';
+import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams } from './../gen-edit.service';
 import { SeditParams, dB_POSTparams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -67,7 +67,10 @@ rData:any;
 //  idSel: String;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
-  masterArray = ['This new page is part of upgrade of Whiteboard to current techonolgy.'
+  masterArray = ['This new page is part of upgrade of Whiteboard.',
+  'To see details, or edit a TimeAway, click on that TimeAway. ',
+  'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
+
                 ];
   reason: String;
   startDate: FormControl;
@@ -209,7 +212,7 @@ rData:any;
    //   this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
 
-  //    this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
+      this.checkIfNoticeNeeded();                                   // see if a notice of a change is needed
     });
 console.log("213");
   }
@@ -305,16 +308,17 @@ console.log("213");
     this.showCoverers = true;
   }
   checkIfNoticeNeeded(){                                             // The NoticeModal is used to inform of changes
-    const getParams = <dB_GETparams>{                               // set the parameters for the genDB_GET interface
+    const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
+      action:'simpleGet',
       tableName:'notice',
-      whereColName:['UserId'],
-      whereColVal:[ this.userid],                                  // the UserId of the loggedInUser
-      getColName:['vacMan', ]
+      whereColName:'UserId',
+      whereColVal: this.userid,                                  // the UserId of the loggedInUser
+      getColName:'vacMan', 
       };
       console.log("166");
     this.genEditSvce.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
       this.notice = val;   
-      console.log("169" + this.notice);                                        // save the resule
+      console.log("169  notice is  %o", this.notice);                                        // save the resule
       if (!this.notice || this.notice['vacMan']== 0){           // it NOT FOUND or 0
        document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
       }
