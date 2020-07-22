@@ -10,6 +10,7 @@ export class NoticeComponent implements OnInit {
   @Input() visible: boolean;
   @Input() userid: string;
   @Input() masterArray : string[];
+  @Input() noticeColName: string;
   phraseA: string[];
   constructor(private genEditSvce: GenEditService) {
     this.phraseA = new Array();
@@ -17,7 +18,7 @@ export class NoticeComponent implements OnInit {
    }
 
   ngOnInit() {
-    console.log('init' + this.masterArray)
+    console.log('init' + this.masterArray + "colName " + this.noticeColName)
   }
   closeModal(){
     document.getElementById('noticeModalComponent').style.display = "none"; 
@@ -29,7 +30,7 @@ export class NoticeComponent implements OnInit {
       tableName: 'notice',
       whereColName: ['UserId'],
       whereColVal: [this.userid],
-      editColNames: ['vacMan'],
+      editColNames: [this.noticeColName],
       editColVals: ['1'],
       insert: true
     }
