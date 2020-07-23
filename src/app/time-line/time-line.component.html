@@ -5,71 +5,65 @@
     <div id="container">  
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)"> </div>
     </div>     
+    <!--       These divs allign the 'help' on the right  ???   -->
     <div id="main">
-            <div >
-                    <div *ngIf = "!newTimeAway2 " >
-                            <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
-                        </div>
-
-
-
+        <div >
+            <div *ngIf = "!newTimeAway2 " >
+                    <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
             </div>
-            <div >
-                    <app-help [helpArray] = "helpArray" style="width:300px;"></app-help>
-            </div>
-    
-          </div>
- 
-            <!------        This is the form used for adding new tAs ---------------> 
+        </div>
+        <div >
+                <app-help [helpArray] = "helpArray" style="width:200px;"></app-help>
+        </div>
+    </div>
   
-
-   
+            <!------        This is the form used for adding new tAs ---------------> 
 
     <div class = 'contDiv'>
          
 <!--         New Time Away Section  text to test Git   -->
-    <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
-        <div class = "heading" > Enter New Time Away Paramters </div>
-        <mat-form-field class="item">
-            <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
-        </mat-form-field>   
-        <mat-form-field class="item">
-            <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
-        </mat-form-field>    
-        
-        <mat-form-field  appearance="none">
-                <mat-label>Reason</mat-label>
-                    <mat-select  
-                    formControlName = "reasonG"  id='reasonId'>
-                            <mat-option  value="0">Personal Vacation</mat-option>
-                            <mat-option  value="1">Other</mat-option>
-                            <mat-option   value="2">Meeting</mat-option>  
-                    </mat-select>
-        </mat-form-field>
-        <mat-form-field  class="wideItem">
-                <mat-label class="smallLabel"> Note:</mat-label>
-                <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize"  cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
-                </textarea>
-        </mat-form-field > 
-        <!-- type='submit' is the default, must specify another type to avoid submitting  -->
-        <button mat-raised-button [disabled]="!formValidation" 
-            title="Valid Start and End dates as well as Reason required"  >Submit </button>
+        <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
+            <div class = "heading" > Enter New Time Away Paramters </div>
+            <mat-form-field class="item">
+                <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
+            </mat-form-field>   
+            <mat-form-field class="item">
+                <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
+            </mat-form-field>    
+            
+            <mat-form-field  appearance="none">
+                    <mat-label>Reason</mat-label>
+                        <mat-select  
+                        formControlName = "reasonG"  id='reasonId'>
+                                <mat-option  value="0">Personal Vacation</mat-option>
+                                <mat-option  value="1">Other</mat-option>
+                                <mat-option   value="2">Meeting</mat-option>  
+                        </mat-select>
+            </mat-form-field>
+            <mat-form-field  class="wideItem">
+                    <mat-label class="smallLabel"> Note:</mat-label>
+                    <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize"  cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
+                    </textarea>
+            </mat-form-field > 
+            <!-- type='submit' is the default, must specify another type to avoid submitting  -->
+            <button mat-raised-button [disabled]="!formValidation" 
+                title="Valid Start and End dates as well as Reason required"  >Submit </button>
 
-        <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
-            class="alert alert-danger">
-                <div *ngIf="this.formG.controls.dateFrom.errors.required">
-                    Start Date is required.
+            <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
+                class="alert alert-danger">
+                    <div *ngIf="this.formG.controls.dateFrom.errors.required">
+                        Start Date is required.
+                    </div>
+            </div>       
+            <div *ngIf="this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) "
+                class="alert alert-danger">
+                <div *ngIf="this.formG.controls.dateTo.errors.required">
+                End Date is required.
                 </div>
-        </div>       
-        <div *ngIf="this.formG.controls.dateTo.invalid && ( this.formG.controls.dateTo.dirty || this.formG.controls.dateTo.touched  ) "
-            class="alert alert-danger">
-            <div *ngIf="this.formG.controls.dateTo.errors.required">
-            End Date is required.
-            </div>
-        </div>  
-        <div class="alert alert-danger" *ngIf="formG.errors"  >   {{  formG.errors?.dates | json }} </div>     
-    </form>
- 
+            </div>  
+            <div class="alert alert-danger" *ngIf="formG.errors"  >   {{  formG.errors?.dates | json }} </div>     
+        </form>
+    
 
 <!--          Edit tA  Controls   -->
     <div style="text-align:center">
@@ -115,7 +109,7 @@
                 </div>
             </form> </td>
             <td  *ngIf = "!_readonly"  >  <button mat-raised-button color="primary" (click) = "editGen('del',$event)" >Delete</button> </td>
-        </tr></table>\  <div *ngIf = "drawEditControls && !newTimeAway2 " class="parentCenter"> 
+        </tr></table>  <div *ngIf = "drawEditControls && !newTimeAway2 " class="parentCenter"> 
                 <table *ngIf = "!_readonly" style = "width:60%; ">
                     <tr>
                         <th *ngIf = "covererToggle ">Chose First Coverer </th>

@@ -71,7 +71,7 @@ rData:any;
   'To see details, or edit a TimeAway, click on that TimeAway. ',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
-  helpArray = ['First Line', 'second Line'];
+  helpArray = ['Help relevant progress in the page will be show. '  ];
   noticeColName='vacMan';
   noticeModalComonentID='vacManModal'
   reason: String;
@@ -856,8 +856,7 @@ console.log("213");
   setNewTimeAway2(){
     this.newTimeAway2 = true;
     this.helpArray = [
-      'Start Date, End Date and Reason must be entered ',
-      'before new Time Aways can be Submitted.  '
+      'Start Date, End Date and Reason must be entered before new Time Aways can be Submitted.  '
     ];
   }
   /*
