@@ -115,45 +115,45 @@
                 </div>
             </form> </td>
             <td  *ngIf = "!_readonly"  >  <button mat-raised-button color="primary" (click) = "editGen('del',$event)" >Delete</button> </td>
-        </tr></table>
+        </tr></table>\  <div *ngIf = "drawEditControls && !newTimeAway2 " class="parentCenter"> 
+                <table *ngIf = "!_readonly" style = "width:60%; ">
+                    <tr>
+                        <th *ngIf = "covererToggle ">Chose First Coverer </th>
+                        <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
+                        <th colspan="2">Coverers </th>
+                    </tr>
+                    <tr><th></th><th> First Coverer</th><th>Second Coverer</th></tr>
+                    <tr  *ngIf="this.rData['data'][this._id]">
+                        <td> 
+                            <mat-select    name = "coverer"  id='covererUserKey' >
+                                <mat-option *ngFor = "let item of rData['users'] | keyvalue" 
+                                    value="item.value" (click) = "selectCoverer(item.key, item.value) "> {{item.key }} </mat-option>
+                            </mat-select>
+                        </td>
+                            <td><input  [class]="setColorForCoverage( this.rData['data'][this._id]['covA_Duty'] )" size=15 matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]  || this.covererName "
+                                [value]= "this.covererName ? this.covererName : this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']] "></td>
+                            <td><input [class]="setColorForCoverage( this.rData['data'][this._id]['covB_Duty'] )"   size=15  matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]  || this.covererName2 "
+                                 [value]= "this.covererName2  ? this.covererName2 : this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]" ></td>
+                            <td ><button  *ngIf = "this.covererUserKey > 0 "  mat-raised-button (click) = "storeCovererDate($event)" >Send Emails to Covers </button> </td>
+                    </tr>
+                </table>
+                <!--        Read Only Coverers Display        -->
+                <table *ngIf = "_readonly" style = "width:30%; ">   
+                    <caption> Coverers </caption>    
+                    <tr> 
+                        <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
+                        <td  *ngIf = "coverageA_isLoggedInUser  && coverageAclass=='NotAccepted'">  
+                                <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covA_Duty')">Accept </button>  
+                        </td>
+                        <td [class] = "coverageBclass" > {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
+                        <td  *ngIf = "coverageB_isLoggedInUser && coverageBclass=='NotAccepted'">  
+                                <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covB_Duty')">Accept </button>  
+                        </td>
+                    </tr>
+                </table>
+            </div>  
     </div >      
-        <div *ngIf = "drawEditControls && !newTimeAway2 " class="parentCenter"> 
-            <table *ngIf = "!_readonly" style = "width:60%; ">
-                <tr>
-                    <th *ngIf = "covererToggle ">Chose First Coverer </th>
-                    <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
-                    <th colspan="2">Coverers </th>
-                </tr>
-                <tr><th></th><th> First Coverer</th><th>Second Coverer</th></tr>
-                <tr  *ngIf="this.rData['data'][this._id]">
-                    <td> 
-                        <mat-select    name = "coverer"  id='covererUserKey' >
-                            <mat-option *ngFor = "let item of rData['users'] | keyvalue" 
-                                value="item.value" (click) = "selectCoverer(item.key, item.value) "> {{item.key }} </mat-option>
-                        </mat-select>
-                    </td>
-                        <td><input  [class]="setColorForCoverage( this.rData['data'][this._id]['covA_Duty'] )" size=15 matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]  || this.covererName "
-                            [value]= "this.covererName ? this.covererName : this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']] "></td>
-                        <td><input [class]="setColorForCoverage( this.rData['data'][this._id]['covB_Duty'] )"   size=15  matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]  || this.covererName2 "
-                             [value]= "this.covererName2  ? this.covererName2 : this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]" ></td>
-                        <td ><button  *ngIf = "this.covererUserKey > 0 "  mat-raised-button (click) = "storeCovererDate($event)" >Send Emails to Covers </button> </td>
-                </tr>
-            </table>
-            <!--        Read Only Coverers Display        -->
-            <table *ngIf = "_readonly" style = "width:30%; ">   
-                <caption> Coverers </caption>    
-                <tr> 
-                    <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
-                    <td  *ngIf = "coverageA_isLoggedInUser  && coverageAclass=='NotAccepted'">  
-                            <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covA_Duty')">Accept </button>  
-                    </td>
-                    <td [class] = "coverageBclass" > {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
-                    <td  *ngIf = "coverageB_isLoggedInUser && coverageBclass=='NotAccepted'">  
-                            <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covB_Duty')">Accept </button>  
-                    </td>
-                </tr>
-            </table>
-        </div>  
+      
         <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
                 <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
             <!--    This the readOnly version of the Reason control -->
