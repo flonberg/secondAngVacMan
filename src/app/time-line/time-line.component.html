@@ -1,19 +1,32 @@
 
 <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
 <div >
+        <app-notice [name] = 'this.userid' [masterArray]="masterArray" [noticeColName]="noticeColName" ></app-notice>
     <div id="container">  
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)"> </div>
     </div>     
+    <div id="main">
+            <div >
+                    <div *ngIf = "!newTimeAway2 " >
+                            <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
+                        </div>
+
+
+
+            </div>
+            <div >
+                    <app-help [helpArray] = "helpArray" style="width:300px;"></app-help>
+            </div>
+    
+          </div>
  
             <!------        This is the form used for adding new tAs ---------------> 
-    <div *ngIf = "!newTimeAway2 " >
-        <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
-    </div>
+  
 
-    <app-notice [name] = 'this.userid' [masterArray]="masterArray" [noticeColName]="noticeColName" ></app-notice>
+   
 
     <div class = 'contDiv'>
-           <app-help [helpArray] = "helpArray"></app-help>
+         
 <!--         New Time Away Section  text to test Git   -->
     <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
         <div class = "heading" > Enter New Time Away Paramters </div>
@@ -40,7 +53,7 @@
         </mat-form-field > 
         <!-- type='submit' is the default, must specify another type to avoid submitting  -->
         <button mat-raised-button [disabled]="!formValidation" 
-            title="Valid Start and End dates as well as Reason required"  >Submit New Time-Away</button>
+            title="Valid Start and End dates as well as Reason required"  >Submit </button>
 
         <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
             class="alert alert-danger">
