@@ -71,7 +71,9 @@ rData:any;
   'To see details, or edit a TimeAway, click on that TimeAway. ',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
+  helpArray = ['First Line', 'second Line'];
   noticeColName='vacMan';
+  noticeModalComonentID='vacManModal'
   reason: String;
   startDate: FormControl;
   endDate: FormControl;
@@ -212,7 +214,7 @@ rData:any;
       this.setQueryParams(queryParams);
    //   this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
-      this.genEditSvce.checkIfNoticeNeeded('vacMan');                                   // see if a notice of a change is needed
+      this.genEditSvce.checkIfNoticeNeeded('vacMan', this.noticeModalComonentID);                                   // see if a notice of a change is needed
     });
 console.log("213");
   }
@@ -351,6 +353,8 @@ console.log("213");
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
+             this.helpArray = ['Click on the Coverage drop-down and select person who will be you First Coverer  If you want to nominate a Second Coverer repeat the selection process.',       
+                              'The Coverer\' in green means that the coverage has been accepted'];
              }                                
            }
            console.log('clicked'  + this._id);
@@ -504,6 +508,10 @@ console.log("213");
   {
  
         /*********     Add to dataBase  **********************/
+        this.helpArray = [
+          'Click on the drop down menu to select the first coverer. ',
+          'before new Time Aways can be Submitted.  '
+        ];
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
         this.insertP.action = 'insertRecGen';
@@ -847,6 +855,10 @@ console.log("213");
   }
   setNewTimeAway2(){
     this.newTimeAway2 = true;
+    this.helpArray = [
+      'Start Date, End Date and Reason must be entered ',
+      'before new Time Aways can be Submitted.  '
+    ];
   }
   /*
   newTimeAway() {

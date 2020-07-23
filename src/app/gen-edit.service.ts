@@ -96,7 +96,7 @@ export class GenEditService   {
     }    
     return this.host;                           // for time-line which has its own REST
     }
-    checkIfNoticeNeeded(name){                                             // The NoticeModal is used to inform of changes
+    checkIfNoticeNeeded(name, modalID){                                             // The NoticeModal is used to inform of changes
       const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
         action:'simpleGet',
         tableName:'notice',
@@ -108,8 +108,8 @@ export class GenEditService   {
       this.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
         this.notice = val;   
         console.log("169  notice is  %o", this.notice);                                        // save the resule
-        if (this.notice &&  this.notice['vacMan']== 0)          // it r 0
-         document.getElementById('noticeModalComponent').style.display = "block";     // show the modal 
+        if (this.notice &&  this.notice[name]== 0)          // it r 0
+         document.getElementById('noticeModalComponent').style.display = "block";     // sNEED VAR = MODAL ID 
         if (!this.notice ) {         // it NOT FOUND or 0
           document.getElementById('noticeModalComponent').style.display = "block";  
           const insertP = <SinsertParams>{};                                // create instance of interface

@@ -517,13 +517,11 @@ MIT
 @angular/router
 MIT
 
-@angular/material/core
-
 @angular/material/form-field
 
 @angular/material/select
 
-@angular/material/autocomplete
+@angular/material/core
 
 zone.js
 MIT

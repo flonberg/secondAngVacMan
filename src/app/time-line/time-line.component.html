@@ -4,7 +4,7 @@
     <div id="container">  
         <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)"> </div>
     </div>     
-
+ 
             <!------        This is the form used for adding new tAs ---------------> 
     <div *ngIf = "!newTimeAway2 " >
         <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
@@ -13,6 +13,7 @@
     <app-notice [name] = 'this.userid' [masterArray]="masterArray" [noticeColName]="noticeColName" ></app-notice>
 
     <div class = 'contDiv'>
+           <app-help [helpArray] = "helpArray"></app-help>
 <!--         New Time Away Section  text to test Git   -->
     <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
         <div class = "heading" > Enter New Time Away Paramters </div>
@@ -165,6 +166,7 @@
 <div id="datums2"  style="display:none"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:none"> </div>
 <div id="chData" style="display:none" > chData </div>  
+
 
 
 <style type="text/css" >

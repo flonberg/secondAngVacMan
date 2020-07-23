@@ -27,6 +27,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { WINDOW_PROVIDERS } from './window.provider';
 import { NoticeComponent } from './notice/notice.component';
 import { MyDutiesComponent } from './my-duties/my-duties.component';
+import { HelpComponent } from './help/help.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -39,6 +40,7 @@ import { MyDutiesComponent } from './my-duties/my-duties.component';
     MonthViewComponent,
     MyDutiesComponent,
     NoticeComponent,
+    HelpComponent,
 
   ],
   imports: [

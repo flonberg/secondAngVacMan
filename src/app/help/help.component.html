@@ -1,0 +1,10 @@
+<div id="hideHelp" class='right'>
+<button mat-raised-button (click)="showHelp()"> Help </button>
+</div>
+
+<div id='helpDiv'  class='right'>
+    <button mat-raised-button (click)="hideHelp()"> Hide Help </button>
+
+    <p *ngFor = "let line of helpArray">
+        {{ line }}  </p> 
+</div>

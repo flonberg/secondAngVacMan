@@ -46,6 +46,12 @@ export class MonthViewComponent implements OnInit {
   startDateForGettingDataString: string;
   toPageID: string;
   colors:string[];
+  masterArray = ['This new Month View page is part of upgrade of Whiteboard.',
+  'To see details, or edit a TimeAway, click on that TimeAway. ',
+  'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
+                ];
+  noticeColName='monthView';
+  noticeModalID = 'monthViewModalID'
   // used to calculate a dayNumber to use as key
   constructor(private datePipe: DatePipe, private http: HttpClient, 
     private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService,
@@ -57,6 +63,7 @@ export class MonthViewComponent implements OnInit {
     .subscribe(queryParams => {   
       this.qParams = queryParams;
       this.genEditSvce.setPlatform();                     // switch between BB and 242 databases. 
+      this.genEditSvce.checkIfNoticeNeeded('monthView', this.noticeModalID);     
     });
     this.nextMonth(0);                                              // draw the calendar for current month
     this.monthNumber = 0;                                           // number for going forward or back. 

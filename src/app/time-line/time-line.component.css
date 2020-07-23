@@ -10,7 +10,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 0;
   width: auto;
 }
-
+.BBB {
+  width:70%;
+  float:left;
+  border:solid;
+}
+.AAA {
+  width:20%;
+  margin-left:20%;
+  border:solid;
+}
 .mat-raised-button.small {
   width: 20px;
   height: 20px;
