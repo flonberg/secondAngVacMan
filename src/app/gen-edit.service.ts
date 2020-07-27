@@ -46,6 +46,12 @@ export interface dB_POSTparams {
     subject: string
   };                                     // INSERT edited ROW if NOT found
 }
+export interface emailParams {
+  action: string,
+  subject: string,
+  addresses: string[],
+  msg:string
+}
 export interface SinsertParams {
   tableName: string;
   colName: string[];
@@ -223,18 +229,10 @@ export class GenEditService   {
        //   console.log("POST call", val);
         });
     }
-    //////  Inserts a single record. Uses : params.tablename= string; params.colName=[]; params.colVal = []; 
-   /* 
-  insert(dBParams){
+  sendEmail(emailParams){
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
-    console.log("insert url is " + url2);
-    return this.http.post(url2, JSON.stringify(dBParams)).pipe(map((response: Response) => {
-      return response;     
-      }));
-    }
-    */
-
-
+    return this.http.post(url2, JSON.stringify(emailParams), { responseType: 'text' as 'json' });
+  }
   genPOST(dBParams){
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
     return this.http.post(url2, JSON.stringify(dBParams), { responseType: 'text' as 'json' });

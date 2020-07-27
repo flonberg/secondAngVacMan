@@ -1,5 +1,5 @@
 import { editParam } from './../dose-fx/dose-fx.component';
-import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams } from './../gen-edit.service';
+import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams } from './../gen-edit.service';
 import { SeditParams, dB_POSTparams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -256,28 +256,26 @@ console.log("213");
     else
       return 'notCovered';  
   }
-  storeCovererDate(){                    // store the nominated coverer UserKey 
+  storeCovererDate()
+  {                    // store the nominated coverer UserKey 
     console.log(" rData %o", this.rData['data'][this._id]['vidx']);
     const vidx = this.rData['data'][this._id]['vidx'];              // the vidx to be edited. 
     this.rData['emailByKey']['116'] = "flonberg@partners.org";
-    if (!this.covererToggle){
+
       var mailKey1 = this.covererUserKey;
-     // mailKey1 = this.covererUserKey2;                         // don't send to actual people in DEV mode
-    }
-    if (this.covererToggle){
       var mailKey2= this.covererUserKey2;
-    }
-    var mTA = ["flonberg@partners.org"];
-//    var mTA = this.rData['emailByKey'][mailKey1];
+
+    var mTA_dev = ["flonberg@partners.org"];
+    var mTA_prod = [this.rData['emailByKey'][mailKey1]];
     var link1 = this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
           + this.covererUserKey + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
     if (mailKey2){
       var link2 =this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
       + this.covererUserKey2 + '&mode=acceptCovB&vidx=' + this.data2._data[this._id].vidx;
-      mTA.push("flonberg@gmail.com")        // CHANGE TO ACTUAL COVERERADDRESS WHEN GOING TO PRODUCTION 
-//      mTA.push(this.rData['emailByKey'][mailKey2])
+      mTA_dev.push("flonberg@gmail.com")        // CHANGE TO ACTUAL COVERERADDRESS WHEN GOING TO PRODUCTION 
+      mTA_prod.push(this.rData['emailByKey'][mailKey2])
     }     
-    console.log("link is " + link1);
+    console.log("link is " + link1 + "mTA_prod is %o ", mTA_prod);
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
     <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. 
      starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
@@ -297,14 +295,31 @@ console.log("213");
       editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
       userid: this.userid,   
       email:{
-        mailToAddresses: mTA,
+        mailToAddresses: mTA_dev,
         msg : message,
         subject: "TEST EMAIL PLEASE DISREGARD "
       }
     };
+    const emailParams = <emailParams> {
+      action:'sendEmailWithMessage', 
+      subject: 'Time Away Coverage',
+      msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. 
+       starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
+       through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
+      <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
+      <p><a href=`+ link1 + `> Accept  coverage. </a></p>
+      `,
+      addresses: ['flonberg@partners.org']          // for prod send the coverer address. 
+    }
     console.log("371fff");
-    this.genEditSvce.genDB_POST(upDateParams);
-  }
+    this.genEditSvce.genPOST(upDateParams).subscribe(
+      (res) => {
+        console.log("res from sendEmailWithMessage " + res);
+      }
+    );
+  }                                                       // end of StoreCovererData 
+
   enterInDbAndEmail(){
     console.log("enterinDb %o", this.covererDates);
     this.showCoverers = true;
@@ -504,9 +519,12 @@ console.log("213");
         return {};
     }
   }
+  cancelNewTA(){
+    console.log("cancel newTA");
+    this.newTimeAway2 = false;
+  }
   onSubmit() 
   {
- 
         /*********     Add to dataBase  **********************/
         this.helpArray = [
           'Click on the drop down menu to select the first coverer. ',
@@ -754,12 +772,15 @@ console.log("213");
     this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]  // the DOM element link to the timeline
     this.genEditSvce.genDB_POST(this.dB_PP);                            // do the dB operation
   }
+  sendEmail(type, event){
+    console.log("sendEmail %o", event);
+  }
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
    const shownId = this._id;
    console.log( 'editGen ' + this.data2._data[this._id]['approved'] + "thisis" + shownId);
     if (type =='start' || type =='end'){                                  // if it is a date
-      const s = this.formatDateForTimeline(event.value);                 // make the string for local update
+      const changedDate = this.formatDateForTimeline(event.value);                 // make the string for local update
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
     }
     if (event.target && event.target.value)                               // the editColVal can be a target.balue
@@ -781,21 +802,39 @@ console.log("213");
       this.dB_PP.email.mailToAddresses[0] = "flonberg@partners.org";
      // this.dB_PP.email.mailToAddresses[1] = "flonberg@gmail.com";
       this.dB_PP.email.subject='Time Away';
-    }
+    }  
+    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.data2._data[this._id].vidx;
+    var emp = {msg : "",
+                action:"sendEmail2",
+               addr: ["flonberg@partners.org"] };
     if (type === 'start') {
+      emp.msg = "The start date of the Time Away for " + this.data2._data[this._id]['LastName'] + " has changed  from " + this.data2._data[this._id]['start'].substr(0, 10) +
+      " to " + event.target.value +". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
+      this.data2.update({id: this._id, style:'color:red' })
       this.startDateEdited = true;
       this.dB_PP.editColNames = ['startDate','approved'];
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
+   
+      this.genEditSvce.sendEmail(emp).subscribe(
+        (res) => {
+          console.log("res from sendEmail " + res);
+        }
+      );
+    
     }                                                                   // update startDate
     if (type === 'end') {
+      emp.msg = "The end date of the Time Away for " + this.data2._data[this._id]['lastName'] + " has changed  from " + this.data2._data[this._id]['end'].substr(0, 10) +
+        "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
+      console.log("oldVal " + emp.msg);
      this.data2.update({id: this._id, end: dateForDataSet}); 
      this.data2.update({id: this._id, style:'color:red' })
       this.endDateEdited = true;
       this.dB_PP.editColNames = ['endDate','approved'];
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
+      this.genEditSvce.sendEmail(emp).subscribe;
     }
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];
@@ -815,6 +854,7 @@ console.log("213");
     }
     this.dB_PP.action='editAndLog';
     this.dB_PP.userid = <string>this.userid;
+    console.log("839 this.dB_PP %o", this.dB_PP);
     this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
   }
 
