@@ -67,7 +67,7 @@ rData:any;
 //  idSel: String;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
-  masterArray = ['This new page is part of upgrade of Whiteboard.AAAA',
+  masterArray = ['This new page is part of upgrade of Whiteboard.',
   'To see details, or edit a TimeAway, click on that TimeAway. ',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
@@ -171,6 +171,7 @@ rData:any;
   coverageB_isLoggedInUser:boolean;
   keyFromQP: number;
   ret: any;
+  lastInsertIdx: any;
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
@@ -554,30 +555,16 @@ console.log("213");
       this.retFromPost(response);
     })   
     this.newTimeAway2 = false;    
-    /*************  Parameters for NeedToApprove Email  */
-    if (this.rData.loggedInRank < 5){                   // if loggedInUser is Dosim.
-      const mP = {
-        'action': 'sendEmail',
-        'address':'flonberg@partners.org',              // change to Brian
-        'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-        <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away from AAAA to BBBB. </p>
-        <p> You can approve this Time Away using the below link: </p>
-        <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=XXXX> Approve Time Away </a>`,
-        } ;
-      this.genEditSvce.genPOST(mP)
-      .subscribe(
-          (response)=>{
-            console.log("emailService");
-          }
-        ); 
-      }
+ 
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
     this.ret = s;
-    console.log("store %o",  this.ret);                               // stores the vacation3 vidx to a
-    var idx = s.arg;
-    console.log("idx is " + idx);
+    console.log("store %o",  s);                               // stores the vacation3 vidx to a
+    var idx = s.lastID;
+    this.lastInsertIdx = s['lastID'];
+    console.log("idx is" +  s['lastID'] );
+
     const item = {
       id: Object.keys(this.data2._data).length + 1,                 // incase the user has DELETED a tA before adding
       start: this.formG.value.dateFrom + ' 00:00:00',
@@ -587,10 +574,28 @@ console.log("213");
       reason: this.formG.value.reasonG,
       note: this.formG.value.noteG,
       className: this.userid,
-      vidx: this.ret['arg']
+      vidx: this.lastInsertIdx
     };
     var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSe
     console.log("593 %o", item);
+       /*************  Parameters for NeedToApprove Email  */
+       if (this.rData.loggedInUserRank < 5){                   // if loggedInUser is Dosim.
+        const mP = {
+          'action': 'sendEmail2',
+          'addr':['flonberg@partners.org'],              // change to Brian
+          'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+          <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away from ` 
+          + this.formG.value.dateFrom     +  `    to + ` + this.formG.value.dateTo     +  `. </p>
+          <p> You can approve this Time Away using the below link: </p>
+          <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx + `> Approve Time Away </a>`,
+          } ;
+        this.genEditSvce.genPOST(mP)
+        .subscribe(
+            (response)=>{
+              console.log("emailService");
+            }
+          ); 
+        }
     return idx;
   }
   /*
@@ -815,8 +820,7 @@ console.log("213");
       this.startDateEdited = true;
       this.dB_PP.editColNames = ['startDate','approved'];
       this.dB_PP.editColVals.push('0');
-      this.dB_PP.needEmail="dateChange";
-   
+    //  this.dB_PP.needEmail="dateChange";
       this.genEditSvce.sendEmail(emp).subscribe(
         (res) => {
           console.log("res from sendEmail " + res);
@@ -834,7 +838,12 @@ console.log("213");
       this.dB_PP.editColNames = ['endDate','approved'];
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
-      this.genEditSvce.sendEmail(emp).subscribe;
+     // this.genEditSvce.sendEmail(emp).subscribe;
+      this.genEditSvce.sendEmail(emp).subscribe(
+        (res) => {
+          console.log("res from sendEmail " + res);
+        }
+      );
     }
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];

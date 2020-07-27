@@ -231,11 +231,11 @@ export class GenEditService   {
     }
   sendEmail(emailParams){
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
-    return this.http.post(url2, JSON.stringify(emailParams), { responseType: 'text' as 'json' });
+    return this.http.post(url2, JSON.stringify(emailParams), { responseType:  'json' });
   }
   genPOST(dBParams){
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
-    return this.http.post(url2, JSON.stringify(dBParams), { responseType: 'text' as 'json' });
+    return this.http.post(url2, JSON.stringify(dBParams), { responseType:  'json' });
   }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
       ////// whereColName = [];  whereColVal = [] \\\\\
