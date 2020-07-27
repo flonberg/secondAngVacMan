@@ -71,7 +71,8 @@ rData:any;
   'To see details, or edit a TimeAway, click on that TimeAway. ',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
-  helpArray = ['Help relevant progress in the page will be show. '  ];
+  helpArray = ['To schedule a Time Away click on the New Time Away button ',
+                'The Help shown here will change to be relevant to you stage in the scheduling of your Time Away.'  ];
   noticeColName='vacMan';
   noticeModalComonentID='vacManModal'
   reason: String;
@@ -363,15 +364,20 @@ console.log("213");
            if (!this.data2._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
           }
+       //   console.log("approved " + this.data2._data[this._id]['approved'])
         this._vidx = this.data2._data[this._id].vidx;                                           // store the vidx for editing
         document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
      //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  this.insertP used for editing tA
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
-             this.helpArray = ['Click on the Coverage drop-down and select person who will be you First Coverer  If you want to nominate a Second Coverer repeat the selection process.',       
-                              'The Coverer\' in green means that the coverage has been accepted'];
-             }                                
+             if (this.data2._data[this._id].approved == 1)
+              this.helpArray = ['Click on the Coverage drop-down and select person who will be you First Coverer.',  
+                                'If you want to nominate a Second Coverer, click on the Coverage drop-down again',       
+                              ];
+             }     
+             else
+              this.helpArray = ['Your Time Away must be approved before you cen select coverers'];                           
            }
            console.log('clicked'  + this._id);
       /*******  classify loggedInUser as tA Owner or coverer */     
@@ -527,10 +533,8 @@ console.log("213");
   onSubmit() 
   {
         /*********     Add to dataBase  **********************/
-        this.helpArray = [
-          'Click on the drop down menu to select the first coverer. ',
-          'before new Time Aways can be Submitted.  '
-        ];
+        if (+this.loggedInRank < 5 )
+        this.helpArray = ['Your Time Away needs to be approved before you can select coverage. '];
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
         this.insertP.action = 'insertRecGen';
@@ -797,7 +801,7 @@ console.log("213");
       this.dB_PP.editColNames = ['reason'];
       this.data2.update({id: this._id, reason: dateForDataSet});  
     }
-    if (type === 'start' || type === 'end' && this.data2._data[this._id]['approved'] == 1 ) {
+    if (type === 'start' || type === 'end' && +this.data2._data[this._id]['approved'] == 1 ) {
       console.log("561 wwwwwwww");
       const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
       this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
@@ -894,7 +898,7 @@ console.log("213");
       return year + '-' + month + '-' + day + ' 00:00:00';
   }
 
-
+/*
   approve() {
     console.log('appreove' + this._id);
     this.data2.update({id: this._id, style: 'color:blue'});
@@ -902,6 +906,7 @@ console.log("213");
     this.data2._data[this._id].approved = 1;
  //   this.editReason(1, 'approved');
   }
+  */
   setNewTimeAway2(){
     this.newTimeAway2 = true;
     this.helpArray = [

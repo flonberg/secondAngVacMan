@@ -104,8 +104,10 @@
                         </div>
                     </form> </td>
                     <td  *ngIf = "!_readonly"  >  <button mat-raised-button color="primary" (click) = "editGen('del',$event); sendEmail('del', $event);" >Delete</button> </td>
-                </tr></table>  <div *ngIf = "drawEditControls && !newTimeAway2 " class="parentCenter"> 
-                        <table *ngIf = "!_readonly" style = "width:60%; ">
+                </tr></table>  
+                <div *ngIf = "drawEditControls && !newTimeAway2  && +this.data2._data[this._id]['approved'] == 1" class="parentCenter"> 
+                    {{ +this.data2._data[this._id]['approved'] }}  {{ this._id }}  {{ this.data2._data[this._id]['start']   }} {{ this.data2._data[this._id]['approved']   }}
+                        <table *ngIf = "!_readonly " style = "width:60%; ">
                             <tr>
                                 <th *ngIf = "covererToggle ">Chose First Coverer </th>
                                 <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
