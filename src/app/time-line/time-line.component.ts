@@ -383,8 +383,11 @@ console.log("213");
       /*******  classify loggedInUser as tA Owner or coverer */     
        if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner 
            this._readonly = false;                                                              // enable editing
-           } else {                                                                             // user is NOT tA owner
-           this._readonly = true;                                                                // make controls readOnly
+           } else
+          {                                                                             // user is NOT tA owner
+              this._readonly = true;                                                                // make controls readOnly
+              this.helpArray = [ "Click on a TimeAway to see the details for tha TimeAway.",
+                                "Coverer namd in green means that the coverage has bee accepted."]; 
            }
            
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
@@ -406,6 +409,15 @@ console.log("213");
         }
         if  (this.data2._data[this._id]['coverageB'] ==   this.rData['loggedInUserKey']){
           this.coverageB_isLoggedInUser = true;
+        }
+        /************   Change Help text */
+        console.log("rData has " + +this.rData['loggedInUserKey'] + " data2 hsa " + +this.data2._data[this._id]['userkey'])
+        if (+this.rData['loggedInUserKey'] == +this.data2._data[this._id]['userkey']){
+          this.helpArray = [
+            "To change any parameter relevant to this TimeAway, just make the change in the Start Date, End Date, Reason, or Note.",
+            "The change is updated in the DataBase as soon as you make the change on the screen.",
+            "The is no need to click on a Submit button. "
+          ]
         }
     }
 
