@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GenEditService, SinsertParams, dB_GETparams, dB_POSTparams } from './../gen-edit.service';
+import { GenEditService, SinsertParams, dB_GETparams, dB_POSTparams, dB_multGETparams } from './../gen-edit.service';
 
 @Component({
   selector: 'app-notice',
@@ -12,6 +12,7 @@ export class NoticeComponent implements OnInit {
   @Input() masterArray : string[];
   @Input() noticeColName: string;
   phraseA: string[];
+
   constructor(private genEditSvce: GenEditService) {
     this.phraseA = new Array();
 

@@ -29,6 +29,13 @@ export interface dB_SimpleGETparams {
   whereColName: string,
   whereColVal: string,
 }
+export interface dB_multGETparams {
+  action: string,
+  tableName: string,
+  getColName: string[],
+  whereColName: string[],
+  whereColVal: string[],
+}
 
 export interface dB_POSTparams {
   action: string,
@@ -154,6 +161,12 @@ export class GenEditService   {
     console.log("76 ffff " + url);
     return this.http.get(url) 
   }  
+  multGet(p){
+    const jS = JSON.stringify(p);
+    const url = this.urlBase + "REST_GET.php?action=multGet&jG=" + jS;
+    console.log("167 multGet url is  " + url);
+    return this.http.get(url) 
+  }
   
   genDB_POST(dP){
       if (!this.urlBase){
@@ -166,7 +179,6 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
-
 
   getLastIdx(){
     const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';

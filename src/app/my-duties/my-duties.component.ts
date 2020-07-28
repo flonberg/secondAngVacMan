@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GenEditService } from '../gen-edit.service';
+import { GenEditService, dB_multGETparams } from '../gen-edit.service';
 import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-my-duties',
@@ -10,9 +10,21 @@ export class MyDutiesComponent implements OnInit {
   qParams: any; // Used as a param for REST getDuties. 
   myDuties: any;
 
+  dB_mG : dB_multGETparams = {
+    action:'multGet',
+    tableName:'',
+    getColName:[],
+    whereColName: [],
+    whereColVal:[]
+  }
+
+
+  
   constructor(
     private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService
-     ){ }
+     ){ 
+       this.genEditSvce=genEditSvce;
+     }
 
   ngOnInit(){
     this.activatedRoute                                             // point to the route clicked on
@@ -31,7 +43,20 @@ export class MyDutiesComponent implements OnInit {
           console.log(err);
         }
       );
+    const mP : dB_multGETparams = {
+      action:'multGet',
+      tableName:'PhysicsDuty',
+      getColName:['Idx','name','timeStpan','nomOrder'],
+      whereColName: ['Idx', 'Name'],
+      whereColVal:['3','ProstateImplants']
     }
+    this.genEditSvce.multGet(mP).subscribe(
+      (res)=> {
+        console.log("multGer %o", res);
+      }
+    );
+  }
+
     setMyDuties(p){
       this.myDuties = p;
       console.log("myDuties are %o", this.myDuties);
