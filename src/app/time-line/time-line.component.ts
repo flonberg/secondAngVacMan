@@ -1,5 +1,5 @@
 import { editParam } from './../dose-fx/dose-fx.component';
-import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams } from './../gen-edit.service';
+import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams, InsertParams } from './../gen-edit.service';
 import { SeditParams, dB_POSTparams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -230,15 +230,17 @@ rData:any;
           if (!this.notice ) {         // it NOT FOUND or 0
             if (   document.getElementById('noticeModalComponent') )
               document.getElementById('noticeModalComponent').style.display = "block";  
-            const insertP = <SinsertParams>{};                                // create instance of interface
-            insertP.tableName = 'notice';
-            insertP.action = 'insertRecGen';
-            insertP.colName  = ['vacMan', 'UserId'];  // names of columns to INSERT
-            insertP.colVal = ['0',<string>this.userid]
-            this.genEditSvce.genPOST(insertP)
+      
+            const tP = <InsertParams> {
+              action: 'insertRecGen',
+              tableName: 'notice',
+              colName: ['vacMan', 'UserId'],
+              colVal:['0',<string>this.userid,]
+            }  
+            this.genEditSvce.genPOST(tP)
             .subscribe(                                          // can't subscribe to POST REST calls ?????
             (response) => {
-              ;
+              this.lastInsertIdx = response;
             })
           }
         });

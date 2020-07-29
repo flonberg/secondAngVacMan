@@ -59,17 +59,23 @@ export interface emailParams {
   addresses: string[],
   msg:string
 }
+export interface InsertParams {
+  action: String,
+  tableName: String,
+  colName: String[],
+  colVal: String[]
+}
 export interface SinsertParams {
-  tableName: string;
-  colName: string[];
-  colVal: string[];
-  action: string;
-  userid: string;
-  needEmail?: string;
+  action: String;
+  tableName: String;
+  colName: String[];
+  colVal: String[];
+  userid: String;
+  needEmail?: String;
   email?: {
-    mailToAddresses:string[],
-    msg: string,
-    subject: string
+    mailToAddresses:String[],
+    msg: String,
+    subject: String
   };   
 }
 @Injectable({
