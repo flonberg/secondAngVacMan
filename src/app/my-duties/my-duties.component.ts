@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { GenEditService, dB_multGETparams } from '../gen-edit.service';
 import { ActivatedRoute } from '@angular/router';
@@ -9,22 +10,11 @@ import { ActivatedRoute } from '@angular/router';
 export class MyDutiesComponent implements OnInit {
   qParams: any; // Used as a param for REST getDuties. 
   myDuties: any;
+  multParams: any;
 
-  dB_mG : dB_multGETparams = {
-    action:'multGet',
-    tableName:'',
-    getColName:[],
-    whereColName: [],
-    whereColVal:[]
-  }
-
-
-  
   constructor(
     private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService
-     ){ 
-       this.genEditSvce=genEditSvce;
-     }
+     ){  }
 
   ngOnInit(){
     this.activatedRoute                                             // point to the route clicked on
@@ -44,16 +34,17 @@ export class MyDutiesComponent implements OnInit {
         }
       );
       /********  test for multGET          */
-    const mP : dB_multGETparams = {
+    const mP = <dB_multGETparams>  {
       action:'multGet',
       tableName:'PhysicsDuty',
-      getColName:['Idx','name','timeSpan','nomOrder'],
-      whereColName: ['Idx', 'Name'],
-      whereColVal:['3','ProstateImplants']
+      getColNames:['Idx','name','timeSpan','nomOrder'],
+      whereColNames: ['Idx', 'name'],
+      whereColVals:['3','ProstateImplants']
     }
     this.genEditSvce.multGet(mP).subscribe(
       (res)=> {
-        console.log("multGer %o", res);
+        this.multParams = res;
+        console.log("47  multGer %o", res);
       }
     );
   }

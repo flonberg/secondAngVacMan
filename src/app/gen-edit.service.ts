@@ -23,18 +23,18 @@ export interface dB_GETparams {
   whereColVal: string[],
 }
 export interface dB_SimpleGETparams {
-  action: string,
-  tableName: string,
-  getColName: string,
-  whereColName: string,
-  whereColVal: string,
+  action: String,
+  tableName: String,
+  getColName: String,
+  whereColName: String,
+  whereColVal: String,
 }
 export interface dB_multGETparams {
-  action: string,
-  tableName: string,
-  getColName: string[],
-  whereColName: string[],
-  whereColVal: string[],
+  action: String,
+  tableName: String,
+  getColNames: String[],
+  whereColNames: String[],
+  whereColVals: String[],
 }
 
 export interface dB_POSTparams {
@@ -117,27 +117,6 @@ export class GenEditService   {
         whereColVal: this.userid,                                  // the UserId of the loggedInUser
         getColName:name, 
         };
-        console.log("166");
-      this.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
-        this.notice = val;   
-        console.log("169  notice is  %o", this.notice);                                        // save the resule
-        if (this.notice &&  this.notice[name]== 0)          // it r 0
-         document.getElementById('noticeModalComponent').style.display = "block";     // sNEED VAR = MODAL ID 
-        if (!this.notice ) {         // it NOT FOUND or 0
-          if (   document.getElementById('noticeModalComponent') )
-            document.getElementById('noticeModalComponent').style.display = "block";  
-          const insertP = <SinsertParams>{};                                // create instance of interface
-          insertP.tableName = 'notice';
-          insertP.action = 'insertRecGen';
-          insertP.colName  = ['vacMan', 'UserId'];  // names of columns to INSERT
-          insertP.colVal = ['0',<string>this.userid]
-          this.genPOST(insertP)
-          .subscribe(                                          // can't subscribe to POST REST calls ?????
-          (response) => {
-            ;
-          })
-        }
-      });
     }  
   getFromFile(){
     if (!this.urlBase){           
