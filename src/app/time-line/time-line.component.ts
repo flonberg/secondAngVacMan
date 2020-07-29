@@ -230,7 +230,6 @@ rData:any;
           if (!this.notice ) {         // it NOT FOUND or 0
             if (   document.getElementById('noticeModalComponent') )
               document.getElementById('noticeModalComponent').style.display = "block";  
-      
             const tP = <InsertParams> {
               action: 'insertRecGen',
               tableName: 'notice',
@@ -262,24 +261,7 @@ console.log("213");
     this.covererToggle = !this.covererToggle;
  
   }
-  acceptCoverage(e){
-    console.log("cover %o", e);
-    if (e == 'covA_Duty')
-      this.coverageAclass = "Accepted";
-    if (e == 'covB_Duty')
-      this.coverageBclass = "Accepted";
-    const upDateParams = <dB_POSTparams>{
-      action:'editAndLog',
-      tableName:'vacation3',
-      whereColName:['vidx'],
-      whereColVal:[this.data2._data[this._id].vidx],
-      editColNames: [e],
-      editColVals: [ "1"  ],
-      userid: this.userid
-    };
-    console.log("371");
-  this.genEditSvce.genDB_POST(upDateParams);
-  }
+
   setColorForCoverage(s){
     if ( s && s == 1)
       return 'covered';
@@ -646,7 +628,7 @@ console.log("213");
   get startDateGet(){ return this.form.get('startDate');}
   get endDateGet(){return this.form.get('endDate');}
   */
-  /************    specific update routine to update StartDate and EndDate of tA, when user drags a tA  ************/
+  /*
   updateDB_StartEnd(sD: string, eD: string) {
       const upDateParams = <dB_POSTparams>{
         action:'editAndLog',
@@ -657,9 +639,9 @@ console.log("213");
         editColVals: [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ],
         userid: this.userid
       };
-      console.log("371");
    this.genEditSvce.genDB_POST(upDateParams);
   }
+  */
 
   formatDateYYYymmdd(d) {
     const pi = 3.14;
@@ -856,26 +838,28 @@ console.log("213");
     var emp = {msg : "",
                 action:"sendEmail2",
                addr: ["flonberg@partners.org"] };
-    if (type === 'start') {
-      emp.msg = "The start date of the Time Away for " + this.data2._data[this._id]['LastName'] + " has changed  from " + this.data2._data[this._id]['start'].substr(0, 10) +
-      " to " + event.target.value +". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
+               emp.msg = "The " + type + " date of the Time Away for " + this.data2._data[this._id]['LastName'] + " has changed  from " + this.data2._data[this._id]['start'].substr(0, 10) +
+               " to " + event.target.value +". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
+      this.genEditSvce.sendEmail(emp).subscribe(
+                (res) => {
+                  console.log("res from sendEmail " + res);
+                }
+              );
+    if (type === 'start' ) {
+  
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.data2.update({id: this._id, style:'color:red' })
       this.startDateEdited = true;
       this.dB_PP.editColNames = ['startDate','approved'];
       this.dB_PP.editColVals.push('0');
-    //  this.dB_PP.needEmail="dateChange";
-      this.genEditSvce.sendEmail(emp).subscribe(
-        (res) => {
-          console.log("res from sendEmail " + res);
-        }
-      );
+      this.dB_PP.needEmail="dateChange";
+ 
     
     }                                                                   // update startDate
     if (type === 'end') {
-      emp.msg = "The end date of the Time Away for " + this.data2._data[this._id]['lastName'] + " has changed  from " + this.data2._data[this._id]['end'].substr(0, 10) +
-        "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
-      console.log("oldVal " + emp.msg);
+    //  emp.msg = "The end date of the Time Away for " + this.data2._data[this._id]['lastName'] + " has changed  from " + this.data2._data[this._id]['end'].substr(0, 10) +
+     //   "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
+   
      this.data2.update({id: this._id, end: dateForDataSet}); 
      this.data2.update({id: this._id, style:'color:red' })
       this.endDateEdited = true;
@@ -883,11 +867,11 @@ console.log("213");
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
      // this.genEditSvce.sendEmail(emp).subscribe;
-      this.genEditSvce.sendEmail(emp).subscribe(
-        (res) => {
-          console.log("res from sendEmail " + res);
-        }
-      );
+   //   this.genEditSvce.sendEmail(emp).subscribe(
+    //    (res) => {
+     //     console.log("res from sendEmail " + res);
+      //  }
+      //);
     }
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];

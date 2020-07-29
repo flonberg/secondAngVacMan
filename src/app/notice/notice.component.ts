@@ -12,6 +12,7 @@ export class NoticeComponent implements OnInit {
   @Input() masterArray : string[];
   @Input() noticeColName: string;
   phraseA: string[];
+  editResponse: String;
 
   constructor(private genEditSvce: GenEditService) {
     this.phraseA = new Array();
@@ -25,7 +26,6 @@ export class NoticeComponent implements OnInit {
     document.getElementById('noticeModalComponent').style.display = "none"; 
   }
   cancelNotice(){                                                   // 
-    console.log('cancel Notice');
     const gP = <dB_POSTparams>{
       action:'editAndLog',
       tableName: 'notice',
