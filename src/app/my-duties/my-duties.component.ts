@@ -43,10 +43,11 @@ export class MyDutiesComponent implements OnInit {
           console.log(err);
         }
       );
+      /********  test for multGET          */
     const mP : dB_multGETparams = {
       action:'multGet',
       tableName:'PhysicsDuty',
-      getColName:['Idx','name','timeStpan','nomOrder'],
+      getColName:['Idx','name','timeSpan','nomOrder'],
       whereColName: ['Idx', 'Name'],
       whereColVal:['3','ProstateImplants']
     }

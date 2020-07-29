@@ -109,7 +109,7 @@ export class GenEditService   {
     }    
     return this.host;                           // for time-line which has its own REST
     }
-    checkIfNoticeNeeded(name, modalID){                                             // The NoticeModal is used to inform of changes
+    checkIfNoticeNeeded(name){                                             // The NoticeModal is used to inform of changes
       const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
         action:'simpleGet',
         tableName:'notice',
@@ -124,7 +124,8 @@ export class GenEditService   {
         if (this.notice &&  this.notice[name]== 0)          // it r 0
          document.getElementById('noticeModalComponent').style.display = "block";     // sNEED VAR = MODAL ID 
         if (!this.notice ) {         // it NOT FOUND or 0
-          document.getElementById('noticeModalComponent').style.display = "block";  
+          if (   document.getElementById('noticeModalComponent') )
+            document.getElementById('noticeModalComponent').style.display = "block";  
           const insertP = <SinsertParams>{};                                // create instance of interface
           insertP.tableName = 'notice';
           insertP.action = 'insertRecGen';
@@ -151,9 +152,6 @@ export class GenEditService   {
     var getStr = "";
     console.log("103 property %o", p);
     for (const property in p) {
-    //  if (i++ == 0)
-     //   getStr += "?"+`${property}`+"="+`${p[property]}`;
-    //  elset
         getStr += "&"+`${property}`+"="+`${p[property]}`;
     }
     //const url = this.urlBase + "RESThub.php?dataS=getSimple"+getStr;

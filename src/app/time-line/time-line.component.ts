@@ -216,7 +216,7 @@ rData:any;
       this.setQueryParams(queryParams);
    //   this.seP.who = this.userid;
       this.getTimelineData2();                                      // get the data from REST database call.
-      this.genEditSvce.checkIfNoticeNeeded('vacMan', this.noticeModalComonentID);                                   // see if a notice of a change is needed
+      this.genEditSvce.checkIfNoticeNeeded('vacMan');                                   // see if a notice of a change is needed
     });
 console.log("213");
   }
