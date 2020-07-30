@@ -834,17 +834,31 @@ console.log("213");
       console.log(" type is " + type + "e is %o", e);
     var p = {} as editsInt;
     p.name = type;
-    if (e.target.value)
+    if (!e){
+      console.log("null")
+
+    }
+    else if (e.value){
+      console.log(" 846 " + e.value);
+      p.value = e.value;
+      this.storedEdits.push(p);
+    }
+    else  if (e.target){
         p.value = e.target.value;
+        const dateForDataSet = e.target.value + " 00:00:00"; 
+        if (type=='start')
+        this.data2.update({id: this._id, start: dateForDataSet}); 
+      if (type=='end')
+        this.data2.update({id: this._id, end: dateForDataSet}); 
+        this.storedEdits.push(p);
+    }
+
     
-    this.storedEdits.push(p);
+  
     console.log(" type is " + type + "e is %o", e);
     console.log(" storeEdits is  %o", this.storedEdits);
-    const dateForDataSet = e.target.value + " 00:00:00";  
-    if (type=='start')
-      this.data2.update({id: this._id, start: dateForDataSet}); 
-    if (type=='end')
-      this.data2.update({id: this._id, end: dateForDataSet}); 
+
+ 
    
 
   }
