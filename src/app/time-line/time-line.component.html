@@ -66,18 +66,18 @@
                     <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
                         <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
                         <mat-form-field class="item" >
-                            <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (change)="editGen('start', $event)" 
+                            <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (change)="storeEdit('start', $event)" 
                             formControlName="dateToEdit"  [readonly] = "_readonly" 
                             type="date" useValueAsDate  />
                         </mat-form-field>    
                         <mat-form-field class="item">
-                                <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="editGen('end', $event)" 
+                                <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="storeEdit('end', $event)" 
                                 formControlName="dateFromEdit"  [readonly] = "_readonly" 
                                 type="date"  useValueAsDate  />
                         </mat-form-field>  
                         <mat-form-field *ngIf = "!_readonly" class="medium">
                             <mat-label>Reason</mat-label>
-                                <mat-select [(value)]='reasonSelect' (selectionChange)="editGen('reason', $event)"
+                                <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)"
                                 id='reasonId'>
                                         <mat-option  value="0">Personal Vacation</mat-option>
                                         <mat-option  value="1">Other</mat-option>
@@ -103,7 +103,10 @@
                             <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
                         </div>
                     </form> </td>
-                    <td  *ngIf = "!_readonly"  >  <button mat-raised-button color="primary" (click) = "editGen('del',$event); sendEmail('del', $event);" >Delete</button> </td>
+                    <td   *ngIf = "drawEditControls && !newTimeAway2 "  >  <button mat-raised-button color="primary" 
+                        (click) = " sendDeleteEmail();submitChanges();" >Submit Changes</button> </td>
+                    <td   *ngIf = "drawEditControls && !newTimeAway2 "  >  <button mat-raised-button color="primary" 
+                                                        (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>
                 </tr></table>  
                 <div *ngIf = "drawEditControls && !newTimeAway2  && +this.data2._data[this._id]['approved'] == 1" class="parentCenter"> 
                         <table *ngIf = "!_readonly " style = "width:60%; ">
@@ -127,6 +130,7 @@
                                     <td ><button  *ngIf = "this.covererUserKey > 0 "  mat-raised-button (click) = "storeCovererDate($event)" >Send Email to Covers </button> </td>
                             </tr>
                         </table>
+               
                         <!--        Read Only Coverers Display        -->
                         <table *ngIf = "_readonly" style = "width:30%; ">   
                             <caption> Coverers </caption>    

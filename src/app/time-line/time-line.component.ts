@@ -7,12 +7,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-import { DatePipe } from '@angular/common';
+import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } from '@angular/material';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
+interface editsInt  {
+  name: string;
+  value: number;
+}
 
 interface newTAparams {
   startDate: string;
@@ -129,6 +133,7 @@ rData:any;
       subject:''
     }
   }
+  storedEdits = [{}]
 
   /*
   SinsertPP: SinsertParams = {
@@ -174,8 +179,11 @@ rData:any;
   ret: any;
   lastInsertIdx: any;
 
+
+
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
+
       this.ret = 1;
     this.dateLabels = [];
     this.nomCoverers = [];
@@ -187,6 +195,9 @@ rData:any;
     this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
     this.contentArray = [];
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
+
+  
+  
    // this.seP.whereColName = 'vidx';
   //  this.seP.tableName = 'vacation3';
     this.index = 0;
@@ -381,7 +392,7 @@ console.log("213");
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
-             if (this.data2._data[this._id].approved == 1)
+             if (this.data2._data[this._id].approved == 1 )
               this.helpArray = ['Click on the Coverage drop-down and select person who will be you First Coverer.',  
                                 'If you want to nominate a Second Coverer, click on the Coverage drop-down again',       
                               ];
@@ -424,6 +435,8 @@ console.log("213");
         console.log("rData has " + +this.rData['loggedInUserKey'] + " data2 hsa " + +this.data2._data[this._id]['userkey'])
         if (+this.rData['loggedInUserKey'] == +this.data2._data[this._id]['userkey']){
           this.helpArray = [
+            'Click on the Coverage drop-down and select person who will be you First Coverer.',  
+            'If you want to nominate a Second Coverer, click on the Coverage drop-down again',  
             "To change any parameter relevant to this TimeAway, just make the change in the Start Date, End Date, Reason, or Note.",
             "The change is updated in the DataBase as soon as you make the change on the screen.",
             "The is no need to click on a Submit button. "
@@ -803,14 +816,47 @@ console.log("213");
     this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]  // the DOM element link to the timeline
     this.genEditSvce.genDB_POST(this.dB_PP);                            // do the dB operation
   }
-  sendEmail(type, event){
-    console.log("sendEmail %o", event);
+  sendDeleteEmail(){
+    const emp = {
+      action: "sendEmail2",
+      subject: "Time Away Deleted",
+      msg: "The Time Away for " + this.data2._data[this._id]['LastName'] + " starting "  + this.data2._data[this._id]['start'].substr(0, 10) +
+        " ending " + this.data2._data[this._id]['end'].substr(0, 10) + " has been deleted. ",
+      addr:    ["flonberg@partners.org"]
+    }
+    this.genEditSvce.genPOST(emp).subscribe(
+      (res) => {
+        console.log("res from sendEmail %o",  res);
+      }
+    );
+  }
+  storeEdit(type,e){
+      console.log(" type is " + type + "e is %o", e);
+    var p = {} as editsInt;
+    p.name = type;
+    if (e.target.value)
+        p.value = e.target.value;
+    
+    this.storedEdits.push(p);
+    console.log(" type is " + type + "e is %o", e);
+    console.log(" storeEdits is  %o", this.storedEdits);
+    const dateForDataSet = e.target.value + " 00:00:00";  
+    if (type=='start')
+      this.data2.update({id: this._id, start: dateForDataSet}); 
+    if (type=='end')
+      this.data2.update({id: this._id, end: dateForDataSet}); 
+   
+
   }
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
    const shownId = this._id;
+   var messageUsed = ""; 
    console.log( 'editGen ' + this.data2._data[this._id]['approved'] + "thisis" + shownId);
     if (type =='start' || type =='end'){                                  // if it is a date
+       messageUsed  = "The " + type + " date of the Time Away for " + this.data2._data[this._id]['LastName'] + " has changed  from "
+      + this.data2._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
+      ". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
       const changedDate = this.formatDateForTimeline(event.value);                 // make the string for local update
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
     }
@@ -823,42 +869,36 @@ console.log("213");
       this.dB_PP.editColNames = ['reason'];
       this.data2.update({id: this._id, reason: dateForDataSet});  
     }
-    if (type === 'start' || type === 'end' && +this.data2._data[this._id]['approved'] == 1 ) {
-      console.log("561 wwwwwwww");
-      const link =this.genEditSvce.urlBase +`/dist/material-demo/index.html?userid=napolitano`;
-      this.dB_PP.email.msg = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p>A Time Away for ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `  ` + this.loggedInLastName + ` has changed. </p>
-      <p> You can approve this time away using the below link: </p>
-      <a href=`+ link + `> Time away schedule. </a>`
-      this.dB_PP.email.mailToAddresses[0] = "flonberg@partners.org";
-     // this.dB_PP.email.mailToAddresses[1] = "flonberg@gmail.com";
-      this.dB_PP.email.subject='Time Away';
-    }  
+   
+   if (type !== 'del'){       
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.data2._data[this._id].vidx;
-    var emp = {msg : "",
-                action:"sendEmail2",
-               addr: ["flonberg@partners.org"] };
-               emp.msg = "The " + type + " date of the Time Away for " + this.data2._data[this._id]['LastName'] + " has changed  from " + this.data2._data[this._id]['start'].substr(0, 10) +
-               " to " + event.target.value +". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
-      this.genEditSvce.sendEmail(emp).subscribe(
+    var emp = { 
+              action:"sendEmail2",
+              addr: {"Dev":"flonberg@partners.org",
+                      "Prod":"flonberg@gmail.com"
+                    //  "Prod":"bnapolitano@partners.org"
+                    },
+              msg: messageUsed,
+              subject: "Time Away Change"
+              };
+      console.log(" 865 emp %o ", emp) ;       
+      this.genEditSvce.genPOST(emp).subscribe(
                 (res) => {
-                  console.log("res from sendEmail " + res);
+                  console.log("res from sendEmail %o", res);
                 }
               );
+    }
     if (type === 'start' ) {
-  
       this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
       this.data2.update({id: this._id, style:'color:red' })
       this.startDateEdited = true;
       this.dB_PP.editColNames = ['startDate','approved'];
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
- 
-    
     }                                                                   // update startDate
     if (type === 'end') {
-    //  emp.msg = "The end date of the Time Away for " + this.data2._data[this._id]['lastName'] + " has changed  from " + this.data2._data[this._id]['end'].substr(0, 10) +
-     //   "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
+      emp.msg = "The end date of the Time Away for " + this.data2._data[this._id]['lastName'] + " has changed  from " + this.data2._data[this._id]['end'].substr(0, 10) +
+        "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
    
      this.data2.update({id: this._id, end: dateForDataSet}); 
      this.data2.update({id: this._id, style:'color:red' })
@@ -867,11 +907,11 @@ console.log("213");
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
      // this.genEditSvce.sendEmail(emp).subscribe;
-   //   this.genEditSvce.sendEmail(emp).subscribe(
-    //    (res) => {
-     //     console.log("res from sendEmail " + res);
-      //  }
-      //);
+  //    this.genEditSvce.genPOST(emp).subscribe(
+   //     (res) => {
+  //        console.log("res from sendEmail " + res);
+  //      }
+   //   );
     }
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];
@@ -894,7 +934,7 @@ console.log("213");
     console.log("839 this.dB_PP %o", this.dB_PP);
     this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
   }
-
+  
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker
     const month = editTime.getMonth() + 1;                                // get month to assemble to edit

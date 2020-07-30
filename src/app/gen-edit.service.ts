@@ -4,6 +4,7 @@ import { WINDOW } from './window.provider';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 //import { start } from 'repl';
 
 export interface SeditParams {
@@ -86,7 +87,7 @@ export class GenEditService   {
   urlBase: string;
   platform: string;
   host:string;
-
+  emailStage; String;
   userid: String;
   notice:any;
   constructor(private http: HttpClient, @Inject(WINDOW) private window: Window) { }
@@ -97,6 +98,7 @@ export class GenEditService   {
    
   setPlatform(){             // set the dB host for the localhost version      
   //  this.angularRoute = this.loc.path();    
+    this.emailStage = "Dev"                                                 // the default. 
     const wlr = window.location.href;       
     console.log("window.location.herf is " + window.location.href);
   //  if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
@@ -104,10 +106,12 @@ export class GenEditService   {
  //   }   
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
       this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
+      this.emailStage = "Dev"; 
     }   
-    if ( window.location.href.indexOf('whiteboard') !== -1 ){
+    if ( window.location.href.indexOf('whiteboard') !== -1 ){                   // PROD. 
       console.log(" dectected whiteboard so setting urlBase to whitboard");
       this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
+      this.emailStage = "Prod";
     }    
     if ( window.location.href.indexOf('cat') !== -1 ){
       console.log(" dectected balckcat so setting urlBase to whitboard");
@@ -229,6 +233,7 @@ export class GenEditService   {
     return this.http.post(url2, JSON.stringify(emailParams), { responseType:  'json' });
   }
   genPOST(dBParams){
+    dBParams['emailStage'] = this.emailStage;
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
     return this.http.post(url2, JSON.stringify(dBParams), { responseType:  'json' });
   }
