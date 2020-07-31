@@ -834,9 +834,17 @@ console.log("213");
   }
   editColNames = [String];
   editColVals = [String];
+  needStartEmail = false;
+  needEndEmail = false;
+  newStartDate = String;
+  newEndDate = String;
+  EDO = { "OldStartDate": String,
+                  "NewStartDate": String,
+                  "OldEndDate": String,
+                  "NewEndDate": String,
+                }
   storeEdit(type,e){
     if (e.value){
-      console.log(" 846 " + e.value);
       this.editColNames.push(type);
       this.editColVals.push(e.value);  
     }
@@ -844,10 +852,19 @@ console.log("213");
         this.editColNames.push(type);
         this.editColVals.push(e.target.value);
         const dateForDataSet = e.target.value + " 00:00:00"; 
-        if (type=='startDate')
-          this.data2.update({id: this._id, start: dateForDataSet}); 
-        if (type=='endDate')
-          this.data2.update({id: this._id, end: dateForDataSet}); 
+        if (type=='startDate'){
+          this.needStartEmail = true;
+          this.EDO.OldStartDate = this.data2._data[this._id]['start'].slice(0,10); ; 
+          this.EDO.NewStartDate = e.target.value; 
+          this.data2.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
+        }
+        if (type=='endDate'){
+          this.needStartEmail = true;
+          this.EDO.OldEndDate = this.data2._data[this._id]['end'].slice(0,10); ; 
+          this.EDO.NewEndDate = e.target.value; 
+          this.data2.update({id: this._id, end: dateForDataSet});   
+          this.EDO.NewEndDate = e.target.value;
+        }
     }
   }
   saveEdits(){
@@ -862,13 +879,43 @@ console.log("213");
       whereColVal:[this.data2._data[this._id]['vidx']],
       userid:this.userid
     }
+    if (this.needStartEmail)
+      this.sendStartOrEndDateEmail();
     this.genEditSvce.genPOST(eP).subscribe(
       (res) => {
-        console.log("res from sendEmail %o",  res);
+        console.log("res from updatel %o",  res);
       }
     );
+
+  }
+  sendStartOrEndDateEmail(){
+    if (this.needStartEmail){
+      var msg = "The  Time Away of " + this.data2._data[this._id]['LastName'] + 'has changed';
+      if (typeof this.EDO.NewStartDate === 'string'){
+        msg += " from Start Date of " + this.EDO.OldStartDate + " to " + this.EDO.NewStartDate +',';
+      }
+      if (this.EDO.NewEndDate){
+        msg += " from End Date of " + this.EDO.OldEndDate + " to " + this.EDO.NewEndDate +',';
+      }
+      var emp = { 
+        action:"sendEmail2",
+        addr: {"Dev":"flonberg@partners.org",
+                "Prod":"flonberg@gmail.com"
+              //  "Prod":"bnapolitano@partners.org"
+              },
+        msg: msg,
+        subject: "Time Away Change"
+        };
+        this.genEditSvce.genPOST(emp).subscribe(
+          (res) => {
+            console.log("res from sendEmail %o", res);
+          }
+        );
+    console.log("Brian Email is " + msg);  
+    }
     
   }
+  
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
    const shownId = this._id;
