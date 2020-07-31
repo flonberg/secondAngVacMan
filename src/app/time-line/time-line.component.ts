@@ -886,34 +886,33 @@ console.log("213");
         console.log("res from updatel %o",  res);
       }
     );
-
   }
   sendStartOrEndDateEmail(){
+    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.data2._data[this._id].vidx;
     if (this.needStartEmail){
-      var msg = "The  Time Away of " + this.data2._data[this._id]['LastName'] + 'has changed';
+      var msg = "<p>The  Time Away of " + this.data2._data[this._id]['LastName'] + ' has changed';
       if (typeof this.EDO.NewStartDate === 'string'){
         msg += " from Start Date of " + this.EDO.OldStartDate + " to " + this.EDO.NewStartDate +',';
       }
       if (this.EDO.NewEndDate){
         msg += " from End Date of " + this.EDO.OldEndDate + " to " + this.EDO.NewEndDate +',';
       }
+      msg += "</p> <p> To approve this change click on a <a href=" + link33 + "> Approve Change </a>" 
       var emp = { 
         action:"sendEmail2",
         addr: {"Dev":"flonberg@partners.org",
                 "Prod":"flonberg@gmail.com"
-              //  "Prod":"bnapolitano@partners.org"
               },
         msg: msg,
         subject: "Time Away Change"
         };
-        this.genEditSvce.genPOST(emp).subscribe(
+      this.genEditSvce.genPOST(emp).subscribe(
           (res) => {
             console.log("res from sendEmail %o", res);
           }
-        );
+      );
     console.log("Brian Email is " + msg);  
     }
-    
   }
   
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
