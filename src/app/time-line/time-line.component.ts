@@ -630,46 +630,9 @@ console.log("213");
     };
     var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSe
     console.log("593 %o", item);
-       /*************  Parameters for NeedToApprove Email  */
-       /*
-       if (this.rData.loggedInUserRank < 5){                   // if loggedInUser is Dosim.
-        const mP = {
-          'action': 'sendEmail2',
-          'addr':['flonberg@partners.org'],              // change to Brian
-          'msg': `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-          <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away from ` 
-          + this.formG.value.dateFrom     +  `    to + ` + this.formG.value.dateTo     +  `. </p>
-          <p> You can approve this Time Away using the below link: </p>
-          <a href=`+ this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx + `> Approve Time Away </a>`,
-          } ;
-        this.genEditSvce.genPOST(mP)
-        .subscribe(
-            (response)=>{
-              console.log("emailService");
-            }
-          ); 
-        }
-        */
+   
     return idx;
   }
-  /*
-  get startDateGet(){ return this.form.get('startDate');}
-  get endDateGet(){return this.form.get('endDate');}
-  */
-  /*
-  updateDB_StartEnd(sD: string, eD: string) {
-      const upDateParams = <dB_POSTparams>{
-        action:'editAndLog',
-        tableName:'vacation3',
-        whereColName:['vidx'],
-        whereColVal:[this.data2._data[this._id].vidx],
-        editColNames: ['startDate', 'endDate'],
-        editColVals: [  this.formatDateYYYymmdd(sD) , this.formatDateYYYymmdd(eD)  ],
-        userid: this.userid
-      };
-   this.genEditSvce.genDB_POST(upDateParams);
-  }
-  */
 
   formatDateYYYymmdd(d) {
     const pi = 3.14;
@@ -907,7 +870,7 @@ console.log("213");
       if (typeof this.EDO.NewStartDate === 'string'){
         msg += " from Start Date of " + this.EDO.OldStartDate + " to " + this.EDO.NewStartDate +',';
       }
-      if (this.EDO.NewEndDate){
+      if (typeof this.EDO.NewEndDate === 'string'){
         msg += " from End Date of " + this.EDO.OldEndDate + " to " + this.EDO.NewEndDate +',';
       }
       msg += "</p> <p> To approve this change click on a <a href=" + link33 + "> Approve Change </a>" 
