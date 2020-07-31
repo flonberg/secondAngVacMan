@@ -14,17 +14,20 @@ import { throwIfEmpty } from 'rxjs/operators';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
+/*
 interface editsInt  {
   name: String;
   value: String;
 }
-
+*/
+/*
 interface newTAparams {
   startDate: string;
   endDate: string;
   reason: number;
   Note: string;
 }
+*/
 interface nameToUserId {                        // used to setGroups
   lastName: string;
   userid: string;
@@ -101,12 +104,14 @@ rData:any;
   reasonSelect = '';                                  // the reason from dataBase
   newTimeAwayBool = false;
   saveTimeAwayBool = false;
+  /*
   newTAparams: newTAparams = {
     startDate: '',
     endDate: '',
     reason: -1,
     Note: ''
   };
+  */
   dB_PP: dB_POSTparams = {                          //  create instance of interface
     tableName:'vacation3',
     whereColName:[],
@@ -588,25 +593,7 @@ console.log("213");
           console.log("res from sendEmail %o",  response);
           this.retFromPost(response);
         })   
-          /************  send NeedToApprove Email  */
-  if (this.rData.loggedInUserRank < 5){        
-    var emp = {                                         // params for email 
-      action:"sendEmail2",
-      addr: {"Dev":"flonberg@partners.org",
-              "Prod":"flonberg@gmail.com"
-            },
-      msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away. </p>
-      <p> You can approve this Time Away using the below link: </p>
-      <a href=`+ link + `> Time away schedule. </a>`,
-      subject: "New Time Away "
-      };
-      this.genEditSvce.genPOST(emp).subscribe(
-        (res) => {
-          console.log("res from sendEmail %o", res);
-        }
-      );
-    }
+  
     this.newTimeAway2 = false;    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
@@ -630,7 +617,28 @@ console.log("213");
     };
     var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSe
     console.log("593 %o", item);
-   
+           /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
+    if (this.rData.loggedInUserRank < 5){ 
+      console.log("this.ret %o", this.retFromPost);    
+      const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx   ;
+      console.log("600  link1 is " + link11);
+      var emp = {                                         // params for email 
+        action:"sendEmail2",
+        addr: {"Dev":"flonberg@partners.org",
+                "Prod":"flonberg@gmail.com"
+              },
+        msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+        <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away. </p>
+        <p> You can approve this Time Away using the below link: </p>
+        <a href=`+ link11 + `> Time away schedule. </a>`,
+        subject: "New Time Away "
+        };
+        this.genEditSvce.genPOST(emp).subscribe(
+          (res) => {
+            console.log("res from sendEmail %o", res);
+          }
+        );
+      }
     return idx;
   }
 
