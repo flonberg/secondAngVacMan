@@ -581,22 +581,33 @@ console.log("213");
           this.formG.value.noteG, this.userkey], '0';
         const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
         console.log("544  insertP is %o", this.insertP);
-        this.insertP.email = {
-              msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-              <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Awau. </p>
-              <p> You can approve this Time Away using the below link: </p>
-              <a href=`+ link + `> Time away schedule. </a>`,
-              mailToAddresses : Array("flonberg@partners.org","flonberg@gmail.com"),
-              subject: "Time Away"
-          };
-   
-   this.genEditSvce.genPOST(this.insertP)
-   .subscribe(                                          // can't subscribe to POST REST calls ?????
-    (response) => {
-      this.retFromPost(response);
-    })   
+            /***********  enter newTA in dataBase  */
+    this.genEditSvce.genPOST(this.insertP)
+      .subscribe(                                          
+        (response) => {
+          console.log("res from sendEmail %o",  response);
+          this.retFromPost(response);
+        })   
+          /************  send NeedToApprove Email  */
+  if (this.rData.loggedInUserRank < 5){        
+    var emp = {                                         // params for email 
+      action:"sendEmail2",
+      addr: {"Dev":"flonberg@partners.org",
+              "Prod":"flonberg@gmail.com"
+            },
+      msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away. </p>
+      <p> You can approve this Time Away using the below link: </p>
+      <a href=`+ link + `> Time away schedule. </a>`,
+      subject: "New Time Away "
+      };
+      this.genEditSvce.genPOST(emp).subscribe(
+        (res) => {
+          console.log("res from sendEmail %o", res);
+        }
+      );
+    }
     this.newTimeAway2 = false;    
- 
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
@@ -620,6 +631,7 @@ console.log("213");
     var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSe
     console.log("593 %o", item);
        /*************  Parameters for NeedToApprove Email  */
+       /*
        if (this.rData.loggedInUserRank < 5){                   // if loggedInUser is Dosim.
         const mP = {
           'action': 'sendEmail2',
@@ -637,6 +649,7 @@ console.log("213");
             }
           ); 
         }
+        */
     return idx;
   }
   /*
@@ -838,7 +851,7 @@ console.log("213");
   needEndEmail = false;
   newStartDate = String;
   newEndDate = String;
-  EDO = { "OldStartDate": String,
+  EDO = { "OldStartDate": String,                                 // used for email 
                   "NewStartDate": String,
                   "OldEndDate": String,
                   "NewEndDate": String,
