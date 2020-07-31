@@ -66,12 +66,12 @@
                     <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
                         <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
                         <mat-form-field class="item" >
-                            <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (blur)="storeEdit('start', $event)" 
+                            <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (blur)="storeEdit('startDate', $event)" 
                             formControlName="dateToEdit"  [readonly] = "_readonly" 
                             type="date" useValueAsDate  />
                         </mat-form-field>    
                         <mat-form-field class="item">
-                                <input matInput id="eDateToEditID"  placeholder= " End-Date " (blur)="storeEdit('end', $event)" 
+                                <input matInput id="eDateToEditID"  placeholder= " End-Date " (blur)="storeEdit('endDate', $event)" 
                                 formControlName="dateFromEdit"  [readonly] = "_readonly" 
                                 type="date"  useValueAsDate  />
                         </mat-form-field>  
@@ -104,7 +104,7 @@
                         </div>
                     </form> </td>
                     <td   *ngIf = "drawEditControls && !newTimeAway2 "  >  <button mat-raised-button color="primary" 
-                        (click) = " storeEdit('submit', null);" >Submit Changes</button> </td>
+                        (click) = " saveEdits();" >Submit Changes</button> </td>
                     <td   *ngIf = "drawEditControls && !newTimeAway2 "  >  <button mat-raised-button color="primary" 
                                                         (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>
                 </tr></table>  

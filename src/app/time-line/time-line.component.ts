@@ -1,6 +1,6 @@
 import { editParam } from './../dose-fx/dose-fx.component';
-import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams, InsertParams } from './../gen-edit.service';
-import { SeditParams, dB_POSTparams } from './../gen-edit.service';
+import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams, InsertParams, dB_POSTparams } from './../gen-edit.service';
+import { SeditParams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 //import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
@@ -10,12 +10,13 @@ import { HttpClient } from '@angular/common/http';
 import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } from '@angular/material';
+import { throwIfEmpty } from 'rxjs/operators';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 interface editsInt  {
-  name: string;
-  value: number;
+  name: String;
+  value: String;
 }
 
 interface newTAparams {
@@ -133,7 +134,8 @@ rData:any;
       subject:''
     }
   }
-  storedEdits = [{}]
+  storedEdits = [{}]                                // store values from startDate, endData, reason, note from user entries. 
+
 
   /*
   SinsertPP: SinsertParams = {
@@ -830,20 +832,26 @@ console.log("213");
       }
     );
   }
+  whereColNames = [String];
+  whereColVals = [String];
   storeEdit(type,e){
       console.log(" type is " + type + "e is %o", e);
     var p = {} as editsInt;
+    this.whereColNames.push(type);
+    
     p.name = type;
     if (!e){
       console.log("null")
-
     }
     else if (e.value){
       console.log(" 846 " + e.value);
       p.value = e.value;
       this.storedEdits.push(p);
+      this.whereColVals.push(e.value);
+      
     }
     else  if (e.target){
+        this.whereColVals.push(e.target.value);
         p.value = e.target.value;
         const dateForDataSet = e.target.value + " 00:00:00"; 
         if (type=='start')
@@ -852,15 +860,30 @@ console.log("213");
         this.data2.update({id: this._id, end: dateForDataSet}); 
         this.storedEdits.push(p);
     }
-
     
-  
-    console.log(" type is " + type + "e is %o", e);
-    console.log(" storeEdits is  %o", this.storedEdits);
-
- 
+   // this.whereColNames.shift();
    
-
+  }
+  saveEdits(){
+    this.whereColNames.shift();                                 // remove garbage zeroth element
+    this.whereColVals.shift();
+    console.log(" whereColNames is  %o", this.whereColNames);
+    console.log(" whereColVals is  %o", this.whereColVals);
+    var eP  = {
+      action:'editAndLog',
+      tableName:'vacation3',
+      editColNames:this.whereColNames,
+      editColVals:this.whereColVals,
+      whereColName:['vidx'],
+      whereColVal:[this.data2._data[this._id]['vidx']],
+      userid:this.userid
+    }
+    this.genEditSvce.genPOST(eP).subscribe(
+      (res) => {
+        console.log("res from sendEmail %o",  res);
+      }
+    );
+    
   }
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
