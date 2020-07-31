@@ -832,48 +832,32 @@ console.log("213");
       }
     );
   }
-  whereColNames = [String];
-  whereColVals = [String];
+  editColNames = [String];
+  editColVals = [String];
   storeEdit(type,e){
-      console.log(" type is " + type + "e is %o", e);
-    var p = {} as editsInt;
-    this.whereColNames.push(type);
-    
-    p.name = type;
-    if (!e){
-      console.log("null")
-    }
-    else if (e.value){
+    if (e.value){
       console.log(" 846 " + e.value);
-      p.value = e.value;
-      this.storedEdits.push(p);
-      this.whereColVals.push(e.value);
-      
+      this.editColNames.push(type);
+      this.editColVals.push(e.value);  
     }
     else  if (e.target){
-        this.whereColVals.push(e.target.value);
-        p.value = e.target.value;
+        this.editColNames.push(type);
+        this.editColVals.push(e.target.value);
         const dateForDataSet = e.target.value + " 00:00:00"; 
-        if (type=='start')
-        this.data2.update({id: this._id, start: dateForDataSet}); 
-      if (type=='end')
-        this.data2.update({id: this._id, end: dateForDataSet}); 
-        this.storedEdits.push(p);
+        if (type=='startDate')
+          this.data2.update({id: this._id, start: dateForDataSet}); 
+        if (type=='endDate')
+          this.data2.update({id: this._id, end: dateForDataSet}); 
     }
-    
-   // this.whereColNames.shift();
-   
   }
   saveEdits(){
-    this.whereColNames.shift();                                 // remove garbage zeroth element
-    this.whereColVals.shift();
-    console.log(" whereColNames is  %o", this.whereColNames);
-    console.log(" whereColVals is  %o", this.whereColVals);
+    this.editColNames.shift();                                 // remove garbage zeroth element
+    this.editColVals.shift();
     var eP  = {
       action:'editAndLog',
       tableName:'vacation3',
-      editColNames:this.whereColNames,
-      editColVals:this.whereColVals,
+      editColNames:this.editColNames,
+      editColVals:this.editColVals,
       whereColName:['vidx'],
       whereColVal:[this.data2._data[this._id]['vidx']],
       userid:this.userid
