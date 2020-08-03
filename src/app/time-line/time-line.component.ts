@@ -287,47 +287,36 @@ console.log("213");
     else
       return 'notCovered';  
   }
-  storeCovererDate()
+  storeCovererData()
   {                    // store the nominated coverer UserKey 
-    console.log(" rData %o", this.rData['data'][this._id]['vidx']);
-    const vidx = this.rData['data'][this._id]['vidx'];              // the vidx to be edited. 
-    this.rData['emailByKey']['116'] = "flonberg@partners.org";
-      var mailKey1 = this.covererUserKey;
-      var mailKey2= this.covererUserKey2;
-  
-    var mTA_dev = ["flonberg@partners.org"];
-    if (this.covererUserKey )
-      var mTA_prod = [this.rData['emailByKey'][this.covererUserKey]];
+    this.rData['emailByKey']['116'] = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
+  //  if (this.covererUserKey )
+  //    var mTA_prod = [this.rData['emailByKey'][this.covererUserKey]];
     var link1 = this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
           + this.covererUserKey + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
-    console.log("link1 is " + link1 + "mTA_prod is %o ", mTA_prod);
     if (this.covererUserKey2){
       var link2 =this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
       + this.covererUserKey2 + '&mode=acceptCovB&vidx=' + this.data2._data[this._id].vidx;
-      mTA_dev.push("flonberg@gmail.com")        // CHANGE TO ACTUAL COVERERADDRESS WHEN GOING TO PRODUCTION 
-      mTA_prod.push(this.rData['emailByKey'][this.covererUserKey2]);  
-      console.log("link2 is " + link2 + "mTA_prod is %o ", mTA_prod);
     }   
+
+        /*************  Send Coverage Emails        */
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-    <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her//his time away. 
-     starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
-     through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
-    <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
-    <p><a href=`+ link1 + `> Accept  ` + this.covererName + ` coverage. </a></p>
+      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
+      starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
+      through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
+      <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
+      <p><a href=`+ link1 + `> Accept  ` + this.covererName + ` coverage. </a></p>
     `;
     if (this.covererUserKey2 > 0 ){                                         // if the IS a second coverer
       message +=  `<p> <a href=`+ link2 + `> Accept  ` + this.covererName2 + `  coverage. </a></p>`;
     }
-    var devAddr = ["flonberg@partners.org"];                                // the DEV address array
     var prodAddr = [this.rData['emailByKey'][this.covererUserKey]];         // the PROD adderess array
-    if ( this.covererUserKey2  )                                            // if there IS a second coverer
-      prodAddr.push(this.rData['emailByKey'][this.covererUserKey2])         // add her address. 
+      if ( this.covererUserKey2  )                                            // if there IS a second coverer
+        prodAddr.push(this.rData['emailByKey'][this.covererUserKey2])         // add her address. 
     var mTA = {
-      "dev": devAddr,
+      "dev": ["flonberg@partners.org"],
       "prod": prodAddr,
      }  
-  
-  
     var emp = {
       action: "sendEmail2",
       addr: mTA,
@@ -339,9 +328,7 @@ console.log("213");
         console.log("res from sendEmail2 from storeCovererDate is  %o", res);
       }
     );
-  
-   
-    console.log(" 328    mTA is %o", mTA);
+   /***********  Update the dataBase for the coverers   */
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
@@ -350,33 +337,12 @@ console.log("213");
       editColNames: ['coverageA', 'coverageB'],
       editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
       userid: this.userid,   
-    /*  email:{
-        mailToAddresses: mTA_dev,
-        msg : message,
-        subject: "TEST  FROM editAndLog EMAIL PLEASE DISREGARD "
-      }*/
-    };
-   
-    /*
-    const emailParams = <emailParams> {
-      action:'sendEmailWithMessage', 
-      subject: 'Time Away Coverage',
-      msg : `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. 
-       starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
-       through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
-      <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
-      <p><a href=`+ link1 + `> Accept  coverage. </a></p>
-      `,
-      addresses: ['flonberg@partners.org']          // for prod send the coverer address. 
-    }
-    */
+    };  
     this.genEditSvce.genPOST(upDateParams).subscribe(
       (res) => {
         console.log("res updateCoveresx" + res);
       }
     );
-
   }                                                       // end of StoreCovererData 
 
   enterInDbAndEmail(){
@@ -701,7 +667,7 @@ console.log("213");
     const endDate = new Date();  
                                                       // create new date to use for end                            
     endDate.setMonth(startDate.getMonth() + 4);                                         // set a date to be the forward date of data collection
-    startDate.setMonth(startDate.getMonth() - 12);                                       // set date for backward data collection far enough back to get all users
+    startDate.setMonth(startDate.getMonth() - 4);                                       // set date for backward data collection far enough back to get all users
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                // mm for endDate
     /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
