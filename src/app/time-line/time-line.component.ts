@@ -11,6 +11,7 @@ import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } from '@angular/material';
 import { throwIfEmpty } from 'rxjs/operators';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -291,31 +292,56 @@ console.log("213");
     console.log(" rData %o", this.rData['data'][this._id]['vidx']);
     const vidx = this.rData['data'][this._id]['vidx'];              // the vidx to be edited. 
     this.rData['emailByKey']['116'] = "flonberg@partners.org";
-
       var mailKey1 = this.covererUserKey;
       var mailKey2= this.covererUserKey2;
-
+  
     var mTA_dev = ["flonberg@partners.org"];
-    var mTA_prod = [this.rData['emailByKey'][mailKey1]];
+    if (this.covererUserKey )
+      var mTA_prod = [this.rData['emailByKey'][this.covererUserKey]];
     var link1 = this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
           + this.covererUserKey + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
-    if (mailKey2){
+    console.log("link1 is " + link1 + "mTA_prod is %o ", mTA_prod);
+    if (this.covererUserKey2){
       var link2 =this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
       + this.covererUserKey2 + '&mode=acceptCovB&vidx=' + this.data2._data[this._id].vidx;
       mTA_dev.push("flonberg@gmail.com")        // CHANGE TO ACTUAL COVERERADDRESS WHEN GOING TO PRODUCTION 
-      mTA_prod.push(this.rData['emailByKey'][mailKey2])
-    }     
-    console.log("link is " + link1 + "mTA_prod is %o ", mTA_prod);
+      mTA_prod.push(this.rData['emailByKey'][this.covererUserKey2]);  
+      console.log("link2 is " + link2 + "mTA_prod is %o ", mTA_prod);
+    }   
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-    <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her time away. 
+    <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her//his time away. 
      starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
      through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
     <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
     <p><a href=`+ link1 + `> Accept  ` + this.covererName + ` coverage. </a></p>
     `;
-    if (this.covererUserKey2 > 0 ){
+    if (this.covererUserKey2 > 0 ){                                         // if the IS a second coverer
       message +=  `<p> <a href=`+ link2 + `> Accept  ` + this.covererName2 + `  coverage. </a></p>`;
     }
+    var devAddr = ["flonberg@partners.org"];                                // the DEV address array
+    var prodAddr = [this.rData['emailByKey'][this.covererUserKey]];         // the PROD adderess array
+    if ( this.covererUserKey2  )                                            // if there IS a second coverer
+      prodAddr.push(this.rData['emailByKey'][this.covererUserKey2])         // add her address. 
+    var mTA = {
+      "dev": devAddr,
+      "prod": prodAddr,
+     }  
+  
+  
+    var emp = {
+      action: "sendEmail2",
+      addr: mTA,
+      msg: message,
+      subject: "coverage" 
+    }
+    this.genEditSvce.genPOST(emp).subscribe(
+      (res) => {
+        console.log("res from sendEmail2 from storeCovererDate is  %o", res);
+      }
+    );
+  
+   
+    console.log(" 328    mTA is %o", mTA);
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
@@ -324,12 +350,14 @@ console.log("213");
       editColNames: ['coverageA', 'coverageB'],
       editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
       userid: this.userid,   
-      email:{
+    /*  email:{
         mailToAddresses: mTA_dev,
         msg : message,
-        subject: "TEST EMAIL PLEASE DISREGARD "
-      }
+        subject: "TEST  FROM editAndLog EMAIL PLEASE DISREGARD "
+      }*/
     };
+   
+    /*
     const emailParams = <emailParams> {
       action:'sendEmailWithMessage', 
       subject: 'Time Away Coverage',
@@ -342,12 +370,13 @@ console.log("213");
       `,
       addresses: ['flonberg@partners.org']          // for prod send the coverer address. 
     }
-    console.log("371fff");
+    */
     this.genEditSvce.genPOST(upDateParams).subscribe(
       (res) => {
-        console.log("res from sendEmailWithMessage " + res);
+        console.log("res updateCoveresx" + res);
       }
     );
+
   }                                                       // end of StoreCovererData 
 
   enterInDbAndEmail(){
@@ -443,10 +472,7 @@ console.log("213");
         if (+this.rData['loggedInUserKey'] == +this.data2._data[this._id]['userkey']){
           this.helpArray = [
             'Click on the Coverage drop-down and select person who will be you First Coverer.',  
-            'If you want to nominate a Second Coverer, click on the Coverage drop-down again',  
-            "To change any parameter relevant to this TimeAway, just make the change in the Start Date, End Date, Reason, or Note.",
-            "The change is updated in the DataBase as soon as you make the change on the screen.",
-            "The is no need to click on a Submit button. "
+            'If you want to nominate a Second Coverer, click on the Coverage drop-down again.',  
           ]
         }
     }
@@ -572,7 +598,7 @@ console.log("213");
     console.log("cancel newTA");
     this.newTimeAway2 = false;
   }
-  onSubmit() 
+  onSubmit()                              /*********  used for New Time Aways  */
   {
         /*********     Add to dataBase  **********************/
         if (+this.loggedInRank < 5 )
@@ -590,7 +616,6 @@ console.log("213");
     this.genEditSvce.genPOST(this.insertP)
       .subscribe(                                          
         (response) => {
-          console.log("res from sendEmail %o",  response);
           this.retFromPost(response);
         })   
   
@@ -616,13 +641,11 @@ console.log("213");
       vidx: this.lastInsertIdx
     };
     var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSe
-    console.log("593 %o", item);
            /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
-    if (this.rData.loggedInUserRank < 5){ 
-      console.log("this.ret %o", this.retFromPost);    
+    if (this.rData.loggedInUserRank < 5){   
       const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx   ;
-      console.log("600  link1 is " + link11);
-      var emp = {                                         // params for email 
+      console.log("600  link1 for retFromPost is " + link11);
+    var emp = {                                         // params for email 
         action:"sendEmail2",
         addr: {"Dev":"flonberg@partners.org",
                 "Prod":"flonberg@gmail.com"
@@ -633,9 +656,9 @@ console.log("213");
         <a href=`+ link11 + `> Time away schedule. </a>`,
         subject: "New Time Away "
         };
-        this.genEditSvce.genPOST(emp).subscribe(
+      this.genEditSvce.genPOST(emp).subscribe(
           (res) => {
-            console.log("res from sendEmail %o", res);
+            console.log("res from sendEmail2 %o", res);
           }
         );
       }
@@ -812,7 +835,7 @@ console.log("213");
     }
     this.genEditSvce.genPOST(emp).subscribe(
       (res) => {
-        console.log("res from sendEmail %o",  res);
+        console.log("res from sendEmail2 %o",  res);
       }
     );
   }
@@ -892,7 +915,7 @@ console.log("213");
         };
       this.genEditSvce.genPOST(emp).subscribe(
           (res) => {
-            console.log("res from sendEmail %o", res);
+            console.log("res from sendEmail2 %o", res);
           }
       );
     console.log("Brian Email is " + msg);  
@@ -935,7 +958,7 @@ console.log("213");
       console.log(" 865 emp %o ", emp) ;       
       this.genEditSvce.genPOST(emp).subscribe(
                 (res) => {
-                  console.log("res from sendEmail %o", res);
+                  console.log("res from sendEmail2 %o", res);
                 }
               );
     }
@@ -951,18 +974,12 @@ console.log("213");
       emp.msg = "The end date of the Time Away for " + this.data2._data[this._id]['lastName'] + " has changed  from " + this.data2._data[this._id]['end'].substr(0, 10) +
         "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
    
-     this.data2.update({id: this._id, end: dateForDataSet}); 
-     this.data2.update({id: this._id, style:'color:red' })
+      this.data2.update({id: this._id, end: dateForDataSet}); 
+      this.data2.update({id: this._id, style:'color:red' })
       this.endDateEdited = true;
       this.dB_PP.editColNames = ['endDate','approved'];
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
-     // this.genEditSvce.sendEmail(emp).subscribe;
-  //    this.genEditSvce.genPOST(emp).subscribe(
-   //     (res) => {
-  //        console.log("res from sendEmail " + res);
-  //      }
-   //   );
     }
     if (type == 'note'){
       this.dB_PP.editColNames = ['note'];
@@ -970,7 +987,6 @@ console.log("213");
     }
     if (type == 'del'){
       this.drawEditControls = false;
-    //  this.seP.editColName = 'reasonIdx';
       this.dB_PP.editColNames = ['reasonIdx'];
       this.dB_PP.editColVals = [ '99'];
       this.data2.remove({id: this._id })
