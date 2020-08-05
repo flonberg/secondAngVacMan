@@ -11,6 +11,7 @@ import { GenEditService } from '../gen-edit.service';
 })
 export class WeekViewComponent implements OnInit {
   testVar: any;
+  calHeadings: any;
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService
 
@@ -18,6 +19,9 @@ export class WeekViewComponent implements OnInit {
 
   ngOnInit() {
     this.testVar = this.fiveDayCalSvce.test();
+    const monDate = this.fiveDayCalSvce.makeWeek(0);
+    this.calHeadings = [{}];
+    this.fiveDayCalSvce.makeWeek(1);
+    console.log ("dS is %o", this.fiveDayCalSvce.dS);
   }
-
 }
