@@ -10,13 +10,14 @@ import { GenEditService } from '../gen-edit.service';
   styleUrls: ['./week-view.component.css']
 })
 export class WeekViewComponent implements OnInit {
-
+  testVar: any;
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
-    private activatedRoute: ActivatedRoute, private fiveDayCalService: FiveDayCalService
+    private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService
 
   ) { }
 
   ngOnInit() {
+    this.testVar = this.fiveDayCalSvce.test();
   }
 
 }

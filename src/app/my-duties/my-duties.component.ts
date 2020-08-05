@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { GenEditService, dB_multGETparams } from '../gen-edit.service';
 import { ActivatedRoute } from '@angular/router';
