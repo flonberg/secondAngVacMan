@@ -105,8 +105,8 @@ export class GenEditService   {
  //     this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/';      //get data from BB  for localhost or BB 
  //   }   
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
-     // this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
-      this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/'; 
+      this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
+     // this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/'; 
       this.emailStage = "Dev"; 
     }   
     if ( window.location.href.indexOf('whiteboard') !== -1 ){                   // PROD. 
@@ -137,6 +137,13 @@ export class GenEditService   {
     console.log('getTa url is getFromFile' + url2);
     return this.http.get(url2);
   }  
+  /*********  get using selStr from GET param  */
+  getWithSelString(selStr){
+    const url = this.urlBase + "REST_GET.php?action=getWithSelString&selStr=" + selStr;
+    console.log("getWithSelString URL is " + url);
+    return this.http.get(url) 
+  }
+  /*******  get with param list and single WHERE conditon */
   simpleGet(p){
     var i = 0;
     var getStr = "";

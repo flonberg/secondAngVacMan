@@ -1,3 +1,11 @@
-<p>
-  week-view works!  {{ testVar }}
-</p>
+
+<table>
+  <tr>
+    <th  *ngFor = "let item of calHeadings">
+      <table>
+        <tr><th>{{ item.dayName }} </th> </tr>
+        <tr><th>{{ item.monthDay }} </th> </tr>
+      </table>
+    </th>
+  </tr>
+</table>
