@@ -1,11 +1,17 @@
 
 <table>
   <tr>
+    <th></th><th></th>
     <th  *ngFor = "let item of calHeadings">
       <table>
         <tr><th>{{ item.dayName }} </th> </tr>
-        <tr><th>{{ item.monthDay }} </th> </tr>
+        <tr><th>  {{ item.monthDay }} </th> </tr>
       </table>
     </th>
+  </tr>
+  <tr *ngFor = 'let item of WeekDutyNames' >
+    <td> {{ item.name }} </td>
+    <td> {{ item.timeSpan }} </td>
+
   </tr>
 </table>

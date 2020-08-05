@@ -13,6 +13,8 @@ export class WeekViewComponent implements OnInit {
 
   calHeadings: any;
   advance = 0;
+  WeekDutyNames: any;
+  physicsMonthlyDuties: any;
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService
 
@@ -25,9 +27,25 @@ export class WeekViewComponent implements OnInit {
     this.fiveDayCalSvce.makeWeek(1);
     this.calHeadings = this.fiveDayCalSvce.dS;
     this.getDutyNames();
+    this.getDutyOwners();
+  }
+  getDutyOwners(){
+    this.genEditSvce.getPMDs('fjl3').subscribe(
+      (res) => {
+        this.setPhysicsMonthlyDuties(res);
+      },
+      err => {
+        console.log("error 223");
+        console.log(err);
+      }
+    );
+  }
+  setPhysicsMonthlyDuties(val){
+    this.physicsMonthlyDuties = val['data'];   
+    console.log("241 %o", this.physicsMonthlyDuties)
   }
   getDutyNames(){
-     this.genEditSvce.getWithSelString("SELECT * FROM PhysicsDuty ORDER bY nomOrder")
+     this.genEditSvce.getWithSelString("SELECT * FROM PhysicsDuty WHERE nomOrder > 0  ORDER bY nomOrder")
      .subscribe(                                          
       (response) => {
         this.setDutyNames(response);
@@ -35,5 +53,6 @@ export class WeekViewComponent implements OnInit {
   }
   setDutyNames(dN){
     console.log("dutyNames is %o", dN);
+    this.WeekDutyNames = dN;
   }
 }

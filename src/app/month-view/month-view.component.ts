@@ -195,7 +195,7 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
             this.daysS[0][i].date = firstDateOnCalendar;
           startDateForGettingData = this.daysS[0][i].date;
           if (dowFD == 1 || dowFD == 6){
-            startDateForGettingData = firstDayOfShownMonth;  
+            startDateForGettingData = firstDayOfShownMonth; 
           }                                            
           this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
         }
@@ -212,6 +212,7 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
         if (firstDayOnCal == lastDayNum + 1)                                                    // if it is greater than lastDayOfMonth
           firstDayOnCal = 1;                                                                    // go to 1, for the first day of monthShown 
           this.daysS[0][i].dateString = this.datePipe.transform(this.daysS[0][i].date, 'yyyy-MM-dd');   }
+
         }
     if (dowFD == 1 || dowFD == 6){
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()- 1 ); 
