@@ -30,7 +30,11 @@ export class NavBarVMComponent {
         label: 'My Duties',
         link: './MyDuties',
         index: 2,   
-    }
+    }, {
+      label: 'Week View',
+      link: './WeekView',
+      index: 3,   
+  }
     ];
   }
   setIndex(n){

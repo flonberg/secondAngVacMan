@@ -94,8 +94,8 @@ export class GenEditService   {
 
   setUserId(s){               // get the userid from the router.queryParams.
     this.userid = s;
-  }
-   
+  }    
+ 
   setPlatform(){             // set the dB host for the localhost version      
   //  this.angularRoute = this.loc.path();    
     this.emailStage = "Dev"                                                 // the default. 

@@ -28,6 +28,7 @@ import { WINDOW_PROVIDERS } from './window.provider';
 import { NoticeComponent } from './notice/notice.component';
 import { MyDutiesComponent } from './my-duties/my-duties.component';
 import { HelpComponent } from './help/help.component';
+import { WeekViewComponent } from './week-view/week-view.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -41,6 +42,7 @@ import { HelpComponent } from './help/help.component';
     MyDutiesComponent,
     NoticeComponent,
     HelpComponent,
+    WeekViewComponent,
 
   ],
   imports: [
@@ -62,6 +64,7 @@ import { HelpComponent } from './help/help.component';
       { path: 'VacMan**', component: TimeLineComponent},
       { path: 'VacMan/:userid', component: TimeLineComponent},
       { path: 'MyDuties', component:MyDutiesComponent},
+      { path: 'WeekView', component:WeekViewComponent},
      { path: '**', component: TimeLineComponent}
     ])
 
