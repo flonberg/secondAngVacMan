@@ -1,10 +1,19 @@
-
+<table><tr>
+    <td   class="small">
+        <button (click) = 'makeWeek(-1)'  mat-raised-button class="accent"  >Previous Week </button>
+      </td>
+     <td  class='large'> {{ monthName }} </td>
+      <td   class="small">
+          <button (click) = 'makeWeek(1)'  mat-raised-button class="accent"  >Next Week </button>
+        </td>
+    </tr>    
+</table>
 <table>
   <tr>
     <th></th><th></th>
     <th  *ngFor = "let item of calHeadings">
       <table>
-        <tr><th>{{ item.dayName }} </th> </tr>
+        <tr><th>{{ item.dayName }} </th> </tr>  
         <tr><th>  {{ item.monthDay }} </th> </tr>
       </table>
     </th>

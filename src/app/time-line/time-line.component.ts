@@ -673,8 +673,8 @@ console.log("213");
     var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);   
-   //   this.genEditSvce.getTAs(this.startDateString,this.endDateString).subscribe(
-      this.genEditSvce.getTAs().subscribe(
+  //  this.genEditSvce.getTAs().subscribe(
+    this.genEditSvce.genGet('REST_GET.php?action=getTAs&userid=' + this.userid).subscribe(
       (val) => {
         console.log("627  val " + val);
         if (this.index === 0) {    

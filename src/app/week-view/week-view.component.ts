@@ -10,27 +10,26 @@ import { GenEditService, dB_SimpleGETparams } from '../gen-edit.service';
   styleUrls: ['./week-view.component.css']
 })
 export class WeekViewComponent implements OnInit {
-
   calHeadings: any;
   advance = 0;
   WeekDutyNames: any;
   physicsMonthlyDuties: any;
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
-    private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService
-
-  ) { }
+    private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService) { }
 
   ngOnInit() {
    this.makeWeek(this.advance);
   }
   makeWeek(advance){
-    this.fiveDayCalSvce.makeWeek(1);
+    this.advance += advance; 
+    this.fiveDayCalSvce.makeWeek(this.advance);
     this.calHeadings = this.fiveDayCalSvce.dS;
     this.getDutyNames();
     this.getDutyOwners();
   }
   getDutyOwners(){
-    this.genEditSvce.getPMDs('fjl3').subscribe(
+  //  this.genEditSvce.getPMDs('fjl3').subscribe(
+      this.genEditSvce.genGet('REST_GET.php?action=getPMDs&userid=fjl3' ).subscribe(  
       (res) => {
         this.setPhysicsMonthlyDuties(res);
       },
@@ -55,4 +54,8 @@ export class WeekViewComponent implements OnInit {
     console.log("dutyNames is %o", dN);
     this.WeekDutyNames = dN;
   }
+  shift(n){
+    this.advance += n;
+  }
+
 }

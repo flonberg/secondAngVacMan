@@ -23,7 +23,8 @@ export class MyDutiesComponent implements OnInit {
         this.genEditSvce.setPlatform();                     // switch between BB and 242 databases. 
       });
       console.log(" myDuties %o ", this.qParams);
-      this.genEditSvce.getMyDuties(this.qParams['userid']).subscribe(
+      const s = 'REST_GET.php?action=getMyDuties&userid=' + this.qParams['userid'];
+      this.genEditSvce.genGet(s).subscribe(
         (res) => {
           this.setMyDuties(res);
         },

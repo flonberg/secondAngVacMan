@@ -162,7 +162,9 @@ export class GenEditService   {
     console.log("167 multGet url is  " + url);
     return this.http.get(url) 
   }
-  
+  getPhysicistFromION(){
+
+  }
   genDB_POST(dP){
       if (!this.urlBase){
         this.setPlatform();
@@ -174,20 +176,21 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
-
+/*
   getLastIdx(){
     const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';
     console.log('getMyDuties url is ' + url2);
     return this.http.get(url2);
     }
-  getMyDuties(UserId){
-    if (!this.urlBase){           
-      this.setPlatform();                   // sets the platform to BB or 242
-    }
-    const url2 = this.urlBase + 'REST_GET.php?action=getMyDuties&userid=' + UserId;
+ */
+genGet(s){
+  if (!this.urlBase)          
+    this.setPlatform();                   // sets the platform to BB or 242
+    const url2 = this.urlBase + s
     console.log('getMyDuties url is ' + url2);
     return this.http.get(url2);
-  }
+}   
+ /*
   getTAs(){
       if (!this.urlBase){           
         this.setPlatform();                   // sets the platform to BB or 242
@@ -196,9 +199,8 @@ export class GenEditService   {
       console.log('getTa url is 5-21' + url2);
       return this.http.get(url2);
     } 
-  getMyDutyies(UserId){
-
-  }  
+    */
+/*
   getPMDs(userid){
       if (!this.urlBase){           
         this.setPlatform();                   // sets the platform to BB or 242
@@ -207,6 +209,7 @@ export class GenEditService   {
       console.log('getTa url is 5-21' + url2);
       return this.http.get(url2);
     } 
+    */
   genDB_GET(dP){
       if (!this.urlBase){
         this.setPlatform();
@@ -223,7 +226,6 @@ export class GenEditService   {
       //const url2 = this.urlBase + 'RESThub.php?dataS=getPhysicsMonthlyDuties&userid=' + userid;
       console.log("getEdit 115 url is " + url2);
       return this.http.get(url2)
-
     } 
   genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;

@@ -238,7 +238,8 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
     }
     /*************      get the data  ************************/
 
-      this.genEditSvce.getPMDs(this.qParams['userid']).subscribe(
+     // this.genEditSvce.getPMDs(this.qParams['userid']).subscribe(
+      this.genEditSvce.genGet('REST_GET.php?action=getPMDs&userid=' + this.qParams['userid'] ).subscribe(  
       (res) => {
         this.setPhysicsMonthlyDuties(res);
       },
