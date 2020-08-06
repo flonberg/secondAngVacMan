@@ -19,13 +19,30 @@ export class WeekViewComponent implements OnInit {
 
   ngOnInit() {
    this.makeWeek(this.advance);
+   this.getFromION();
+   this.getDutyNames();
+   this.getDutyOwners();
   }
   makeWeek(advance){
     this.advance += advance; 
     this.fiveDayCalSvce.makeWeek(this.advance);
     this.calHeadings = this.fiveDayCalSvce.dS;
-    this.getDutyNames();
-    this.getDutyOwners();
+
+  
+  }
+  getFromION(){
+    this.genEditSvce.genGet('REST_GET.php?action=RgetJOINFromION').subscribe(
+      (res) => {
+        this.setFromION(res);
+      },
+      err => {
+        console.log("error 223");
+        console.log(err);
+      }
+    );
+  }
+  setFromION(res){
+    console.log("  43    getFromION %o", res);
   }
   getDutyOwners(){
   //  this.genEditSvce.getPMDs('fjl3').subscribe(

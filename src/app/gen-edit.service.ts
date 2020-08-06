@@ -218,6 +218,7 @@ genGet(s){
       console.log("genBDPosrt url 2is " + url2);
       return this.http.post(url2, JSON.stringify(dP));
     }
+    /*
   getPhysicsMonthlyDuties(startDateString, userid){
       if (!this.urlBase){
         this.setPlatform();
@@ -227,6 +228,7 @@ genGet(s){
       console.log("getEdit 115 url is " + url2);
       return this.http.get(url2)
     } 
+    */
   genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;
   } 

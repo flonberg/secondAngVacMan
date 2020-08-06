@@ -15,12 +15,14 @@
       <table>
         <tr><th>{{ item.dayName }} </th> </tr>  
         <tr><th>  {{ item.monthDay }} </th> </tr>
+   
+
       </table>
     </th>
   </tr>
   <tr *ngFor = 'let item of WeekDutyNames' >
     <td> {{ item.name }} </td>
     <td> {{ item.timeSpan }} </td>
-
+    <td *ngFor = "let item2 of calHeadings"> {{ physicsMonthlyDuties[item2.date][item.Idx]['lNN'] }} -- {{ item.Idx }} </td>
   </tr>
 </table>
