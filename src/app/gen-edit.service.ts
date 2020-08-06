@@ -138,8 +138,10 @@ export class GenEditService   {
     return this.http.get(url2);
   }  
   /*********  get using selStr from GET param  */
-  getWithSelString(selStr){
-    const url = this.urlBase + "REST_GET.php?action=getWithSelString&selStr=" + selStr;
+  getWithSelString(arg){
+    var url = this.urlBase + "REST_GET.php?action=getWithSelString&selStr=" + arg['selStr'];
+    if (arg['key'])
+     url += "&key=" + arg['key'];
     console.log("getWithSelString URL is " + url);
     return this.http.get(url) 
   }

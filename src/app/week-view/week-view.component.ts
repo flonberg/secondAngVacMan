@@ -14,6 +14,8 @@ export class WeekViewComponent implements OnInit {
   advance = 0;
   WeekDutyNames: any;
   physicsMonthlyDuties: any;
+  regularDuties: any;
+  fromION: any;
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService) { }
 
@@ -22,14 +24,14 @@ export class WeekViewComponent implements OnInit {
    this.getFromION();
    this.getDutyNames();
    this.getDutyOwners();
+   this.getRegularDuties();
   }
   makeWeek(advance){
     this.advance += advance; 
     this.fiveDayCalSvce.makeWeek(this.advance);
     this.calHeadings = this.fiveDayCalSvce.dS;
-
-  
   }
+ 
   getFromION(){
     this.genEditSvce.genGet('REST_GET.php?action=RgetJOINFromION').subscribe(
       (res) => {
@@ -43,6 +45,7 @@ export class WeekViewComponent implements OnInit {
   }
   setFromION(res){
     console.log("  43    getFromION %o", res);
+    this.fromION = res;
   }
   getDutyOwners(){
   //  this.genEditSvce.getPMDs('fjl3').subscribe(
@@ -60,8 +63,21 @@ export class WeekViewComponent implements OnInit {
     this.physicsMonthlyDuties = val['data'];   
     console.log("241 %o", this.physicsMonthlyDuties)
   }
+  getRegularDuties(){
+    const arg = {'selStr': 'SELECT * FROM PhysicsRegularDuty', 'key':'serviceid'};
+    this.genEditSvce.getWithSelString(arg)
+    .subscribe(                                          
+     (response) => {
+       this.setRegDuties(response);
+     })   
+  }
+  setRegDuties(s){
+    console.log(" 81   rebDuties %o", s);
+    this.regularDuties = s;
+  }
   getDutyNames(){
-     this.genEditSvce.getWithSelString("SELECT * FROM PhysicsDuty WHERE nomOrder > 0  ORDER bY nomOrder")
+     const arg = {'selStr': 'SELECT * FROM PhysicsDuty WHERE nomOrder > 0  ORDER bY nomOrder'}
+     this.genEditSvce.getWithSelString(arg)
      .subscribe(                                          
       (response) => {
         this.setDutyNames(response);
