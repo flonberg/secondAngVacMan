@@ -16,20 +16,30 @@ export class WeekViewComponent implements OnInit {
   physicsMonthlyDuties: any;
   regularDuties: any;
   fromION: any;
+  todayString; String;
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService) { }
 
   ngOnInit() {
    this.makeWeek(this.advance);
+   console.log("33   calHeadins %o", this.calHeadings);
    this.getFromION();
    this.getDutyNames();
    this.getDutyOwners();
    this.getRegularDuties();
+   const todayDate =  new Date();
+   this.todayString = todayDate.toISOString().split('T')[0];
   }
   makeWeek(advance){
     this.advance += advance; 
     this.fiveDayCalSvce.makeWeek(this.advance);
     this.calHeadings = this.fiveDayCalSvce.dS;
+  }
+  isToday(s){
+    if (s == this.todayString)
+      return "todayClass";
+    else  
+      return "white";  
   }
  
   getFromION(){

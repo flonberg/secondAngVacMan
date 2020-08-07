@@ -1,4 +1,19 @@
 table {
     table-layout:fixed;
- 
+    border-collapse:collapse
 }
+.todayClass {
+    background-color:yellow;
+}
+tr:nth-child(even) {
+    background-color: #d6d6d6;
+  }
+table.main {
+    width:800px;
+}  
+.white {
+    background-color:white
+}
+tr:hover {
+    background-color: #ffff99;
+  }
