@@ -33,7 +33,7 @@ export class MyDutiesComponent implements OnInit {
           console.log(err);
         }
       );
-      /********  test for multGET          */
+      /********  test for multGET          
     const mP = <dB_multGETparams>  {
       action:'multGet',
       tableName:'PhysicsDuty',
@@ -47,8 +47,8 @@ export class MyDutiesComponent implements OnInit {
         console.log("47  multGer %o", res);
       }
     );
+    */
   }
-
     setMyDuties(p){
       this.myDuties = p;
       console.log("myDuties are %o", this.myDuties);

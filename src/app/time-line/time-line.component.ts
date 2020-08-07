@@ -959,7 +959,7 @@ console.log("213");
     if (type == 'approve'){
       this.dB_PP.editColNames = ['approved'];
       this.dB_PP.editColVals = [ '1'];
-      this.data2.update({id: this._id, style:'color:blue' })
+      this.data2.update({id: this._id, style:'color:orange' })
     }
     this.dB_PP.action='editAndLog';
     this.dB_PP.userid = <string>this.userid;
