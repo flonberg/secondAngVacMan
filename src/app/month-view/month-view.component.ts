@@ -39,6 +39,7 @@ export class MonthViewComponent implements OnInit {
   qParams: any;                                                     // Used as a param for REST getDuties. 
   loggedInUserKey: any;
   dutyOrder: [];
+  helpArray:[String];
   physicsDutiesClass: any;
   idxForEdit: string;
   loggedInUserLastName: string;
@@ -66,6 +67,12 @@ export class MonthViewComponent implements OnInit {
       this.genEditSvce.checkIfNoticeNeeded('monthView');     
     });
     this.nextMonth(0);                                              // draw the calendar for current month
+    if (this.loggedInUserKey){
+      this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];
+    }
+      else {
+        this.helpArray = ['Click on a name to page. '];
+      }
     this.monthNumber = 0;                                           // number for going forward or back. 
     this.physicsDutiesClass = [
       {'dutyId':20, 'dutyName':'MorningA-IORT'},
@@ -78,6 +85,7 @@ export class MonthViewComponent implements OnInit {
     this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
     this.logSvcs.logMessage('tst');
     this.colors = ['one','two','three','four','five','six'];
+    
   }
   isLoggedInUser(n){                                                // show the loggedInUser's duties in red
     if (this.loggedInUserKey == n)
@@ -253,8 +261,10 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
 setPhysicsMonthlyDuties(val){
   this.physicsMonthlyDuties = val['data'];   
   console.log("241 %o", val)
-  if (val['loggedInUserKey'])                                                       // the data to the monthly schedule
-    this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty                                            // the userkey to be used for Take-A-Duty
+  if (val['loggedInUserKey'])      {                                                 // the data to the monthly schedule
+    this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty      
+    this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];      
+  }                            
   if (val['loggedInUserLastName'])                                             // the userkey to be used for Take-A-Duty
     this.loggedInUserLastName = val['loggedInUserLastName']
   this.physicsDuties = Array();      

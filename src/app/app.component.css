@@ -23,3 +23,8 @@
    color: red !important;
    font-family: Arial !important;
 }
+#help {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}

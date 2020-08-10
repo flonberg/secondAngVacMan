@@ -80,7 +80,7 @@ rData:any;
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
   helpArray = ['To schedule a Time Away click on the New Time Away button ',
-                'The Help shown here will change to be relevant to you stage in the scheduling of your Time Away.'  ];
+                'To edit your Time Away click on that Time Away. '  ];
   noticeColName='vacMan';
   noticeModalComonentID='vacManModal'
   reason: String;

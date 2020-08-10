@@ -103,9 +103,9 @@
                             <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
                         </div>
                     </form> </td>
-                    <td   *ngIf = "drawEditControls && !newTimeAway2 "  >  <button mat-raised-button color="primary" 
+                    <td   *ngIf = "!_readonly && !newTimeAway2 "  >  <button      mat-raised-button color="primary" 
                         (click) = " saveEdits();" >Submit Changes</button> </td>
-                    <td   *ngIf = "drawEditControls && !newTimeAway2 "  >  <button mat-raised-button color="primary" 
+                    <td   *ngIf = "!_readonly && !newTimeAway2 "  >  <button mat-raised-button color="primary" 
                                                         (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>
                 </tr></table>  
                 <div *ngIf = "drawEditControls && !newTimeAway2  && +this.data2._data[this._id]['approved'] == 1" class="parentCenter"> 
@@ -164,7 +164,7 @@
         </div>    
     </td>
     <td colspan="2" style=" text-align:left;">
-    <div  >
+    <div id='help'  style="  position: fixed; bottom: 0; right: 0;" >
             <app-help [helpArray] = "helpArray"   ></app-help>
     </div>
     </td>
