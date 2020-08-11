@@ -41,6 +41,9 @@ export class WeekViewComponent implements OnInit {
     else  
       return "white";  
   }
+  page(){
+    
+  }
  
   getFromION(){
     this.genEditSvce.genGet('REST_GET.php?action=RgetJOINFromION').subscribe(

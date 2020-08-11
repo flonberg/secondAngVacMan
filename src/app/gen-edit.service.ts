@@ -88,6 +88,8 @@ export class GenEditService   {
   platform: string;
   host:string;
   emailStage; String;
+
+
   userid: String;
   notice:any;
   constructor(private http: HttpClient, @Inject(WINDOW) private window: Window) { }
@@ -147,15 +149,11 @@ export class GenEditService   {
   }
   /*******  get with param list and single WHERE conditon */
   simpleGet(p){
-    var i = 0;
     var getStr = "";
-    console.log("103 property %o", p);
     for (const property in p) {
         getStr += "&"+`${property}`+"="+`${p[property]}`;
     }
-    //const url = this.urlBase + "RESThub.php?dataS=getSimple"+getStr;
     const url = this.urlBase + "REST_GET.php?dataS=getSimple" + getStr;
-    console.log("76 ffff " + url);
     return this.http.get(url) 
   }  
   multGet(p){
@@ -243,7 +241,9 @@ genGet(s){
         });
     }
   sendEmail(emailParams){
+    emailParams['debug'] = '1';
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
+    console.log(" 248  senEmail %o", emailParams);
     return this.http.post(url2, JSON.stringify(emailParams), { responseType:  'json' });
   }
   genPOST(dBParams){

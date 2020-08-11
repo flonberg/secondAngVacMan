@@ -313,14 +313,17 @@ console.log("213");
       if ( this.covererUserKey2  )                                            // if there IS a second coverer
         prodAddr.push(this.rData['emailByKey'][this.covererUserKey2])         // add her address. 
     var mTA = {
-      "dev": ["flonberg@partners.org"],
-      "prod": prodAddr,
+      "Dev": ["flonberg@partners.org"],
+      "Prod": prodAddr,
      }  
     var emp = {
       action: "sendEmail2",
-      addr: mTA,
+      addr: { "Dev":["flonberg@partners.org"],
+              "Prod":prodAddr
+      },
       msg: message,
-      subject: "coverage" 
+      subject: "coverage", 
+      debug: 1
     }
     this.genEditSvce.genPOST(emp).subscribe(
       (res) => {
@@ -872,20 +875,22 @@ console.log("213");
       msg += "</p> <p> To approve this change click on a <a href=" + link33 + "> Approve Change </a>" 
       var emp = { 
         action:"sendEmail2",
-        addr: {"Dev":"flonberg@partners.org",
-                "Prod":"flonberg@gmail.com"
+        addr: { "Dev":["flonberg@partners.org"],
+                "Prod":["flonberg@gmail.com"]
               },
         msg: msg,
-        subject: "Time Away Change"
+        subject: "Time Away Change",
+        debug: 1                                                    // change to '0' to send email to actual recipients
         };
       this.genEditSvce.genPOST(emp).subscribe(
           (res) => {
             console.log("res from sendEmail2 %o", res);
           }
       );
-    console.log("Brian Email is " + msg);  
+      console.log("Brian Email msg is " + msg);  
     }
   }
+
   
   editGen(type: string, event: any) {                                  // editGen is used for ALL fields
    var dateForDataSet = ''; 
