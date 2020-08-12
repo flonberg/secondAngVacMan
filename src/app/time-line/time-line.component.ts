@@ -584,7 +584,7 @@ console.log("213");
     this.genEditSvce.genPOST(this.insertP)
       .subscribe(                                          
         (response) => {
-          this.retFromPost(response);
+          this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
         })   
   
     this.newTimeAway2 = false;    
@@ -615,14 +615,15 @@ console.log("213");
       console.log("600  link1 for retFromPost is " + link11);
     var emp = {                                         // params for email 
         action:"sendEmail2",
-        addr: {"Dev":"flonberg@partners.org",
-                "Prod":"flonberg@gmail.com"
+        addr: {"Dev":["flonberg@partners.org"],
+                "Prod":["bnapolitano@mgu.harvard.edu"]
               },
         msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
         <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away. </p>
         <p> You can approve this Time Away using the below link: </p>
-        <a href=`+ link11 + `> Time away schedule. </a>`,
-        subject: "New Time Away "
+        <a href=`+ link11 + `> Approve Time Away. </a>`,
+        subject: "New Time Away ",
+        debug: 1
         };
       this.genEditSvce.genPOST(emp).subscribe(
           (res) => {
@@ -807,8 +808,9 @@ console.log("213");
       }
     );
   }
-  editColNames = [String];
-  editColVals = [String];
+  /*********  used to store values from (blur) of input widgets         */
+  editColNames = [];
+  editColVals = [];
   needStartEmail = false;
   needEndEmail = false;
   newStartDate = String;
@@ -819,8 +821,11 @@ console.log("213");
                   "NewEndDate": String,
                 }
   storeEdit(type,e){
+    this.editColNames[0] = 'approved';
+    this.editColVals[0] = '0';
     if (e.value){
       this.editColNames.push(type);
+ 
       this.editColVals.push(e.value);  
     }
     else  if (e.target){
@@ -840,11 +845,16 @@ console.log("213");
           this.data2.update({id: this._id, end: dateForDataSet});   
           this.EDO.NewEndDate = e.target.value;
         }
+        var str = "approved";  
+   
+        // use of Constructor Property 
+
+
     }
   }
   saveEdits(){
-    this.editColNames.shift();                                 // remove garbage zeroth element
-    this.editColVals.shift();
+   // this.editColNames.shift();                                 // remove garbage zeroth element
+  //  this.editColVals.shift();
     var eP  = {
       action:'editAndLog',
       tableName:'vacation3',
@@ -876,7 +886,7 @@ console.log("213");
       var emp = { 
         action:"sendEmail2",
         addr: { "Dev":["flonberg@partners.org"],
-                "Prod":["flonberg@gmail.com"]
+                "Prod":["bnapolitano@mgh.harvard.edu"]
               },
         msg: msg,
         subject: "Time Away Change",

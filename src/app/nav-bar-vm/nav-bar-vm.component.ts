@@ -27,7 +27,7 @@ export class NavBarVMComponent {
           link: './MonthView',
           index: 1,   
       }, {
-        label: 'My-Duties',
+        label: 'My Duties',
         link: './MyDuties',
         index: 2,   
     }, {
