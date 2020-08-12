@@ -70,6 +70,7 @@ rData:any;
   groupsArray: any;
   contentArray: any;
   redraw: boolean;
+  showSubmitChanges: boolean;
   itemNum: string;
   qP: any;                                              // used to receive queryParams
 //  idSel: String;
@@ -202,6 +203,7 @@ rData:any;
     this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
     this.contentArray = [];
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
+    this.showSubmitChanges = false; 
 
   
   
@@ -822,6 +824,7 @@ console.log("213");
                 }
   storeEdit(type,e){
     this.editColNames[0] = 'approved';
+    this.showSubmitChanges = true;
     this.editColVals[0] = '0';
     if (e.value){
       this.editColNames.push(type);
@@ -843,7 +846,8 @@ console.log("213");
           this.EDO.OldEndDate = this.data2._data[this._id]['end'].slice(0,10); ; 
           this.EDO.NewEndDate = e.target.value; 
           this.data2.update({id: this._id, end: dateForDataSet});   
-          this.EDO.NewEndDate = e.target.value;
+          this.data2.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'});   
+          
         }
         var str = "approved";  
    
