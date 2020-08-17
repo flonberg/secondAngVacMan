@@ -48,7 +48,6 @@ export class MonthViewComponent implements OnInit {
   toPageID: string;
   colors:string[];
   masterArray = ['This new Month View page is part of upgrade of Whiteboard.',
-  'To see details, or edit a TimeAway, click on that TimeAway. ',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
   noticeColName='monthView';

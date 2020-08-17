@@ -2,13 +2,13 @@
   <nav  >
     <button 
        *ngFor="let routeLink of routeLinks; let i = index;"
-       [ngClass]=" index == i ? 'button' : 'buttonSel' "
-       [routerLink]="routeLink.link"
-       routerLinkActive="tab-link-active"
-       queryParamsHandling="merge"
-       #rla="routerLinkActive"
-       (click)="setIndex(i)"
-        [routerLinkActiveOptions]="{exact: false}"
+        [ngClass]=" index == i ? 'button' : 'buttonSel' "
+        [routerLink]="routeLink.link"
+        routerLinkActive="tab-link-active"
+        queryParamsHandling="merge"
+        #rla="routerLinkActive"
+        (click)="setIndex(i)"
+          [routerLinkActiveOptions]="{exact: false}"
     >
         {{routeLink.label }} 
     </button>

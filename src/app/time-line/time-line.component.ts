@@ -77,7 +77,6 @@ rData:any;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
   masterArray = ['This new page is part of upgrade of Whiteboard.',
-  'To see details, or edit a TimeAway, click on that TimeAway. ',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
   helpArray = ['To schedule a Time Away click on the New Time Away button ',
@@ -758,7 +757,8 @@ console.log("213");
     }
   }
   /**********  make a dataStructure to hold all names of tA holders  */
-  setGroups(s) {                                                           // s is the timeline dataSet
+  setGroups(s) { 
+    console.log("761   loggedInUserRank %o", this.rData.loggedInUserRank );                                                         // s is the timeline dataSet
     this.nameList = new Array();
     this.groupsArray = new Array();
     for (let i = 0; i < s.length; i++) {                                   // step thru the data
@@ -840,6 +840,8 @@ console.log("213");
           this.EDO.OldStartDate = this.data2._data[this._id]['start'].slice(0,10); ; 
           this.EDO.NewStartDate = e.target.value; 
           this.data2.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
+          this.data2.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'}); 
+
         }
         if (type=='endDate'){
           this.needStartEmail = true;
