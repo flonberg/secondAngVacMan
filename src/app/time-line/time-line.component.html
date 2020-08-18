@@ -1,7 +1,7 @@
 
 <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
 <div id="container">  
-        <div id="timeline" #visjsTimeline *ngIf = "redraw  && index == 0"   (click) = "clicked($event)"> </div>
+        <div id="timeline" #visjsTimeline *ngIf = "index == 0"   (click) = "clicked($event)"> </div>
     </div>     
 <table style="width:100%; table-layout:fixed; "><tr>
     <th></th><th></th><th></th><th></th><th></th><th></th></tr>
@@ -13,7 +13,7 @@
                     <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
                 </td>
                 <td *ngIf = "this.userid=='napolitano'"> 
-                    <button mat-raised-button (click) ="setNewTimeAway2()"  >Show Physicists </button> 
+                    <button mat-raised-button (click) ="toggleShowPhysicists()"  >Show Physicists </button> 
                 </td>
                 </tr></table>
             </div>

@@ -104,6 +104,7 @@ rData:any;
   reasonSelect = '';                                  // the reason from dataBase
   newTimeAwayBool = false;
   saveTimeAwayBool = false;
+  showPhysicist : number;
   /*
   newTAparams: newTAparams = {
     startDate: '',
@@ -194,7 +195,7 @@ rData:any;
       this.ret = 1;
     this.dateLabels = [];
     this.nomCoverers = [];
-    this.redraw = true;
+ //   this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
     this.isApprover = false;
@@ -266,6 +267,7 @@ rData:any;
     });
 console.log("213");
   }
+
 
   selectCoverer(n, i ){
     if (this.covererToggle ){
@@ -669,6 +671,7 @@ console.log("213");
     const todayDate = new Date();
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     const endDate = new Date();  
+    this.rData = new Array();
                                                       // create new date to use for end                            
     endDate.setMonth(startDate.getMonth() + 4);                                         // set a date to be the forward date of data collection
     startDate.setMonth(startDate.getMonth() - 4);                                       // set date for backward data collection far enough back to get all users
@@ -758,9 +761,10 @@ console.log("213");
     this.groupsArray = new Array();
     /**********   Switch between Dosim and Physicists  */
     for (let i = 0; i < s.length; i++) { 
-      if (+this.rData.loggedInUserRank == 5 && +s._data[i].rank == 0)          // if the user is Phys 
-        continue;                                                               // skip Dosims
-      if (+this.rData.loggedInUserRank == 0 && +s._data[i].rank == 5)
+      if ((+this.rData.loggedInUserRank == 5 && +s._data[i].rank == 0) ){          // if the user is Phys 
+          continue;          
+        }                                                     // skip Dosims
+      if ((+this.rData.loggedInUserRank == 0 && +s._data[i].rank == 5) ) 
         continue;
       if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
         this.nameList.push( s._data[i].content);                           // put it in the dS 
@@ -906,10 +910,28 @@ console.log("213");
       console.log("Brian Email msg is " + msg);  
     }
   }
+tSP(param){
 
-  
-  editGen(type: string, event: any) {                                  // editGen is used for ALL fields
-   var dateForDataSet = ''; 
+}
+toggleShowPhysicists(param){
+  console.log( "ttttt");
+
+  var url = window.location.href;    
+  if (url.indexOf('?') > -1){
+    if ( url.indexOf('param') < 0  )
+     url += '&param=1';
+    else {
+      url = url.substr(0, url.length - 8);
+    }
+    
+  }else{
+     url += '?param=1' + this.showPhysicist
+  }
+  window.location.href = url;
+}
+editGen(type: string, event: any) {                                  // editGen is used for ALL fields
+ console.log("editGen");
+    var dateForDataSet = ''; 
    const shownId = this._id;
    var messageUsed = ""; 
    console.log( 'editGen ' + this.data2._data[this._id]['approved'] + "thisis" + shownId);
@@ -1014,6 +1036,7 @@ console.log("213");
       }
       return year + '-' + month + '-' + day + ' 00:00:00';
   }
+
 
 /*
   approve() {
