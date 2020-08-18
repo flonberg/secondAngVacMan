@@ -737,11 +737,6 @@ console.log("213");
       start: startDateShown,
       end: endDateShown,
     };
-   
-    
-      
-  
-
   }  
   setLoggedInUserKey(){
 
@@ -761,7 +756,12 @@ console.log("213");
     console.log("761   loggedInUserRank %o", this.rData.loggedInUserRank );                                                         // s is the timeline dataSet
     this.nameList = new Array();
     this.groupsArray = new Array();
-    for (let i = 0; i < s.length; i++) {                                   // step thru the data
+    /**********   Switch between Dosim and Physicists  */
+    for (let i = 0; i < s.length; i++) { 
+      if (+this.rData.loggedInUserRank == 5 && +s._data[i].rank == 0)          // if the user is Phys 
+        continue;                                                               // skip Dosims
+      if (+this.rData.loggedInUserRank == 0 && +s._data[i].rank == 5)
+        continue;
       if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
         this.nameList.push( s._data[i].content);                           // put it in the dS 
         this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };// make dS of lastName ; userkey

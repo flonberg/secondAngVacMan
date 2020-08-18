@@ -8,9 +8,14 @@
     <tr>
         <td  colspan='7' >
             <div >
-                <div *ngIf = "!newTimeAway2 " >
-                        <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
-                </div>
+                <table><tr>
+                <td *ngIf = "!newTimeAway2 " >
+                    <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
+                </td>
+                <td *ngIf = "this.userid=='napolitano'"> 
+                    <button mat-raised-button (click) ="setNewTimeAway2()"  >Show Physicists </button> 
+                </td>
+                </tr></table>
             </div>
                 <!------        This is the form used for adding new tAs ---------------> 
             <div class = 'contDiv'>
