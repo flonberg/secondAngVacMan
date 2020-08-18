@@ -8,7 +8,7 @@
         <td   class="small">
           <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
         </td>
-       <td  class='large'> {{ monthName }} </td>
+       <td  class='large'> {{ monthName }} {{ count }}</td>
         <td   class="small">
             <button (click) = 'nextMonth(1)'  mat-raised-button class="accent"  >Next Month </button>
           </td>
@@ -21,10 +21,9 @@
             </td>  
       </tr>
     </table>
- 
-</div>
+  </div>
   <p *ngIf = "loggedInUserKey" class="heading" >  To Assume a Duty, click on physicist's name. </p>
-<div id="header" >
+  <div id="header" >
     <table>
       <tr class="dow"> <th > Monday</th> <th> Tuesday</th><th> Wednesday</th><th> Thursday</th> <th> Friday</th>
       </tr>

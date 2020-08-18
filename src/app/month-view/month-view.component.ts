@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import { DatePipe, KeyValue } from '@angular/common';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -28,6 +28,7 @@ interface dateBox {
 })
 
 export class MonthViewComponent implements OnInit {
+  @Input() count: number;
   daysS: dateBox[][];
   monthName: string;                                                // used in .html
   date: Date;
@@ -58,6 +59,8 @@ export class MonthViewComponent implements OnInit {
     private logSvcs:LogService
      ){ }
   ngOnInit(){
+    console.log("count is " + this.count);
+      
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {   

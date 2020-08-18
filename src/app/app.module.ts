@@ -29,6 +29,7 @@ import { NoticeComponent } from './notice/notice.component';
 import { MyDutiesComponent } from './my-duties/my-duties.component';
 import { HelpComponent } from './help/help.component';
 import { WeekViewComponent } from './week-view/week-view.component';
+import { ProtonmonthComponent } from './protonmonth/protonmonth.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -43,6 +44,7 @@ import { WeekViewComponent } from './week-view/week-view.component';
     NoticeComponent,
     HelpComponent,
     WeekViewComponent,
+    ProtonmonthComponent,
 
   ],
   imports: [
@@ -61,6 +63,7 @@ import { WeekViewComponent } from './week-view/week-view.component';
     MatAutocompleteModule,
     RouterModule.forRoot([
       { path: 'MonthView', component: MonthViewComponent },
+      { path: 'ProtonMonth', component: ProtonmonthComponent },
       { path: 'VacMan**', component: TimeLineComponent},
       { path: 'VacMan/:userid', component: TimeLineComponent},
       { path: 'MyDuties', component:MyDutiesComponent},

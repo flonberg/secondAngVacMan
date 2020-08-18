@@ -104,7 +104,7 @@ rData:any;
   reasonSelect = '';                                  // the reason from dataBase
   newTimeAwayBool = false;
   saveTimeAwayBool = false;
-  showPhysicist : number;
+  showPhysicist :String;
   param: String;
   /*
   newTAparams: newTAparams = {
@@ -655,7 +655,10 @@ console.log("213");
     }
     if (qP.param){
       this.param='param=1';
+      this.showPhysicist = "Show Dosimetrists";
     }
+    else 
+      this.showPhysicist = "Show Physicists";
     if (qP.platform) {
       this.platform = qP.platform;
       console.log("timeLine platform " + this.platform);
@@ -923,8 +926,6 @@ tSP(param){
 
 }
 toggleShowPhysicists(param){
-  console.log( "ttttt");
-
   var url = window.location.href;    
   if (url.indexOf('?') > -1){
     if ( url.indexOf('param') < 0  )

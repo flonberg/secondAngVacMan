@@ -22,18 +22,26 @@ export class NavBarVMComponent {
           label: 'Vacation Manager',
           link: './VacMan',
           index: 0,
-      }, {
+      },
+       {
           label: 'Monthview',
           link: './MonthView',
           index: 1,   
-      }, {
+      },
+      {
+        label: 'ProtonMonthview',
+        link: './ProtonMonth',   
+        index: 2,   
+    },
+       {
         label: 'My Duties',
         link: './MyDuties',
-        index: 2,   
-    }, {
+        index: 3,   
+    }, 
+    {
       label: 'Week View',
       link: './WeekView',
-      index: 3,   
+      index: 4,   
   }
     ];
   }
