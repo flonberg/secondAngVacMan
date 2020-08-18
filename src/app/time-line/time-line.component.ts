@@ -105,6 +105,7 @@ rData:any;
   newTimeAwayBool = false;
   saveTimeAwayBool = false;
   showPhysicist : number;
+  param: String;
   /*
   newTAparams: newTAparams = {
     startDate: '',
@@ -652,6 +653,9 @@ console.log("213");
       this.userid = qP.userid;
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
     }
+    if (qP.param){
+      this.param='param=1';
+    }
     if (qP.platform) {
       this.platform = qP.platform;
       console.log("timeLine platform " + this.platform);
@@ -682,7 +686,10 @@ console.log("213");
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 7);   
   //  this.genEditSvce.getTAs().subscribe(
-    this.genEditSvce.genGet('REST_GET.php?action=getTAs&userid=' + this.userid).subscribe(
+    var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
+    if (this.param)
+      url += '&param=1';
+    this.genEditSvce.genGet(url).subscribe(
       (val) => {
         console.log("627  val " + val);
         if (this.index === 0) {    
@@ -761,11 +768,13 @@ console.log("213");
     this.groupsArray = new Array();
     /**********   Switch between Dosim and Physicists  */
     for (let i = 0; i < s.length; i++) { 
+      /*
       if ((+this.rData.loggedInUserRank == 5 && +s._data[i].rank == 0) ){          // if the user is Phys 
           continue;          
         }                                                     // skip Dosims
       if ((+this.rData.loggedInUserRank == 0 && +s._data[i].rank == 5) ) 
         continue;
+        */
       if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
         this.nameList.push( s._data[i].content);                           // put it in the dS 
         this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };// make dS of lastName ; userkey
