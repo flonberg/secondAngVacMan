@@ -84,6 +84,12 @@ export class MonthViewComponent implements OnInit {
       {'dutyId':25, 'dutyName':'Float1'},
       {'dutyId':26, 'dutyName':'Float2'},
     ]
+    if (this.count == 1){
+      this.physicsDutiesClass = [
+        {'dutyId':23, 'dutyName':'ProtonAM'},
+        {'dutyId':24, 'dutyName':'ProtonPM'},
+      ]
+    }
     this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
     this.logSvcs.logMessage('tst');
     this.colors = ['one','two','three','four','five','six'];
@@ -105,6 +111,7 @@ export class MonthViewComponent implements OnInit {
 
   takeAduty(nDutyId, dDayNum){
   //  const v = this.isUserDutyTaker();
+    console.log("takeAduty");
     if (this.isUserDutyTaker() !== true){
       window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
       + this.physicsMonthlyDuties[dDayNum][nDutyId]['id'] + '  , _blank');
@@ -160,12 +167,11 @@ export class MonthViewComponent implements OnInit {
   {
     this.daysS = Array(Array());                                     // make array to hold daysS structures
     var tmpDate = new Date();                                       // this is the date which will be incremented
-    this.date = new Date();                            //  this will be set to today in production
-//    this.date = new Date('2019-01-28');                            //  this will be set to today in production
+    this.date = new Date();                                         //  this will be set to today in production
     this.baseDate = new Date('2010-01-01');
 
     this.monthNumber += nn;                                        // nn will be either +1 of -1 to go forward or bacf
-    if (nn != 0)                                                // if date has been changed by button  
+    if (nn != 0)                                                  // if date has been changed by button  
       this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));     // make the new date
     this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                       // used for the caption on the calendar 
     var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);   
@@ -186,17 +192,14 @@ export class MonthViewComponent implements OnInit {
     if (dowFD === 0 )
       firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
     this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');
-
-console.log('startDataDate ' +    this.startDateForGettingDataString  );
-
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
-    var startDateForGettingData = new Date()                                                     // define a date to set in the below loop
-    if (dowFD > 1 && dowFD < 6){                                                                 // if the firstDayOfMonth is NOT Sat or Sun  
-      for (let i = 0;  i < 5; i++){                                                              // make the 5 days of the first week;
-        if (!this.daysS[0])                                                                     //  if array row has not been defined
-          this.daysS[0] = Array();                                                              // define the array for the Week
-        this.daysS[0][i] = <dateBox>{};                                                         // define an instance of the daysS interface
-        this.daysS[0][i].dayNumber = firstDayOnCal;                                             // set dayNumber element of interface
+    var startDateForGettingData = new Date()                                         // define a date to set in the below loop
+    if (dowFD > 1 && dowFD < 6){                                                     // if the firstDayOfMonth is NOT Sat or Sun  
+      for (let i = 0;  i < 5; i++){                                                  // make the 5 days of the first week;
+        if (!this.daysS[0])                                                          //  if array row has not been defined
+          this.daysS[0] = Array();                                                   // define the array for the Week
+        this.daysS[0][i] = <dateBox>{};                                              // define an instance of the daysS interface
+        this.daysS[0][i].dayNumber = firstDayOnCal;                                  // set dayNumber element of interface
        /************      first Day of first week **********************/
         if ( i == 0){
           this.daysS[0][i].date = new Date(lastDayPrevMonth.getFullYear(), lastDayPrevMonth.getMonth(), firstDayOnCal);  // set first date on Calendar in array
@@ -229,27 +232,31 @@ console.log('startDataDate ' +    this.startDateForGettingDataString  );
       tmpDate = firstDateOnCalendar  ;
       startDateForGettingData = firstDayOfShownMonth;  
     }  
-      if (dowFD == 0)
-        tmpDate = firstDateOnCalendar;
-      for (let i=1; i < 6; i++){                                                              // max of 4 more weeks in calendar
-        for (let j= 0; j < 5; j++) {                                                          // the days of each week
-          tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
-          let dayNum = tmpDate.getDay();                                                      // get dayNum of week, this will be Saturday 
-          if (dayNum == 6 )                                                                   // check if it is Saturday, 
-            tmpDate.setDate(tmpDate.getDate() + 2);                                           // increment 2 days to get to Monday. 
-          if (!this.daysS[i])                                                                 //  if array row has not been defined
-              this.daysS[i] = Array();  
-              this.daysS[i][j] = <dateBox>{};                                                 // define an instance of the daysS interface
-              this.daysS[i][j].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());    // put date in daysS dataStructure.
-              this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
-              this.daysS[i][j].dayNumber = tmpDate.getDate();
-              this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";     
-        }
+    if (dowFD == 0)
+      tmpDate = firstDateOnCalendar;
+    /*******   make the rest of the weeks on the calendar.  */  
+    for (let i=1; i < 6; i++){                                                              // max of 4 more weeks in calendar
+      for (let j= 0; j < 5; j++) {                                                          // the days of each week
+        tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
+        let dayNum = tmpDate.getDay();                                                      // get dayNum of week, this will be Saturday 
+        if (dayNum == 6 )                                                                   // check if it is Saturday, 
+          tmpDate.setDate(tmpDate.getDate() + 2);                                           // increment 2 days to get to Monday. 
+        if (!this.daysS[i])                                                                 //  if array row has not been defined
+            this.daysS[i] = Array();  
+            this.daysS[i][j] = <dateBox>{};                                                 // define an instance of the daysS interface
+            this.daysS[i][j].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());    // put date in daysS dataStructure.
+            this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
+            this.daysS[i][j].dayNumber = tmpDate.getDate();
+            this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";     
+      }
     }
     /*************      get the data  ************************/
 
      // this.genEditSvce.getPMDs(this.qParams['userid']).subscribe(
-      this.genEditSvce.genGet('REST_GET.php?action=getPMDs&userid=' + this.qParams['userid'] ).subscribe(  
+      var url =  'REST_GET.php?action=getPMDs&userid=' + this.qParams['userid'] ; 
+      if (this.count == 1)
+        url += "&group=proton";
+      this.genEditSvce.genGet(url ).subscribe(  
       (res) => {
         this.setPhysicsMonthlyDuties(res);
       },

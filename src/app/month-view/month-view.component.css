@@ -108,18 +108,18 @@ caption {
   }
 
 
-.MorningA-IORT:hover, .MorningB:hover, .EveningA:hover, .EveningB:hover {
+.MorningA-IORT:hover, .MorningB:hover, .EveningA:hover, .EveningB:hover, .ProtonAM, .ProtonPM {
     background-color:yellow;
     cursor: pointer;
 }
 
 
-.one, .MorningA-IORT {
+.one, .MorningA-IORT, .ProtonAM {
     background-color:#fcc9ae;
     height:10px;
     border: 1px outset #ccc;
 } 
-.two, .MorningB {
+.two, .MorningB, .ProtonPM {
     background-color:#fcdfbc;
     height:10px;
     border: 1px outset #ccc;

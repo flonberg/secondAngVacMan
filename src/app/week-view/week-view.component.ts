@@ -35,11 +35,18 @@ export class WeekViewComponent implements OnInit {
     this.fiveDayCalSvce.makeWeek(this.advance);
     this.calHeadings = this.fiveDayCalSvce.dS;
   }
-  isToday(s){
+  isToday(s, i){
     if (s == this.todayString)
       return "todayClass";
     else  
       return "white";  
+  }
+  isTodayColor(s){
+    console.log("s is %o", s);
+    if (s == this.todayString)
+      return "red";
+    else  
+      return "gray";  
   }
   page(){
     

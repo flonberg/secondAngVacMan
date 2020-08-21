@@ -3,7 +3,7 @@ table {
     border-collapse:collapse
 }
 .todayClass {
-    background-color:yellow;
+    color:red;
 }
 tr:nth-child(even) {
     background-color: #d6d6d6;

@@ -8,7 +8,7 @@
         <td   class="small">
           <button (click) = 'nextMonth(-1)'  mat-raised-button class="accent"  >Previous Month </button>
         </td>
-       <td  class='large'> {{ monthName }} {{ count }}</td>
+       <td  class='large'> {{ monthName }} </td>
         <td   class="small">
             <button (click) = 'nextMonth(1)'  mat-raised-button class="accent"  >Next Month </button>
           </td>
@@ -37,7 +37,6 @@
               [id]="physicsMonthlyDuties[dayEl.dateString][item.dutyId]['idx']" 
               [class] = "isLoggedInUser( physicsMonthlyDuties[dayEl.dateString][item.dutyId]['UserKey'])"
                >   {{  physicsMonthlyDuties[dayEl.dateString][item.dutyId]['lNN'] }}
-   
             </div>
             <div></div>
             </tr> 

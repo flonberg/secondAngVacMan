@@ -12,21 +12,21 @@
 <table class='main'>
   <tr class='white'>
    <th></th><th></th>
-    <th  *ngFor = "let item of calHeadings">
+    <th  *ngFor = "let item of calHeadings; let i = index" >
       <table [class] = 'isToday(item.date)'>
         <tr><th >{{ item.dayName }} </th> </tr>  
-        <tr><th   [class]='isToday(item.date)'>  {{ item.monthDay }} </th> </tr>
+        <tr><th   [class]='isToday(item.date, i)'>  {{ item.monthDay }} </th> </tr>
       </table>
     </th> 
   </tr>
   <tr *ngFor = 'let item of WeekDutyNames' >
     <td style="font-weight:bold;" >  {{ item.name }} </td>
     <td> {{ item.timeSpan }} </td>
-    <td *ngFor = "let item2 of calHeadings"> 
-      <div *ngIf = 'physicsMonthlyDuties && physicsMonthlyDuties[item2.date][item.Idx]'>
+    <td *ngFor = "let item2 of calHeadings"  [style.color]="isTodayColor(item2.date)"> 
+      <div *ngIf = 'physicsMonthlyDuties && physicsMonthlyDuties[item2.date]'   >
       {{ physicsMonthlyDuties[item2.date][item.Idx]['lNN'] }}  
       </div>
-      <div *ngIf = "regularDuties[item.Idx] && fromION[regularDuties[item.Idx]['phys1']]"> 
+      <div *ngIf = "regularDuties[item.Idx] && fromION[regularDuties[item.Idx]['phys1']]"   > 
         {{ fromION[regularDuties[item.Idx]['phys1']]['LastName'] }} </div>
     </td>
   </tr>
