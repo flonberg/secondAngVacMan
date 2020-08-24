@@ -30,6 +30,7 @@ import { MyDutiesComponent } from './my-duties/my-duties.component';
 import { HelpComponent } from './help/help.component';
 import { WeekViewComponent } from './week-view/week-view.component';
 import { ProtonmonthComponent } from './protonmonth/protonmonth.component';
+import { DosimAssignmentsComponent } from './dosim-assignments/dosim-assignments.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -45,6 +46,7 @@ import { ProtonmonthComponent } from './protonmonth/protonmonth.component';
     HelpComponent,
     WeekViewComponent,
     ProtonmonthComponent,
+    DosimAssignmentsComponent,
 
   ],
   imports: [
@@ -68,6 +70,7 @@ import { ProtonmonthComponent } from './protonmonth/protonmonth.component';
       { path: 'VacMan/:userid', component: TimeLineComponent},
       { path: 'MyDuties', component:MyDutiesComponent},
       { path: 'WeekView', component:WeekViewComponent},
+
      { path: '**', component: TimeLineComponent}
     ])
 

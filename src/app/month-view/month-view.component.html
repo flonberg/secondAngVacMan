@@ -15,7 +15,8 @@
           <td class="small">
               <table class="tinyTable">
                 <tr *ngFor="let item of physicsDuties | keyvalue">
-                <td  [class] = "item.value.cN" > {{item.value.name}} </td>
+                <td  [class] = "item.value.cN" style="text-align: left; width:100px;"> {{item.value.name}}   </td>
+                <td  [class] = "item.value.cN" style="text-align: right;width:100px;"> {{item.value.timeSpan}}   </td>
                 </tr>
               </table>
             </td>  

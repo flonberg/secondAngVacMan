@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { TimeLineComponent } from './../time-line/time-line.component';
 import { Component, OnInit } from '@angular/core';
 
@@ -12,7 +13,14 @@ export class NavBarVMComponent {
   index: number;
   button:string;
   buttonSel: string;
-  constructor(private tlc: TimeLineComponent) { 
+  loggedInLastname: string;
+  constructor(private tlc: TimeLineComponent, private actRout: ActivatedRoute) { 
+    this.actRout                                             // point to the route clicked on
+    .queryParams                                                    // look at the queryParams
+    .subscribe(queryParams => {   
+      this.setUserLastname( queryParams);
+      
+    });
     this.userid = tlc.userid;
     this.button= "button ";
     this.buttonSel = "buttonSel";
@@ -42,8 +50,13 @@ export class NavBarVMComponent {
       label: 'Week View',
       link: './WeekView',
       index: 4,   
-  }
+    }
     ];
+  }
+  setUserLastname(val)
+  {
+    this.loggedInLastname = val;
+    console.log("nav has %o", this.loggedInLastname);
   }
   setIndex(n){
     this.index = n;

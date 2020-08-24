@@ -42,7 +42,6 @@ export class WeekViewComponent implements OnInit {
       return "white";  
   }
   isTodayColor(s){
-    console.log("s is %o", s);
     if (s == this.todayString)
       return "red";
     else  

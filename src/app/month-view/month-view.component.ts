@@ -78,8 +78,8 @@ export class MonthViewComponent implements OnInit {
     this.monthNumber = 0;                                           // number for going forward or back. 
     this.physicsDutiesClass = [
       {'dutyId':20, 'dutyName':'MorningA-IORT'},
-      {'dutyId':10, 'dutyName':'MorningB'},
-      {'dutyId':21, 'dutyName':'EveningA'},
+      {'dutyId':21, 'dutyName':'MorningB'},
+      {'dutyId':10, 'dutyName':'EveningA'},
       {'dutyId':22, 'dutyName':'EveningB'},
       {'dutyId':25, 'dutyName':'Float1'},
       {'dutyId':26, 'dutyName':'Float2'},
