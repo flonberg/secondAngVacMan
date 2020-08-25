@@ -17,6 +17,7 @@ export class WeekViewComponent implements OnInit {
   regularDuties: any;
   fromION: any;
   todayString; String;
+  dayNums: String[];
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService) { }
 
@@ -27,6 +28,7 @@ export class WeekViewComponent implements OnInit {
    this.getDutyNames();
    this.getDutyOwners();
    this.getRegularDuties();
+   this.dayNums = ['0','1','2','3','4'];
    const todayDate =  new Date();
    this.todayString = todayDate.toISOString().split('T')[0];
   }
@@ -95,7 +97,7 @@ export class WeekViewComponent implements OnInit {
     this.regularDuties = s;
   }
   getDutyNames(){
-     const arg = {'selStr': 'SELECT * FROM PhysicsDuty WHERE nomOrder > 0  ORDER bY nomOrder'}
+     const arg = {'selStr': 'SELECT * FROM PhysicsDuty WHERE nomOrder > 0  AND nomOrder <=8 ORDER bY nomOrder'}
      this.genEditSvce.getWithSelString(arg)
      .subscribe(                                          
       (response) => {

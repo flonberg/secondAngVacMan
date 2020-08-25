@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarVMComponent {
   routeLinks: any[];
-  userid: String;
+  userid: string;
   index: number;
   button:string;
   buttonSel: string;
@@ -21,7 +21,7 @@ export class NavBarVMComponent {
       this.setUserLastname( queryParams);
       
     });
-    this.userid = tlc.userid;
+   // this.userid = tlc.userid;
     this.button= "button ";
     this.buttonSel = "buttonSel";
     this.index = 0;
