@@ -13,6 +13,7 @@ export class WeekViewComponent implements OnInit {
   calHeadings: any;
   advance = 0;
   WeekDutyNames: any;
+  RegDutyNames: any;
   physicsMonthlyDuties: any;
   regularDuties: any;
   fromION: any;
@@ -27,6 +28,7 @@ export class WeekViewComponent implements OnInit {
    this.getFromION();
    this.getDutyNames();
    this.getDutyOwners();
+   this.getRegDutyNames();
    this.getRegularDuties();
    this.dayNums = ['0','1','2','3','4'];
    const todayDate =  new Date();
@@ -104,9 +106,21 @@ export class WeekViewComponent implements OnInit {
         this.setDutyNames(response);
       })   
   }
+  getRegDutyNames(){
+    const arg = {'selStr': 'SELECT * FROM PhysicsDuty WHERE nomOrder > 8 ORDER bY nomOrder'}
+    this.genEditSvce.getWithSelString(arg)
+    .subscribe(                                          
+     (response) => {
+       this.setRegDutyNames(response);
+     })   
+ }
   setDutyNames(dN){
     console.log("dutyNames is %o", dN);
     this.WeekDutyNames = dN;
+  }
+  setRegDutyNames(dN){
+    console.log("RegDutyNames is %o", dN);
+    this.RegDutyNames = dN;
   }
   shift(n){
     this.advance += n;
