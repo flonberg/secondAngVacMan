@@ -15,6 +15,7 @@ export class WeekViewComponent implements OnInit {
   WeekDutyNames: any;
   RegDutyNames: any;
   physicsMonthlyDuties: any;
+  physicsRegularDuties: any;
   regularDuties: any;
   fromION: any;
   todayString; String;
@@ -83,8 +84,11 @@ export class WeekViewComponent implements OnInit {
     );
   }
   setPhysicsMonthlyDuties(val){
+    console.log("87 val %o ", val);
     this.physicsMonthlyDuties = val['data'];   
-    console.log("241 %o", this.physicsMonthlyDuties)
+    this.physicsRegularDuties = val['RegularDuties']
+    console.log("241 physicsMothlyDuties %o", this.physicsMonthlyDuties);
+    console.log("241 physicsRegularDuties %o", this.physicsRegularDuties);
   }
   getRegularDuties(){
     const arg = {'selStr': 'SELECT * FROM PhysicsRegularDuty', 'key':'serviceid'};
@@ -115,8 +119,9 @@ export class WeekViewComponent implements OnInit {
      })   
  }
   setDutyNames(dN){
-    console.log("dutyNames is %o", dN);
+   
     this.WeekDutyNames = dN;
+    console.log("WeekdutyNames is %o", this.WeekDutyNames);
   }
   setRegDutyNames(dN){
     console.log("RegDutyNames is %o", dN);

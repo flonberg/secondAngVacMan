@@ -28,9 +28,16 @@
     </div>
     </td>
   </tr>
-  <tr *ngFor = 'let item of RegDutyNames' >
-    <td style="font-weight:bold;" >  {{ item.name }} </td>
-    <td> {{ item.timeSpan }} </td>
+
 </table>
+
 <p> Physicist A is responsible for new plan checks on L1, L2, L3 that occur during the assigned shift </p>
 <p> Physicist B is responsible for new plan checks on L4, L5, L6 that occur during the assigned shift </p>
+<table class='main' style="width:300px;">
+
+<tr *ngFor = 'let item of physicsRegularDuties | keyvalue'>
+    <th> <b>{{item.value.name}}</b></th> 
+    <th> {{item.value.takers[0]}}</th> 
+
+</tr>
+</table>
