@@ -41,8 +41,8 @@
 </tr>  
 <tr *ngFor = 'let item of physicsRegularDuties | keyvalue'>
     <th > <b>{{item.value.name}}</b></th> 
-    <td (click) = "page( item.value.takers[0]  )" > {{ item.value.takers[0]['lNN']}}</td> 
-    <td  (click) = "page( item.value.takers[1]  )" > {{item.value.takers[1]['lNN']}}</td> 
+    <td class="defaultClass" (click) = "page( item.value.takers[0]  )" > {{ item.value.takers[0]['lNN']}}</td> 
+    <td class="defaultClass"  (click) = "page( item.value.takers[1]  )" > {{item.value.takers[1]['lNN']}}</td> 
 
 
 </tr>
