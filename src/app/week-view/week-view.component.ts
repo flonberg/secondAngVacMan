@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { GenEditService, dB_SimpleGETparams } from '../gen-edit.service';
 
+import { CommonModule } from '@angular/common';
+import {NgStyle} from "@angular/common";
+
 @Component({
   selector: 'app-week-view',
   templateUrl: './week-view.component.html',
@@ -19,6 +22,8 @@ export class WeekViewComponent implements OnInit {
   regularDuties: any;
   fromION: any;
   todayString; String;
+  todayColor: any;
+  defaultColor: any;
   dayNums: String[];
   constructor(private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private fiveDayCalSvce: FiveDayCalService) { }
@@ -32,9 +37,12 @@ export class WeekViewComponent implements OnInit {
    this.getRegDutyNames();
    this.getRegularDuties();
    this.dayNums = ['0','1','2','3','4'];
+   this.todayColor = "color:red";
+   this.defaultColor = "color:gray";
    const todayDate =  new Date();
    this.todayString = todayDate.toISOString().split('T')[0];
   }
+ 
   makeWeek(advance){
     this.advance += advance; 
     this.fiveDayCalSvce.makeWeek(this.advance);
@@ -46,14 +54,19 @@ export class WeekViewComponent implements OnInit {
     else  
       return "white";  
   }
-  isTodayColor(s){
-    if (s == this.todayString)
-      return "red";
-    else  
-      return "gray";  
+  isTodayColor(s): any {
+    if (s == this.todayString){
+      return "todayClass" ;
+    }
+    else
+      return  "defaultClass";
   }
-  page(){
-    
+  page(m){
+    console.log("page 67 %o", m);
+    if (m.id)
+      window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
+      + m.id + '  , _blank');
+      return;
   }
  
   getFromION(){
@@ -98,6 +111,7 @@ export class WeekViewComponent implements OnInit {
        this.setRegDuties(response);
      })   
   }
+
   setRegDuties(s){
     console.log(" 81   rebDuties %o", s);
     this.regularDuties = s;

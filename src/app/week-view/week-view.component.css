@@ -4,6 +4,10 @@ table {
 }
 .todayClass {
     color:red;
+    cursor: pointer;
+}
+.defaultClass {
+    cursor: pointer;
 }
 tr:nth-child(even) {
     background-color: #d6d6d6;
@@ -17,3 +21,6 @@ table.main {
 tr:hover {
     background-color: #ffff99;
   }
+th {
+    text-align: Left;
+}  
