@@ -80,7 +80,9 @@ rData:any;
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
   helpArray = ['To schedule a Time Away click on the New Time Away button ',
-                'To edit your Time Away click on that Time Away. '  ];
+                'To edit your Time Away click on that Time Away. ',
+                'To zoom the calendar scroll within the calendar.',
+                'You can also pan the calendar by placing mouse in calendar and moving right or'    ];
   noticeColName='vacMan';
   noticeModalComonentID='vacManModal'
   reason: String;
@@ -402,7 +404,8 @@ console.log("213");
              this.drawEditControls = true;
              if (this.data2._data[this._id].approved == 1 )
               this.helpArray = ['Click on the Coverage drop-down and select person who will be you First Coverer.',  
-                                'If you want to nominate a Second Coverer, click on the Coverage drop-down again',       
+                                'If you want to nominate a Second Coverer, click on the Coverage drop-down again',  
+     
                               ];
              }     
              else
@@ -1030,6 +1033,9 @@ editGen(type: string, event: any) {                                  // editGen 
     const year = editTime.getFullYear();                                 // mm
     const s =  month + '-' + editTime.getDate() + '-' + editTime.getFullYear();
     return s;
+  }
+  showDosimAssignments(){
+    
   }
 
   /**************  format date as yyyy-mm-dd  for dataBase ********************/

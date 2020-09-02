@@ -48,6 +48,7 @@ export class WeekViewComponent implements OnInit {
     this.fiveDayCalSvce.makeWeek(this.advance);
     this.calHeadings = this.fiveDayCalSvce.dS;
   }
+
   isToday(s, i){
     if (s == this.todayString)
       return "todayClass";

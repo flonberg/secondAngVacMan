@@ -70,6 +70,7 @@ import { DosimAssignmentsComponent } from './dosim-assignments/dosim-assignments
       { path: 'VacMan/:userid', component: TimeLineComponent},
       { path: 'MyDuties', component:MyDutiesComponent},
       { path: 'WeekView', component:WeekViewComponent},
+      { path: 'DosimAssign', component:DosimAssignmentsComponent},
 
      { path: '**', component: TimeLineComponent}
     ])
