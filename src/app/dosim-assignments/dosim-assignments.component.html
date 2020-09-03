@@ -1,3 +1,22 @@
-<p>
-  dosim-assignments works!
-</p>
+<table class='table' *ngIf = "dosimAssignments">
+  <tr><th>Dosimetrist</th> <th>UnitNumber</th><th>Patient Name </th>
+    <th>Start Date</th>  <th>Assignment Date </th>  <th>Status</th><th>Modality</th></tr>
+    <tr *ngFor = "let item of dosimAssignments | keyvalue" >
+      <td>{{ item.key  }} </td>
+   <table class='table'>
+     <tr *ngFor = " let item2 of item.value | keyvalue ">
+       <td> {{ item2.value.UnitNumber }} </td>
+       <td> {{ item2.value.LastName }} </td>
+       <td> {{ item2.value.StartDate }} </td>
+       <td> {{ item2.value.AssignDate }} </td>
+       <td [class] = "getStatClass(item2.value.Status)" > {{ item2.value.Status }} </td>
+       <td> {{ item2.value.Modality }} </td>
+      <td></td>
+
+     </tr>
+   </table>
+   </tr>
+ 
+     
+  
+  

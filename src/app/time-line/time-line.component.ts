@@ -270,8 +270,6 @@ rData:any;
     });
 console.log("213");
   }
-
-
   selectCoverer(n, i ){
     if (this.covererToggle ){
       this.covererName = n;
@@ -654,6 +652,7 @@ console.log("213");
   setQueryParams(qP) {
     if (qP.userid) {
       this.userid = qP.userid;
+      console.log(" 655  dddd %o", this.userid);
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
     }
     if (qP.param){
@@ -1035,7 +1034,7 @@ editGen(type: string, event: any) {                                  // editGen 
     return s;
   }
   showDosimAssignments(){
-    
+
   }
 
   /**************  format date as yyyy-mm-dd  for dataBase ********************/

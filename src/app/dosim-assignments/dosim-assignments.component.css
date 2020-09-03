@@ -1,0 +1,18 @@
+.table { width: 1050px; font-size:200%;  border-collapse: collapse;table-layout:fixed; }
+th { text-align: left; font-weight: bold; }
+            th, td {  overflow:hidden; vertical-align:top; font-size:small; padding-left:10px; color:black }
+
+            .TPClass {background-color:#FFFF00}
+            .CPClass {background-color:#DFFFFD}
+            .RMDClass {background-color:#F0AE78}
+            .MDApprClass {background-color:#F0E278}
+            .IMRTQAClass {background-color:#208A88}
+            .RforMDClass {background-color:#F0AE78}
+            .PhysPlanClass {background-color:#6699CC}
+            .preTreatClass {background-color:#CCCCaa}
+            .PhysPlanClass {background-color:#6699CC}
+            .PlanWrClass {background-color:#33CCFF}
+            .OneAndFourAgil {background-color:#4775D1}
+            .CforTClass {background-color:#53CF29}
+            .MdApprovedClass {background-color:#CCAAFF}
+

@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { TimeLineComponent } from './../time-line/time-line.component';
 import { Component, OnInit } from '@angular/core';
 
@@ -7,20 +7,16 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './nav-bar-vm.component.html',
   styleUrls: ['./nav-bar-vm.component.css']
 })
-export class NavBarVMComponent {
+export class NavBarVMComponent implements OnInit {
   routeLinks: any[];
   userid: string;
   index: number;
   button:string;
   buttonSel: string;
   loggedInLastname: string;
+  napParam: any;
   constructor(private tlc: TimeLineComponent, private actRout: ActivatedRoute) { 
-    this.actRout                                             // point to the route clicked on
-    .queryParams                                                    // look at the queryParams
-    .subscribe(queryParams => {   
-      this.setUserLastname( queryParams);
-      
-    });
+  
    // this.userid = tlc.userid;
     this.button= "button ";
     this.buttonSel = "buttonSel";
@@ -52,6 +48,23 @@ export class NavBarVMComponent {
       index: 4,   
     }
     ];
+    console.log(" 55 navBar %o", this.loggedInLastname );
+   if (this.userid =='Napolitano')
+    {
+      this.routeLinks.push({
+        label: 'Dosimetrist Assignments',
+        link: './DosimAssign',
+        index: 5
+      })
+    }
+  }
+  ngOnInit(){
+    this.napParam =  { 'userid': 'napolitano'}
+    this.actRout.queryParams.subscribe(params => {
+      this.userid = params['userid'];
+      console.log( " 63   ggggg " + this.userid);
+    });
+
   }
   setUserLastname(val)
   {

@@ -9,7 +9,7 @@
         <td  colspan='7' >
             <div >
                 <table><tr>
-                <td *ngIf = "!newTimeAway2 " >
+                <td *ngIf = "!newTimeAway2 && userid" >
                     <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
                 </td>
                 <td *ngIf = "this.userid=='napolitano'"> 
@@ -173,7 +173,7 @@
  
     </td>
 </tr></table>
-<button mat-raised-button (click) ="showDosimAssign();" ><a [routerLink]="['/DosimAssign']" target="_blank">
+<button mat-raised-button *ngIf = "userid == 'napolitano'" ><a [routerLink]="['/DosimAssign']" target="_blank">
    Show Dosimetrist Assignments 
   </a> </button>  
    <div id='help'  style="  position: fixed; bottom: 0; right: 0;" >
