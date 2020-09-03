@@ -655,6 +655,9 @@ console.log("213");
       console.log(" 655  dddd %o", this.userid);
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
     }
+    else {
+      this.userid = this.genEditSvce.userid;
+    }
     if (qP.param){
       this.param='param=1';
       this.showPhysicist = "Show Dosimetrists";
