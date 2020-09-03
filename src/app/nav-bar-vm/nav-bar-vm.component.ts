@@ -1,6 +1,7 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { TimeLineComponent } from './../time-line/time-line.component';
 import { Component, OnInit } from '@angular/core';
+import { GenEditService } from '../gen-edit.service';
 
 @Component({
   selector: 'app-nav-bar-vm',
@@ -15,7 +16,7 @@ export class NavBarVMComponent implements OnInit {
   buttonSel: string;
   loggedInLastname: string;
   napParam: any;
-  constructor(private tlc: TimeLineComponent, private actRout: ActivatedRoute) { 
+  constructor(private tlc: TimeLineComponent, private actRout: ActivatedRoute, private genEditSvce: GenEditService, ) { 
   
    // this.userid = tlc.userid;
     this.button= "button ";
@@ -62,9 +63,11 @@ export class NavBarVMComponent implements OnInit {
     this.napParam =  { 'userid': 'napolitano'}
     this.actRout.queryParams.subscribe(params => {
       this.userid = params['userid'];
-      console.log( " 63   ggggg " + this.userid);
-    });
 
+    });
+    if (!this.userid)
+      this.userid = <string>this.genEditSvce.userid;
+      console.log( " 63   ggggg " + this.userid);
   }
   setUserLastname(val)
   {

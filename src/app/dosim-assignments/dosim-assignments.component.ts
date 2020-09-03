@@ -19,12 +19,8 @@ export class DosimAssignmentsComponent implements OnInit {
 
   ngOnInit() {
     this.getDosimAssignments();
-    this.userid='napolitano';
-    this.activatedRoute.queryParams.subscribe(
-      queryParams => {
-        this.setQueryParams(queryParams);
-      }
-    )
+    this.userid= this.genEditSvce.userid;
+   
     this.userid = this.activatedRoute.snapshot.params.valueOf();
     console.log(" 29 userid %o", this.userid);
   }
