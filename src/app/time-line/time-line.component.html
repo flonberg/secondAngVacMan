@@ -124,7 +124,7 @@
                             <tr><th></th><th> First Coverer</th><th>Second Coverer</th></tr>
                             <tr  *ngIf="this.rData['data'][this._id]">
                                 <td> 
-                                    <mat-select    name = "coverer"  id='covererUserKey' >
+                                    <mat-select  style='background-color:rgb(238, 232, 232);'  name = "coverer"  id='covererUserKey' >
                                         <mat-option *ngFor = "let item of rData['users'] | keyvalue" 
                                             value="item.value" (click) = "selectCoverer(item.key, item.value) "> {{item.key }} </mat-option>
                                     </mat-select>
@@ -174,9 +174,12 @@
  
     </td>
 </tr></table>
+<div id="offBottom">
 <button mat-raised-button *ngIf = "userid == 'napolitano'" ><a [routerLink]="['/DosimAssign']" target="_blank">
    Show Dosimetrist Assignments 
-  </a> </button>  
+  </a> 
+</button>  
+</div>
    <div id='help'  style="  position: fixed; bottom: 0; right: 0;" >
             <app-help [helpArray] = "helpArray"   ></app-help>
     </div>

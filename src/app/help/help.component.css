@@ -1,3 +1,6 @@
 #helpDiv {
     display:none;
+    width:400px;
+    opacity: 3;
+    background-color:white;
 }

@@ -31,6 +31,7 @@ import { HelpComponent } from './help/help.component';
 import { WeekViewComponent } from './week-view/week-view.component';
 import { ProtonmonthComponent } from './protonmonth/protonmonth.component';
 import { DosimAssignmentsComponent } from './dosim-assignments/dosim-assignments.component';
+import { FooterComponent } from './footer/footer.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -47,6 +48,7 @@ import { DosimAssignmentsComponent } from './dosim-assignments/dosim-assignments
     WeekViewComponent,
     ProtonmonthComponent,
     DosimAssignmentsComponent,
+    FooterComponent,
 
   ],
   imports: [

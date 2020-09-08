@@ -112,7 +112,6 @@ export class WeekViewComponent implements OnInit {
        this.setRegDuties(response);
      })   
   }
-
   setRegDuties(s){
     console.log(" 81   rebDuties %o", s);
     this.regularDuties = s;

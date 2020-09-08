@@ -79,10 +79,10 @@ rData:any;
   masterArray = ['This new page is part of upgrade of Whiteboard.',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
-  helpArray = ['To schedule a Time Away click on the New Time Away button ',
-                'To edit your Time Away click on that Time Away. ',
-                'To zoom the calendar scroll within the calendar.',
-                'You can also pan the calendar by placing mouse in calendar and moving right or'    ];
+  helpArray = [ 'To zoom the calendar scroll within the calendar.',
+                'You can also pan the calendar by placing mouse in calendar and moving right or' ,
+                'To edit your Time Away click on that Time Away. ', 
+                'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'  ];
   noticeColName='vacMan';
   noticeModalComonentID='vacManModal'
   reason: String;
@@ -401,8 +401,10 @@ console.log("213");
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
              if (this.data2._data[this._id].approved == 1 )
-              this.helpArray = ['Click on the Coverage drop-down and select person who will be you First Coverer.',  
-                                'If you want to nominate a Second Coverer, click on the Coverage drop-down again',  
+              this.helpArray = ['Click on the Coverage drop-down and select person',
+                                ' who will be you First Coverer.',  
+                                'If you want to nominate a Second Coverer,',
+                                ' click on the Coverage drop-down again',  
      
                               ];
              }     
@@ -417,7 +419,7 @@ console.log("213");
           {                                                                             // user is NOT tA owner
               this._readonly = true;                                                                // make controls readOnly
               this.helpArray = [ "Click on a TimeAway to see the details for tha TimeAway.",
-                                "Coverer namd in green means that the coverage has bee accepted."]; 
+                                "Coverer name in green means that the coverage has bee accepted."]; 
            }
            
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
@@ -1068,7 +1070,8 @@ editGen(type: string, event: any) {                                  // editGen 
   setNewTimeAway2(){
     this.newTimeAway2 = true;
     this.helpArray = [
-      'Start Date, End Date and Reason must be entered before new Time Aways can be Submitted.  '
+      'Start Date, End Date and Reason must be entered before',
+       'new Time Away can be Submitted.  '
     ];
   }
   /*

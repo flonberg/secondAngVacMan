@@ -18,9 +18,10 @@ table.main {
 .white {
     background-color:white
 }
-tr:hover {
-    background-color: #ffff99;
-  }
+
 th {
     text-align: Left;
 }  
+tr.main:hover{
+    background-color:yellow;
+}

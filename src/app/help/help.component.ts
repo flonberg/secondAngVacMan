@@ -6,18 +6,20 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./help.component.css']
 })
 export class HelpComponent implements OnInit {
+  showHelpBool: boolean 
   @Input() helpArray : string[];
   constructor() { }
 
   ngOnInit() {
+    this.showHelpBool = false; 
   }
   showHelp(){
-    console.log('showHelp');
+    this.showHelpBool = true;
     document.getElementById('helpDiv').style.display="block";
     document.getElementById('hideHelp').style.display="none";
   }
   hideHelp(){
-    console.log('showHelp');
+    this.showHelpBool = false;
     document.getElementById('helpDiv').style.display="none";
     document.getElementById('hideHelp').style.display="block";
   }

@@ -57,6 +57,7 @@ td.NotAccepted {
   color:red;
   font-size:12pt;
 }
+
 caption {
   font-size:12pt;
 }
@@ -92,6 +93,7 @@ input.large {
   align-items: center;
   text-align: center;
 }
+
 .vis-time-axis .vis-grid.vis-saturday,
 	.vis-time-axis .vis-grid.vis-sunday {
 		background: green	
@@ -152,4 +154,10 @@ input.large {
 }
 .medium {
   width:140px;
+}
+#offBottom {
+  position:fixed;
+  left:0;
+  bottom:500;
+
 }

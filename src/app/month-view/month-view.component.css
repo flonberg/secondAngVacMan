@@ -18,9 +18,14 @@ table.small {
 td {
     border:solid;
     width: 200px;
-    height: 100px;
+    height: 50px;
     font-family:sans-serif;
 }
+td.noBord {
+    border: none;
+    color:blue;
+    background-color:white;
+  }
 td.small {
     height:200px;
     border:none;

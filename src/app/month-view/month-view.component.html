@@ -16,14 +16,18 @@
               <table class="tinyTable">
                 <tr *ngFor="let item of physicsDuties | keyvalue">
                 <td  [class] = "item.value.cN" style="text-align: left; width:100px;"> {{item.value.name}}   </td>
-                <td  [class] = "item.value.cN" style="text-align: right;width:100px;"> {{item.value.timeSpan}}   </td>
+                <td  [class] = "item.value.cN" style="text-align: left;width:100px;"> {{item.value.timeSpan}}   </td>
                 </tr>
               </table>
             </td>  
+            <td  *ngIf = "loggedInUserKey" class="noBord" >  To assume a Duty, click on physicist's name.</td>
+            <td  *ngIf = "!loggedInUserKey" class='noBord' >  To page, click on physicist's name.</td>
+           
+       
       </tr>
     </table>
   </div>
-  <p *ngIf = "loggedInUserKey" class="heading" >  To Assume a Duty, click on physicist's name. </p>
+
   <div id="header" >
     <table>
       <tr class="dow"> <th > Monday</th> <th> Tuesday</th><th> Wednesday</th><th> Thursday</th> <th> Friday</th>
