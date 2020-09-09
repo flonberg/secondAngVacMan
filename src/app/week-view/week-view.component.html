@@ -23,8 +23,10 @@
     <td> {{ item.timeSpan }} </td>
     <td  *ngFor = " let cH of calHeadings" >
     <div *ngIf = "physicsMonthlyDuties " [class] = "isTodayColor(cH['date'] ) "
-      (click) = "page(physicsMonthlyDuties[cH['date']][item.Idx])">
-       {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }}
+      (click) = "page(physicsMonthlyDuties[cH['date']][item.Idx])"
+      >
+   {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }} 
+      
     </div>
     </td>
   </tr> 

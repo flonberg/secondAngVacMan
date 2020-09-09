@@ -32,10 +32,10 @@ export class WeekViewComponent implements OnInit {
    this.makeWeek(this.advance);
    console.log("33   calHeadins %o", this.calHeadings);
    this.getFromION();
-   this.getDutyNames();
+  // this.getDutyNames();
    this.getDutyOwners();
-   this.getRegDutyNames();
-   this.getRegularDuties();
+ //  this.getRegDutyNames();
+  // this.getRegularDuties();
    this.dayNums = ['0','1','2','3','4'];
    this.todayColor = "color:red";
    this.defaultColor = "color:gray";
@@ -98,9 +98,10 @@ export class WeekViewComponent implements OnInit {
     );
   }
   setPhysicsMonthlyDuties(val){
-    console.log("87 val %o ", val);
+    console.log("87 val %o ", val['PhysicsDuties']);
     this.physicsMonthlyDuties = val['data'];   
     this.physicsRegularDuties = val['RegularDuties']
+    this.WeekDutyNames = val['PhysicsDuties']
     console.log("241 physicsMothlyDuties %o", this.physicsMonthlyDuties);
     console.log("241 physicsRegularDuties %o", this.physicsRegularDuties);
   }
@@ -117,7 +118,7 @@ export class WeekViewComponent implements OnInit {
     this.regularDuties = s;
   }
   getDutyNames(){
-     const arg = {'selStr': 'SELECT * FROM PhysicsDuty WHERE nomOrder > 0  AND nomOrder <=8 ORDER bY nomOrder'}
+     const arg = {'selStr': 'SELECT * FROM PhysicsDuty  ORDER bY nomOrder'}
      this.genEditSvce.getWithSelString(arg)
      .subscribe(                                          
       (response) => {

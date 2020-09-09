@@ -77,10 +77,11 @@ rData:any;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
   masterArray = ['This new page is part of upgrade of Whiteboard.',
-  'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
+  'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.',
+  'There is a button for Help in the lower right corner of the page. '
                 ];
   helpArray = [ 'To zoom the calendar scroll within the calendar.',
-                'You can also pan the calendar by placing mouse in calendar and moving right or' ,
+                'You can also pan the calendar by placing mouse in calendar and moving horizontally.' ,
                 'To edit your Time Away click on that Time Away. ', 
                 'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'  ];
   noticeColName='vacMan';
