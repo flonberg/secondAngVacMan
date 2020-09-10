@@ -97,6 +97,14 @@ export class GenEditService   {
   setUserId(s){               // get the userid from the router.queryParams.
     this.userid = s;
   }    
+
+  writeLog(s){
+    this.setPlatform();
+    const url2 = this.urlBase + 'logREST.php';
+    console.log( url2);
+    return this.http.get(url2);
+
+  }
  
   setPlatform(){             // set the dB host for the localhost version      
   //  this.angularRoute = this.loc.path();    
@@ -176,13 +184,7 @@ export class GenEditService   {
        //   console.log('POST call', val);
         });
     }
-/*
-  getLastIdx(){
-    const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';
-    console.log('getMyDuties url is ' + url2);
-    return this.http.get(url2);
-    }
- */
+
 genGet(s){
   if (!this.urlBase)          
     this.setPlatform();                   // sets the platform to BB or 242
@@ -190,26 +192,7 @@ genGet(s){
     console.log('getMyDuties url is ' + url2);
     return this.http.get(url2);
 }   
- /*
-  getTAs(){
-      if (!this.urlBase){           
-        this.setPlatform();                   // sets the platform to BB or 242
-      }
-      const url2 = this.urlBase + 'REST_GET.php?action=getTAs&userid=' + this.userid ;
-      console.log('getTa url is 5-21' + url2);
-      return this.http.get(url2);
-    } 
-    */
-/*
-  getPMDs(userid){
-      if (!this.urlBase){           
-        this.setPlatform();                   // sets the platform to BB or 242
-      }
-      const url2 = this.urlBase + 'REST_GET.php?action=getPMDs&userid=' + userid ;
-      console.log('getTa url is 5-21' + url2);
-      return this.http.get(url2);
-    } 
-    */
+
   genDB_GET(dP){
       if (!this.urlBase){
         this.setPlatform();
@@ -218,17 +201,7 @@ genGet(s){
       console.log("genBDPosrt url 2is " + url2);
       return this.http.post(url2, JSON.stringify(dP));
     }
-    /*
-  getPhysicsMonthlyDuties(startDateString, userid){
-      if (!this.urlBase){
-        this.setPlatform();
-      }
-      const url2 = this.urlBase + 'getPhysicsDuties.php?dateSince=' + startDateString + '&userid=' + userid;
-      //const url2 = this.urlBase + 'RESThub.php?dataS=getPhysicsMonthlyDuties&userid=' + userid;
-      console.log("getEdit 115 url is " + url2);
-      return this.http.get(url2)
-    } 
-    */
+  
   genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;
   } 
@@ -264,3 +237,41 @@ genGet(s){
       const url = "https://ion.mgh.harvard.edu/cgi-bin/imrtqa/TESTgetter.php";
     }
   }
+ /*
+  getTAs(){
+      if (!this.urlBase){           
+        this.setPlatform();                   // sets the platform to BB or 242
+      }
+      const url2 = this.urlBase + 'REST_GET.php?action=getTAs&userid=' + this.userid ;
+      console.log('getTa url is 5-21' + url2);
+      return this.http.get(url2);
+    } 
+    */
+/*
+  getPMDs(userid){
+      if (!this.urlBase){           
+        this.setPlatform();                   // sets the platform to BB or 242
+      }
+      const url2 = this.urlBase + 'REST_GET.php?action=getPMDs&userid=' + userid ;
+      console.log('getTa url is 5-21' + url2);
+      return this.http.get(url2);
+    } 
+    */
+     /*
+  getPhysicsMonthlyDuties(startDateString, userid){
+      if (!this.urlBase){
+        this.setPlatform();
+      }
+      const url2 = this.urlBase + 'getPhysicsDuties.php?dateSince=' + startDateString + '&userid=' + userid;
+      //const url2 = this.urlBase + 'RESThub.php?dataS=getPhysicsMonthlyDuties&userid=' + userid;
+      console.log("getEdit 115 url is " + url2);
+      return this.http.get(url2)
+    } 
+    */
+   /*
+  getLastIdx(){
+    const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';
+    console.log('getMyDuties url is ' + url2);
+    return this.http.get(url2);
+    }
+ */

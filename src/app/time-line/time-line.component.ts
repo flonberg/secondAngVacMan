@@ -271,7 +271,7 @@ rData:any;
     });
 console.log("213");
   }
-  selectCoverer(n, i ){
+selectCoverer(n, i ){
     if (this.covererToggle ){
       this.covererName = n;
       this.covererUserKey = i;
@@ -281,7 +281,13 @@ console.log("213");
       this.covererName2 = n;  
       this.covererUserKey2 = i;    
     }
+    console.log("284 covererUserKey = " + this.covererUserKey )
     this.covererToggle = !this.covererToggle;
+    this.genEditSvce.writeLog(" covererUserKey is " + this.covererUserKey).subscribe(
+      (res) => {
+        console.log("res from  writeLog is  %o", res);
+      }
+    );
  
   }
 
@@ -755,6 +761,7 @@ console.log("213");
         document.getElementById('datums').innerHTML = item.id;
         document.getElementById('datums2').innerHTML = callback;
       },
+ 
       start: startDateShown,
       end: endDateShown,
     };
