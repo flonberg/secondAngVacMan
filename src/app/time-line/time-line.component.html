@@ -13,8 +13,10 @@
                 <td *ngIf = "!newTimeAway2 && userid" >
                     <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
                 </td>
-                <td *ngIf = "this.userid=='napolitano'"> 
-                    <button mat-raised-button (click) ="toggleShowPhysicists()"  >{{ showPhysicist }} </button> 
+                <td *ngIf = "this.userid=='napolitano' || this.userid=='jbeatty'"> 
+                    <button mat-raised-button >
+                          <a href="https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=napolitano&param=1" >Show Physicists</a>
+                     </button> 
                 </td>
                 </tr></table>
             </div>
@@ -133,7 +135,7 @@
                                         [value]= "this.covererName ? this.covererName : this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']] "></td>
                                     <td><input [class]="setColorForCoverage( this.rData['data'][this._id]['covB_Duty'] )"   size=15  matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]  || this.covererName2 "
                                         [value]= "this.covererName2  ? this.covererName2 : this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]" ></td>
-                                    <td ><button  *ngIf = "this.covererUserKey > 0 "  mat-raised-button color="primary" (click) = "storeCovererData($event)" >Send Email to Covers </button> </td>
+                                    <td ><button  *ngIf = "this.showSendEmailToCoverers"  mat-raised-button color="primary" (click) = "storeCovererData($event)" >Send Email to Covers </button> </td>
                             </tr>
                         </table>
                
@@ -174,8 +176,9 @@
  
     </td>
 </tr></table>
-<div id="offBottom">
-<button mat-raised-button *ngIf = "userid == 'napolitano'" ><a [routerLink]="['/DosimAssign']" target="_blank">
+<div >
+    <button mat-raised-button (click)="goHome(this.userid)"> Home  </button> 
+<button mat-raised-button *ngIf = "userid == 'napolitano'" ><a href="https://ion.mgh.harvard.edu/cgi-bin/imrtqa/dosimAssignION.php" target="_blank">
    Show Dosimetrist Assignments 
   </a> 
 </button>  

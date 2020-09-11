@@ -32,6 +32,7 @@ import { WeekViewComponent } from './week-view/week-view.component';
 import { ProtonmonthComponent } from './protonmonth/protonmonth.component';
 import { DosimAssignmentsComponent } from './dosim-assignments/dosim-assignments.component';
 import { FooterComponent } from './footer/footer.component';
+import { GenEditService, dB_SimpleGETparams } from './gen-edit.service';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -84,4 +85,6 @@ import { FooterComponent } from './footer/footer.component';
   bootstrap: [AppComponent],
  
 })
-export class AppModule { }
+export class AppModule { 
+
+}

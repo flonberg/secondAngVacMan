@@ -99,11 +99,15 @@ export class GenEditService   {
   }    
 
   writeLog(s){
+    var r = Math.random();
     this.setPlatform();
-    const url2 = this.urlBase + 'logREST.php';
+    const url2 = this.urlBase + 'logREST.php?str=' + s + "&r=" + r;
     console.log( url2);
     return this.http.get(url2);
 
+  }
+  goHome(u){
+    window.location.href = 'https://ion.mgh.harvard.edu/cgi-bin/main.pl?userid=' + u;
   }
  
   setPlatform(){             // set the dB host for the localhost version      
@@ -116,7 +120,7 @@ export class GenEditService   {
  //   }   
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
       this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
-     // this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/'; 
+      this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/'; 
       this.emailStage = "Dev"; 
     }   
     if ( window.location.href.indexOf('whiteboard') !== -1 ){                   // PROD. 

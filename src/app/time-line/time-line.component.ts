@@ -61,6 +61,7 @@ rData:any;
   covererUserKey2: number;
   
   showCoverers = false;
+  showSendEmailToCoverers = false;
   dB_PostParams: dB_POSTparams
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
@@ -272,25 +273,31 @@ rData:any;
 console.log("213");
   }
 selectCoverer(n, i ){
+    this.showSendEmailToCoverers = true;
     if (this.covererToggle ){
       this.covererName = n;
       this.covererUserKey = i;
       this.covererName2='';
+      this.writeLog("covererUserKey set to ", this.covererUserKey);
     }
     else {
       this.covererName2 = n;  
       this.covererUserKey2 = i;    
+      this.writeLog("covererUserKey2 set to ", this.covererUserKey2);
     }
-    console.log("284 covererUserKey = " + this.covererUserKey )
     this.covererToggle = !this.covererToggle;
-    this.genEditSvce.writeLog(" covererUserKey is " + this.covererUserKey).subscribe(
+ 
+  }
+  goHome(u){
+    window.location.href = 'https://ion.mgh.harvard.edu/cgi-bin/main.pl?userid=' + u;
+  }
+  writeLog(s, arg){
+    this.genEditSvce.writeLog(s  + "   "  + this.covererUserKey).subscribe(
       (res) => {
         console.log("res from  writeLog is  %o", res);
       }
     );
- 
   }
-
   setColorForCoverage(s){
     if ( s && s == 1)
       return 'covered';
@@ -299,6 +306,7 @@ selectCoverer(n, i ){
   }
   storeCovererData()
   {                    // store the nominated coverer UserKey 
+    this.showSendEmailToCoverers = false;
     this.rData['emailByKey']['116'] = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
   //  if (this.covererUserKey )
   //    var mTA_prod = [this.rData['emailByKey'][this.covererUserKey]];
@@ -308,14 +316,14 @@ selectCoverer(n, i ){
       var link2 =this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
       + this.covererUserKey2 + '&mode=acceptCovB&vidx=' + this.data2._data[this._id].vidx;
     }   
-
+    this.writeLog(" in storeCovererData ", link1);
         /*************  Send Coverage Emails        */
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
       <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
       starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
       through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
       <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
-      <p><a href=`+ link1 + `> Accept  ` + this.covererName + ` coverage. </a></p>
+      <p><a href=`+ link1 + `>  ` + this.covererName + ` accepts coverage. </a></p>
     `;
     if (this.covererUserKey2 > 0 ){                                         // if the IS a second coverer
       message +=  `<p> <a href=`+ link2 + `> Accept  ` + this.covererName2 + `  coverage. </a></p>`;
@@ -336,6 +344,7 @@ selectCoverer(n, i ){
       subject: "coverage", 
       debug: 1
     }
+    this.writeLog("storeCovererData", link1);
     this.genEditSvce.genPOST(emp).subscribe(
       (res) => {
         console.log("res from sendEmail2 from storeCovererDate is  %o", res);
@@ -594,6 +603,7 @@ selectCoverer(n, i ){
           this.formG.value.noteG, this.userkey], '0';
         const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
         console.log("544  insertP is %o", this.insertP);
+      
             /***********  enter newTA in dataBase  */
     this.genEditSvce.genPOST(this.insertP)
       .subscribe(                                          
@@ -708,7 +718,7 @@ selectCoverer(n, i ){
       url += '&param=1';
     this.genEditSvce.genGet(url).subscribe(
       (val) => {
-        console.log("627  val " + val);
+        console.log("627  val %o ", val);
         if (this.index === 0) {    
           this.rData = val;
           this.data2 = new vis.DataSet(this.rData['data']);
@@ -733,6 +743,8 @@ selectCoverer(n, i ){
           this.groups.add({id: i, content: this.nameList[i], value: i });                    // add a group
            this.groupsArray[i] = this.nameList[i];
         }
+        console.log("743 groups dataSet is %o", this.groups);
+        console.log("744 data2 dataSet is %o", this.data2);
         const top = this.nameList.length * 20;
         const topString = top.toString() + 'px';
         this.assignGroups();                                                              // go thru tA's and assign each to proper Group
@@ -941,7 +953,10 @@ tSP(param){
 
 }
 toggleShowPhysicists(param){
-  var url = window.location.href;    
+  this.getTimelineData2();
+  /*
+  var url = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=napolitano&param=1";    
+ console.log("957  url is " + url);
   if (url.indexOf('?') > -1){
     if ( url.indexOf('param') < 0  )
      url += '&param=1';
@@ -953,6 +968,7 @@ toggleShowPhysicists(param){
      url += '?param=1' + this.showPhysicist
   }
   window.location.href = url;
+  */
 }
 editGen(type: string, event: any) {                                  // editGen is used for ALL fields
  console.log("editGen");
