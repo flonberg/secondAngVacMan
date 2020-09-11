@@ -13,10 +13,14 @@
                 <td *ngIf = "!newTimeAway2 && userid" >
                     <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
                 </td>
-                <td *ngIf = "this.userid=='napolitano' || this.userid=='jbeatty'"> 
+                <td *ngIf = "this.userid=='napolitano' || this.userid=='jbeatty' || this.userid=='schneider' || this.userid=='ske5'"> 
                     <button mat-raised-button >
-                          <a href="https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=napolitano&param=1" >Show Physicists</a>
+                          <a href= '{{ showPhysURL }}' >Show Physicists</a>
                      </button> 
+                     <button mat-raised-button >
+                            <a href='{{ showDosimURL }}'  >Show Dosimetrists</a>
+                       </button> 
+                  <button mat-raised-button (click)="goHome(this.userid)"> Home  </button> 
                 </td>
                 </tr></table>
             </div>
@@ -64,7 +68,7 @@
                     End Date is required.
                     </div>
                 </div>  
-                <div class="alert alert-danger" *ngIf="formG.errors"  >   {{  formG.errors?.dates | json }} </div>     
+                <div class="alert alert-danger" *ngIf="formG.errors"  >  ç </div>     
             </form>
         
 
@@ -177,7 +181,7 @@
     </td>
 </tr></table>
 <div >
-    <button mat-raised-button (click)="goHome(this.userid)"> Home  </button> 
+  
 <button mat-raised-button *ngIf = "userid == 'napolitano'" ><a href="https://ion.mgh.harvard.edu/cgi-bin/imrtqa/dosimAssignION.php" target="_blank">
    Show Dosimetrist Assignments 
   </a> 

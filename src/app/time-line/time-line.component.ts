@@ -59,6 +59,8 @@ rData:any;
   covererName2 = "";
   covererUserKey: number;
   covererUserKey2: number;
+  showPhysURL: string;
+  showDosimURL: string;
   
   showCoverers = false;
   showSendEmailToCoverers = false;
@@ -673,6 +675,10 @@ selectCoverer(n, i ){
       this.userid = qP.userid;
       console.log(" 655  dddd %o", this.userid);
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
+      this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=1";
+      this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=schneider";
+      this.showDosimURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=2";
+      this.showDosimURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=ske5";
     }
     else {
       this.userid = this.genEditSvce.userid;
@@ -680,6 +686,10 @@ selectCoverer(n, i ){
     if (qP.param){
       this.param='param=1';
       this.showPhysicist = "Show Dosimetrists";
+    }
+    else if (qP.param){
+      this.param='param=2';
+      this.showPhysicist = "Show Physicists";
     }
     else 
       this.showPhysicist = "Show Physicists";
@@ -715,17 +725,19 @@ selectCoverer(n, i ){
   //  this.genEditSvce.getTAs().subscribe(
     var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
     if (this.param)
-      url += '&param=1';
+      url += this.param;
     this.genEditSvce.genGet(url).subscribe(
       (val) => {
         console.log("627  val %o ", val);
         if (this.index === 0) {    
           this.rData = val;
           this.data2 = new vis.DataSet(this.rData['data']);
+          var p = {id: 101, content: "Period A", start: "2020-09-01", end: "2020-09-12", group:"2"};
+          this.data2.add(p);
          } else {
           this.data2 = Array();
         }
-        console.log("rData: %o", this.rData);
+        console.log("data1: %o", this.data2);
         if (this.qP['vidx']){
           Object.keys(this.rData['data']).forEach(key => {
             if (this.rData['data'][key].vidx === Number(this.qP['vidx'])) {
@@ -821,6 +833,9 @@ selectCoverer(n, i ){
   }
   assignGroups() {                                                     // put each tA in proper group.
     for (const property in this.data2._data ) {
+      if (+property == 0)
+        continue;
+       
       if (this.data2._data.hasOwnProperty(property)) {                // 'hasOwnProperty' is typescript to see it a p is in arry
         this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content);  // set the correct groupNumber
     //  if (this.data2._data[property].approved === 1) {
