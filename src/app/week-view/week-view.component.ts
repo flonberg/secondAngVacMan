@@ -102,6 +102,8 @@ export class WeekViewComponent implements OnInit {
     this.physicsMonthlyDuties = val['data'];   
     this.physicsRegularDuties = val['RegularDuties']
     this.WeekDutyNames = val['PhysicsDuties']
+
+    console.log("241 WeekDutyNames %o", this.WeekDutyNames);
     console.log("241 physicsMothlyDuties %o", this.physicsMonthlyDuties);
     console.log("241 physicsRegularDuties %o", this.physicsRegularDuties);
   }
