@@ -826,15 +826,22 @@ selectCoverer(n, i ){
   }
   assignGroups() {                                                     // put each tA in proper group.
     for (const property in this.data2._data ) {                         // property is the key of the dataStructure which is the 
-      if (+property == 0)                                             
+      if (+this.data2._data[property]['userkey']  == 0) {
+        console.log("830  %o ", this.data2._data[property])
+       this.data2._data[property]['content'] = '';   
+       delete  this.data2._data[property]['group']                            
         continue;
+      }
+    
       if (this.data2._data.hasOwnProperty(property)) {                // 'hasOwnProperty' is typescript to see it a p is in arry
         this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content);  // set the correct groupNumber
     //  if (this.data2._data[property].approved === 1) {
       //    this.data2._data[property].style = 'color:green';
       //  }
+        }
       }
-    }
+
+    
   }
       /*************  remove the tA from display working, needs dataBase part **************/
   remove() {
