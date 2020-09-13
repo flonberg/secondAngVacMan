@@ -17,14 +17,34 @@ export class FiveDayCalService {
      
     const today = new Date();
     today.setDate(today.getDate() + advance * 7);
-    const monDate = this.getMonday(today);
+    var monDate = this.getMonday(today);
+    var kludgeDate = this.getMonday(today);                         // to avoid 'date' element coming out 1 day in advance. 
+    kludgeDate.setDate(monDate.getDate() - 1);                      // may have something to do with time of day????
+    console.log(" 22222 %o", monDate);
     for (var i=0; i < 5; i++){
       this.dS[i] = { "monthDay" : mns[monDate.getMonth()] + "-" + monDate.getDate(),
                   "dayName" : weekday[i] ,
-                  "date" : monDate.toISOString().split('T')[0]};
+                //  "date" : kludgeDate.toISOString().split('T')[0]};
+                  "date" : this.formatDate(monDate)};  
       monDate.setDate(monDate.getDate() + 1);
+    //  kludgeDate = this.getMonday(today);
+    //  kludgeDate.setDate(monDate.getDate() - 1);
     }
   }
+  
+  formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
   getMonday(d) {
     var day = d.getDay(),
         diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday

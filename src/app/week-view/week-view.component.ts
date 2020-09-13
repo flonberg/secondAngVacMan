@@ -14,6 +14,7 @@ import {NgStyle} from "@angular/common";
 })
 export class WeekViewComponent implements OnInit {
   calHeadings: any;
+  calHeadings2: any;
   advance = 0;
   WeekDutyNames: any;
   RegDutyNames: any;
@@ -47,6 +48,8 @@ export class WeekViewComponent implements OnInit {
     this.advance += advance; 
     this.fiveDayCalSvce.makeWeek(this.advance);
     this.calHeadings = this.fiveDayCalSvce.dS;
+    this.calHeadings2 = this.fiveDayCalSvce.dS;
+  
   }
 
   isToday(s, i){

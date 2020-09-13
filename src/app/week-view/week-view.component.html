@@ -21,12 +21,15 @@
   <tr *ngFor = 'let item of WeekDutyNames' class='main' >
     <td style="font-weight:bold;" >  {{ item.name }} </td>
     <td> {{ item.timeSpan }} </td>
-    <td  *ngFor = " let cH of calHeadings; let j = index" >
-    <div *ngIf = "physicsMonthlyDuties && physicsMonthlyDuties[cH['date']] " [class] = "isTodayColor(cH['date'] ) "
-      (click) = "page(physicsMonthlyDuties[cH['date']][item.Idx])"
+    <td  *ngFor = " let cH of calHeadings2; let j = index" >
+      
+       <div *ngIf = "physicsMonthlyDuties && physicsMonthlyDuties[cH['date']] " [class] = "isTodayColor(cH['date'] ) "
+          (click) = "page(physicsMonthlyDuties[cH['date']][item.Idx])"
       >
-   {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }}  {{ j }}
-    </div>
+       {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }} 
+   
+     </div>
+
     </td>
   </tr> 
 

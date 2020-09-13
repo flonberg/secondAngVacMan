@@ -810,17 +810,10 @@ selectCoverer(n, i ){
     this.groupsArray = new Array();
     /**********   Switch between Dosim and Physicists  */
     for (let i = 0; i < s.length; i++) { 
-      /*
-      if ((+this.rData.loggedInUserRank == 5 && +s._data[i].rank == 0) ){          // if the user is Phys 
-          continue;          
-        }                                                     // skip Dosims
-      if ((+this.rData.loggedInUserRank == 0 && +s._data[i].rank == 5) ) 
-        continue;
-        */
       if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
-        this.nameList.push( s._data[i].content);                           // put it in the dS 
-        this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };// make dS of lastName ; userkey
-        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };// dS userid : userkey
+        this.nameList.push( s._data[i].content);                           // put it in the list of Names for the timeLins
+        this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };  // make dS of lastName paired with  userkey
+        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };// dS of userid paired with userkey
         this.contentArray[s._data[i].userkey] = s._data[i].content;         // used to get 'content' param to add to dataSet.
       }                         }
     this.nameList.sort();                                                 // alphabetize the nameList
@@ -832,10 +825,9 @@ selectCoverer(n, i ){
       }                 // the userKey of the loggedIn user
   }
   assignGroups() {                                                     // put each tA in proper group.
-    for (const property in this.data2._data ) {
-      if (+property == 0)
+    for (const property in this.data2._data ) {                         // property is the key of the dataStructure which is the 
+      if (+property == 0)                                             
         continue;
-       
       if (this.data2._data.hasOwnProperty(property)) {                // 'hasOwnProperty' is typescript to see it a p is in arry
         this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content);  // set the correct groupNumber
     //  if (this.data2._data[property].approved === 1) {
