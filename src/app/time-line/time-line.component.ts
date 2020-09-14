@@ -747,7 +747,7 @@ selectCoverer(n, i ){
       { id: 1, content: "item 1<br>start", start: "2014-01-23" },
       { id: 2, content: "item 2", start: "2020-09-18" },
       { id: 3, content: "item 3", start: "2020-09-21" },
-      { id: 4, content: "item 4", start: "2020-09-19", end: "2019-01-24" },
+      { id: 4, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:4 },
       { id: 5, content: "item 5", start: "2020-09-28", type: "point" },
       { id: 6, content: "item 6", start: "2020-09-26" },
     ]);
@@ -761,6 +761,7 @@ selectCoverer(n, i ){
         if (this.index === 0) {    
           this.rData = val;
           this.data2 = new vis.DataSet(this.rData['data']);
+    
          } else {
           this.data2 = Array();
         }
