@@ -404,15 +404,21 @@ selectCoverer(n, i ){
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) 
   {// this responds to ANY click-RELEASE in the div containing the calendar
-       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) { // user click on a tA
+    console.log("407 clicked %o", ev);
+      if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) 
+       { // user click on a tA
+    
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
            this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
+
        /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
            if (!this.data2._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
           }
+   
        //   console.log("approved " + this.data2._data[this._id]['approved'])
         this._vidx = this.data2._data[this._id].vidx;                                           // store the vidx for editing
+  
         document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
      //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  this.insertP used for editing tA
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
@@ -522,8 +528,12 @@ selectCoverer(n, i ){
     this.reasonSelect = this.data2._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
-    var toDate = new Date(this.data2._data[this._id].start).toISOString().slice(0,10);           // format date yyyy/mm/dd
-    var fromDate = new Date(this.data2._data[this._id].end).toISOString().slice(0,10);
+
+
+    var toDate = this.formatDate(new Date(this.data2._data[this._id].start));           // format date yyyy/mm/dd
+    var fromDate = this.formatDate(new Date(this.data2._data[this._id].end));           // format date yyyy/mm/dd
+
+    console.log("531");
     this.formEdit = this.fb.group({                          // fb ison
       goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDate, Validators.required ],
@@ -534,6 +544,19 @@ selectCoverer(n, i ){
     );
     this.makeDateLabels();
   }
+  formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
   makeDateLabels(){
     const dName = ["Mon","Tues","Wed","Thurs","Fri"];
@@ -547,7 +570,8 @@ selectCoverer(n, i ){
     var monthNum = sDate.getMonth()-1;
     console.log("date " + dName[day]);
     for (let i = 0; i < 15; i++){
-      var dateString = this.datePipe.transform(sDate,"yyyy-dd-dd");
+     // var dateString = this.datePipe.transform(sDate,"yyyy-dd-dd");
+      var dateString = this.formatDate(sDate);
       if (dName[day]){
         this.dateLabels.push( {"dayName": dName[day], "date": date, 
           "monthName":mName[monthNum], "dateString":dateString,"dayOfTA":i,
