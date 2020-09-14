@@ -778,17 +778,13 @@ selectCoverer(n, i ){
             className: "negative",
           },
           { id: 1, content: "item 1<br>start", start: "2014-01-23" },
-          { id: 2, content: "item 2", start: "2020-01-18", group:1 },
-          { id: 3, content: "item 3", start: "2020-01-21", group: 2 },
-          { id: 4, content: "item 4", start: "2020-01-19", end: "2014-01-24", group:2 },
-          { id: 5, content: "item 5", start: "2020-01-28", type: "point", group: 2 },
-          { id: 6, content: "item 6", start: "2020-01-26", group:1 },
+          { id: 2, content: "item 2", start: "2020-09-18", group:1 },
+          { id: 3, content: "item 3", start: "2020-09-21", group: 2 },
+          { id: 4, content: "item 4", start: "2020-09-19", end: "2014-01-24", group:3 },
+          { id: 5, content: "item 5", start: "2020-09-28", type: "point", group: 4 },
+          { id: 6, content: "item 6", start: "2020-09-26", group:1 },
         ]);
-        var names = ['John', 'Alston', 'Lee', 'Grant'];
-  var groups = new vis.DataSet();
-  for (var g = 0; g < group.length; g++) {
-    groups.add({id: g, content: names[g]});
-  }
+
 
 
 console.log("770  data3 %o", items);
@@ -798,16 +794,24 @@ console.log("770  data3 %o", items);
      //   this.assignGroups();                                                              // go thru tA's and assign each to proper Group
       
      //   this.timeline = new vis.Timeline(this.tlContainer, this.data2._data, {});
+     var startDateShown = new Date();    // move to first day of current month for showing
+     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);   
+     endDateShown.setDate(startDate.getDate() + numWeeks * 8);   
      var options = {
-      start: "2020-01-10",
-      end: "2020-02-10",
+      start: startDateShown,
+      end: endDateShown,
       editable: true,
     };
-    
+    var names = ['John', 'Alston', 'Lee', 'Grant'];
+    var groups = new vis.DataSet();
+    for (var g = 0; g < names.length; g++) {
+      groups.add({id: g, content: names[g]});
+    }
+    console.log("810  groups is %o", groups);
         this.timeline = new vis.Timeline(this.tlContainer, items, options);
-        if (this.timeline)
+        this.timeline.setOptions(this.options);
+        console.log("808 this.timeline %o", this.timeline );  
         this.timeline.setGroups(groups).
-   //     this.timeline.setOptions(this.options);
    //     this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
       
