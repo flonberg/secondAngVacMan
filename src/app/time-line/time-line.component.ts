@@ -11,6 +11,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } from '@angular/material';
 import { throwIfEmpty } from 'rxjs/operators';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { group } from '@angular/animations';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -68,6 +69,7 @@ rData:any;
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
   data2: any;                                           // the dS for the tA data
+  data3: any;
   options: {};                                          // options for timeLIne
   groups: any;
   groupsArray: any;
@@ -675,11 +677,13 @@ selectCoverer(n, i ){
       this.userid = qP.userid;
       console.log(" 655  dddd %o", this.userid);
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
-      this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=1";
+     this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=1";
       this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=schneider";
       this.showDosimURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=2";
       this.showDosimURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=ske5";
-    }
+    
+    
+   }
     else {
       this.userid = this.genEditSvce.userid;
     }
@@ -708,7 +712,7 @@ selectCoverer(n, i ){
   getTimelineData2() 
   {
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
-    const numWeeks = 8;                                                                 // number of weeks to show on the calendar
+    const numWeeks = 5;                                                                 // number of weeks to show on the calendar
     const todayDate = new Date();
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     const endDate = new Date();  
@@ -719,9 +723,10 @@ selectCoverer(n, i ){
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                // mm for endDate
     /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
-    var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
+//    var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
+    var startDateShown = new Date();    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
-    endDateShown.setDate(startDate.getDate() + numWeeks * 7);   
+    endDateShown.setDate(startDate.getDate() + numWeeks * 8);   
   //  this.genEditSvce.getTAs().subscribe(
     var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
     if (this.param)
@@ -732,12 +737,11 @@ selectCoverer(n, i ){
         if (this.index === 0) {    
           this.rData = val;
           this.data2 = new vis.DataSet(this.rData['data']);
-          var p = {id: 101, content: "Period A", start: "2020-09-01", end: "2020-09-12", group:"2"};
-          this.data2.add(p);
          } else {
           this.data2 = Array();
         }
-        console.log("data1: %o", this.data2);
+        console.log(" 739 data1: %o", this.data2._data);
+        /*
         if (this.qP['vidx']){
           Object.keys(this.rData['data']).forEach(key => {
             if (this.rData['data'][key].vidx === Number(this.qP['vidx'])) {
@@ -746,8 +750,9 @@ selectCoverer(n, i ){
             }
         });
         }
+        */
                                                         // store data in this.data2
-        this.removeBads();                                                
+      //  this.removeBads();                                                
         this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);
         let i = 0;                                           // make a dataStruct for the groups
@@ -755,17 +760,60 @@ selectCoverer(n, i ){
           this.groups.add({id: i, content: this.nameList[i], value: i });                    // add a group
            this.groupsArray[i] = this.nameList[i];
         }
-        console.log("743 groups dataSet is %o", this.groups);
-        console.log("744 data2 dataSet is %o", this.data2);
-        const top = this.nameList.length * 20;
-        const topString = top.toString() + 'px';
-        this.assignGroups();                                                              // go thru tA's and assign each to proper Group
-        this.timeline = new vis.Timeline(this.tlContainer, this.data2, {});
-        this.timeline.setOptions(this.options);
-        this.timeline.setGroups(this.groups);
+  
+        var items = new vis.DataSet([
+          {
+            id: "A",
+            content: "Period A",
+            start: "2020-01-16",
+            end: "2020-01-22",
+            type: "background",
+          },
+          {
+            id: "B",
+            content: "Period B",
+            start: "2020-01-25",
+            end: "2020-01-30",
+            type: "background",
+            className: "negative",
+          },
+          { id: 1, content: "item 1<br>start", start: "2014-01-23" },
+          { id: 2, content: "item 2", start: "2020-01-18", group:1 },
+          { id: 3, content: "item 3", start: "2020-01-21", group: 2 },
+          { id: 4, content: "item 4", start: "2020-01-19", end: "2014-01-24", group:2 },
+          { id: 5, content: "item 5", start: "2020-01-28", type: "point", group: 2 },
+          { id: 6, content: "item 6", start: "2020-01-26", group:1 },
+        ]);
+        var names = ['John', 'Alston', 'Lee', 'Grant'];
+  var groups = new vis.DataSet();
+  for (var g = 0; g < group.length; g++) {
+    groups.add({id: g, content: names[g]});
+  }
+
+
+console.log("770  data3 %o", items);
+
+        const top = +this.nameList.length * 20;
+     //   const topString = top.toString() + 'px';
+     //   this.assignGroups();                                                              // go thru tA's and assign each to proper Group
+      
+     //   this.timeline = new vis.Timeline(this.tlContainer, this.data2._data, {});
+     var options = {
+      start: "2020-01-10",
+      end: "2020-02-10",
+      editable: true,
+    };
+    
+        this.timeline = new vis.Timeline(this.tlContainer, items, options);
+        if (this.timeline)
+        this.timeline.setGroups(groups).
+   //     this.timeline.setOptions(this.options);
+   //     this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
+      
+         document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
         });
+        
       function logEvent(event, properties) {                                            // used to capture event if user clicke 'x' to delete tA
         const log = document.getElementById('log');                                     // so if 'remove' is found  
         const msg = document.createElement('div');
@@ -777,6 +825,7 @@ selectCoverer(n, i ){
     );
     this.options = {
       selectable: true,
+      /*
       onAdd: function (item, callback) {
         document.getElementById('datums').innerHTML = item.group;
         document.getElementById('datums2').innerHTML = item.start;
@@ -785,7 +834,7 @@ selectCoverer(n, i ){
         document.getElementById('datums').innerHTML = item.id;
         document.getElementById('datums2').innerHTML = callback;
       },
- 
+ */
       start: startDateShown,
       end: endDateShown,
     };
@@ -825,9 +874,9 @@ selectCoverer(n, i ){
       }                 // the userKey of the loggedIn user
   }
   assignGroups() {                                                     // put each tA in proper group.
+    console.log("840  thid.data2 %o", this.data2)
     for (const property in this.data2._data ) {                         // property is the key of the dataStructure which is the 
       if (+this.data2._data[property]['userkey']  == 0) {
-        console.log("830  %o ", this.data2._data[property])
        this.data2._data[property]['content'] = '';   
        delete  this.data2._data[property]['group']                            
         continue;
