@@ -11,7 +11,6 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } from '@angular/material';
 import { throwIfEmpty } from 'rxjs/operators';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
-import { group } from '@angular/animations';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -69,7 +68,6 @@ rData:any;
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
   data2: any;                                           // the dS for the tA data
-  data3: any;
   options: {};                                          // options for timeLIne
   groups: any;
   groupsArray: any;
@@ -729,6 +727,32 @@ selectCoverer(n, i ){
     endDateShown.setDate(startDate.getDate() + numWeeks * 8);   
   //  this.genEditSvce.getTAs().subscribe(
     var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
+
+    var items = new vis.DataSet([
+      {
+        id: "A",
+        content: "Period A",
+        start: "2020-01-16",
+        end: "2020-01-22",
+        type: "background",
+      },
+      {
+        id: "B",
+        content: "Period B",
+        start: "2020-01-25",
+        end: "2020-01-30",
+        type: "background",
+        className: "negative",
+      },
+      { id: 1, content: "item 1<br>start", start: "2014-01-23" },
+      { id: 2, content: "item 2", start: "2020-09-18" },
+      { id: 3, content: "item 3", start: "2020-09-21" },
+      { id: 4, content: "item 4", start: "2020-09-19", end: "2019-01-24" },
+      { id: 5, content: "item 5", start: "2020-09-28", type: "point" },
+      { id: 6, content: "item 6", start: "2020-09-26" },
+    ]);
+
+
     if (this.param)
       url += this.param;
     this.genEditSvce.genGet(url).subscribe(
@@ -740,18 +764,7 @@ selectCoverer(n, i ){
          } else {
           this.data2 = Array();
         }
-        console.log(" 739 data1: %o", this.data2._data);
-        /*
-        if (this.qP['vidx']){
-          Object.keys(this.rData['data']).forEach(key => {
-            if (this.rData['data'][key].vidx === Number(this.qP['vidx'])) {
-              this.keyFromQP = Number(key);
-                console.log("Found.");
-            }
-        });
-        }
-        */
-                                                        // store data in this.data2
+
       //  this.removeBads();                                                
         this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);
@@ -760,59 +773,12 @@ selectCoverer(n, i ){
           this.groups.add({id: i, content: this.nameList[i], value: i });                    // add a group
            this.groupsArray[i] = this.nameList[i];
         }
-  
-        var items = new vis.DataSet([
-          {
-            id: "A",
-            content: "Period A",
-            start: "2020-01-16",
-            end: "2020-01-22",
-            type: "background",
-          },
-          {
-            id: "B",
-            content: "Period B",
-            start: "2020-01-25",
-            end: "2020-01-30",
-            type: "background",
-            className: "negative",
-          },
-          { id: 1, content: "item 1<br>start", start: "2014-01-23" },
-          { id: 2, content: "item 2", start: "2020-09-18", group:1 },
-          { id: 3, content: "item 3", start: "2020-09-21", group: 2 },
-          { id: 4, content: "item 4", start: "2020-09-19", end: "2014-01-24", group:3 },
-          { id: 5, content: "item 5", start: "2020-09-28", type: "point", group: 4 },
-          { id: 6, content: "item 6", start: "2020-09-26", group:1 },
-        ]);
-
-
-
-console.log("770  data3 %o", items);
 
         const top = +this.nameList.length * 20;
-     //   const topString = top.toString() + 'px';
-     //   this.assignGroups();                                                              // go thru tA's and assign each to proper Group
-      
-     //   this.timeline = new vis.Timeline(this.tlContainer, this.data2._data, {});
-     var startDateShown = new Date();    // move to first day of current month for showing
-     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);   
-     endDateShown.setDate(startDate.getDate() + numWeeks * 8);   
-     var options = {
-      start: startDateShown,
-      end: endDateShown,
-      editable: true,
-    };
-    var names = ['John', 'Alston', 'Lee', 'Grant'];
-    var groups = new vis.DataSet();
-    for (var g = 0; g < names.length; g++) {
-      groups.add({id: g, content: names[g]});
-    }
-    console.log("810  groups is %o", groups);
-        this.timeline = new vis.Timeline(this.tlContainer, items, options);
+                                                          // go thru tA's and assign each to proper Group      
+        this.timeline = new vis.Timeline(this.tlContainer, items, {});
         this.timeline.setOptions(this.options);
-        console.log("808 this.timeline %o", this.timeline );  
-        this.timeline.setGroups(groups).
-   //     this.timeline.setGroups(this.groups);
+        this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
       
          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
@@ -827,9 +793,9 @@ console.log("770  data3 %o", items);
         }
       }
     );
+    
     this.options = {
       selectable: true,
-      /*
       onAdd: function (item, callback) {
         document.getElementById('datums').innerHTML = item.group;
         document.getElementById('datums2').innerHTML = item.start;
@@ -838,11 +804,11 @@ console.log("770  data3 %o", items);
         document.getElementById('datums').innerHTML = item.id;
         document.getElementById('datums2').innerHTML = callback;
       },
- */
+ 
       start: startDateShown,
       end: endDateShown,
     };
-  }  
+  }                                                   // end of getTimeLineData
   setLoggedInUserKey(){
 
   }  
