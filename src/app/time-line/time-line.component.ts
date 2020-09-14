@@ -530,6 +530,8 @@ selectCoverer(n, i ){
     this.invalidFromDate = false;
 
 
+
+    
     var toDate = this.formatDate(new Date(this.data2._data[this._id].start));           // format date yyyy/mm/dd
     var fromDate = this.formatDate(new Date(this.data2._data[this._id].end));           // format date yyyy/mm/dd
 
