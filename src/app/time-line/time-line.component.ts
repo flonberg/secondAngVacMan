@@ -541,50 +541,9 @@ selectCoverer(n, i ){
       noteGEdit: [ this.data2._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );;
-    this.makeDateLabels();
+  //  this.makeDateLabels();
   }
-  formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
 
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
-  makeDateLabels(){
-    const dName = ["Mon","Tues","Wed","Thurs","Fri"];
-    const mName = ["Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
-    var sDate = new Date(this.data2._data[this._id].start); 
-    const vidx = this.data2._data[this._id].vidx;
-    const goAwayerUserKey = this.data2._data[this._id].userkey;
-    this.dateLabels = Array();
-    var day = sDate.getDay()-1;
-    var date = sDate.getDate();
-    var monthNum = sDate.getMonth()-1;
-    console.log("date " + dName[day]);
-    for (let i = 0; i < 15; i++){
-     // var dateString = this.datePipe.transform(sDate,"yyyy-dd-dd");
-      var dateString = this.formatDate(sDate);
-      if (dName[day]){
-        this.dateLabels.push( {"dayName": dName[day], "date": date, 
-          "monthName":mName[monthNum], "dateString":dateString,"dayOfTA":i,
-          "vidx":vidx, "goAwayerUserKey": goAwayerUserKey});
-      }
-      sDate.setDate(sDate.getDate() + 1);
-      if (sDate > new Date(this.data2._data[this._id].end))
-        break;
-      day = sDate.getDay()-1;
-      date = sDate.getDate();
-      monthNum = sDate.getMonth();
-    }
-    console.log("dateLabels is %o", this.dateLabels);
-  }
 
   dateLessThan(from: string, to: string, reason: string) {
       return (group: FormGroup): {[key: string]: any} => 
@@ -729,7 +688,7 @@ selectCoverer(n, i ){
       this.tlContainer = this.timelineContainer.nativeElement;
     }
   }
-  
+  items: any;
   getTimelineData2() 
   {
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
@@ -751,31 +710,9 @@ selectCoverer(n, i ){
   //  this.genEditSvce.getTAs().subscribe(
     var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
 
-    var items = new vis.DataSet([
-      {
-        id: "A",
-        content: "Period A",
-        start: "2020-01-16",
-        end: "2020-01-22",
-        type: "background",
-      },
-      {
-        id: "B",
-        content: "Period B",
-        start: "2020-01-25",
-        end: "2020-01-30",
-        type: "background",
-        className: "negative",
-      },
-      { id: 1, content: "item 1<br>start", start: "2014-01-23" },
-      { id: 2, content: "item 2", start: "2020-09-18" },
-      { id: 3, content: "item 3", start: "2020-09-21" },
-      { id: 4, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:4 },
-      { id: 5, content: "item 5", start: "2020-09-28", type: "point" },
-      { id: 6, content: "item 6", start: "2020-09-26" },
+    this.items = new vis.DataSet([
+      { id: 0, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:2},
     ]);
-
-
     if (this.param)
       url += this.param;
     this.genEditSvce.genGet(url).subscribe(
@@ -784,11 +721,43 @@ selectCoverer(n, i ){
         if (this.index === 0) {    
           this.rData = val;
           this.data2 = new vis.DataSet(this.rData['data']);
-    
          } else {
           this.data2 = Array();
         }
+        var jj = 0;
+        var setId = 1;
+        var tAstartDate = new Date();
+        var tAendDate = new Date();
+        for (var key in this.rData)
+        {
+        //  console.log("key has %o", this.rData[key])
+          for (var key2 in this.rData[key]){
+            if (this.rData[key][key2]['start'])
+              var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z" 
+            if (this.rData[key][key2]['end'])
+              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;
+            tAstartDate = new Date(startDateArg );
+            tAendDate = new Date(endDateArg);
 
+           if ( tAstartDate > startDateShown && tAstartDate < endDateShown){
+            console.log("key2 has %o", this.rData[key][key2]['start'] + "startDateshown is " + startDateArg)
+            const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
+                                    end: endDateArg, group: 5 }
+            this.items.getDataSet().add(tAO)
+            console.log(" 742  data added vvvvvvv");
+           }
+       
+            if (jj++ > 25 )
+            break;
+          }
+    
+        }
+        console.log("747 dataset %o", this.items);
+        var items = new vis.DataSet([
+          { id: 4, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:4 },
+        ]);
+
+        console.log("730 rData %o", this.rData);
       //  this.removeBads();                                                
         this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
         this.groups = new vis.DataSet([]);
@@ -800,7 +769,7 @@ selectCoverer(n, i ){
 
         const top = +this.nameList.length * 20;
                                                           // go thru tA's and assign each to proper Group      
-        this.timeline = new vis.Timeline(this.tlContainer, items, {});
+        this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
@@ -1165,3 +1134,47 @@ editGen(type: string, event: any) {                                  // editGen 
   }
   */
 }
+  /*
+  formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+  makeDateLabels(){
+    const dName = ["Mon","Tues","Wed","Thurs","Fri"];
+    const mName = ["Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
+    var sDate = new Date(this.data2._data[this._id].start); 
+    const vidx = this.data2._data[this._id].vidx;
+    const goAwayerUserKey = this.data2._data[this._id].userkey;
+    this.dateLabels = Array();
+    var day = sDate.getDay()-1;
+    var date = sDate.getDate();
+    var monthNum = sDate.getMonth()-1;
+    console.log("date " + dName[day]);
+    for (let i = 0; i < 15; i++){
+     // var dateString = this.datePipe.transform(sDate,"yyyy-dd-dd");
+      var dateString = this.formatDate(sDate);
+      if (dName[day]){
+        this.dateLabels.push( {"dayName": dName[day], "date": date, 
+          "monthName":mName[monthNum], "dateString":dateString,"dayOfTA":i,
+          "vidx":vidx, "goAwayerUserKey": goAwayerUserKey});
+      }
+      sDate.setDate(sDate.getDate() + 1);
+      if (sDate > new Date(this.data2._data[this._id].end))
+        break;
+      day = sDate.getDay()-1;
+      date = sDate.getDate();
+      monthNum = sDate.getMonth();
+    }
+    console.log("dateLabels is %o", this.dateLabels);
+  }
+  */
