@@ -524,15 +524,15 @@ selectCoverer(n, i ){
   }
 ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
-    console.log('147');
+    console.log('147 this.items %o', this.items);
     this.reasonSelect = this.data2._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
 
-    var toDateRaw = this.data2._data[this._id].start
-    toDateRaw = toDateRaw.substring(0, toDateRaw.length - 9);;
-    var fromDateRaw = this.data2._data[this._id].end;
-    fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 9);
+    var toDateRaw = this.items._data[this._id].start
+    toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
+    var fromDateRaw = this.items._data[this._id].end;
+    fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 10);
     this.formEdit = this.fb.group({                          // fb ison
       goAwayerBox: [ this.data2._data[this._id].content],
       dateToEdit: [toDateRaw, Validators.required ],
@@ -607,8 +607,8 @@ selectCoverer(n, i ){
 
     const item = {
       id: Object.keys(this.data2._data).length + 1,                 // incase the user has DELETED a tA before adding
-      start: this.formG.value.dateFrom + ' 00:00:00',
-      end: this.formG.value.dateTo + ' 00:00:00',
+      start: this.formG.value.dateFrom + 'T00:00:00Z',
+      end: this.formG.value.dateTo + ' T00:00:00Z',
       content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
       group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
       reason: this.formG.value.reasonG,
@@ -616,7 +616,10 @@ selectCoverer(n, i ){
       className: this.userid,
       vidx: this.lastInsertIdx
     };
-    var idOfAdded = this.timeline.itemsData.getDataSet().add(item);  // add the new tA to local DataSe
+    console.log("619 item to add is %o", item);
+    /**********  Add to DataSet */
+    var idOfAdded = this.items.getDataSet().add(item);  // add the new tA to local DataSe
+   
            /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
     if (this.rData.loggedInUserRank < 5){   
       const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx   ;
@@ -736,15 +739,18 @@ selectCoverer(n, i ){
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z" 
             if (this.rData[key][key2]['end'])
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;
+      
             tAstartDate = new Date(startDateArg );
             tAendDate = new Date(endDateArg);
 
            if ( tAstartDate > startDateShown && tAstartDate < endDateShown){
-            console.log("key2 has %o", this.rData[key][key2]['start'] + "startDateshown is " + startDateArg)
+             if ( this.rData[key][key2]['content']){
+            console.log("key2 has %o + vidx is %o", this.rData[key][key2]['start'], this.rData[key][key2]['vidx']  )
             const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                    end: endDateArg, group: 5 }
+                                    end: endDateArg, group: 5, vidx:this.rData[key][key2]['vidx']}
             this.items.getDataSet().add(tAO)
             console.log(" 742  data added vvvvvvv");
+           }
            }
        
             if (jj++ > 25 )
