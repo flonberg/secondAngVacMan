@@ -529,21 +529,18 @@ selectCoverer(n, i ){
     this.doValidation = false;
     this.invalidFromDate = false;
 
-
-
-    
-    var toDate = this.formatDate(new Date(this.data2._data[this._id].start));           // format date yyyy/mm/dd
-    var fromDate = this.formatDate(new Date(this.data2._data[this._id].end));           // format date yyyy/mm/dd
-
-    console.log("531");
+    var toDateRaw = this.data2._data[this._id].start
+    toDateRaw = toDateRaw.substring(0, toDateRaw.length - 9);;
+    var fromDateRaw = this.data2._data[this._id].end;
+    fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 9);
     this.formEdit = this.fb.group({                          // fb ison
       goAwayerBox: [ this.data2._data[this._id].content],
-      dateToEdit: [toDate, Validators.required ],
-      dateFromEdit: [fromDate, Validators.required ],
+      dateToEdit: [toDateRaw, Validators.required ],
+      dateFromEdit: [fromDateRaw, Validators.required ],
       reasonGEdit: [''],
       noteGEdit: [ this.data2._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
-    );
+    );;
     this.makeDateLabels();
   }
   formatDate(date) {
