@@ -581,14 +581,14 @@ selectCoverer(n, i ){
   {
         /*********     Add to dataBase  **********************/
         if (+this.loggedInRank < 5 )
-        this.helpArray = ['Your Time Away needs to be approved before you can select coverage. '];
+          this.helpArray = ['Your Time Away needs to be approved before you can select coverage. '];
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
         this.insertP.action = 'insertRecGen';
         this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
         this.insertP.colVal = [this.formG.value.dateFrom,  // colValues 
           this.formG.value.dateTo, this.formG.value.reasonG,
-          this.formG.value.noteG, this.userkey], '0';
+          this.formG.value.noteG, this.rData['loggedInUserKey'], '0'];
         const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
         console.log("544  insertP is %o", this.insertP);
       
@@ -598,7 +598,14 @@ selectCoverer(n, i ){
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
         })   
-  
+    /*    
+    const tAO = { id: 101, content: 'test', start: this.formG.value.dateFrom,
+      className:this.userid,
+      end: this.formG.value.dateFrom, group:  1, vidx:this.rData[key][key2]['vidx'],
+      reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}                
+    this.items.getDataSet().add(tAO);
+    */
+   window.location.reload();
     this.newTimeAway2 = false;    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
@@ -706,7 +713,7 @@ selectCoverer(n, i ){
     this.rData = new Array();
                                                       // create new date to use for end                            
     endDate.setMonth(startDate.getMonth() + 4);                                         // set a date to be the forward date of data collection
-    startDate.setMonth(startDate.getMonth() - 4);                                       // set date for backward data collection far enough back to get all users
+    startDate.setMonth(startDate.getMonth() - 1);                                       // set date for backward data collection far enough back to get all users
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                // mm for endDate
     /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
@@ -797,6 +804,7 @@ selectCoverer(n, i ){
     
     this.options = {
       selectable: true,
+
       onAdd: function (item, callback) {
         document.getElementById('datums').innerHTML = item.group;
         document.getElementById('datums2').innerHTML = item.start;
