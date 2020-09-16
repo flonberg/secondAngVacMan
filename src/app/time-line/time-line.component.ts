@@ -70,7 +70,9 @@ rData:any;
   data2: any;                                           // the dS for the tA data
   options: {};                                          // options for timeLIne
   groups: any;
+  groups2: any;                                         // for Group DataSet
   groupsArray: any;
+  groups2Array: String[];
   contentArray: any;
   redraw: boolean;
   showSubmitChanges: boolean;
@@ -713,9 +715,10 @@ selectCoverer(n, i ){
   //  this.genEditSvce.getTAs().subscribe(
     var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
 
-    this.items = new vis.DataSet([
-      { id: 0, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:2},
-    ]);
+    this.items = new vis.DataSet();                                     // for tAs
+    this.groups2 = new vis.DataSet();                                   // for Groups;
+    this.groups2Array = new Array();                                             // Array to keep track of if added to groups2
+  
     if (this.param)
       url += this.param;
     this.genEditSvce.genGet(url).subscribe(
@@ -739,25 +742,31 @@ selectCoverer(n, i ){
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z" 
             if (this.rData[key][key2]['end'])
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;
-      
             tAstartDate = new Date(startDateArg );
             tAendDate = new Date(endDateArg);
-
            if ( tAstartDate > startDateShown && tAstartDate < endDateShown){
              if ( this.rData[key][key2]['content']){
-            console.log("key2 has %o + vidx is %o", this.rData[key][key2]['start'], this.rData[key][key2]['vidx']  )
-            const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                    end: endDateArg, group: 5, vidx:this.rData[key][key2]['vidx']}
-            this.items.getDataSet().add(tAO)
-            console.log(" 742  data added vvvvvvv");
+              var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
+              if (group2Badded == -1 ){
+                this.groups2Array.push(this.rData[key][key2]['content']);
+                this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
+              }
+              group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
+              const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
+                                      end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx']}
+              //console.log("tAO is %o",tAO )                   
+              this.items.getDataSet().add(tAO);
+      
+              console.log(" 742  data added %o", this.rData[key][key2]['vidx']);
+            }
            }
-           }
-       
+   
             if (jj++ > 25 )
             break;
           }
-    
+        
         }
+        console.log("758 groups2Array is %o", this.groups2Array);
         console.log("747 dataset %o", this.items);
         var items = new vis.DataSet([
           { id: 4, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:4 },
@@ -772,12 +781,12 @@ selectCoverer(n, i ){
           this.groups.add({id: i, content: this.nameList[i], value: i });                    // add a group
            this.groupsArray[i] = this.nameList[i];
         }
-
+console.log("782 this.goups is %o", this.groups);
         const top = +this.nameList.length * 20;
                                                           // go thru tA's and assign each to proper Group      
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
-        this.timeline.setGroups(this.groups);
+        this.timeline.setGroups(this.groups2);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
       
          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
