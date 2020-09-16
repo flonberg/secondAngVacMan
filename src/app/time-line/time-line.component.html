@@ -102,9 +102,11 @@
                                 <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
                         </mat-form-field>
                         <mat-form-field  class="wideItem">
-                                <mat-label class="smallLabel"> Note:</mat-label>
-                                <textarea matInput  (change)="storeEdit( 'note', $event)" [value]="newTimeAwayBool ? ' ' : this.data2._data[this._id]?.note"
+                                <mat-label class="smallLabel"> Note: {{ this._id }} </mat-label>
+                                <textarea matInput  (change)="storeEdit( 'note', $event)" 
+                                    [value]="newTimeAwayBool ? ' ' : this.shownNote"
                                     [formControl] = "notesFC"
+                         
                                     cdkTextareaAutosize [readonly]="_readonly"
                                     #autosize="cdkTextareaAutosize"
                                     cdkAutosizeMinRows="1"

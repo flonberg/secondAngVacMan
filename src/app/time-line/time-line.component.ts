@@ -61,6 +61,7 @@ rData:any;
   covererUserKey2: number;
   showPhysURL: string;
   showDosimURL: string;
+  shownNote: string;
   
   showCoverers = false;
   showSendEmailToCoverers = false;
@@ -426,7 +427,7 @@ selectCoverer(n, i ){
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
-             if (this.data2._data[this._id].approved == 1 )
+             if (this.items._data[this._id].approved == 1 )
               this.helpArray = ['Click on the Coverage drop-down and select person',
                                 ' who will be you First Coverer.',  
                                 'If you want to nominate a Second Coverer,',
@@ -452,25 +453,25 @@ selectCoverer(n, i ){
            this.isApprover = true;
          }
       /***********  Set Class for Coverers display,  according to Acceptance */   
-      if ( this.data2._data[this._id]     )  { 
-        if ( this.data2._data[this._id]['covA_Duty'] == '1')
+      if ( this.items._data[this._id]     )  { 
+        if ( this.items._data[this._id]['covA_Duty'] == '1')
           this.coverageAclass = "Accepted";
           else
             this.coverageAclass = "NotAccepted";
-        if ( this.data2._data[this._id]['covB_Duty'] == '1')
+        if ( this.items._data[this._id]['covB_Duty'] == '1')
             this.coverageBclass = "Accepted";
             else
                 this.coverageBclass = "NotAccepted";     
         /***********  Set if loggedInUser it the Coverer  */
-        if  (this.data2._data[this._id]['coverageA'] ==   this.rData['loggedInUserKey']){
+        if  (this.items._data[this._id]['coverageA'] ==   this.rData['loggedInUserKey']){
           this.coverageA_isLoggedInUser = true;
         }
-        if  (this.data2._data[this._id]['coverageB'] ==   this.rData['loggedInUserKey']){
+        if  (this.items._data[this._id]['coverageB'] ==   this.rData['loggedInUserKey']){
           this.coverageB_isLoggedInUser = true;
         }
         /************   Change Help text */
-        console.log("rData has " + +this.rData['loggedInUserKey'] + " data2 hsa " + +this.data2._data[this._id]['userkey'])
-        if (+this.rData['loggedInUserKey'] == +this.data2._data[this._id]['userkey']){
+        console.log("rData has " + +this.rData['loggedInUserKey'] + " items hsa " + +this.items._data[this._id]['userkey'])
+        if (+this.rData['loggedInUserKey'] == +this.items._data[this._id]['userkey']){
           this.helpArray = [
             'Click on the Coverage drop-down and select person who will be you First Coverer.',  
             'If you want to nominate a Second Coverer, click on the Coverage drop-down again.',  
@@ -490,17 +491,17 @@ selectCoverer(n, i ){
 
        if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
     
-       this.data2.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
+       this.items.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
            this.drawEditControls = false;                                                       // turn off the edit Controls.
            document.getElementById('datums2').innerText = "";                                   // clear it so that further clicks on tA don't result in delete
            dParams.editColNames = ['reasonIdx'];
            dParams.editColVals = ['99'];
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
        } 
-         else if (   this.data2._data[this._id] ){             // Ed/
+         else if (   this.items._data[this._id] ){             // Ed/
  
-            var startDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].start);    // format the date for use in dataBase
-            var endDateEdit = this.formatDateYYYymmdd(this.data2._data[this._id].end);        //    "
+            var startDateEdit = this.formatDateYYYymmdd(this.items._data[this._id].start);    // format the date for use in dataBase
+            var endDateEdit = this.formatDateYYYymmdd(this.items._data[this._id].end);        //    "
           //  dParams.editColNames = ['startDate','endDate'];
             this.dB_PP.editColNames = ['startDate','endDate'];      
             this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
@@ -526,8 +527,8 @@ selectCoverer(n, i ){
   }
 ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
-    console.log('147 this.items %o', this.items);
-    this.reasonSelect = this.data2._data[this._id].reason.toString(); // set selected
+    console.log('529 this.items %o', this.items._data);
+    this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
 
@@ -535,12 +536,13 @@ selectCoverer(n, i ){
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
     var fromDateRaw = this.items._data[this._id].end;
     fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 10);
+    this.shownNote = this.items._data[this._id].note;
     this.formEdit = this.fb.group({                          // fb ison
-      goAwayerBox: [ this.data2._data[this._id].content],
+      goAwayerBox: [ this.items._data[this._id].content],
       dateToEdit: [toDateRaw, Validators.required ],
       dateFromEdit: [fromDateRaw, Validators.required ],
       reasonGEdit: [''],
-      noteGEdit: [ this.data2._data[this._id].note]
+      noteGEdit: [ this.items._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );;
   //  this.makeDateLabels();
@@ -608,7 +610,7 @@ selectCoverer(n, i ){
     console.log("idx is" +  s['lastID'] );
 
     const item = {
-      id: Object.keys(this.data2._data).length + 1,                 // incase the user has DELETED a tA before adding
+      id: Object.keys(this.items._data).length + 1,                 // incase the user has DELETED a tA before adding
       start: this.formG.value.dateFrom + 'T00:00:00Z',
       end: this.formG.value.dateTo + ' T00:00:00Z',
       content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
@@ -752,10 +754,11 @@ selectCoverer(n, i ){
               group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
               const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
                                       className:this.rData[key][key2]['className'],
-                                      end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx']}                
+                                      end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
+                                      reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}                
               this.items.getDataSet().add(tAO);
             //  console.log("757 tAO is %o ", tAO);
-             // console.log("757 item  is %o ", this.rData[key][key2]);
+              console.log("757 item  is %o ", this.rData[key][key2]);
             }
            }
           }
@@ -814,9 +817,9 @@ selectCoverer(n, i ){
 
   }                                                       // end of getTimelineData2
   removeBads(){
-    for (let key in this.data2._data){
-      if (this.data2._data[key].start > this.data2._data[key].end){
-        delete this.data2._data[key];
+    for (let key in this.items._data){
+      if (this.items._data[key].start > this.items._data[key].end){
+        delete this.items._data[key];
       }
     }
   }
@@ -835,8 +838,8 @@ selectCoverer(n, i ){
     const emp = {
       action: "sendEmail2",
       subject: "Time Away Deleted",
-      msg: "The Time Away for " + this.data2._data[this._id]['LastName'] + " starting "  + this.data2._data[this._id]['start'].substr(0, 10) +
-        " ending " + this.data2._data[this._id]['end'].substr(0, 10) + " has been deleted. ",
+      msg: "The Time Away for " + this.items._data[this._id]['LastName'] + " starting "  + this.items._data[this._id]['start'].substr(0, 10) +
+        " ending " + this.items._data[this._id]['end'].substr(0, 10) + " has been deleted. ",
       addr:    ["flonberg@partners.org"]
     }
     this.genEditSvce.genPOST(emp).subscribe(
@@ -872,7 +875,7 @@ selectCoverer(n, i ){
         const dateForDataSet = e.target.value + "T00:00:00Z"; 
         if (type=='startDate'){
           this.needStartEmail = true;
-          this.EDO.OldStartDate = this.data2._data[this._id]['start'].slice(0,10); ; 
+          this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10); ; 
           this.EDO.NewStartDate = e.target.value; 
           this.items.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
           this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'}); 
@@ -880,7 +883,7 @@ selectCoverer(n, i ){
         }
         if (type=='endDate'){
           this.needStartEmail = true;
-          this.EDO.OldEndDate = this.data2._data[this._id]['end'].slice(0,10); ; 
+          this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10); ; 
           this.EDO.NewEndDate = e.target.value; 
           this.items.update({id: this._id, end: dateForDataSet});   
           this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'});   
@@ -915,7 +918,7 @@ selectCoverer(n, i ){
     );
   }
   sendStartOrEndDateEmail(){
-    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.data2._data[this._id].vidx;
+    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;
     if (this.needStartEmail){
       var msg = "<p>The  Time Away of " + this.items._data[this._id]['LastName'] + ' has changed';
       if (typeof this.EDO.NewStartDate === 'string'){
@@ -968,10 +971,10 @@ editGen(type: string, event: any) {                                  // editGen 
     var dateForDataSet = ''; 
    const shownId = this._id;
    var messageUsed = ""; 
-   console.log( 'editGen ' + this.data2._data[this._id]['approved'] + "thisis" + shownId);
+   console.log( 'editGen ' + this.items._data[this._id]['approved'] + "thisis" + shownId);
     if (type =='start' || type =='end'){                                  // if it is a date
        messageUsed  = "The " + type + " date of the Time Away for " + this.items._data[this._id]['LastName'] + " has changed  from "
-      + this.data2._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
+      + this.items._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
       ". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
       const changedDate = this.formatDateForTimeline(event.value);                 // make the string for local update
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
@@ -983,7 +986,7 @@ editGen(type: string, event: any) {                                  // editGen 
     console.log('edtied local ');
     if (type == 'reason'){
       this.dB_PP.editColNames = ['reason'];
-      this.data2.update({id: this._id, reason: dateForDataSet});  
+      this.items.update({id: this._id, reason: dateForDataSet});  
     }
    
    if (type !== 'del'){       
