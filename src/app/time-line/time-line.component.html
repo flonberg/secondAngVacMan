@@ -33,10 +33,10 @@
             <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
                 <div class = "heading" > Enter New Time Away Paramters </div>
                 <mat-form-field class="item">
-                    <input matInput  placeholder= "Start Date "  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
+                    <input matInput  placeholder= "Start Date (yyyy-mm-dd)"  formControlName="dateFrom" type="date" useValueAsDate title="click down triangle for calendar" />
                 </mat-form-field>   
                 <mat-form-field class="item">
-                    <input matInput placeholder= "End Date "   formControlName="dateTo" type="date" useValueAsDate />
+                    <input matInput placeholder= "End Date (yyyy-mm-dd)"   formControlName="dateTo" type="date" useValueAsDate />
                 </mat-form-field>    
                 
                 <mat-form-field  appearance="none">

@@ -605,7 +605,7 @@ selectCoverer(n, i ){
       reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}                
     this.items.getDataSet().add(tAO);
     */
-   window.location.reload();
+    window.location.reload();
     this.newTimeAway2 = false;    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
@@ -615,7 +615,7 @@ selectCoverer(n, i ){
     var idx = s.lastID;
     this.lastInsertIdx = s['lastID'];
     console.log("idx is" +  s['lastID'] );
-
+/*
     const item = {
       id: Object.keys(this.items._data).length + 1,                 // incase the user has DELETED a tA before adding
       start: this.formG.value.dateFrom + 'T00:00:00Z',
@@ -628,8 +628,9 @@ selectCoverer(n, i ){
       vidx: this.lastInsertIdx
     };
     console.log("619 item to add is %o", item);
-    /**********  Add to DataSet */
-    var idOfAdded = this.items.getDataSet().add(item);  // add the new tA to local DataSe
+
+    var idOfAdded = this.items.getDataSet().add(item);  // add the new tA to local DataSet
+    */
    
            /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
     if (this.rData.loggedInUserRank < 5){   
@@ -641,7 +642,7 @@ selectCoverer(n, i ){
                 "Prod":["bnapolitano@mgu.harvard.edu"]
               },
         msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-        <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` has scheduled a Time Away. </p>
+        <p> ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + ` has scheduled a Time Away. </p>
         <p> You can approve this Time Away using the below link: </p>
         <a href=`+ link11 + `> Approve Time Away. </a>`,
         subject: "New Time Away ",
@@ -655,7 +656,6 @@ selectCoverer(n, i ){
       }
     return idx;
   }
-
   formatDateYYYymmdd(d) {
     const pi = 3.14;
     const date = new Date(d);
@@ -738,7 +738,7 @@ selectCoverer(n, i ){
          } else {
           this.data2 = Array();
         }
-     //   var jj = 0;
+    console.log('742  rData is %o', this.rData)    
         var setId = 1;                                                    
         var tAstartDate = new Date();
         var tAendDate = new Date();
@@ -751,40 +751,24 @@ selectCoverer(n, i ){
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;
             tAstartDate = new Date(startDateArg );
             tAendDate = new Date(endDateArg);
-           if ( tAstartDate > startDateShown && tAstartDate < endDateShown){
+            //if ( tAstartDate > startDateShown && tAstartDate < endDateShown){
+            if ( tAstartDate > startDateShown ){
              if ( this.rData[key][key2]['content']){
-              var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
-              if (group2Badded == -1 ){
-                this.groups2Array.push(this.rData[key][key2]['content']);
-                this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
+                var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
+                if (group2Badded == -1 ){
+                  this.groups2Array.push(this.rData[key][key2]['content']);
+                  this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
+                }
+                group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
+                const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
+                                        className:this.rData[key][key2]['className'],
+                                        end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
+                                        reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}                
+                this.items.getDataSet().add(tAO);
               }
-              group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
-              const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                      className:this.rData[key][key2]['className'],
-                                      end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
-                                      reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}                
-              this.items.getDataSet().add(tAO);
-            //  console.log("757 tAO is %o ", tAO);
-              console.log("757 item  is %o ", this.rData[key][key2]);
             }
-           }
-          }
-        
+          }      
         }
-     //   var items = new vis.DataSet([
-     //     { id: 4, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:4 },
-     //   ]);
-      //  this.removeBads();                                                
-      //  this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
-      //  this.groups = new vis.DataSet([]);
-      //  let i = 0;                                           // make a dataStruct for the groups
-      //  for ( i = 0; i < this.nameList.length; i++) {                                   // foreach name found to have tA's
-      //    this.groups.add({id: i, content: this.nameList[i], value: i });                    // add a group
-       //    this.groupsArray[i] = this.nameList[i];
-       // }
-
-     //   const top = +this.nameList.length * 20;
-                                                          // go thru tA's and assign each to proper Group      
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups2);
@@ -813,7 +797,7 @@ selectCoverer(n, i ){
         document.getElementById('datums').innerHTML = item.id;
         document.getElementById('datums2').innerHTML = callback;
       },
- 
+   
       start: startDateShown,
       end: endDateShown,
     };
