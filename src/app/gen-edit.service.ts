@@ -226,6 +226,7 @@ genGet(s){
   genPOST(dBParams){
     dBParams['emailStage'] = this.emailStage;
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
+    console.log("gen_edit 229  url is " + url2);
     return this.http.post(url2, JSON.stringify(dBParams), { responseType:  'json' });
   }
     /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\

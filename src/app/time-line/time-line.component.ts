@@ -315,17 +315,17 @@ selectCoverer(n, i ){
   //  if (this.covererUserKey )
   //    var mTA_prod = [this.rData['emailByKey'][this.covererUserKey]];
     var link1 = this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
-          + this.covererUserKey + '&mode=acceptCov&vidx=' + this.data2._data[this._id].vidx;
+          + this.covererUserKey + '&mode=acceptCov&vidx=' + this.items._data[this._id].vidx;
     if (this.covererUserKey2){
       var link2 =this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
-      + this.covererUserKey2 + '&mode=acceptCovB&vidx=' + this.data2._data[this._id].vidx;
+      + this.covererUserKey2 + '&mode=acceptCovB&vidx=' + this.items._data[this._id].vidx;
     }   
     this.writeLog(" in storeCovererData ", link1);
         /*************  Send Coverage Emails        */
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
       <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
-      starting  ` + this.formatDateYYYymmdd(this.data2._data[this._id].start) + `
-      through  ` + this.formatDateYYYymmdd(this.data2._data[this._id].end) + ` </p>
+      starting  ` + this.formatDateYYYymmdd(this.items._data[this._id].start) + `
+      through  ` + this.formatDateYYYymmdd(this.items._data[this._id].end) + ` </p>
       <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
       <p><a href=`+ link1 + `>  ` + this.covererName + ` accepts coverage. </a></p>
     `;
@@ -359,7 +359,7 @@ selectCoverer(n, i ){
       action:'editAndLog',
       tableName:'vacation3',
       whereColName:['vidx'],
-      whereColVal:[this.data2._data[this._id].vidx],
+      whereColVal:[this.items._data[this._id].vidx],
       editColNames: ['coverageA', 'coverageB'],
       editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
       userid: this.userid,   
@@ -414,14 +414,14 @@ selectCoverer(n, i ){
            this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
 
        /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
-           if (!this.data2._data[this._id]) {                                                        // click was NOT in a tA box;
+           if (!this.items._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
           }
    
        //   console.log("approved " + this.data2._data[this._id]['approved'])
-        this._vidx = this.data2._data[this._id].vidx;                                           // store the vidx for editing
+        this._vidx = this.items._data[this._id].vidx;                                           // store the vidx for editing
   
-        document.getElementById('vidx').innerText = this.data2._data[this._id].vidx; // store the vidx for DELETE
+        document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
      //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  this.insertP used for editing tA
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
@@ -439,7 +439,7 @@ selectCoverer(n, i ){
            }
            console.log('clicked'  + this._id);
       /*******  classify loggedInUser as tA Owner or coverer */     
-       if ( this.data2._data[this._id] &&  this.data2._data[this._id].className === this.userid) { // loggedInUser is tA owner 
+       if ( this.items._data[this._id] &&  this.items._data[this._id].className === this.userid) { // loggedInUser is tA owner 
            this._readonly = false;                                                              // enable editing
            } else
           {                                                                             // user is NOT tA owner
@@ -723,20 +723,18 @@ selectCoverer(n, i ){
       url += this.param;
     this.genEditSvce.genGet(url).subscribe(
       (val) => {
-        console.log("627  val %o ", val);
         if (this.index === 0) {    
           this.rData = val;
           this.data2 = new vis.DataSet(this.rData['data']);
          } else {
           this.data2 = Array();
         }
-        var jj = 0;
-        var setId = 1;
+     //   var jj = 0;
+        var setId = 1;                                                    
         var tAstartDate = new Date();
         var tAendDate = new Date();
         for (var key in this.rData)
         {
-        //  console.log("key has %o", this.rData[key])
           for (var key2 in this.rData[key]){
             if (this.rData[key][key2]['start'])
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z" 
@@ -753,42 +751,34 @@ selectCoverer(n, i ){
               }
               group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
               const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                      end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx']}
-              //console.log("tAO is %o",tAO )                   
+                                      className:this.rData[key][key2]['className'],
+                                      end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx']}                
               this.items.getDataSet().add(tAO);
-      
-              console.log(" 742  data added %o", this.rData[key][key2]['vidx']);
+            //  console.log("757 tAO is %o ", tAO);
+             // console.log("757 item  is %o ", this.rData[key][key2]);
             }
            }
-   
-            if (jj++ > 25 )
-            break;
           }
         
         }
-        console.log("758 groups2Array is %o", this.groups2Array);
-        console.log("747 dataset %o", this.items);
-        var items = new vis.DataSet([
-          { id: 4, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:4 },
-        ]);
-
-        console.log("730 rData %o", this.rData);
+     //   var items = new vis.DataSet([
+     //     { id: 4, content: "item 4", start: "2020-09-19", end: "2020-09-24", group:4 },
+     //   ]);
       //  this.removeBads();                                                
-        this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
-        this.groups = new vis.DataSet([]);
-        let i = 0;                                           // make a dataStruct for the groups
-        for ( i = 0; i < this.nameList.length; i++) {                                   // foreach name found to have tA's
-          this.groups.add({id: i, content: this.nameList[i], value: i });                    // add a group
-           this.groupsArray[i] = this.nameList[i];
-        }
-console.log("782 this.goups is %o", this.groups);
-        const top = +this.nameList.length * 20;
+      //  this.setGroups(this.data2);                           // make this.nameList a  list of users who have timeAways found
+      //  this.groups = new vis.DataSet([]);
+      //  let i = 0;                                           // make a dataStruct for the groups
+      //  for ( i = 0; i < this.nameList.length; i++) {                                   // foreach name found to have tA's
+      //    this.groups.add({id: i, content: this.nameList[i], value: i });                    // add a group
+       //    this.groupsArray[i] = this.nameList[i];
+       // }
+
+     //   const top = +this.nameList.length * 20;
                                                           // go thru tA's and assign each to proper Group      
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups2);
         this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-      
          document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
         });
         
@@ -830,49 +820,10 @@ console.log("782 this.goups is %o", this.groups);
       }
     }
   }
-  /**********  make a dataStructure to hold all names of tA holders  */
-  setGroups(s) { 
-    console.log("761   loggedInUserRank %o", this.rData.loggedInUserRank );                                                         // s is the timeline dataSet
-    this.nameList = new Array();
-    this.groupsArray = new Array();
-    /**********   Switch between Dosim and Physicists  */
-    for (let i = 0; i < s.length; i++) { 
-      if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
-        this.nameList.push( s._data[i].content);                           // put it in the list of Names for the timeLins
-        this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };  // make dS of lastName paired with  userkey
-        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };// dS of userid paired with userkey
-        this.contentArray[s._data[i].userkey] = s._data[i].content;         // used to get 'content' param to add to dataSet.
-      }                         }
-    this.nameList.sort();                                                 // alphabetize the nameList
-    const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId    
-    if (this.useridToUserkeys[index]) {                              // Someone may use page who is NOT a goAwayer. 
-      this.userkey = this.useridToUserkeys[index].userkey;  
-      this.loggedInLastName = s._data[index].LastName;
-      this.loggedInFirstName = s._data[index].FirstName;
-      }                 // the userKey of the loggedIn user
-  }
-  assignGroups() {                                                     // put each tA in proper group.
-    console.log("840  thid.data2 %o", this.data2)
-    for (const property in this.data2._data ) {                         // property is the key of the dataStructure which is the 
-      if (+this.data2._data[property]['userkey']  == 0) {
-       this.data2._data[property]['content'] = '';   
-       delete  this.data2._data[property]['group']                            
-        continue;
-      }
-    
-      if (this.data2._data.hasOwnProperty(property)) {                // 'hasOwnProperty' is typescript to see it a p is in arry
-        this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content);  // set the correct groupNumber
-    //  if (this.data2._data[property].approved === 1) {
-      //    this.data2._data[property].style = 'color:green';
-      //  }
-        }
-      }
-
-    
-  }
+  
       /*************  remove the tA from display working, needs dataBase part **************/
   remove() {
-    this.data2.remove(this._id);                                         // remove LOCALLY
+    this.items.remove(this._id);                                         // remove LOCALLY
     this.showControls = false;                                          // turn off controls             
     this.dB_PP.editColNames = ['reasonIdx'];                            // the col which holds the DELETE sign
     this.dB_PP.editColVals = ['99'];                                    // the DELETE code
@@ -918,21 +869,21 @@ console.log("782 this.goups is %o", this.groups);
     else  if (e.target){
         this.editColNames.push(type);
         this.editColVals.push(e.target.value);
-        const dateForDataSet = e.target.value + " 00:00:00"; 
+        const dateForDataSet = e.target.value + "T00:00:00Z"; 
         if (type=='startDate'){
           this.needStartEmail = true;
           this.EDO.OldStartDate = this.data2._data[this._id]['start'].slice(0,10); ; 
           this.EDO.NewStartDate = e.target.value; 
-          this.data2.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
-          this.data2.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'}); 
+          this.items.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
+          this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'}); 
 
         }
         if (type=='endDate'){
           this.needStartEmail = true;
           this.EDO.OldEndDate = this.data2._data[this._id]['end'].slice(0,10); ; 
           this.EDO.NewEndDate = e.target.value; 
-          this.data2.update({id: this._id, end: dateForDataSet});   
-          this.data2.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'});   
+          this.items.update({id: this._id, end: dateForDataSet});   
+          this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'});   
           
         }
         var str = "approved";  
@@ -951,9 +902,10 @@ console.log("782 this.goups is %o", this.groups);
       editColNames:this.editColNames,
       editColVals:this.editColVals,
       whereColName:['vidx'],
-      whereColVal:[this.data2._data[this._id]['vidx']],
+      whereColVal:[this.items._data[this._id]['vidx']],
       userid:this.userid
     }
+    console.log("905  saveEdits ep %o", eP);
     if (this.needStartEmail)
       this.sendStartOrEndDateEmail();
     this.genEditSvce.genPOST(eP).subscribe(
@@ -965,7 +917,7 @@ console.log("782 this.goups is %o", this.groups);
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.data2._data[this._id].vidx;
     if (this.needStartEmail){
-      var msg = "<p>The  Time Away of " + this.data2._data[this._id]['LastName'] + ' has changed';
+      var msg = "<p>The  Time Away of " + this.items._data[this._id]['LastName'] + ' has changed';
       if (typeof this.EDO.NewStartDate === 'string'){
         msg += " from Start Date of " + this.EDO.OldStartDate + " to " + this.EDO.NewStartDate +',';
       }
@@ -1018,7 +970,7 @@ editGen(type: string, event: any) {                                  // editGen 
    var messageUsed = ""; 
    console.log( 'editGen ' + this.data2._data[this._id]['approved'] + "thisis" + shownId);
     if (type =='start' || type =='end'){                                  // if it is a date
-       messageUsed  = "The " + type + " date of the Time Away for " + this.data2._data[this._id]['LastName'] + " has changed  from "
+       messageUsed  = "The " + type + " date of the Time Away for " + this.items._data[this._id]['LastName'] + " has changed  from "
       + this.data2._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
       ". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
       const changedDate = this.formatDateForTimeline(event.value);                 // make the string for local update
@@ -1035,7 +987,7 @@ editGen(type: string, event: any) {                                  // editGen 
     }
    
    if (type !== 'del'){       
-    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.data2._data[this._id].vidx;
+    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;
     var emp = { 
               action:"sendEmail2",
               addr: {"Dev":"flonberg@partners.org",
@@ -1053,19 +1005,19 @@ editGen(type: string, event: any) {                                  // editGen 
               );
     }
     if (type === 'start' ) {
-      this.data2.update({id: this._id, start: dateForDataSet});           // do the local update
-      this.data2.update({id: this._id, style:'color:red' })
+      this.items.update({id: this._id, start: dateForDataSet});           // do the local update
+      this.items.update({id: this._id, style:'color:red' })
       this.startDateEdited = true;
       this.dB_PP.editColNames = ['startDate','approved'];
       this.dB_PP.editColVals.push('0');
       this.dB_PP.needEmail="dateChange";
     }                                                                   // update startDate
     if (type === 'end') {
-      emp.msg = "The end date of the Time Away for " + this.data2._data[this._id]['lastName'] + " has changed  from " + this.data2._data[this._id]['end'].substr(0, 10) +
+      emp.msg = "The end date of the Time Away for " + this.items._data[this._id]['lastName'] + " has changed  from " + this.items._data[this._id]['end'].substr(0, 10) +
         "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
    
-      this.data2.update({id: this._id, end: dateForDataSet}); 
-      this.data2.update({id: this._id, style:'color:red' })
+      this.items.update({id: this._id, end: dateForDataSet}); 
+      this.items.update({id: this._id, style:'color:red' })
       this.endDateEdited = true;
       this.dB_PP.editColNames = ['endDate','approved'];
       this.dB_PP.editColVals.push('0');
@@ -1079,12 +1031,12 @@ editGen(type: string, event: any) {                                  // editGen 
       this.drawEditControls = false;
       this.dB_PP.editColNames = ['reasonIdx'];
       this.dB_PP.editColVals = [ '99'];
-      this.data2.remove({id: this._id })
+      this.items.remove({id: this._id })
     }
     if (type == 'approve'){
       this.dB_PP.editColNames = ['approved'];
       this.dB_PP.editColVals = [ '1'];
-      this.data2.update({id: this._id, style:'color:orange' })
+      this.items.update({id: this._id, style:'color:orange' })
     }
     this.dB_PP.action='editAndLog';
     this.dB_PP.userid = <string>this.userid;
@@ -1191,5 +1143,48 @@ editGen(type: string, event: any) {                                  // editGen 
       monthNum = sDate.getMonth();
     }
     console.log("dateLabels is %o", this.dateLabels);
+  }
+  */
+ /**********  make a dataStructure to hold all names of tA holders  */
+  /*
+  setGroups(s) { 
+    console.log("761   loggedInUserRank %o", this.rData.loggedInUserRank );                                                         // s is the timeline dataSet
+    this.nameList = new Array();
+    this.groupsArray = new Array();
+
+    for (let i = 0; i < s.length; i++) { 
+      if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
+        this.nameList.push( s._data[i].content);                           // put it in the list of Names for the timeLins
+        this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };  // make dS of lastName paired with  userkey
+        this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };// dS of userid paired with userkey
+        this.contentArray[s._data[i].userkey] = s._data[i].content;         // used to get 'content' param to add to dataSet.
+      }                         }
+    this.nameList.sort();                                                 // alphabetize the nameList
+    const index = this.useridToUserkeys.map(function(e) { return e.userid; }).indexOf(<string>this.userid);  // find arrayIndex of userId    
+    if (this.useridToUserkeys[index]) {                              // Someone may use page who is NOT a goAwayer. 
+      this.userkey = this.useridToUserkeys[index].userkey;  
+      this.loggedInLastName = s._data[index].LastName;
+      this.loggedInFirstName = s._data[index].FirstName;
+      }                 // the userKey of the loggedIn user
+  }
+ 
+  assignGroups() {                                                     // put each tA in proper group.
+    console.log("840  thid.data2 %o", this.data2)
+    for (const property in this.data2._data ) {                         // property is the key of the dataStructure which is the 
+      if (+this.data2._data[property]['userkey']  == 0) {
+       this.data2._data[property]['content'] = '';   
+       delete  this.data2._data[property]['group']                            
+        continue;
+      }
+    
+      if (this.data2._data.hasOwnProperty(property)) {                // 'hasOwnProperty' is typescript to see it a p is in arry
+        this.data2._data[property].group = this.nameList.indexOf(this.data2._data[property].content);  // set the correct groupNumber
+    //  if (this.data2._data[property].approved === 1) {
+      //    this.data2._data[property].style = 'color:green';
+      //  }
+        }
+      }
+
+    
   }
   */
