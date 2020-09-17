@@ -606,6 +606,7 @@ selectCoverer(n, i ){
     this.items.getDataSet().add(tAO);
     */
     window.location.reload();
+    //this.getTimelineData2();
     this.newTimeAway2 = false;    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
