@@ -734,11 +734,13 @@ selectCoverer(n, i ){
       (val) => {
         if (this.index === 0) {    
           this.rData = val;
+          console.log("737  rData %o", this.rData);
+          this.rData.data = this.myBubsort(this.rData.data);              // alphabetize by LastName
           this.data2 = new vis.DataSet(this.rData['data']);
          } else {
           this.data2 = Array();
         }
-    console.log('742  rData is %o', this.rData)    
+ 
         var setId = 1;                                                    
         var tAstartDate = new Date();
         var tAendDate = new Date();
@@ -797,17 +799,26 @@ selectCoverer(n, i ){
         document.getElementById('datums').innerHTML = item.id;
         document.getElementById('datums2').innerHTML = callback;
       },
-   
+      groupOrder: function (a, b) {
+        return a.value - b.value;
+      },
       start: startDateShown,
       end: endDateShown,
     };
   }                                                   // end of getTimeLineData
-  setLoggedInUserKey(){
-
-  }  
-  setCoverageAcceptances(){
-
-  }                                                       // end of getTimelineData2
+ myBubsort(array){                                            // sort by LastName 
+  array = array.slice(); // creates a copy of the array
+  for(let i = 0; i < array.length; i++) {
+      for(let j = 0; j < array.length - 1; j++) {
+          if(array[j]['LastName'] > array[j + 1]['LastName']) {
+              let swap = array[j];
+              array[j] = array[j + 1];
+              array[j + 1] = swap;
+          }
+      }
+  }
+  return array;  
+ }
   removeBads(){
     for (let key in this.items._data){
       if (this.items._data[key].start > this.items._data[key].end){
