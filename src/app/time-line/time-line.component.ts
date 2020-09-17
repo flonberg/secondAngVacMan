@@ -606,7 +606,6 @@ selectCoverer(n, i ){
     this.items.getDataSet().add(tAO);
     */
     window.location.reload();
-    //this.getTimelineData2();
     this.newTimeAway2 = false;    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
@@ -704,6 +703,7 @@ selectCoverer(n, i ){
     }
   }
   items: any;
+  tAO: any
   getTimelineData2() 
   {
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
@@ -757,21 +757,40 @@ selectCoverer(n, i ){
             //if ( tAstartDate > startDateShown && tAstartDate < endDateShown){
             if ( tAstartDate > startDateShown ){
              if ( this.rData[key][key2]['content']){
-                var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
-                if (group2Badded == -1 ){
-                  this.groups2Array.push(this.rData[key][key2]['content']);
-                  this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
+               console.log("759 userkey %o", +this.rData[key][key2]['userkey'])
+                if (   +this.rData[key][key2]['userkey'] > 0  ){
+                  var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
+                  if (group2Badded == -1 ){
+                    this.groups2Array.push(this.rData[key][key2]['content']);
+                    this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
+                    this.rData[key][key2]['type']= 'range';
+                    group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
+                  }
+                  else {
+                    this.rData[key][key2]['type']= 'background';
+          
+                  }
+               
                 }
-                group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
-                const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
+                if (   +this.rData[key][key2]['userkey'] > 0  ){
+                  const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
                                         className:this.rData[key][key2]['className'],
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
-                                        reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}                
-                this.items.getDataSet().add(tAO);
+                                        reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}  
+                  this.items.getDataSet().add(tAO);
+                }   
+                else {
+                  const tAO = { id: ++setId,  start: startDateArg,
+                  className:this.rData[key][key2]['className'],
+                  end: endDateArg, vidx:this.rData[key][key2]['vidx'], type:'background',
+                  reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}  
+                  this.items.getDataSet().add(tAO);
+                }           
               }
             }
           }      
         }
+        console.log("793  this.items %o", this.items);
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups2);
