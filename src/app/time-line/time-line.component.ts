@@ -603,7 +603,7 @@ selectCoverer(n, i ){
       .subscribe(                                          
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
-   //       window.location.reload();
+          window.location.reload();
         })   
 
 
