@@ -784,6 +784,7 @@ selectCoverer(n, i ){
             }
           }      
         }
+        console.log('787  items %o', this.items)
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups2);
