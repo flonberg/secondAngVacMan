@@ -229,7 +229,7 @@ rData:any;
     this.cutOffDate = new Date('2019-02-01');
     this.createForm();
 
-    this.formValidation = false;
+    this.formValidation = true;
     this.newTimeAway2 = false;
     this.covererToggle = true;
     this.covererUserKey = -1;
@@ -582,12 +582,18 @@ selectCoverer(n, i ){
         /*********     Add to dataBase  **********************/
         if (+this.loggedInRank < 5 )
           this.helpArray = ['Your Time Away needs to be approved before you can select coverage. '];
+        var advEndDate = this.formG.value.dateTo
+        var advStartDate = this.formG.value.dateFrom
+        advEndDate.setDate(advEndDate.getDate() + 1); 
+        const advStartDateString = this.formatDateYYYymmdd(advStartDate);
+        const advEndDateString = this.formatDateYYYymmdd(advEndDate);
+        console.log("589  advStartDateString " + advStartDateString)
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
         this.insertP.action = 'insertRecGen';
         this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
-        this.insertP.colVal = [this.formG.value.dateFrom,  // colValues 
-          this.formG.value.dateTo, this.formG.value.reasonG,
+        this.insertP.colVal = [advStartDateString,  // colValues 
+          advEndDateString, this.formG.value.reasonG,
           this.formG.value.noteG, this.rData['loggedInUserKey'], '0'];
         const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
         console.log("544  insertP is %o", this.insertP);
@@ -597,41 +603,20 @@ selectCoverer(n, i ){
       .subscribe(                                          
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
+   //       window.location.reload();
         })   
-    /*    
-    const tAO = { id: 101, content: 'test', start: this.formG.value.dateFrom,
-      className:this.userid,
-      end: this.formG.value.dateFrom, group:  1, vidx:this.rData[key][key2]['vidx'],
-      reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}                
-    this.items.getDataSet().add(tAO);
-    */
-    window.location.reload();
+
+
     this.newTimeAway2 = false;    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
-    this.ret = s;
-    console.log("store %o",  s);                               // stores the vacation3 vidx to a
+    this.ret = s;                             // stores the vacation3 vidx to a
     var idx = s.lastID;
     this.lastInsertIdx = s['lastID'];
-    console.log("idx is" +  s['lastID'] );
+    console.log("idx is %o" +  s );
 /*
-    const item = {
-      id: Object.keys(this.items._data).length + 1,                 // incase the user has DELETED a tA before adding
-      start: this.formG.value.dateFrom + 'T00:00:00Z',
-      end: this.formG.value.dateTo + ' T00:00:00Z',
-      content: this.contentArray[this.userkey],                    // build the dataStruct to add to the timeLine DataSet,
-      group: this.groupsArray.indexOf(this.contentArray[this.userkey]),
-      reason: this.formG.value.reasonG,
-      note: this.formG.value.noteG,
-      className: this.userid,
-      vidx: this.lastInsertIdx
-    };
-    console.log("619 item to add is %o", item);
 
-    var idOfAdded = this.items.getDataSet().add(item);  // add the new tA to local DataSet
-    */
-   
            /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
     if (this.rData.loggedInUserRank < 5){   
       const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx   ;
@@ -642,7 +627,8 @@ selectCoverer(n, i ){
                 "Prod":["bnapolitano@mgu.harvard.edu"]
               },
         msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-        <p> ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + ` has scheduled a Time Away. </p>
+        <p> ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
+        ` has scheduled a Time Away, from ` + s['startDate']   +  ` returning on `  + s['endDate']   +      `</p>
         <p> You can approve this Time Away using the below link: </p>
         <a href=`+ link11 + `> Approve Time Away. </a>`,
         subject: "New Time Away ",
@@ -656,13 +642,23 @@ selectCoverer(n, i ){
       }
     return idx;
   }
-  formatDateYYYymmdd(d) {
-    const pi = 3.14;
-    const date = new Date(d);
-    const y = date.getFullYear();
-    const m = date.getMonth() + 1;
-    const dd = date.getDate();
-    const fD = m + '/' + dd + '/' + y;
+  formatDateYYYymmdd(date) {
+ //   const date = new Date(d);
+    var day = date.getDate();
+    var y = date.getFullYear();
+    y = Math.abs(y);
+    console.log("649 y is %o", y);
+    var m = date.getMonth() + 1;
+    if (m  < 10)
+      var mStr = "0" + m;
+    else 
+      var mStr = "" + m;  
+    if (day  < 10)
+      var dStr = "0" + day;
+    else 
+      var dStr = "" + day;    
+    var fD = y + '-' + mStr + '-' + dStr;
+    console.log("660 fD is " + fD);
     return fD;
   }
 
@@ -750,29 +746,27 @@ selectCoverer(n, i ){
           for (var key2 in this.rData[key]){
             if (this.rData[key][key2]['start'])
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z" 
-            if (this.rData[key][key2]['end'])
-              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;
+            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] !== 'background') // advance end to avoid 'humping'
+              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00Z" ;
+            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] == 'background') // don't advance backgrong end 
+              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;  
             tAstartDate = new Date(startDateArg );
             tAendDate = new Date(endDateArg);
-            //if ( tAstartDate > startDateShown && tAstartDate < endDateShown){
             if ( tAstartDate > startDateShown ){
              if ( this.rData[key][key2]['content']){
-               console.log("759 userkey %o", +this.rData[key][key2]['userkey'])
-                if (   +this.rData[key][key2]['userkey'] > 0  ){
+                if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal tA, i.e. NOT weekend
                   var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
-                  if (group2Badded == -1 ){
+                  if (group2Badded == -1 ){                             
                     this.groups2Array.push(this.rData[key][key2]['content']);
                     this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
                     this.rData[key][key2]['type']= 'range';
                     group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
                   }
-                  else {
-                    this.rData[key][key2]['type']= 'background';
-          
+                  else {                                                                            // weekend
+                    this.rData[key][key2]['type']= 'background';                                    // add 'type' for shading
                   }
-               
                 }
-                if (   +this.rData[key][key2]['userkey'] > 0  ){
+                if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal nonWeekend tA
                   const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
                                         className:this.rData[key][key2]['className'],
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
@@ -781,16 +775,15 @@ selectCoverer(n, i ){
                 }   
                 else {
                   const tAO = { id: ++setId,  start: startDateArg,
-                  className:this.rData[key][key2]['className'],
-                  end: endDateArg, vidx:this.rData[key][key2]['vidx'], type:'background',
-                  reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}  
+                    className:this.rData[key][key2]['className'],
+                    end: endDateArg,  type:'background',
+                    }  
                   this.items.getDataSet().add(tAO);
                 }           
               }
             }
           }      
         }
-        console.log("793  this.items %o", this.items);
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups2);
@@ -858,12 +851,15 @@ selectCoverer(n, i ){
     this.genEditSvce.genDB_POST(this.dB_PP);                            // do the dB operation
   }
   sendDeleteEmail(){
+    const addrArray = Array("flonberg@partners.org", "bnapolitano@partners.org")
     const emp = {
       action: "sendEmail2",
       subject: "Time Away Deleted",
-      msg: "The Time Away for " + this.items._data[this._id]['LastName'] + " starting "  + this.items._data[this._id]['start'].substr(0, 10) +
+      msg: "The Time Away for " + this.items._data[this._id]['content'] + " starting "  + this.items._data[this._id]['start'].substr(0, 10) +
         " ending " + this.items._data[this._id]['end'].substr(0, 10) + " has been deleted. ",
-      addr:    ["flonberg@partners.org"]
+      addr: { "Dev":["flonberg@partners.org"],
+              "Prod":["flonberg@gmail.com"]
+            },
     }
     this.genEditSvce.genPOST(emp).subscribe(
       (res) => {
