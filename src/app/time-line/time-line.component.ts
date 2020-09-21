@@ -11,6 +11,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } from '@angular/material';
 import { throwIfEmpty } from 'rxjs/operators';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -163,6 +164,7 @@ rData:any;
  loggedInLastName: string;
  loggedInFirstName: string;
  loggedInRank: string;
+ isLoggedInUserDosimetrist: boolean;
   nameToUserId: nameToUserId[];
   useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
@@ -172,8 +174,8 @@ rData:any;
   _vidx: string;
   endDateString: string;
   startDateString: string;
-  endDateShownString: string;
-  startDateShownString: string;
+  //endDateShownString: string;
+  //startDateShownString: string;
   index: number;
   useridP: string;
   form: FormGroup;
@@ -196,6 +198,7 @@ rData:any;
   keyFromQP: number;
   ret: any;
   lastInsertIdx: any;
+  events: any;
 
 
 
@@ -325,8 +328,9 @@ selectCoverer(n, i ){
         /*************  Send Coverage Emails        */
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
       <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
-      starting  ` + this.formatDateYYYymmdd(this.items._data[this._id].start) + `
-      through  ` + this.formatDateYYYymmdd(this.items._data[this._id].end) + ` </p>
+      starting  ` + 
+                  this.datePipe.transform(this.items._data[this._id].start) + `
+      through  ` + this.datePipe.transform(this.items._data[this._id].end) + ` </p>
       <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
       <p><a href=`+ link1 + `>  ` + this.covererName + ` accepts coverage. </a></p>
     `;
@@ -500,8 +504,10 @@ selectCoverer(n, i ){
        } 
          else if (   this.items._data[this._id] ){             // Ed/
  
-            var startDateEdit = this.formatDateYYYymmdd(this.items._data[this._id].start);    // format the date for use in dataBase
-            var endDateEdit = this.formatDateYYYymmdd(this.items._data[this._id].end);        //    "
+            var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
+            var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
+         //   this.formatDateYYYymmdd(this.items._data[this._id].start);    // format the date for use in dataBase
+          //  var endDateEdit = this.formatDateYYYymmdd(this.items._data[this._id].end);        //    "
           //  dParams.editColNames = ['startDate','endDate'];
             this.dB_PP.editColNames = ['startDate','endDate'];      
             this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
@@ -585,8 +591,10 @@ selectCoverer(n, i ){
         var advEndDate = this.formG.value.dateTo
         var advStartDate = this.formG.value.dateFrom
         advEndDate.setDate(advEndDate.getDate() + 1); 
-        const advStartDateString = this.formatDateYYYymmdd(advStartDate);
-        const advEndDateString = this.formatDateYYYymmdd(advEndDate);
+    //    const advStartDateString = this.formatDateYYYymmdd(advStartDate);
+        const advStartDateString = this.datePipe.transform(advStartDate, 'yyyy-MM-dd'); 
+        const advEndDateString = this.datePipe.transform(advEndDate, 'yyyy-MM-dd'); 
+      //  const advEndDateString = this.formatDateYYYymmdd(advEndDate);
         console.log("589  advStartDateString " + advStartDateString)
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
@@ -603,7 +611,7 @@ selectCoverer(n, i ){
       .subscribe(                                          
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
-          window.location.reload();
+      //    window.location.reload();
         })   
 
 
@@ -642,25 +650,7 @@ selectCoverer(n, i ){
       }
     return idx;
   }
-  formatDateYYYymmdd(date) {
- //   const date = new Date(d);
-    var day = date.getDate();
-    var y = date.getFullYear();
-    y = Math.abs(y);
-    console.log("649 y is %o", y);
-    var m = date.getMonth() + 1;
-    if (m  < 10)
-      var mStr = "0" + m;
-    else 
-      var mStr = "" + m;  
-    if (day  < 10)
-      var dStr = "0" + day;
-    else 
-      var dStr = "" + day;    
-    var fD = y + '-' + mStr + '-' + dStr;
-    console.log("660 fD is " + fD);
-    return fD;
-  }
+
 
   setQueryParams(qP) {
     if (qP.userid) {
@@ -733,14 +723,16 @@ selectCoverer(n, i ){
           this.rData = val;
           console.log("737  rData %o", this.rData);
           this.rData.data = this.myBubsort(this.rData.data);              // alphabetize by LastName
-          this.data2 = new vis.DataSet(this.rData['data']);
+   //       this.data2 = new vis.DataSet(this.rData['data']);
          } else {
-          this.data2 = Array();
+     //     this.data2 = Array();
         }
  
         var setId = 1;                                                    
         var tAstartDate = new Date();
         var tAendDate = new Date();
+ //    var tst = this.rData.fromION.find(t=>t.userid == this.userid);
+        /*****           process data and add to TimeLine DataSet             */
         for (var key in this.rData)
         {
           for (var key2 in this.rData[key]){
@@ -752,7 +744,8 @@ selectCoverer(n, i ){
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;  
             tAstartDate = new Date(startDateArg );
             tAendDate = new Date(endDateArg);
-            if ( tAstartDate > startDateShown ){
+          //  if ( tAstartDate > startDateShown )
+            {
              if ( this.rData[key][key2]['content']){
                 if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal tA, i.e. NOT weekend
                   var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
@@ -771,6 +764,7 @@ selectCoverer(n, i ){
                                         className:this.rData[key][key2]['className'],
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
                                         reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}  
+               //   console.log("774 tAO %o", tAO);                      
                   this.items.getDataSet().add(tAO);
                 }   
                 else {
@@ -784,7 +778,7 @@ selectCoverer(n, i ){
             }
           }      
         }
-        console.log('787  items %o', this.items)
+     //   console.log('787  items %o', this.items)
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups2);
@@ -970,21 +964,7 @@ tSP(param){
 }
 toggleShowPhysicists(param){
   this.getTimelineData2();
-  /*
-  var url = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=napolitano&param=1";    
- console.log("957  url is " + url);
-  if (url.indexOf('?') > -1){
-    if ( url.indexOf('param') < 0  )
-     url += '&param=1';
-    else {
-      url = url.substr(0, url.length - 8);
-    }
-    
-  }else{
-     url += '?param=1' + this.showPhysicist
-  }
-  window.location.href = url;
-  */
+
 }
 editGen(type: string, event: any) {                                  // editGen is used for ALL fields
  console.log("editGen");
@@ -996,7 +976,7 @@ editGen(type: string, event: any) {                                  // editGen 
        messageUsed  = "The " + type + " date of the Time Away for " + this.items._data[this._id]['LastName'] + " has changed  from "
       + this.items._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
       ". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
-      const changedDate = this.formatDateForTimeline(event.value);                 // make the string for local update
+
       dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
     }
     if (event.target && event.target.value)                               // the editColVal can be a target.balue
@@ -1078,9 +1058,11 @@ editGen(type: string, event: any) {                                  // editGen 
     const s =  month + '-' + editTime.getDate() + '-' + editTime.getFullYear();
     return s;
   }
-  showDosimAssignments(){
-
+  storeDate(type: string, event: MatDatepickerInputEvent<Date>) {
+ 
+    console.log("1090 type is %o  event is %o",type, event);
   }
+
 
   /**************  format date as yyyy-mm-dd  for dataBase ********************/
   formatDateForTimeline(date) {
@@ -1209,5 +1191,24 @@ editGen(type: string, event: any) {                                  // editGen 
       }
 
     
+  }
+    formatDateYYYymmdd(date) {
+ //   const date = new Date(d);
+    var day = date.getDate();
+    var y = date.getFullYear();
+    y = Math.abs(y);                                  // Safari yields a negative number
+    console.log("649 y is %o", y);
+    var m = date.getMonth() + 1;
+    if (m  < 10)
+      var mStr = "0" + m;
+    else 
+      var mStr = "" + m;  
+    if (day  < 10)
+      var dStr = "0" + day;
+    else 
+      var dStr = "" + day;    
+    var fD = y + '-' + mStr + '-' + dStr;
+    console.log("660 fD is " + fD);
+    return fD;
   }
   */

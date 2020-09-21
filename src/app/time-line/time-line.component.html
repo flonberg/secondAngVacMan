@@ -15,16 +15,17 @@
                 <td *ngIf = "!newTimeAway2 && userid" >
                     <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
                 </td>
-                <td *ngIf = "this.userid=='napolitano' || this.userid=='jbeatty' || this.userid=='schneider' || this.userid=='ske5'"> 
-                    <!--
+                <td *ngIf = "this.userid=='napolitano' || this.userid=='jbeatty' ||  this.userid=='ske5'"> 
                     <button mat-raised-button >
                           <a href= '{{ showPhysURL }}' >Show Physicists</a>
                      </button> 
+                </td>
+                <td *ngIf = "this.userid=='schneider'"  >    
                      <button mat-raised-button >
                             <a href='{{ showDosimURL }}'  >Show Dosimetrists</a>
                        </button> 
-                    -->   
-                  <button mat-raised-button (click)="goHome(this.userid)"> Home  </button> 
+            
+                    <button mat-raised-button (click)="goHome(this.userid)"> Home  </button> 
                 </td>
                 </tr></table>
             </div>
@@ -36,16 +37,16 @@
                 <div class = "heading" > Enter New Time Away Paramters </div>
                 <mat-form-field class="item" >
                         <mat-label>First Day Away</mat-label>
-                        <input matInput formControlName="dateFrom" [matDatepicker]="picker">
+                        <input matInput formControlName="dateFrom" [matDatepicker]="picker" (dateChange)="storeDate('first', $event)"  >
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
        
                 <mat-form-field class="item" >
-                        <mat-label>Last Day Away</mat-label>
-                        <input matInput formControlName="dateTo" [matDatepicker]="picker1">
-                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-label>Last- Day Away</mat-label>
+                        <input matInput formControlName="dateTo"     [matDatepicker]="picker1" (dateChange)="storeDate('last', $event)"      >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"       ></mat-datepicker-toggle>
+                        <mat-datepicker #picker1   ></mat-datepicker>
                 </mat-form-field>
                 
                 <mat-form-field  appearance="none">
@@ -57,9 +58,10 @@
                                     <mat-option   value="2">Meeting</mat-option>  
                             </mat-select>
                 </mat-form-field>
-                <mat-form-field  class="wideItem">
+                <mat-form-field  class="wideItem" (blur)="checkInterval()" >
                         <mat-label class="smallLabel"> Note:</mat-label>
-                        <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize"  cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
+                        <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize" (blur)="checkInterval()"
+                         cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
                         </textarea>
                 </mat-form-field > 
                 <!-- type='submit' is the default, must specify another type to avoid submitting  -->
