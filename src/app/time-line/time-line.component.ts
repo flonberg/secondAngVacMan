@@ -101,6 +101,10 @@ rData:any;
   deleteControl: FormControl;
   dateFrom: FormControl;
   goAwayerName: FormControl;
+  endBeforeStart: boolean;
+  gotReason: boolean;
+  tAstartDate: any;
+  tAendDateObj: [{}];
  // reasonStrings: String[];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
@@ -232,7 +236,7 @@ rData:any;
     this.cutOffDate = new Date('2019-02-01');
     this.createForm();
 
-    this.formValidation = true;
+    this.formValidation = false;
     this.newTimeAway2 = false;
     this.covererToggle = true;
     this.covererUserKey = -1;
@@ -241,6 +245,8 @@ rData:any;
   }
   
   ngOnInit() {
+    this.endBeforeStart = false;
+    this.gotReason = false;
     console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
@@ -591,10 +597,8 @@ selectCoverer(n, i ){
         var advEndDate = this.formG.value.dateTo
         var advStartDate = this.formG.value.dateFrom
         advEndDate.setDate(advEndDate.getDate() + 1); 
-    //    const advStartDateString = this.formatDateYYYymmdd(advStartDate);
         const advStartDateString = this.datePipe.transform(advStartDate, 'yyyy-MM-dd'); 
         const advEndDateString = this.datePipe.transform(advEndDate, 'yyyy-MM-dd'); 
-      //  const advEndDateString = this.formatDateYYYymmdd(advEndDate);
         console.log("589  advStartDateString " + advStartDateString)
         this.insertP = <SinsertParams>{};                                // create instance of interface
         this.insertP.tableName = 'vacation3';
@@ -611,7 +615,7 @@ selectCoverer(n, i ){
       .subscribe(                                          
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
-      //    window.location.reload();
+          window.location.reload();
         })   
 
 
@@ -1059,12 +1063,24 @@ editGen(type: string, event: any) {                                  // editGen 
     return s;
   }
   storeDate(type: string, event: MatDatepickerInputEvent<Date>) {
- 
-    console.log("1090 type is %o  event is %o",type, event);
+    var loc = event;
+    console.log("1090 tAstartDate",type, this.formG.value.dateFrom);
+    console.log("1090 tAendDate",type, this.formG.value.dateTo);
+    if ( this.formG.value.dateTo && this.formG.value.dateFrom > this.formG.value.dateTo)
+      this.endBeforeStart = true;  
+    if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
+      this.endBeforeStart = false;  
+  }
+  getReason()
+  {
+    console.log("1074  gotReason");
+    this.gotReason = true;
+    if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
+      this.formValidation = true; 
   }
 
-
   /**************  format date as yyyy-mm-dd  for dataBase ********************/
+  /*
   formatDateForTimeline(date) {
       const d = new Date(date);
           let month = '' + (d.getMonth() + 1);
@@ -1080,7 +1096,7 @@ editGen(type: string, event: any) {                                  // editGen 
   }
 
 
-/*
+
   approve() {
     console.log('appreove' + this._id);
     this.data2.update({id: this._id, style: 'color:blue'});

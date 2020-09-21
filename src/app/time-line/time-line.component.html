@@ -33,7 +33,7 @@
             <div class = 'contDiv'>
                 <app-notice [name] = 'this.userid' [masterArray]="masterArray" [noticeColName]="noticeColName" ></app-notice>
     <!--         New Time Away Section  text to test Git   -->
-            <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()">
+            <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()" name='mainForm'>
                 <div class = "heading" > Enter New Time Away Paramters </div>
                 <mat-form-field class="item" >
                         <mat-label>First Day Away</mat-label>
@@ -43,9 +43,9 @@
                 </mat-form-field>
        
                 <mat-form-field class="item" >
-                        <mat-label>Last- Day Away</mat-label>
+                        <mat-label>Last Day Away</mat-label>
                         <input matInput formControlName="dateTo"     [matDatepicker]="picker1" (dateChange)="storeDate('last', $event)"      >
-                        <mat-datepicker-toggle matSuffix [for]="picker1"       ></mat-datepicker-toggle>
+                        <mat-datepicker-toggle matSuffix [for]="picker1"  ></mat-datepicker-toggle>
                         <mat-datepicker #picker1   ></mat-datepicker>
                 </mat-form-field>
                 
@@ -53,12 +53,12 @@
                         <mat-label>Reason</mat-label>
                             <mat-select  
                             formControlName = "reasonG"  id='reasonId'>
-                                    <mat-option  value="0">Personal Vacation</mat-option>
-                                    <mat-option  value="1">Other</mat-option>
-                                    <mat-option   value="2">Meeting</mat-option>  
+                                    <mat-option (click) = "getReason()" value="0">Personal Vacation</mat-option>
+                                    <mat-option (click) = "getReason()"  value="1">Other</mat-option>
+                                    <mat-option  (click) = "getReason()"   value="2">Meeting</mat-option>  
                             </mat-select>
                 </mat-form-field>
-                <mat-form-field  class="wideItem" (blur)="checkInterval()" >
+                <mat-form-field  class="wideItem" >
                         <mat-label class="smallLabel"> Note:</mat-label>
                         <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize" (blur)="checkInterval()"
                          cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
@@ -81,7 +81,9 @@
                     End Date is required.
                     </div>
                 </div>  
-                <div class="alert alert-danger" *ngIf="formG.errors"  >  ç </div>     
+  
+                <div  class="error" *ngIf = "endBeforeStart"> End date must be after start date. </div>
+                 
             </form>
         
     <!--          Edit tA  Controls   -->
