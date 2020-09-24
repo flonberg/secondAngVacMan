@@ -136,7 +136,11 @@
                     <td   *ngIf = "!_readonly && !newTimeAway2 && drawEditControls"  >  <button mat-raised-button color="primary" 
                                                         (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>
                 </tr></table>  
-                <div *ngIf = "drawEditControls && !newTimeAway2  && this.data2 && +this.data2._data[this._id]['approved'] == 1" class="parentCenter"> 
+            
+
+              
+                <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
+                        {{ this.items._data[this._id] | json}}
                         <table *ngIf = "!_readonly " style = "width:60%; ">
                             <tr>
                                 <th *ngIf = "covererToggle ">Chose First Coverer </th>

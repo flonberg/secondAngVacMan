@@ -203,6 +203,7 @@ rData:any;
   ret: any;
   lastInsertIdx: any;
   events: any;
+  rDataKey: number;
 
 
 
@@ -417,13 +418,13 @@ selectCoverer(n, i ){
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) 
   {// this responds to ANY click-RELEASE in the div containing the calendar
-    console.log("407 clicked %o", ev);
+
       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) 
        { // user click on a tA
     
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
            this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
-
+           console.log("407 clicked %o", ev);
        /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
            if (!this.items._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
@@ -525,8 +526,16 @@ selectCoverer(n, i ){
 
            // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
-         console.log("527")
+         this.rDataKey = +this.find_rDataKey()
+         console.log("527 rDataKey " + this.rDataKey)
     }       /*******  end of clicked */
+  /*********  find the key of the selected timeAway element in the rData so can find Coverers */
+  find_rDataKey(){
+    for( var prop in this.rData.data ) {
+          if( this.rData.data[prop][ 'vidx' ] === this._vidx )
+              return prop;
+      }
+  }  
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
@@ -755,7 +764,7 @@ selectCoverer(n, i ){
           //  if ( tAstartDate > startDateShown )
             {
              if ( this.rData[key][key2]['content']){
-                if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal tA, i.e. NOT weekend
+                if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // adjuct color to reflect approval
                   if (+this.rData[key][key2]['rank']== 0  && +this.rData[key][key2]['userkey'] !== 58 ){
                     if (+this.rData[key][key2]['approved'] == 0 )
                       styleTxt = 'background-color:white;'
@@ -763,7 +772,7 @@ selectCoverer(n, i ){
                       styleTxt= 'background-color:rgb(195,195,195);';
                   }
                   var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
-                  if (group2Badded == -1 ){                             
+                  if (group2Badded == -1 ){                                                       // if groups does not yet exist
                     this.groups2Array.push(this.rData[key][key2]['content']);
                     this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
                     this.rData[key][key2]['type']= 'range';
