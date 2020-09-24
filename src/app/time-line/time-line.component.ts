@@ -740,6 +740,7 @@ selectCoverer(n, i ){
         var tAendDate = new Date();
  //    var tst = this.rData.fromION.find(t=>t.userid == this.userid);
         /*****           process data and add to TimeLine DataSet             */
+        var styleTxt= 'background-color:rgb(195,195,195);';
         for (var key in this.rData)
         {
           for (var key2 in this.rData[key]){
@@ -755,6 +756,12 @@ selectCoverer(n, i ){
             {
              if ( this.rData[key][key2]['content']){
                 if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal tA, i.e. NOT weekend
+                  if (+this.rData[key][key2]['rank']== 0  && +this.rData[key][key2]['userkey'] !== 58 ){
+                    if (+this.rData[key][key2]['approved'] == 0 )
+                      styleTxt = 'background-color:white;'
+                    else   
+                      styleTxt= 'background-color:rgb(195,195,195);';
+                  }
                   var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
                   if (group2Badded == -1 ){                             
                     this.groups2Array.push(this.rData[key][key2]['content']);
@@ -768,7 +775,7 @@ selectCoverer(n, i ){
                 }
                 if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal nonWeekend tA
                   const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                        className:'red',
+                                        style:styleTxt,
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
                                         reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}  
                //   console.log("774 tAO %o", tAO);                      
