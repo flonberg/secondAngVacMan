@@ -254,7 +254,7 @@ rData:any;
       this.qP = queryParams;
       this.setQueryParams(queryParams);
    //   this.seP.who = this.userid;
-      this.getTimelineData2();                                      // get the data from REST database call.
+      this.getTimelineData2(0);                                      // get the data from REST database call.
       const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
         action:'simpleGet',
         tableName:'notice',
@@ -430,10 +430,11 @@ selectCoverer(n, i ){
           }
    
        //   console.log("approved " + this.data2._data[this._id]['approved'])
+       if (this.items){
         this._vidx = this.items._data[this._id].vidx;                                           // store the vidx for editing
-  
         document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
-     //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  this.insertP used for editing tA
+       }
+        //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  this.insertP used for editing tA
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
@@ -619,7 +620,7 @@ selectCoverer(n, i ){
         })   
 
 
-    this.newTimeAway2 = false;    
+   // this.newTimeAway2 = false;    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
@@ -627,7 +628,6 @@ selectCoverer(n, i ){
     var idx = s.lastID;
     this.lastInsertIdx = s['lastID'];
     console.log("idx is %o" +  s );
-/*
 
            /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
     if (this.rData.loggedInUserRank < 5){   
@@ -694,7 +694,7 @@ selectCoverer(n, i ){
   }
   items: any;
   tAO: any
-  getTimelineData2() 
+  getTimelineData2(mode) 
   {
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
     const numWeeks = 5;                                                                 // number of weeks to show on the calendar
@@ -714,7 +714,8 @@ selectCoverer(n, i ){
     endDateShown.setDate(startDate.getDate() + numWeeks * 8);   
   //  this.genEditSvce.getTAs().subscribe(
     var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
-
+    this.items = null;
+    this.groups2 = null;
     this.items = new vis.DataSet();                                     // for tAs
     this.groups2 = new vis.DataSet();                                   // for Groups;
     this.groups2Array = new Array();                                             // Array to keep track of if added to groups2
@@ -783,6 +784,9 @@ selectCoverer(n, i ){
           }      
         }
      //   console.log('787  items %o', this.items)
+
+      //  if (this.timeline)
+    //      this.timeline.destroy;
         this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
         this.timeline.setOptions(this.options);
         this.timeline.setGroups(this.groups2);
@@ -850,21 +854,23 @@ selectCoverer(n, i ){
     this.genEditSvce.genDB_POST(this.dB_PP);                            // do the dB operation
   }
   sendDeleteEmail(){
-    const addrArray = Array("flonberg@partners.org", "bnapolitano@partners.org")
-    const emp = {
-      action: "sendEmail2",
-      subject: "Time Away Deleted",
-      msg: "The Time Away for " + this.items._data[this._id]['content'] + " starting "  + this.items._data[this._id]['start'].substr(0, 10) +
-        " ending " + this.items._data[this._id]['end'].substr(0, 10) + " has been deleted. ",
-      addr: { "Dev":["flonberg@partners.org"],
-              "Prod":["flonberg@gmail.com"]
-            },
-    }
-    this.genEditSvce.genPOST(emp).subscribe(
-      (res) => {
-        console.log("res from sendEmail2 %o",  res);
+    if (+this.rData.loggedInUserRank == 0){
+      const addrArray = Array("flonberg@partners.org", "bnapolitano@partners.org")
+      const emp = {
+        action: "sendEmail2",
+        subject: "Time Away Deleted",
+        msg: "The Time Away for " + this.items._data[this._id]['content'] + " starting "  + this.items._data[this._id]['start'].substr(0, 10) +
+          " ending " + this.items._data[this._id]['end'].substr(0, 10) + " has been deleted. ",
+        addr: { "Dev":["flonberg@partners.org"],
+                "Prod":["flonberg@gmail.com"]
+              },
       }
-    );
+      this.genEditSvce.genPOST(emp).subscribe(
+        (res) => {
+          console.log("res from sendEmail2 %o",  res);
+          }
+        );
+    }
   }
   /*********  used to store values from (blur) of input widgets         */
   editColNames = [];
@@ -934,11 +940,12 @@ selectCoverer(n, i ){
         console.log("res from updatel %o",  res);
       }
     );
+    this.drawEditControls = false;
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;
     if (this.needStartEmail){
-      var msg = "<p>The  Time Away of " + this.items._data[this._id]['LastName'] + ' has changed';
+      var msg = "<p>The  Time Away of " + this.items._data[this._id]['content'] + ' has changed';
       if (typeof this.EDO.NewStartDate === 'string'){
         msg += " from Start Date of " + this.EDO.OldStartDate + " to " + this.EDO.NewStartDate +',';
       }
@@ -967,7 +974,7 @@ tSP(param){
 
 }
 toggleShowPhysicists(param){
-  this.getTimelineData2();
+  this.getTimelineData2(0);
 
 }
 editGen(type: string, event: any) {                                  // editGen is used for ALL fields
@@ -975,7 +982,7 @@ editGen(type: string, event: any) {                                  // editGen 
     var dateForDataSet = ''; 
    const shownId = this._id;
    var messageUsed = ""; 
-   console.log( 'editGen ' + this.items._data[this._id]['approved'] + "thisis" + shownId);
+  // console.log( 'editGen ' + this.items._data[this._id]['approved'] + "thisis" + shownId);
     if (type =='start' || type =='end'){                                  // if it is a date
        messageUsed  = "The " + type + " date of the Time Away for " + this.items._data[this._id]['LastName'] + " has changed  from "
       + this.items._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 

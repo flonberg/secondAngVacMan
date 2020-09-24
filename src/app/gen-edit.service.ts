@@ -192,9 +192,9 @@ export class GenEditService   {
 genGet(s){
   if (!this.urlBase)          
     this.setPlatform();                   // sets the platform to BB or 242
-    const url2 = this.urlBase + s
-    console.log('196  setPlatForm url2 is ' + url2);
-    return this.http.get(url2);
+  const url2 = this.urlBase + s
+  console.log('196  setPlatForm url2 is ' + url2);
+  return this.http.get(url2);
 }   
 
   genDB_GET(dP){
