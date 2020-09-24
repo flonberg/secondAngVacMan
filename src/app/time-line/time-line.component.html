@@ -127,7 +127,7 @@
                                     >
                                 </textarea>
                         </mat-form-field >
-                        <div  *ngIf = "isApprover && this.data2._data[this._id]['approved'] == 0 " >   
+                        <div  *ngIf = "isApprover && this.data2 && this.data2._data[this._id]['approved'] == 0 " >   
                             <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
                         </div>
                     </form> </td>
@@ -176,7 +176,7 @@
                     </div>  
         </div >      
  
-            <div id="controls" [formGroup] = 'form' *ngIf = "drawControls" >
+            <div id="controls" [formGroup] = 'form' *ngIf = "drawControls && this.data2" >
                     <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
                 <!--    This the readOnly version of the Reason control -->
                         <li class="wideItem" *ngIf =_readonly>

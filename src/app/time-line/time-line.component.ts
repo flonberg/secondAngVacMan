@@ -429,7 +429,7 @@ selectCoverer(n, i ){
             return;
           }
    
-       //   console.log("approved " + this.data2._data[this._id]['approved'])
+     //    console.log("approved " + this.data2._data[this._id]['approved'])
        if (this.items){
         this._vidx = this.items._data[this._id].vidx;                                           // store the vidx for editing
         document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
@@ -438,7 +438,7 @@ selectCoverer(n, i ){
            if (this._id >= 0 ) {                                                                // shows user had clicked a box
              this.showControls = true;                                                          // show editing controls
              this.drawEditControls = true;
-             if (this.items._data[this._id].approved == 1 )
+             if (this.items && this.items._data[this._id].approved == 1 )
               this.helpArray = ['Click on the Coverage drop-down and select person',
                                 ' who will be you First Coverer.',  
                                 'If you want to nominate a Second Coverer,',
@@ -451,7 +451,7 @@ selectCoverer(n, i ){
            }
            console.log('clicked'  + this._id);
       /*******  classify loggedInUser as tA Owner or coverer */     
-       if ( this.items._data[this._id] &&  this.items._data[this._id].className === this.userid) { // loggedInUser is tA owner 
+       if (this.items && this.items._data[this._id] &&  this.items._data[this._id].className === this.userid) { // loggedInUser is tA owner 
            this._readonly = false;                                                              // enable editing
            } else
           {                                                                             // user is NOT tA owner
@@ -463,8 +463,9 @@ selectCoverer(n, i ){
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
+      console.log("466");   
       /***********  Set Class for Coverers display,  according to Acceptance */   
-      if ( this.items._data[this._id]     )  { 
+      if (this.items && this.items._data[this._id]     )  { 
         if ( this.items._data[this._id]['covA_Duty'] == '1')
           this.coverageAclass = "Accepted";
           else
@@ -509,7 +510,7 @@ selectCoverer(n, i ){
            dParams.editColVals = ['99'];
            this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
        } 
-         else if (   this.items._data[this._id] ){             // Ed/
+         else if ( this.items &&  this.items._data[this._id] ){             // Ed/
  
             var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
             var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
@@ -524,7 +525,7 @@ selectCoverer(n, i ){
 
            // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
-         
+         console.log("527")
     }       /*******  end of clicked */
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
@@ -558,6 +559,7 @@ selectCoverer(n, i ){
       noteGEdit: [ this.items._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );;
+    console.log("561")
   //  this.makeDateLabels();
   }
 
@@ -732,7 +734,7 @@ selectCoverer(n, i ){
          } else {
      //     this.data2 = Array();
         }
- 
+
         var setId = 1;                                                    
         var tAstartDate = new Date();
         var tAendDate = new Date();
@@ -766,7 +768,7 @@ selectCoverer(n, i ){
                 }
                 if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal nonWeekend tA
                   const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                        className:this.rData[key][key2]['className'],
+                                        className:'red',
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
                                         reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}  
                //   console.log("774 tAO %o", tAO);                      
