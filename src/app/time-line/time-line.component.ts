@@ -526,6 +526,7 @@ selectCoverer(n, i ){
 
            // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
+         
          this.rDataKey = +this.find_rDataKey()
          console.log("527 rDataKey " + this.rDataKey)
     }       /*******  end of clicked */
@@ -786,7 +787,8 @@ selectCoverer(n, i ){
                   const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
                                         style:styleTxt,
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
-                                        reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note']}  
+                                        reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
+                                        className: this.rData[key][key2]['className']}  
                //   console.log("774 tAO %o", tAO);                      
                   this.items.getDataSet().add(tAO);
                 }   
