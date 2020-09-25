@@ -209,7 +209,7 @@ rData:any;
 
 
   myControl = new FormControl();
-  foptions: string[] = ['GTV', 'CTV', 'PTV','ITV'];
+  foptions: string[] = [];
   filteredOptions: Observable<string[]>;
 
 
@@ -253,17 +253,16 @@ rData:any;
   
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-
     return this.foptions.filter(option => option.toLowerCase().includes(filterValue));
   }
 
 
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value))
+        );
     this.endBeforeStart = false;
     this.gotReason = false;
     console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
@@ -762,7 +761,13 @@ selectCoverer(n, i ){
          } else {
      //     this.data2 = Array();
         }
-
+        for (let key in this.rData.users) {
+          let value = this.rData.users[key];
+          console.log("key is " + key + " data has %o", this.rData.fromION[key].LastName)
+          if (+key > 0)
+          this.foptions.push( this.rData.fromION[key].LastName )
+             }
+        
         var setId = 1;                                                    
         var tAstartDate = new Date();
         var tAendDate = new Date();
