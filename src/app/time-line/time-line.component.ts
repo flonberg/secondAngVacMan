@@ -757,15 +757,17 @@ selectCoverer(n, i ){
           this.rData = val;
           console.log("737  rData %o", this.rData);
           this.rData.data = this.myBubsort(this.rData.data);              // alphabetize by LastName
+  
    //       this.data2 = new vis.DataSet(this.rData['data']);
          } else {
      //     this.data2 = Array();
         }
-        for (let key in this.rData.users) {
+
+        for (let key in this.rData.Rusers) {
           let value = this.rData.users[key];
-          console.log("key is " + key + " data has %o", this.rData.fromION[key].LastName)
-          if (+key > 0)
-          this.foptions.push( this.rData.fromION[key].LastName )
+       //   console.log("key is " + key + " data has %o", this.rData.fromION[key].LastName)
+        //  if (+key > 0)
+            this.foptions.push( key)
              }
         
         var setId = 1;                                                    
