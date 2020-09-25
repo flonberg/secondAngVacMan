@@ -208,6 +208,10 @@ rData:any;
   rDataKey: number;
 
 
+  myControl = new FormControl();
+  foptions: string[] = ['GTV', 'CTV', 'PTV','ITV'];
+  filteredOptions: Observable<string[]>;
+
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
@@ -247,8 +251,19 @@ rData:any;
     this.keyFromQP= -1;
   }
   
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.foptions.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+
   ngOnInit() {
-    
+    this.filteredOptions = this.myControl.valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
     this.endBeforeStart = false;
     this.gotReason = false;
     console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);

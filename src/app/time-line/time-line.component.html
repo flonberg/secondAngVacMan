@@ -140,7 +140,16 @@
              
               
                 <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
-                        <autocomplete-filter-example></autocomplete-filter-example>
+            
+                        <mat-form-field class="example-full-width">
+                                <mat-label style='color:blue'>Expansions Based On</mat-label>
+                              <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                              <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                  {{option}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
                         {{ this.items._data[this._id] | json}} <br>
                          {{ this.rData.data[this.rDataKey].coverageA | json }} <br>
                          {{ this.rData.fromION[this.rData.data[this.rDataKey].coverageA].LastName | json}}
