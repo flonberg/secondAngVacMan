@@ -137,10 +137,13 @@
                                                         (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>
                 </tr></table>  
             
-
+             
               
                 <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
-                        {{ this.items._data[this._id] | json}}
+                        <autocomplete-filter-example></autocomplete-filter-example>
+                        {{ this.items._data[this._id] | json}} <br>
+                         {{ this.rData.data[this.rDataKey].coverageA | json }} <br>
+                         {{ this.rData.fromION[this.rData.data[this.rDataKey].coverageA].LastName | json}}
                         <table *ngIf = "!_readonly " style = "width:60%; ">
                             <tr>
                                 <th *ngIf = "covererToggle ">Chose First Coverer </th>
@@ -148,7 +151,7 @@
                                 <th colspan="2">Coverers </th>
                             </tr>
                             <tr><th></th><th> First Coverer</th><th>Second Coverer</th></tr>
-                            <tr  *ngIf="this.rData['data'][this._id]">
+                            <tr  *ngIf="this.rData['data'][this.rDataKey]">
                                 <td> 
                                     <mat-select  style='background-color:rgb(238, 232, 232);'  name = "coverer"  id='covererUserKey' >
                                         <mat-option *ngFor = "let item of rData['users'] | keyvalue" 
@@ -162,7 +165,7 @@
                                     <td ><button  *ngIf = "this.showSendEmailToCoverers"  mat-raised-button color="primary" (click) = "storeCovererData($event)" >Send Email to Covers </button> </td>
                             </tr>
                         </table>
-               
+               <auto-complete-filter-example></auto-complete-filter-example>
                         <!--        Read Only Coverers Display        -->
                         <table *ngIf = "_readonly" style = "width:30%; ">   
                             <caption> Coverers </caption>    

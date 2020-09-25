@@ -12,6 +12,8 @@ import { throwMatDialogContentAlreadyAttachedError, matDatepickerAnimations } fr
 import { throwIfEmpty } from 'rxjs/operators';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -246,6 +248,7 @@ rData:any;
   }
   
   ngOnInit() {
+    
     this.endBeforeStart = false;
     this.gotReason = false;
     console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
@@ -1106,6 +1109,8 @@ editGen(type: string, event: any) {                                  // editGen 
       this.formValidation = true; 
   }
 
+
+  
   /**************  format date as yyyy-mm-dd  for dataBase ********************/
   /*
   formatDateForTimeline(date) {

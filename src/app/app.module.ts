@@ -72,6 +72,7 @@ import { GenEditService, dB_SimpleGETparams } from './gen-edit.service';
       { path: 'VacMan**', component: TimeLineComponent},
       { path: 'VacMan/:userid', component: TimeLineComponent},
       { path: 'MyDuties', component:MyDutiesComponent},
+    //  { path: 'WeekView', component:AutocompleteFilterExample},
       { path: 'WeekView', component:WeekViewComponent},
       { path: 'DosimAssign', component:DosimAssignmentsComponent},
 
