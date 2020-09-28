@@ -33,7 +33,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #main {
   width: 90%;
   height: 20px;
-
   display: flex;
 }
 
@@ -42,6 +41,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color:red;
   font-size: 24pt;
 }
+.genInput {
+
+  font-size: 10pt;
+}
+.datepickerOne .mat-calendar-body-today:not(.mat-calendar-body-selected){
+  border-color: darkgreen;
+} 
 
 #main div:nth-of-type(1) {flex-grow: 3;}
 #main div:nth-of-type(2) {flex-grow: 1;}

@@ -37,14 +37,16 @@
                 <div class = "heading" > Enter New Time Away Paramters </div>
                 <mat-form-field class="item" >
                         <mat-label>First Day Away</mat-label>
-                        <input matInput formControlName="dateFrom" [matDatepicker]="picker" (dateChange)="storeDate('first', $event)"  >
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
+                        <input matInput formControlName="dateFrom" [matDatepicker]="picker" (dateChange)="storeDate('first', $event)" 
+                        class ='genInput'  (click)="picker.open()" >
+    
+                        <mat-datepicker panelClass="datepickerOne"  #picker></mat-datepicker>
                 </mat-form-field>
        
                 <mat-form-field class="item" >
                         <mat-label>Last Day Away</mat-label>
-                        <input matInput formControlName="dateTo"     [matDatepicker]="picker1" (dateChange)="storeDate('last', $event)"      >
+                        <input matInput formControlName="dateTo"     [matDatepicker]="picker1" (dateChange)="storeDate('last', $event)"  
+                        (click)="picker1.open()"     >
                         <mat-datepicker-toggle matSuffix [for]="picker1"  ></mat-datepicker-toggle>
                         <mat-datepicker #picker1   ></mat-datepicker>
                 </mat-form-field>
@@ -61,7 +63,7 @@
                 <mat-form-field  class="wideItem" >
                         <mat-label class="smallLabel"> Note:</mat-label>
                         <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize" (blur)="checkInterval()"
-                         cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5" >
+                         cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5"  class='genInput'>
                         </textarea>
                 </mat-form-field > 
                 <!-- type='submit' is the default, must specify another type to avoid submitting  -->
@@ -92,9 +94,11 @@
                     <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
                         <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
                         <mat-form-field class="item" >
-                            <input matInput id="dateToEditIDXX" placeholder= " Start-Date " (change)="storeEdit('startDate', $event)" 
-                            formControlName="dateToEdit"  [readonly] = "_readonly" 
-                            type="date" useValueAsDate  />
+                            <input matInput id="dateToEditIDXX" 
+                            placeholder= " Start-Date " (change)="storeEdit('startDate', $event)"   
+                            formControlName="dateToEdit"  
+                            type="date" useValueAsDate 
+                             />
                         </mat-form-field>    
                         <mat-form-field class="item">
                                 <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="storeEdit('endDate', $event)" 
@@ -141,7 +145,8 @@
             
                         <mat-form-field class="example-full-width">
                                 <mat-label style='color:blue'>Coverer Chosen (autocomplete) </mat-label>
-                              <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" title="Type a character for autocomplete">
+                              <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" 
+                              title="Type a character for autocomplete">
                               <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                   {{option}}
