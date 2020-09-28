@@ -567,12 +567,16 @@ selectCoverer(n, i ){
     }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
     );
   }
+  editStartDate: FormControl;
+  dateF: any;
 ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
     console.log('529 this.items %o', this.items._data);
     this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
+
+    this.dateF = new Date(this.items._data[this._id].start);
 
     var toDateRaw = this.items._data[this._id].start
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
