@@ -930,8 +930,13 @@ selectCoverer(n, i ){
     this.showSubmitChanges = true;
     this.editColVals[0] = '0';
     if (e.value){
+      console.log("date Entered %o", e.value);
       this.editColNames.push(type);
- 
+      let newDate = new Date(e.value);
+     newDate.setHours(newDate.getHours() + 18);
+      let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
+   //   startDateString += "T00:00:00Z"
+      this.items.update({id: this._id, start: startDateString});   
       this.editColVals.push(e.value);  
     }
     else  if (e.target){

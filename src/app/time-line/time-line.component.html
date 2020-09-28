@@ -36,11 +36,16 @@
             <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()" name='mainForm'>
                 <div class = "heading" > Enter New Time Away Paramters </div>
                 <mat-form-field class="item" >
+
                         <mat-label>First Day Away</mat-label>
-                        <input matInput formControlName="dateFrom" [matDatepicker]="picker" (dateChange)="storeDate('first', $event)" 
-                        class ='genInput'  (click)="picker.open()" >
-    
+
+                        <input matInput formControlName="dateFrom" 
+                        [matDatepicker]="picker" 
+                        (dateChange)="storeDate('first', $event)" 
+                        class ='genInput'  
+                        (click)="picker.open()" >
                         <mat-datepicker panelClass="datepickerOne"  #picker></mat-datepicker>
+                        
                 </mat-form-field>
        
                 <mat-form-field class="item" >
@@ -93,13 +98,20 @@
                 <table><tr><td>
                     <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
                         <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
+
                         <mat-form-field class="item" >
+
                             <input matInput id="dateToEditIDXX" 
-                            placeholder= " Start-Date " (change)="storeEdit('startDate', $event)"   
+                            [matDatepicker]="pickerEdit" 
+                            (dateChange)="storeEdit('startDate', $event)"   
                             formControlName="dateToEdit"  
+                            (click)="pickerEdit.open()"
                             type="date" useValueAsDate 
-                             />
-                        </mat-form-field>    
+                             >
+                             <mat-datepicker panelClass="datepickerOne"  #pickerEdit></mat-datepicker>
+
+                        </mat-form-field>  
+
                         <mat-form-field class="item">
                                 <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="storeEdit('endDate', $event)" 
                                 formControlName="dateFromEdit"  [readonly] = "_readonly" 
