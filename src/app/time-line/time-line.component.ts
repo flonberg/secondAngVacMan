@@ -253,7 +253,7 @@ rData:any;
   
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.foptions.filter(option => option.toLowerCase().includes(filterValue));
+    return this.foptions.filter(option => option.toLowerCase().startsWith(filterValue));
   }
 
 
@@ -304,6 +304,7 @@ rData:any;
     });
 console.log("213");
   }
+
 selectCoverer(n, i ){
     this.showSendEmailToCoverers = true;
     if (this.covererToggle ){

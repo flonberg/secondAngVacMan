@@ -140,9 +140,9 @@
                 <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
             
                         <mat-form-field class="example-full-width">
-                                <mat-label style='color:blue'>Expansions Based On</mat-label>
-                              <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                              <mat-autocomplete #auto="matAutocomplete">
+                                <mat-label style='color:blue'>Coverer Chosen (autocomplete) </mat-label>
+                              <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" title="Type a character for autocomplete">
+                              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                   {{option}}
                                 </mat-option>
