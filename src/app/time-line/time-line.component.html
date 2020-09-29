@@ -103,7 +103,7 @@
                     <td *ngIf = '!_readonly'>
                         <mat-form-field style="width:150px;"  color="accent" *ngIf = "drawEditControls && !newTimeAway2 "  >
                                 <mat-label>First --Day Away</mat-label>
-                                <input  class="example-events" matInput [matDatepicker]="picker1"  [ngModel]="dBstartDate"
+                                <input  class="param" matInput [matDatepicker]="picker1"  [ngModel]="dBstartDate"
                                 (click)="picker1.open()"
                                 (dateChange)="storeEdit('startDate', $event)" 
                                 >
@@ -115,7 +115,7 @@
                             <mat-form-field style="width:150px;"  color="accent"  *ngIf = "drawEditControls && !newTimeAway2 " >
                                 <mat-label>Last Day Away</mat-label>
                                 
-                                <input  class="example-events" matInput [matDatepicker]="picker2"  [ngModel]="dBendDate"
+                                <input  class="param" matInput [matDatepicker]="picker2"  [ngModel]="dBendDate"
                                 (click)="picker2.open()"
                                 (dateChange)="storeEdit('endDate', $event)" 
                                 >
@@ -125,16 +125,18 @@
                      </td>
                      <td *ngIf = '_readonly'>
                             <mat-label>First Day Away</mat-label>
-                            <input class="example-events" matInput   [ngModel]='dBstartDateString'>
+                             <input class="param" matInput   [ngModel]='dBstartDateString'>
                      </td>
                      <td *ngIf = '_readonly'>
                             <mat-label>Last Day Away</mat-label>
-                            <input class="example-events" matInput   [ngModel]='dBendDateString'>
+                            <input class="param" matInput   [ngModel]='dBendDateString'>
                      </td>
+       
+               
                      <td>
                             <mat-form-field *ngIf = "!_readonly" class="medium">
                                     <mat-label>Reason</mat-label>
-                                        <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)"
+                                        <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)" class="param"
                                         id='reasonId'>
                                                 <mat-option  value="0">Personal Vacation</mat-option>
                                                 <mat-option  value="1">Other</mat-option>
@@ -142,10 +144,14 @@
                                         </mat-select>
                             </mat-form-field>
                     </td>
+                    <td *ngIf = '_readonly'>
+                            <mat-label>Reason</mat-label>
+                            <input class="param" matInput   [ngModel]='dBreason'>
+                     </td>
                     <td>
                         <mat-form-field  class="wideItem">
                                 <mat-label class="smallLabel"> Note: {{ this._id }} </mat-label>
-                                <textarea matInput  (change)="storeEdit( 'note', $event)" 
+                                <textarea matInput  (change)="storeEdit( 'note', $event)"  class="param"
                                     [value]="newTimeAwayBool ? ' ' : this.shownNote"
                                     [formControl] = "notesFC"
                         
@@ -157,6 +163,21 @@
                                 </textarea>
                         </mat-form-field >
                     </td>    
+                
+                    <td>
+                    <mat-form-field class="example-full-width">
+                            <mat-label style='color:blue'>Choose Coverer (autocomplete) </mat-label>
+                          <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" 
+                          title="Type a character for autocomplete">
+                          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                              {{option}}
+                            </mat-option>
+                          </mat-autocomplete>
+                     </mat-form-field>
+                     </td>
+            
+                 
 
 
 
@@ -180,17 +201,7 @@
         
                 <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
             
-                        <mat-form-field class="example-full-width">
-                                <mat-label style='color:blue'>Coverer Chosen (autocomplete) </mat-label>
-                              <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" 
-                              title="Type a character for autocomplete">
-                              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                  {{option}}
-                                </mat-option>
-                              </mat-autocomplete>
-                            </mat-form-field>
-                
+                     
                         <table *ngIf = "!_readonly " style = "width:60%; ">
                             <tr>
                                 <th *ngIf = "covererToggle ">Chose First Coverer </th>

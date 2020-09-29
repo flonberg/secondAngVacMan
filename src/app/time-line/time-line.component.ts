@@ -579,6 +579,8 @@ selectCoverer(n, i ){
   dBstartDateString: String;
   dBendDateString: String;
   dBcontent: String;
+  dBreason: String;
+
 ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
     console.log('529 this.items %o', this.items._data);
@@ -589,8 +591,10 @@ selectCoverer(n, i ){
     this.dBcontent = this.items._data[this._id].content;
     this.dBstartDate = new Date(this.items._data[this._id].start);
     this.dBendDate = new Date(this.items._data[this._id].end);
-    this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'MM-dd-yyyy');
-    this.dBendDateString = this.datePipe.transform(this.dBendDate , 'MM-dd-yyyy');
+    this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');
+    this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M-dd-yyyy');
+    const reasons = ['Personal Vacation', 'Other', 'Meeting'];
+    this.dBreason = reasons[this.items._data[this._id].reason];
 
     var toDateRaw = this.items._data[this._id].start
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;

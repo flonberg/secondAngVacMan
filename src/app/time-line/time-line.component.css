@@ -35,6 +35,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 20px;
   display: flex;
 }
+mat-label{
+  color:blue;
+}
+.param {
+
+  font-size:14pt;
+}
 
 .error {
   font-weight:bold;
