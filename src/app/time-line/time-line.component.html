@@ -97,9 +97,10 @@
         
     <!--          Edit tA  Controls   -->
     <div class = "heading" *ngIf = '!_readonly' > Edit Time Away Paramters   </div>
-    <div class = "heading" *ngIf = '_readonly' > Time Away Paramters for {{ dBcontent }}   </div>
+    <div class = "heading" *ngIf = '_id > 0 && _readonly  ' > Time Away Paramters for {{ dBcontent }}   </div>
         <div style="text-align:center" *ngIf = 'this.showControls'>
-                <table><tr>
+            <table>
+                <tr>
                     <td *ngIf = '!_readonly'>
                         <mat-form-field style="width:150px;"  color="accent" *ngIf = "drawEditControls && !newTimeAway2 "  >
                                 <mat-label>First --Day Away</mat-label>
@@ -148,13 +149,13 @@
                             <mat-label>Reason</mat-label>
                             <input class="param" matInput   [ngModel]='dBreason'>
                      </td>
+               
                     <td>
                         <mat-form-field  class="wideItem">
-                                <mat-label class="smallLabel"> Note: {{ this._id }} </mat-label>
+                                <mat-label class="smallLabel"> Note:  </mat-label>
                                 <textarea matInput  (change)="storeEdit( 'note', $event)"  class="param"
                                     [value]="newTimeAwayBool ? ' ' : this.shownNote"
                                     [formControl] = "notesFC"
-                        
                                     cdkTextareaAutosize [readonly]="_readonly"
                                     #autosize="cdkTextareaAutosize"
                                     cdkAutosizeMinRows="1"
@@ -163,21 +164,30 @@
                                 </textarea>
                         </mat-form-field >
                     </td>    
+
+                    <td   *ngIf = "!_readonly && !newTimeAway2 && showSubmitChanges && drawEditControls"  >  <button  mat-raised-button color="primary" 
+                        (click) = " saveEdits();" >Submit Changes</button> </td>
+                    <td   *ngIf = "!_readonly && !newTimeAway2 && drawEditControls"  >  <button mat-raised-button color="primary" 
+                                                        (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>    
+
+                </tr><tr>
                 
-                    <td>
+                <td>
                     <mat-form-field class="example-full-width">
                             <mat-label style='color:blue'>Choose Coverer (autocomplete) </mat-label>
                           <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" 
-                          title="Type a character for autocomplete">
-                          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                              {{option}}
+                          class="param"        title="Type a character for autocomplete">
+                          <mat-autocomplete  #auto="matAutocomplete">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
+                            (click)="storeEdit('coverer', $event)" 
+                            > {{option}}
                             </mat-option>
                           </mat-autocomplete>
                      </mat-form-field>
-                     </td>
+                 </td>
             
-                 
+                 <td   *ngIf = "!_readonly && !newTimeAway2 && covererSelected && drawEditControls"  >  <button  mat-raised-button color="primary" 
+                    (click) = " storeCovererData();" >Send Email To Coverer </button> </td>
 
 
 
@@ -193,11 +203,11 @@
                             <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
                         </div>
                     </form> </td>
-                    <td   *ngIf = "!_readonly && !newTimeAway2 && showSubmitChanges && drawEditControls"  >  <button  mat-raised-button color="primary" 
-                        (click) = " saveEdits();" >Submit Changes</button> </td>
-                    <td   *ngIf = "!_readonly && !newTimeAway2 && drawEditControls"  >  <button mat-raised-button color="primary" 
-                                                        (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>
-                </tr></table>  
+
+                
+                
+                
+                                                    </tr></table>  
         
                 <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
             

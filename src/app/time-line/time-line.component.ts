@@ -179,6 +179,7 @@ rData:any;
   reasonEdited: boolean;
   seP = <SeditParams>{};  // define instance of SeditParams interface
   _vidx: string;
+
   endDateString: string;
   startDateString: string;
   //endDateShownString: string;
@@ -348,6 +349,7 @@ selectCoverer(n, i ){
   {                    // store the nominated coverer UserKey 
     this.showSendEmailToCoverers = false;
     this.rData['emailByKey']['116'] = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
+    const devEmailAddress = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
   //  if (this.covererUserKey )
   //    var mTA_prod = [this.rData['emailByKey'][this.covererUserKey]];
     var link1 = this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
@@ -359,13 +361,12 @@ selectCoverer(n, i ){
     this.writeLog(" in storeCovererData ", link1);
         /*************  Send Coverage Emails        */
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
-      starting  ` + 
-                  this.datePipe.transform(this.items._data[this._id].start) + `
-      through  ` + this.datePipe.transform(this.items._data[this._id].end) + ` </p>
-      <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
-      <p><a href=`+ link1 + `>  ` + this.covererName + ` accepts coverage. </a></p>
-    `;
+                      <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
+                      starting  ` +  this.datePipe.transform(this.items._data[this._id].start) + `
+                      through  ` + this.datePipe.transform(this.items._data[this._id].end) + ` </p>
+                      <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
+                      <p><a href=`+ link1 + `>  ` + this.covererName + ` accepts coverage. </a></p>
+                       `;
     if (this.covererUserKey2 > 0 ){                                         // if the IS a second coverer
       message +=  `<p> <a href=`+ link2 + `> Accept  ` + this.covererName2 + `  coverage. </a></p>`;
     }
@@ -386,26 +387,35 @@ selectCoverer(n, i ){
       debug: 1
     }
     this.writeLog("storeCovererData", link1);
+    /*
     this.genEditSvce.genPOST(emp).subscribe(
       (res) => {
         console.log("res from sendEmail2 from storeCovererDate is  %o", res);
       }
     );
+    */
+    if (this.covererName.length &&  this.covererName.length > 0){
+      const covererUserKey = this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName)
+      console.log(" 397 " + covererUserKey)
+
+    }
    /***********  Update the dataBase for the coverers   */
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
       whereColName:['vidx'],
       whereColVal:[this.items._data[this._id].vidx],
-      editColNames: ['coverageA', 'coverageB'],
-      editColVals: [  this.covererUserKey.toString(), this.covererUserKey2.toString()   ],
+      editColNames: ['coverageA'],
+      editColVals: [  this.covererName  ],
       userid: this.userid,   
     };  
+    
     this.genEditSvce.genPOST(upDateParams).subscribe(
       (res) => {
         console.log("res updateCoveresx" + res);
       }
     );
+    
   }                                                       // end of StoreCovererData 
 
   enterInDbAndEmail(){
@@ -453,8 +463,6 @@ selectCoverer(n, i ){
            if (!this.items._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
           }
-   
-     //    console.log("approved " + this.data2._data[this._id]['approved'])
        if (this.items){
         this._vidx = this.items._data[this._id].vidx;                                           // store the vidx for editing
         document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
@@ -551,14 +559,18 @@ selectCoverer(n, i ){
            // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
          }
          
-         this.rDataKey = +this.find_rDataKey()
+         this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
          console.log("527 rDataKey " + this.rDataKey)
     }       /*******  end of clicked */
   /*********  find the key of the selected timeAway element in the rData so can find Coverers */
-  find_rDataKey(){
-    for( var prop in this.rData.data ) {
-          if( this.rData.data[prop][ 'vidx' ] === this._vidx )
-              return prop;
+  find_rDataKey(dataStruct, name, value){
+    for( var prop in dataStruct ) {
+        var tst = new String(dataStruct[prop][name]) ;
+        var short = value.toString().trim();
+        var tst2 = tst.indexOf( value.toString().trim())
+        console.log("565 tst is " + tst + "  short is " + short + " tst2 is " + tst2);
+        if (tst.indexOf(value.toString().trim()) !== -1)
+               return prop;
       }
   }  
      /*********  This is used by the New TimeAway  ***********/
@@ -947,7 +959,11 @@ selectCoverer(n, i ){
                   "OldEndDate": String,
                   "NewEndDate": String,
                 }
+  covererSelected = false;
   storeEdit(type,e){
+    console.log("951 %o", e);
+    if (type == 'coverer')
+      this.covererSelected = true;
     this.editColNames[0] = 'approved';
     this.showSubmitChanges = true;
     this.editColVals[0] = '0';
@@ -958,7 +974,7 @@ selectCoverer(n, i ){
     
           let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
           let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
-          newDate.setDate(newDate.getDate()+ 1);                  // Wrong time is entered 
+          newDate.setDate(newDate.getDate()+ 1);                  // Wrong time is entered by DatePicker
     //      newDate.setHours(newDate.getHours()  -4 );                  // Wrong time is entered 
           let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
           let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
@@ -1002,7 +1018,11 @@ selectCoverer(n, i ){
           this.EDO.NewEndDate = e.target.value; 
           this.items.update({id: this._id, end: dateForDataSet});   
           this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'});   
-          
+        }
+        if (type == 'coverer'){
+          this.covererName = e.target.textContent;
+          this.editColNames = ['coverageA'];
+          this.editColVals =[this.covererName]
         }
         var str = "approved";  
    
