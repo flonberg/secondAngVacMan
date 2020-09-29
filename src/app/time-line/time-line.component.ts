@@ -565,14 +565,12 @@ selectCoverer(n, i ){
   /*********  find the key of the selected timeAway element in the rData so can find Coverers */
   find_rDataKey(dataStruct, name, value){
     for( var prop in dataStruct ) {
-        var tst = new String(dataStruct[prop][name]) ;
-        var short = value.toString().trim();
-        var tst2 = tst.indexOf( value.toString().trim())
-        console.log("565 tst is " + tst + "  short is " + short + " tst2 is " + tst2);
+        var tst = new String(dataStruct[prop][name]) ;                                          // need to do this to use indexOf()
         if (tst.indexOf(value.toString().trim()) !== -1)
                return prop;
       }
   }  
+  
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
