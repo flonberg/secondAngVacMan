@@ -523,6 +523,8 @@ MIT
 
 @angular/material/core
 
+@angular/material/autocomplete
+
 zone.js
 MIT
 The MIT License

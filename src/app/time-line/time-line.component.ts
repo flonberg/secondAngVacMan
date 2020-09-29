@@ -1,3 +1,4 @@
+
 import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams, InsertParams, dB_POSTparams } from './../gen-edit.service';
 import { SeditParams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
@@ -256,8 +257,14 @@ rData:any;
     return this.foptions.filter(option => option.toLowerCase().startsWith(filterValue));
   }
 
-
+  isSafari = true
   ngOnInit() {
+ let tst = window.navigator.userAgent.toLowerCase();
+ console.log("262 rr %o", tst);
+   if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
+     this.isSafari = false;
+  if (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+     this.isSafari = false;
     this.filteredOptions = this.myControl.valueChanges
         .pipe(
           startWith(''),
@@ -439,7 +446,6 @@ selectCoverer(n, i ){
 
       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) 
        { // user click on a tA
-    
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
            this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
            console.log("407 clicked %o", ev);
@@ -568,7 +574,11 @@ selectCoverer(n, i ){
     );
   }
   editStartDate: FormControl;
-  dateF: any;
+  dBstartDate: Date;
+  dBendDate: Date;
+  dBstartDateString: String;
+  dBendDateString: String;
+  dBcontent: String;
 ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   createEditForm() {                                      // create the form for New tA
     console.log('529 this.items %o', this.items._data);
@@ -576,7 +586,11 @@ selectCoverer(n, i ){
     this.doValidation = false;
     this.invalidFromDate = false;
 
-    this.dateF = new Date(this.items._data[this._id].start);
+    this.dBcontent = this.items._data[this._id].content;
+    this.dBstartDate = new Date(this.items._data[this._id].start);
+    this.dBendDate = new Date(this.items._data[this._id].end);
+    this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'MM-dd-yyyy');
+    this.dBendDateString = this.datePipe.transform(this.dBendDate , 'MM-dd-yyyy');
 
     var toDateRaw = this.items._data[this._id].start
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
@@ -801,7 +815,7 @@ selectCoverer(n, i ){
                   if (group2Badded == -1 ){                                                       // if groups does not yet exist
                     this.groups2Array.push(this.rData[key][key2]['content']);
                     this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
-                    this.rData[key][key2]['type']= 'range';
+                
                     group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
                   }
                   else {                                                                            // weekend
@@ -934,14 +948,36 @@ selectCoverer(n, i ){
     this.showSubmitChanges = true;
     this.editColVals[0] = '0';
     if (e.value){
-      console.log("date Entered %o", e.value);
-      this.editColNames.push(type);
-      let newDate = new Date(e.value);
-     newDate.setHours(newDate.getHours() + 18);
-      let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
-   //   startDateString += "T00:00:00Z"
-      this.items.update({id: this._id, start: startDateString});   
-      this.editColVals.push(e.value);  
+          console.log("date Entered %o", e.value);
+     //     this.editColNames.push(type);
+          let newDate = new Date(e.value);
+    
+          let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
+          let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
+          newDate.setDate(newDate.getDate()+ 1);                  // Wrong time is entered 
+    //      newDate.setHours(newDate.getHours()  -4 );                  // Wrong time is entered 
+          let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
+          let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
+
+    console.log("951 newDateString %o", startDateString);
+     
+          {
+            if (type=='startDate'){
+              if (!this.isSafari)
+              this.items.update({id: this._id, start: startDateString});  
+              this.editColNames.push("startDate");
+              this.editColVals.push(startDateStringForEdit)
+            }
+            if (type=='endDate'){
+              if (!this.isSafari)
+              this.items.update({id: this._id, end: endDateString});  
+              this.editColNames.push("endDate");
+              this.editColVals.push(endDateStringForEdit)
+            }
+          }
+
+          console.log("958 %o", this.items);
+        //  this.editColVals.push(e.value);  
     }
     else  if (e.target){
         this.editColNames.push(type);
@@ -952,6 +988,7 @@ selectCoverer(n, i ){
           this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10); ; 
           this.EDO.NewStartDate = e.target.value; 
           this.items.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
+
           this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'}); 
 
         }
@@ -991,6 +1028,8 @@ selectCoverer(n, i ){
       }
     );
     this.drawEditControls = false;
+    if (this.isSafari)
+       window.location.reload();
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;

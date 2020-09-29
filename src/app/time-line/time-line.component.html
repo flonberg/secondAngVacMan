@@ -96,63 +96,59 @@
             </form>
         
     <!--          Edit tA  Controls   -->
-             <div style="text-align:center">
-                <table><tr><td>
-
-                        <mat-form-field style="width:150px;"  color="accent">
-                                <mat-label>Choose From Date</mat-label>
-                                <input  class="example-events" matInput [matDatepicker]="picker1"  [ngModel]="dateF"
+    <div class = "heading" *ngIf = '!_readonly' > Edit Time Away Paramters   </div>
+    <div class = "heading" *ngIf = '_readonly' > Time Away Paramters for {{ dBcontent }}   </div>
+        <div style="text-align:center" *ngIf = 'this.showControls'>
+                <table><tr>
+                    <td *ngIf = '!_readonly'>
+                        <mat-form-field style="width:150px;"  color="accent" *ngIf = "drawEditControls && !newTimeAway2 "  >
+                                <mat-label>First --Day Away</mat-label>
+                                <input  class="example-events" matInput [matDatepicker]="picker1"  [ngModel]="dBstartDate"
                                 (click)="picker1.open()"
                                 (dateChange)="storeEdit('startDate', $event)" 
                                 >
                                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                                 <mat-datepicker #picker1 ></mat-datepicker>
                          </mat-form-field>
-
-
-                    <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
-                        <div class = "heading" *ngIf = '!_readonly'> Edit Time Away Paramters </div>
-
-                        <mat-form-field class="item" >
-
-                            <input matInput id="dateToEditIDXX" 
-                            [matDatepicker]="pickerEdit" 
-                            (dateChange)="storeEdit('startDate', $event)"   
-                            formControlName="dateToEdit"  
-                            (click)="pickerEdit.open()"
-                            type="date" useValueAsDate 
-                             >
-                             <mat-datepicker panelClass="datepickerOne"  #pickerEdit></mat-datepicker>
-
-                        </mat-form-field>  
-
-                  
-
-
-                        <mat-form-field class="item">
-                                <input matInput id="eDateToEditID"  placeholder= " End-Date " (change)="storeEdit('endDate', $event)" 
-                                formControlName="dateFromEdit"  [readonly] = "_readonly" 
-                                type="date"  useValueAsDate  />
-                        </mat-form-field>  
-                        <mat-form-field *ngIf = "!_readonly" class="medium">
-                            <mat-label>Reason</mat-label>
-                                <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)"
-                                id='reasonId'>
-                                        <mat-option  value="0">Personal Vacation</mat-option>
-                                        <mat-option  value="1">Other</mat-option>
-                                        <mat-option   value="2">Meeting</mat-option>  
-                                </mat-select>
-                        </mat-form-field>
-                        <mat-form-field *ngIf = "_readonly" appearance="none" > 
-                                <mat-label class="smallLabel"> Reason</mat-label>
-                                <input matInput  [value]="reasons[reasonSelect]" size = 40  [readonly] = "_readonly">
-                        </mat-form-field>
+                    </td>
+                    <td *ngIf = '!_readonly' >
+                            <mat-form-field style="width:150px;"  color="accent"  *ngIf = "drawEditControls && !newTimeAway2 " >
+                                <mat-label>Last Day Away</mat-label>
+                                
+                                <input  class="example-events" matInput [matDatepicker]="picker2"  [ngModel]="dBendDate"
+                                (click)="picker2.open()"
+                                (dateChange)="storeEdit('endDate', $event)" 
+                                >
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2 ></mat-datepicker>
+                            </mat-form-field>
+                     </td>
+                     <td *ngIf = '_readonly'>
+                            <mat-label>First Day Away</mat-label>
+                            <input class="example-events" matInput   [ngModel]='dBstartDateString'>
+                     </td>
+                     <td *ngIf = '_readonly'>
+                            <mat-label>Last Day Away</mat-label>
+                            <input class="example-events" matInput   [ngModel]='dBendDateString'>
+                     </td>
+                     <td>
+                            <mat-form-field *ngIf = "!_readonly" class="medium">
+                                    <mat-label>Reason</mat-label>
+                                        <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)"
+                                        id='reasonId'>
+                                                <mat-option  value="0">Personal Vacation</mat-option>
+                                                <mat-option  value="1">Other</mat-option>
+                                                <mat-option   value="2">Meeting</mat-option>  
+                                        </mat-select>
+                            </mat-form-field>
+                    </td>
+                    <td>
                         <mat-form-field  class="wideItem">
                                 <mat-label class="smallLabel"> Note: {{ this._id }} </mat-label>
                                 <textarea matInput  (change)="storeEdit( 'note', $event)" 
                                     [value]="newTimeAwayBool ? ' ' : this.shownNote"
                                     [formControl] = "notesFC"
-                         
+                        
                                     cdkTextareaAutosize [readonly]="_readonly"
                                     #autosize="cdkTextareaAutosize"
                                     cdkAutosizeMinRows="1"
@@ -160,7 +156,19 @@
                                     >
                                 </textarea>
                         </mat-form-field >
-                        <div  *ngIf = "isApprover && this.data2 && this.data2._data[this._id]['approved'] == 0 " >   
+                    </td>    
+
+
+
+
+                     <td>  
+
+
+         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
+                  
+
+
+            <div  *ngIf = "isApprover && this.data2 && this.data2._data[this._id]['approved'] == 0 " >   
                             <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
                         </div>
                     </form> </td>
@@ -182,9 +190,7 @@
                                 </mat-option>
                               </mat-autocomplete>
                             </mat-form-field>
-                        {{ this.items._data[this._id] | json}} <br>
-                         {{ this.rData.data[this.rDataKey].coverageA | json }} <br>
-                         {{ this.rData.fromION[this.rData.data[this.rDataKey].coverageA].LastName | json}}
+                
                         <table *ngIf = "!_readonly " style = "width:60%; ">
                             <tr>
                                 <th *ngIf = "covererToggle ">Chose First Coverer </th>
