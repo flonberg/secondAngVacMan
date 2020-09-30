@@ -595,14 +595,17 @@ selectCoverer(n, i ){
 ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   findCoverage(itemId){
     const vidx =  this.items._data[itemId].vidx;
-
-    console.log("598 vidx is %o", vidx)
+    const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', vidx);
+    const coverageA = this.rData.data[rDataKey].coverageA;
+    console.log("fromION %o", this.rData.fromION[coverageA].LastName)
+    console.log("598 vidx is %o rDataKey is %o  coverageA is %o", vidx, rDataKey, coverageA)
+    return this.rData.fromION[coverageA].LastName
   }
   createEditForm(_id) {                                      // create the form for New tA
     console.log("597 rDataKey " + _id )
     this.findCoverage(_id);
   //  this.myControl.setValue( this.rData.data[_id]['vidx']);
-    this.myControl.setValue( _id);
+    this.myControl.setValue(this.findCoverage(_id));
 
     console.log('529 this.items %o', this.items._data);
     this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
