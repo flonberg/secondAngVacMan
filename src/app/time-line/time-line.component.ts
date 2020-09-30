@@ -455,38 +455,26 @@ selectCoverer(n, i ){
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) 
   {// this responds to ANY click-RELEASE in the div containing the calendar
-
       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) 
        { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
-                                // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
-
        /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
-           if (!this.items._data[this._id]) {                                                        // click was NOT in a tA box;
-            return;
-          }
-       if (this.items){
-        this._vidx = this.items._data[this._id].vidx;                                           // store the vidx for editing
-        const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);   // find the key of this vidx in the rawData 
-        this.clickedFrom_rData= this.rData.data[rDataKey];                          // get the row for this vidx from the rawData
-        this.createEditForm(this._id);     
-        document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
-       }
-        //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  this.insertP used for editing tA
-           if (this._id >= 0 ) {                                                                // shows user had clicked a box
-             this.showControls = true;                                                          // show editing controls
-             this.drawEditControls = true;
-             if (this.items && this.items._data[this._id].approved == 1 )
-              this.helpArray = ['Click on the Coverage drop-down and select person',
-                                ' who will be you First Coverer.',  
-                                'If you want to nominate a Second Coverer,',
-                                ' click on the Coverage drop-down again',  
-     
-                              ];
-             }     
-             else
-              this.helpArray = ['Your Time Away must be approved before you cen select coverers'];                           
-           }
+        if (!this.items._data[this._id])                                                         // click was NOT in a tA box;
+          return;
+        if (this.items){
+            this.showControls = true;                                                          // show editing controls
+            this.drawEditControls = true;
+            this._vidx = this.items._data[this._id].vidx;                                        // store the vidx for editing
+            const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);            // find the key of this vidx in the rawData 
+            this.clickedFrom_rData= this.rData.data[rDataKey];                                   // get the row for this vidx from the rawData
+            this.createEditForm(this._id);                                                       // create the form for editing the tA
+            document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
+            if (this.items && this.items._data[this._id].approved == 1 )
+              this.helpArray = [' If you time away has been approved you can select a coverer.' ];
+              else
+              this.helpArray = ['Your Time Away must be approved before you cen select coverers'];      
+            }                  
+        }
            console.log('clicked'  + this._id);
       /*******  classify loggedInUser as tA Owner or coverer */     
        if (this.items && this.items._data[this._id] &&  this.items._data[this._id].className === this.userid) { // loggedInUser is tA owner 

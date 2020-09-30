@@ -40,7 +40,7 @@
                         <mat-label>First Day Away</mat-label>
                         <input matInput formControlName="dateFrom" 
                         [matDatepicker]="picker" 
-                        [formControl]='editStartDate'
+   
                         (dateChange)="storeDate('first', $event)" 
                         class ='genInput'  
                         (click)="picker.open()" >
