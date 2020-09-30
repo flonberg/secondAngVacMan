@@ -400,16 +400,17 @@ selectCoverer(n, i ){
 
     }
    /***********  Update the dataBase for the coverers   */
+    const userKey = this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName  )
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
       whereColName:['vidx'],
       whereColVal:[this.items._data[this._id].vidx],
       editColNames: ['coverageA'],
-      editColVals: [  this.covererName  ],
+      editColVals:  [this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName  )], // store the UserKey of Coverer
       userid: this.userid,   
     };  
-    
+    console.log("412 %o,", upDateParams);
     this.genEditSvce.genPOST(upDateParams).subscribe(
       (res) => {
         console.log("res updateCoveresx" + res);
@@ -457,7 +458,7 @@ selectCoverer(n, i ){
       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) 
        { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
-           this.createEditForm();                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
+           this.createEditForm(this._id);                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
            console.log("407 clicked %o", ev);
        /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
            if (!this.items._data[this._id]) {                                                        // click was NOT in a tA box;
@@ -570,7 +571,7 @@ selectCoverer(n, i ){
                return prop;
       }
   }  
-  
+
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
@@ -590,9 +591,19 @@ selectCoverer(n, i ){
   dBendDateString: String;
   dBcontent: String;
   dBreason: String;
-
+  tst = "test";
 ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
-  createEditForm() {                                      // create the form for New tA
+  findCoverage(itemId){
+    const vidx =  this.items._data[itemId].vidx;
+
+    console.log("598 vidx is %o", vidx)
+  }
+  createEditForm(_id) {                                      // create the form for New tA
+    console.log("597 rDataKey " + _id )
+    this.findCoverage(_id);
+  //  this.myControl.setValue( this.rData.data[_id]['vidx']);
+    this.myControl.setValue( _id);
+
     console.log('529 this.items %o', this.items._data);
     this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
@@ -804,6 +815,7 @@ selectCoverer(n, i ){
  //    var tst = this.rData.fromION.find(t=>t.userid == this.userid);
         /*****           process data and add to TimeLine DataSet             */
         var styleTxt= 'background-color:rgb(195,195,195);';
+        console.log("818 %o", this.rData);
         for (var key in this.rData)
         {
           for (var key2 in this.rData[key]){
@@ -842,7 +854,7 @@ selectCoverer(n, i ){
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
                                         reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
                                         className: this.rData[key][key2]['className']}  
-               //   console.log("774 tAO %o", tAO);                      
+               //  console.log("774 tAO %o", tAO);                      
                   this.items.getDataSet().add(tAO);
                 }   
                 else {
