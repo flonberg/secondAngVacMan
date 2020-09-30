@@ -451,6 +451,7 @@ selectCoverer(n, i ){
       };
    this.genEditSvce.genDB_GET(getParams);
   }
+  clickedFrom_rData: any;
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) 
   {// this responds to ANY click-RELEASE in the div containing the calendar
@@ -458,14 +459,17 @@ selectCoverer(n, i ){
       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) 
        { // user click on a tA
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
-           this.createEditForm(this._id);                                   // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
-           console.log("407 clicked %o", ev);
+                                // THIS LOADS THE VALUES FROM DATASET INTO WIDGETS
+
        /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
            if (!this.items._data[this._id]) {                                                        // click was NOT in a tA box;
             return;
           }
        if (this.items){
         this._vidx = this.items._data[this._id].vidx;                                           // store the vidx for editing
+        const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);   // find the key of this vidx in the rawData 
+        this.clickedFrom_rData= this.rData.data[rDataKey];                          // get the row for this vidx from the rawData
+        this.createEditForm(this._id);     
         document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
        }
         //   this.seP.whereColVal = this.data2._data[this._id].vidx;                                 // seP =>  this.insertP used for editing tA
@@ -592,22 +596,25 @@ selectCoverer(n, i ){
   dBcontent: String;
   dBreason: String;
   tst = "test";
-////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
-  findCoverage(itemId){
-    const vidx =  this.items._data[itemId].vidx;
-    const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', vidx);
-    const coverageA = this.rData.data[rDataKey].coverageA;
-    console.log("fromION %o", this.rData.fromION[coverageA].LastName)
-    console.log("598 vidx is %o rDataKey is %o  coverageA is %o", vidx, rDataKey, coverageA)
-    return this.rData.fromION[coverageA].LastName
-  }
-  createEditForm(_id) {                                      // create the form for New tA
-    console.log("597 rDataKey " + _id )
-    this.findCoverage(_id);
-  //  this.myControl.setValue( this.rData.data[_id]['vidx']);
-    this.myControl.setValue(this.findCoverage(_id));
 
-    console.log('529 this.items %o', this.items._data);
+  findCoverage(itemId){                                                    // 
+    const vidx =  this.items._data[itemId].vidx;                          // get the vidx of tA clicked on in the DataSet
+    const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', vidx);   // find the key of this vidx in the rawData 
+    const coverageA = this.rData.data[rDataKey].coverageA;                // get the 'coverageA' datum from the rawData
+    if( this.rData.fromION[coverageA]){
+
+      return this.rData.fromION[coverageA].LastName                         // return the LastName using fromION data. 
+    }
+  }
+  ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
+  ///////    Some params need to be fetched from the rData ds which is the raw data from the vacation3 table      //////
+  
+  createEditForm(_id) {                                      // create the form for New tA
+    const coverageA = this.findCoverage(_id);
+    if (this.clickedFrom_rData.coverageA)
+      this.myControl.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);                      // set the value of the autoComplete Coverage widget
+    else
+      this.myControl.setValue('');  
     this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
