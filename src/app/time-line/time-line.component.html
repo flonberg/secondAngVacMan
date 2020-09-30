@@ -178,7 +178,7 @@
                           <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" 
                           class="param"        title="Type a character for autocomplete"   >
                           <mat-autocomplete  #auto="matAutocomplete">
-                            <mat-option *ngFor="let option of filteredOptions | async"  [(value)]="tst"
+                            <mat-option *ngFor="let option of filteredOptions | async"  [(value)]="option"
                             (click)="storeEdit('coverer', $event)" 
                             > {{option}}
                             </mat-option>
@@ -211,28 +211,7 @@
         
                 <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
             
-                     
-                        <table *ngIf = "!_readonly " style = "width:60%; ">
-                            <tr>
-                                <th *ngIf = "covererToggle ">Chose First Coverer </th>
-                                <th *ngIf = "!covererToggle ">Chose Second Coverer </th>
-                                <th colspan="2">Coverers </th>
-                            </tr>
-                            <tr><th></th><th> First Coverer</th><th>Second Coverer</th></tr>
-                            <tr  *ngIf="this.rData['data'][this.rDataKey]">
-                                <td> 
-                                    <mat-select  style='background-color:rgb(238, 232, 232);'  name = "coverer"  id='covererUserKey' >
-                                        <mat-option *ngFor = "let item of rData['users'] | keyvalue" 
-                                            value="item.value" (click) = "selectCoverer(item.key, item.value) "> {{item.key }} </mat-option>
-                                    </mat-select>
-                                </td>
-                                    <td><input  [class]="setColorForCoverage( this.rData['data'][this._id]['covA_Duty'] )" size=15 matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]  || this.covererName "
-                                        [value]= "this.covererName ? this.covererName : this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']] "></td>
-                                    <td><input [class]="setColorForCoverage( this.rData['data'][this._id]['covB_Duty'] )"   size=15  matInput *ngIf = " this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]  || this.covererName2 "
-                                        [value]= "this.covererName2  ? this.covererName2 : this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]" ></td>
-                                    <td ><button  *ngIf = "this.showSendEmailToCoverers"  mat-raised-button color="primary" (click) = "storeCovererData($event)" >Send Email to Covers </button> </td>
-                            </tr>
-                        </table>
+                   
                <auto-complete-filter-example></auto-complete-filter-example>
                         <!--        Read Only Coverers Display        -->
                         <table *ngIf = "_readonly" style = "width:30%; ">   

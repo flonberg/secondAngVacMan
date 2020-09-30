@@ -583,7 +583,7 @@ selectCoverer(n, i ){
   dBendDateString: String;
   dBcontent: String;
   dBreason: String;
-  tst = "test";
+  tst = "";
 
   findCoverage(itemId){                                                    // 
     const vidx =  this.items._data[itemId].vidx;                          // get the vidx of tA clicked on in the DataSet
