@@ -15,6 +15,7 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import { style } from '@angular/animations';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
@@ -210,7 +211,7 @@ rData:any;
   rDataKey: number;
 
 
-  myControl = new FormControl();
+  covererSelect = new FormControl();
   foptions: string[] = [];
   filteredOptions: Observable<string[]>;
 
@@ -265,8 +266,8 @@ rData:any;
    if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
      this.isSafari = false;
   if (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
-     this.isSafari = false;
-    this.filteredOptions = this.myControl.valueChanges
+    this.isSafari = false;
+    this.filteredOptions = this.covererSelect.valueChanges
         .pipe(
           startWith(''),
           map(value => this._filter(value))
@@ -387,13 +388,12 @@ selectCoverer(n, i ){
       debug: 1
     }
     this.writeLog("storeCovererData", link1);
-    /*
     this.genEditSvce.genPOST(emp).subscribe(
       (res) => {
         console.log("res from sendEmail2 from storeCovererDate is  %o", res);
       }
     );
-    */
+    /*********    end of sendEmail to Coverer  *****************/
     if (this.covererName.length &&  this.covererName.length > 0){
       const covererUserKey = this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName)
       console.log(" 397 " + covererUserKey)
@@ -559,7 +559,7 @@ selectCoverer(n, i ){
   find_rDataKey(dataStruct, name, value){
     for( var prop in dataStruct ) {
         var tst = new String(dataStruct[prop][name]) ;                                          // need to do this to use indexOf()
-        if (tst.indexOf(value.toString().trim()) !== -1)
+        if (value && tst.indexOf(value.toString().trim()) !== -1)
                return prop;
       }
   }  
@@ -600,9 +600,9 @@ selectCoverer(n, i ){
   createEditForm(_id) {                                      // create the form for New tA
     const coverageA = this.findCoverage(_id);
     if (this.clickedFrom_rData.coverageA)
-      this.myControl.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);                      // set the value of the autoComplete Coverage widget
+      this.covererSelect.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);                      // set the value of the autoComplete Coverage widget
     else
-      this.myControl.setValue('');  
+      this.covererSelect.setValue('');  
     this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
@@ -726,17 +726,15 @@ selectCoverer(n, i ){
     return idx;
   }
 
-
   setQueryParams(qP) {
     if (qP.userid) {
       this.userid = qP.userid;
       console.log(" 655  dddd %o", this.userid);
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
-     this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=1";
+      this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=1";
       this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=schneider";
       this.showDosimURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=2";
       this.showDosimURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=ske5";
-    
     
    }
     else {
@@ -767,6 +765,7 @@ selectCoverer(n, i ){
   tAO: any
   getTimelineData2(mode) 
   {
+
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
     const numWeeks = 5;                                                                 // number of weeks to show on the calendar
     const todayDate = new Date();
@@ -799,6 +798,7 @@ selectCoverer(n, i ){
           this.rData = val;
           console.log("737  rData %o", this.rData);
           this.rData.data = this.myBubsort(this.rData.data);              // alphabetize by LastName
+          this.setLoggedInUserData();
          } else {
      //     this.data2 = Array();
         }
@@ -816,24 +816,36 @@ selectCoverer(n, i ){
         console.log("818 %o", this.rData);
         for (var key in this.rData)
         {
-          for (var key2 in this.rData[key]){
+          for (var key2 in this.rData[key])
+          {
             if (this.rData[key][key2]['start'])
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z" 
-            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] !== 'background') // advance end to avoid 'humping'
+            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] !== 'background')                                       // advance end to avoid 'humping'
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00Z" ;
-            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] == 'background') // don't advance backgrong end 
+            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] == 'background')                                        // don't advance backgrong end 
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;  
             tAstartDate = new Date(startDateArg );
             tAendDate = new Date(endDateArg);
           //  if ( tAstartDate > startDateShown )
             {
+             
              if ( this.rData[key][key2]['content']){
-                if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // adjuct color to reflect approval
-                  if (+this.rData[key][key2]['rank']== 0  && +this.rData[key][key2]['userkey'] !== 58 ){
+                if (   +this.rData[key][key2]['userkey'] > 0  ){                                                                       // adjuct color to reflect approval
+                  if (+this.rData[key][key2]['rank']== 0  && +this.rData[key][key2]['userkey'] !== 58 ){                                // if user is a Dosimetrist and NOT Napolitano
+                    styleTxt = "";
                     if (+this.rData[key][key2]['approved'] == 0 )
                       styleTxt = 'background-color:white;'
                     else   
-                      styleTxt= 'background-color:rgb(195,195,195);';
+                      styleTxt= 'background-color:rgb(230,230,230);';
+                 
+                    console.log ("840 %o", +this.rData[key][key2]['coverageA'] !> 0 )
+                 
+                    if (+this.rData[key][key2]['covA_Duty'] == 1)
+                      styleTxt +='background-color:green;'
+                    else if ( +this.rData[key][key2]['coverageA'] !> 0 ){
+                        styleTxt +='background-color:red;'
+                        console.log("red %", styleTxt);
+                      }  
                   }
                   var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
                   if (group2Badded == -1 ){                                                       // if groups does not yet exist
@@ -905,6 +917,10 @@ selectCoverer(n, i ){
       end: endDateShown,
     };
   }                                                   // end of getTimeLineData
+  setLoggedInUserData(){
+    this.loggedInLastName = this.rData.fromION[this.rData['loggedInUserKey']]['LastName'];
+    this.loggedInFirstName = this.rData.fromION[this.rData['loggedInUserKey']]['FirstName'];
+  }
  myBubsort(array){                                            // sort by LastName 
   array = array.slice(); // creates a copy of the array
   for(let i = 0; i < array.length; i++) {

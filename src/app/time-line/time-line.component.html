@@ -175,7 +175,7 @@
                 <td> {{ tst }}
                     <mat-form-field class="example-full-width">
                             <mat-label style='color:blue'>Choose Coverer (autocomplete) </mat-label>
-                          <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" 
+                          <input type="text"  aria-label="Number" matInput [formControl]="covererSelect" [matAutocomplete]="auto" 
                           class="param"        title="Type a character for autocomplete"   >
                           <mat-autocomplete  #auto="matAutocomplete">
                             <mat-option *ngFor="let option of filteredOptions | async"  [(value)]="option"
@@ -260,9 +260,7 @@
    <div id='help'  style="  position: fixed; bottom: 0; right: 0;" >
             <app-help [helpArray] = "helpArray"   ></app-help>
     </div>
-<div id='help'  style="  position: fixed; bottom: 0; right: 0;" >
-    <app-help [helpArray] = "helpArray"   ></app-help>
-</div>
+
 <div id="datums"  style="display:none"> </div> <!----  Gro  ??  id ??-->
 <div id="datums2"  style="display:none"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:block"> </div>
