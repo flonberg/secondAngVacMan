@@ -39,8 +39,10 @@ mat-label{
   color:blue;
 }
 .param {
-
-  font-size:10pt;
+  font-size:12pt;
+}
+caption {
+  color:blue;
 }
 
 .error {

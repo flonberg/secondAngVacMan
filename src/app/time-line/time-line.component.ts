@@ -475,7 +475,7 @@ selectCoverer(n, i ){
               this.helpArray = ['Your Time Away must be approved before you cen select coverers'];      
             }                  
         }
-           console.log('clicked'  + this._id);
+      
       /*******  classify loggedInUser as tA Owner or coverer */     
        if (this.items && this.items._data[this._id] &&  this.items._data[this._id].className === this.userid) { // loggedInUser is tA owner 
            this._readonly = false;                                                              // enable editing
@@ -485,7 +485,7 @@ selectCoverer(n, i ){
               this.helpArray = [ "Click on a TimeAway to see the details for tha TimeAway.",
                                 "Coverer name in green means that the coverage has bee accepted."]; 
            }
-           
+           console.log('clicked  _readOnly %o',  this._readonly );  
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
@@ -828,25 +828,28 @@ selectCoverer(n, i ){
             tAstartDate = new Date(startDateArg );
             tAendDate = new Date(endDateArg);
           //  if ( tAstartDate > startDateShown )
-            {
-             
+
              if ( this.rData[key][key2]['content']){
                 if (   this.rData[key][key2]['userkey'] > 0  ){                                                                       // adjuct color to reflect approval
                  var rank = +this.rData[key][key2]['rank'] ;
                   console.log("835 rank %o", +this.rData[key][key2]['rank'] )
                   if (  this.rData[key][key2]['rank'] &&   +this.rData[key][key2]['rank'] == 0  ){                                // if user is a Dosimetrist and NOT Napolitano
                     styleTxt = "";
+                    styleTxt= 'background-color:rgb(230,230,230);'; 
                     if (+this.rData[key][key2]['approved'] == 0 )
                       styleTxt = 'background-color:white;'
-                    else   
-                      styleTxt= 'background-color:rgb(230,230,230);'; 
+             
+               
                  //   console.log ("840 %o", +this.rData[key][key2]['coverageA'] !> 0 )
-                    if (+this.rData[key][key2]['covA_Duty'] == 1)
+                    else if (+this.rData[key][key2]['covA_Duty'] == 1)                                 // if coverage is accepted
                       styleTxt +='background-color:green;'
-                    else if ( +this.rData[key][key2]['coverageA'] !> 0 ){
-                        styleTxt +='background-color:red;'
+                    else if ( +this.rData[key][key2]['coverageA'] !> 0 ){                         // if coverage is nominaged
+                        styleTxt +='background-color:orange;'
                         console.log("red %", styleTxt);
-                      }  
+                        }
+                    else 
+                        styleTxt += 'background-color:red'                                        // no coverer    
+
                   }
                   var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
                   if (group2Badded == -1 ){                                                       // if groups does not yet exist
@@ -877,7 +880,7 @@ selectCoverer(n, i ){
                 }           
               }
             }
-          }      
+     
         }
      //   console.log('787  items %o', this.items)
 

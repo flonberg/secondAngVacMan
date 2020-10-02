@@ -132,17 +132,15 @@
                             <mat-label>Last Day Away</mat-label>
                             <input class="param" matInput   [ngModel]='dBendDateString'>
                      </td>
-       
-               
                      <td>
                             <mat-form-field *ngIf = "!_readonly" class="medium">
-                                    <mat-label>Reason</mat-label>
-                                        <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)" class="param"
-                                        id='reasonId'>
-                                                <mat-option  value="0">Personal Vacation</mat-option>
-                                                <mat-option  value="1">Other</mat-option>
-                                                <mat-option   value="2">Meeting</mat-option>  
-                                        </mat-select>
+                                <mat-label>Reason</mat-label>
+                                <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)" class="param"
+                                id='reasonId'>
+                                        <mat-option  value="0">Personal Vacation</mat-option>
+                                        <mat-option  value="1">Other</mat-option>
+                                        <mat-option   value="2">Meeting</mat-option>  
+                                </mat-select>
                             </mat-form-field>
                     </td>
                     <td *ngIf = '_readonly'>
@@ -169,66 +167,40 @@
                         (click) = " saveEdits();" >Submit Changes</button> </td>
                     <td   *ngIf = "!_readonly && !newTimeAway2 && drawEditControls"  >  <button mat-raised-button color="primary" 
                                                         (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>    
-
-                </tr><tr>
-                
-                <td> {{ tst }}
-                    <mat-form-field class="example-full-width">
-                            <mat-label style='color:blue'>Choose Coverer (autocomplete) </mat-label>
-                          <input type="text"  aria-label="Number" matInput [formControl]="covererSelect" [matAutocomplete]="auto" 
-                          class="param"        title="Type a character for autocomplete"   >
-                          <mat-autocomplete  #auto="matAutocomplete">
-                            <mat-option *ngFor="let option of filteredOptions | async"  [(value)]="option"
-                            (click)="storeEdit('coverer', $event)" 
-                            > {{option}}
-                            </mat-option>
-                          </mat-autocomplete>
-                     </mat-form-field>
-                 </td>
-            
-                 <td   *ngIf = "!_readonly && !newTimeAway2 && covererSelected && drawEditControls"  >  <button  mat-raised-button color="primary" 
-                    (click) = " storeCovererData();" >Send Email To Coverer </button> </td>
-
-
-
-
-                     <td>  
-
-
-         <form [formGroup]="formEdit" *ngIf = "drawEditControls && !newTimeAway2 " (ngSubmit)="onSubmit()">
-                  
-
-
-            <div  *ngIf = "isApprover && this.data2 && this.data2._data[this._id]['approved'] == 0 " >   
-                            <button  mat-raised-button  type='button' (click) = "editGen('approve', $event)">Approve </button>  
-                        </div>
-                    </form> </td>
-
-                
-                
-                
-                                                    </tr></table>  
+                </tr>
+                <tr>
+                    <td    *ngIf = "+rData.loggedInUserRank == 0   && !_readonly "     > 
+                        <mat-form-field class="example-full-width">
+                            <mat-label  style='color:blue'>Choose Coverer (autocomplete) </mat-label>
+                            <input type="text"  aria-label="Number" matInput [formControl]="covererSelect" [matAutocomplete]="auto" 
+                            class="param"        title="Type a character for autocomplete"   >
+                            <mat-autocomplete  #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of filteredOptions | async"  [(value)]="option"
+                                (click)="storeEdit('coverer', $event)" 
+                                > {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td   *ngIf = "!_readonly && !newTimeAway2 && covererSelected && drawEditControls"  >  <button  mat-raised-button color="primary" 
+                                    (click) = " storeCovererData();" >Send Email To Coverer </button> </td>
+                    <td>                  
+                </tr>
+        </table>  
         
-                <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter"> 
-            
-                   
-               <auto-complete-filter-example></auto-complete-filter-example>
+            <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter">  
                         <!--        Read Only Coverers Display        -->
                         <table *ngIf = "_readonly" style = "width:30%; ">   
                             <caption> Coverers </caption>    
                             <tr> 
-                                <td [class] = "coverageAclass"> {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageA']]   }} </td>
-                                <td  *ngIf = "coverageA_isLoggedInUser  && coverageAclass=='NotAccepted'">  
-                                        <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covA_Duty')">Accept </button>  
-                                </td>
-                                <td [class] = "coverageBclass" > {{ this.rData['usersByKey'][this.rData['data'][this._id]['coverageB']]   }} </td>
-                                <td  *ngIf = "coverageB_isLoggedInUser && coverageBclass=='NotAccepted'">  
-                                        <button  mat-raised-button class="small" type='button' (click) = "acceptCoverage('covB_Duty')">Accept </button>  
-                                </td>
+                                <td [class] = "coverageAclass"> {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>
+
+                          
                             </tr>
                         </table>
                     </div>  
         </div >      
+
  
             <div id="controls" [formGroup] = 'form' *ngIf = "drawControls && this.data2" color:grey>
                     <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
