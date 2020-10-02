@@ -91,10 +91,10 @@ rData:any;
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.',
   'There is a button for Help in the lower right corner of the page. '
                 ];
-  helpArray = [ 'To zoom the calendar scroll within the calendar.',
-                'You can also pan the calendar by placing mouse in calendar and moving horizontally.' ,
-                'To edit your Time Away click on that Time Away. ', 
-                'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'  ];
+  helpArray = [   "If TimeAway is in red, it means that now coverer has been nominated",
+  "Orange means that the coverer has not yer accepted the coverage.",
+  "Green means that the coverage has been accepted.",
+    "Pan and zoom are implemented."  ];
   noticeColName='vacMan';
   noticeModalComonentID='vacManModal'
   reason: String;
@@ -483,7 +483,10 @@ selectCoverer(n, i ){
           {                                                                             // user is NOT tA owner
               this._readonly = true;                                                                // make controls readOnly
               this.helpArray = [ "Click on a TimeAway to see the details for tha TimeAway.",
-                                "Coverer name in green means that the coverage has bee accepted."]; 
+                                "If TimeAway is in red, it means that now coverer has been nominated",
+                                "Orange means that the coverer has not yer accepted the coverage.",
+                                "Green means that the coverage has been accepted."
+                              ]; 
            }
            console.log('clicked  _readOnly %o',  this._readonly );  
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
