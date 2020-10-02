@@ -237,7 +237,7 @@ export class MonthViewComponent implements OnInit {
     /*******   make the rest of the weeks on the calendar.  */  
     for (let i=1; i < 6; i++){                                                              // max of 4 more weeks in calendar
       for (let j= 0; j < 5; j++) {                                                          // the days of each week
-        tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
+
         let dayNum = tmpDate.getDay();                                                      // get dayNum of week, this will be Saturday 
         if (dayNum == 6 )                                                                   // check if it is Saturday, 
           tmpDate.setDate(tmpDate.getDate() + 2);                                           // increment 2 days to get to Monday. 
@@ -248,6 +248,7 @@ export class MonthViewComponent implements OnInit {
             this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
             this.daysS[i][j].dayNumber = tmpDate.getDate();
             this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";     
+            tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
       }
     }
     /*************      get the data  ************************/

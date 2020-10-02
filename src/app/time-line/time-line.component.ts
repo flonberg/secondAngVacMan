@@ -603,6 +603,7 @@ selectCoverer(n, i ){
       this.covererSelect.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);                      // set the value of the autoComplete Coverage widget
     else
       this.covererSelect.setValue('');  
+    if ( this.items._data[this._id].reason )  
     this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
     this.doValidation = false;
     this.invalidFromDate = false;
@@ -830,16 +831,16 @@ selectCoverer(n, i ){
             {
              
              if ( this.rData[key][key2]['content']){
-                if (   +this.rData[key][key2]['userkey'] > 0  ){                                                                       // adjuct color to reflect approval
-                  if (+this.rData[key][key2]['rank']== 0  && +this.rData[key][key2]['userkey'] !== 58 ){                                // if user is a Dosimetrist and NOT Napolitano
+                if (   this.rData[key][key2]['userkey'] > 0  ){                                                                       // adjuct color to reflect approval
+                 var rank = +this.rData[key][key2]['rank'] ;
+                  console.log("835 rank %o", +this.rData[key][key2]['rank'] )
+                  if (  this.rData[key][key2]['rank'] &&   +this.rData[key][key2]['rank'] == 0  ){                                // if user is a Dosimetrist and NOT Napolitano
                     styleTxt = "";
                     if (+this.rData[key][key2]['approved'] == 0 )
                       styleTxt = 'background-color:white;'
                     else   
-                      styleTxt= 'background-color:rgb(230,230,230);';
-                 
-                    console.log ("840 %o", +this.rData[key][key2]['coverageA'] !> 0 )
-                 
+                      styleTxt= 'background-color:rgb(230,230,230);'; 
+                 //   console.log ("840 %o", +this.rData[key][key2]['coverageA'] !> 0 )
                     if (+this.rData[key][key2]['covA_Duty'] == 1)
                       styleTxt +='background-color:green;'
                     else if ( +this.rData[key][key2]['coverageA'] !> 0 ){

@@ -119,8 +119,8 @@ export class GenEditService   {
  //     this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/';      //get data from BB  for localhost or BB 
  //   }   
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
-    //  this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
-     this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/'; 
+      this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
+    // this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/'; 
       this.emailStage = "Dev"; 
     }   
     if ( window.location.href.indexOf('whiteboard') !== -1 ){                   // PROD. 
