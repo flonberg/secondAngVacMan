@@ -193,9 +193,9 @@
                         <table *ngIf = "_readonly" style = "width:30%; ">   
                             <caption> Coverers </caption>    
                             <tr> 
-                                <td [class] = "coverageAclass"> {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>
-
-                          
+                                <td [class] = "coverageAclass"
+                                *ngIf = "this.rData.fromION[ this.clickedFrom_rData.coverageA] "
+                                > {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>     
                             </tr>
                         </table>
                     </div>  

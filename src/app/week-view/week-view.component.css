@@ -25,3 +25,7 @@ th {
 tr.main:hover{
     background-color:yellow;
 }
+.loading {
+    font-size: 20pt;
+    color: blue;
+}

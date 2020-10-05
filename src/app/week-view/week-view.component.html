@@ -1,4 +1,4 @@
-<app-autocomplete-filter-example></app-autocomplete-filter-example>
+
 <table><tr>
     <td  *ngIf = "advance  >= 0 " class="small">
         <button (click) = 'makeWeek(-1)'  mat-raised-button class="accent"  >Previous Week </button>
@@ -9,32 +9,33 @@
       <td style="color:blue"> To page, click on a physicist's name. </td>
     </tr>    
 </table>
-<table class='main'>
-  <tr class='white'>
-   <th></th><th></th>
-    <th  *ngFor = "let item of calHeadings; let i = index" >
-      <table [class] = 'isToday(item.date)'>
-        <tr><th >{{ item.dayName }} </th> </tr>  
-        <tr><th   [class]='isToday(item.date, i)'>  {{ item.monthDay }} </th> </tr>
-      </table>
-    </th> 
-  </tr>
-  <tr *ngFor = 'let item of WeekDutyNames' class='main' >
-    <td style="font-weight:bold;" >  {{ item.name }} </td>
-    <td> {{ item.timeSpan }} </td>
-    <td  *ngFor = " let cH of calHeadings2; let j = index" >
-      
-       <div *ngIf = "physicsMonthlyDuties && physicsMonthlyDuties[cH['date']] " [class] = "isTodayColor(cH['date'] ) "
-          (click) = "page(physicsMonthlyDuties[cH['date']][item.Idx])"
-      >
-       {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }} 
-   
-     </div>
+<div *ngIf = "!physicsMonthlyDuties" class='loading' > loading... </div>
+<div *ngIf = "physicsMonthlyDuties">
+  <table class='main'>
+    <tr class='white'>
+    <th></th><th></th>
+      <th  *ngFor = "let item of calHeadings; let i = index" >
+        <table [class] = 'isToday(item.date)'>
+          <tr><th >{{ item.dayName }} </th> </tr>  
+          <tr><th   [class]='isToday(item.date, i)'>  {{ item.monthDay }} </th> </tr>
+        </table>
+      </th> 
+    </tr>
+    <tr *ngFor = 'let item of WeekDutyNames' class='main' >
+      <td style="font-weight:bold;" >  {{ item.name }} </td>
+      <td> {{ item.timeSpan }} </td>
+      <td  *ngFor = " let cH of calHeadings2; let j = index" >
+        
+        <div *ngIf = "physicsMonthlyDuties && physicsMonthlyDuties[cH['date']] " [class] = "isTodayColor(cH['date'] ) "
+            (click) = "page(physicsMonthlyDuties[cH['date']][item.Idx])"
+        >
+        {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }} 
+        </div>
 
-    </td>
-  </tr> 
-
-</table>
+      </td>
+    </tr> 
+  </table>
+</div>  
 
 <p> Physicist A is responsible for new plan checks on L1, L2, L3 that occur during the assigned shift </p>
 <p> Physicist B is responsible for new plan checks on L4, L5, L6 that occur during the assigned shift </p>

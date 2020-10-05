@@ -787,12 +787,12 @@ selectCoverer(n, i ){
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 8);   
   //  this.genEditSvce.getTAs().subscribe(
-    var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;
+    var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;                       // userId used to switch between Dosim and Phys
     this.items = null;
     this.groups2 = null;
-    this.items = new vis.DataSet();                                     // for tAs
-    this.groups2 = new vis.DataSet();                                   // for Groups;
-    this.groups2Array = new Array();                                             // Array to keep track of if added to groups2
+    this.items = new vis.DataSet();                                                     // for tAs
+    this.groups2 = new vis.DataSet();                                                   // for Groups;
+    this.groups2Array = new Array();                                                    // Array to keep track of if added to groups2
   
     if (this.param)
       url += this.param;
@@ -801,21 +801,17 @@ selectCoverer(n, i ){
         if (this.index === 0) {    
           this.rData = val;
           console.log("737  rData %o", this.rData);
-          this.rData.data = this.myBubsort(this.rData.data);              // alphabetize by LastName
-          this.setLoggedInUserData();
-         } else {
-     //     this.data2 = Array();
-        }
-        for (let key in this.rData.Rusers) {                                // load the UserName into autoComplete array
+          this.rData.data = this.myBubsort(this.rData.data);                            // alphabetize by LastName, rData.data is tAs
+          this.loggedInLastName = this.rData.fromION[this.rData['loggedInUserKey']]['LastName'];  // used for mail messages
+          this.loggedInFirstName = this.rData.fromION[this.rData['loggedInUserKey']]['FirstName'];                                        
+         }
+        for (let key in this.rData.Rusers) {                                            // load the UserName into autoComplete array
           let value = this.rData.users[key];
             this.foptions.push( key)
              }
         
-        var setId = 1;                                                    
-        var tAstartDate = new Date();
-        var tAendDate = new Date();
- //    var tst = this.rData.fromION.find(t=>t.userid == this.userid);
-        /*****           process data and add to TimeLine DataSet             */
+                /*****           process data and add to TimeLine DataSet             */
+        var setId = 1;                                                                  // used to incement id for adding to DataSet                            
         var styleTxt= 'background-color:rgb(195,195,195);';
         console.log("818 %o", this.rData);
         for (var key in this.rData)
@@ -828,8 +824,8 @@ selectCoverer(n, i ){
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00Z" ;
             if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] == 'background')                                        // don't advance backgrong end 
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;  
-            tAstartDate = new Date(startDateArg );
-            tAendDate = new Date(endDateArg);
+      //      tAstartDate = new Date(startDateArg );
+      //      tAendDate = new Date(endDateArg);
           //  if ( tAstartDate > startDateShown )
 
              if ( this.rData[key][key2]['content']){
@@ -924,10 +920,7 @@ selectCoverer(n, i ){
       end: endDateShown,
     };
   }                                                   // end of getTimeLineData
-  setLoggedInUserData(){
-    this.loggedInLastName = this.rData.fromION[this.rData['loggedInUserKey']]['LastName'];
-    this.loggedInFirstName = this.rData.fromION[this.rData['loggedInUserKey']]['FirstName'];
-  }
+
  myBubsort(array){                                            // sort by LastName 
   array = array.slice(); // creates a copy of the array
   for(let i = 0; i < array.length; i++) {
