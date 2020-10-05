@@ -492,7 +492,7 @@ selectCoverer(n, i ){
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
-      console.log("466");   
+
       /***********  Set Class for Coverers display,  according to Acceptance */   
       if (this.items && this.items._data[this._id]     )  { 
         if ( this.items._data[this._id]['covA_Duty'] == '1')
@@ -511,7 +511,6 @@ selectCoverer(n, i ){
           this.coverageB_isLoggedInUser = true;
         }
         /************   Change Help text */
-        console.log("rData has " + +this.rData['loggedInUserKey'] + " items hsa " + +this.items._data[this._id]['userkey'])
         if (+this.rData['loggedInUserKey'] == +this.items._data[this._id]['userkey']){
           this.helpArray = [
             'Click on the Coverage drop-down and select person who will be you First Coverer.',  
@@ -519,45 +518,30 @@ selectCoverer(n, i ){
           ]
         }
     }
+    var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
+    'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
+    'editColNames':[],
+    'editColVals':[],
+    'action': 'editAndLog'                                     
+  };
+  this.dB_PP.whereColName=['vidx'];
+  this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
 
-    console.log("coverageAclass" + this.coverageAclass);   
-         var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
-          'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
-          'editColNames':[],
-          'editColVals':[],
-          'action': 'editAndLog'                                     
-        };
-        this.dB_PP.whereColName=['vidx'];
-        this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
+ if ( this.items &&  this.items._data[this._id] ){             // Ed/
+        var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
+        var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
+        this.dB_PP.editColNames = ['startDate','endDate'];      
+        this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
+        this.dB_PP.action = 'editAndLog';
 
-       if (document.getElementById('datums2').innerText.indexOf('remove') !== -1) {             // presence of the work 'remove' indicates user clicked 'x'
+      // dParams.editColVals = [startDateEdit,endDateEdit];
+
+      // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
+    }
     
-       this.items.remove({id: +document.getElementById('datums').innerText});                // remove the item from the dataSet
-           this.drawEditControls = false;                                                       // turn off the edit Controls.
-           document.getElementById('datums2').innerText = "";                                   // clear it so that further clicks on tA don't result in delete
-           dParams.editColNames = ['reasonIdx'];
-           dParams.editColVals = ['99'];
-           this.genEditSvce.genDB_POST(dParams);                                              // use REST call to delete tA from the dataBase.
-       } 
-         else if ( this.items &&  this.items._data[this._id] ){             // Ed/
- 
-            var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
-            var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
-         //   this.formatDateYYYymmdd(this.items._data[this._id].start);    // format the date for use in dataBase
-          //  var endDateEdit = this.formatDateYYYymmdd(this.items._data[this._id].end);        //    "
-          //  dParams.editColNames = ['startDate','endDate'];
-            this.dB_PP.editColNames = ['startDate','endDate'];      
-            this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
-            this.dB_PP.action = 'editAndLog';
-
-           // dParams.editColVals = [startDateEdit,endDateEdit];
-
-           // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
-         }
-         
          this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
-         console.log("527 rDataKey " + this.rDataKey)
-    }       /*******  end of clicked */
+         console.log("527 rDataK %o  and this.id is %o",   this.rData.data, this._id)
+}       /*******  end of clicked */
   /*********  find the key of the selected timeAway element in the rData so can find Coverers */
   find_rDataKey(dataStruct, name, value){
     for( var prop in dataStruct ) {
@@ -566,7 +550,6 @@ selectCoverer(n, i ){
                return prop;
       }
   }  
-
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.doValidation = false;
@@ -814,27 +797,21 @@ selectCoverer(n, i ){
         var setId = 1;                                                                  // used to incement id for adding to DataSet                            
         var styleTxt= 'background-color:rgb(195,195,195);';
         console.log("818 %o", this.rData);
-        for (var key in this.rData)
-        {
+      for (var key in this.rData)
+      {
           for (var key2 in this.rData[key])
           {
             if (this.rData[key][key2]['start'])
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z"  // create string for adding to DataSet
-           // if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] !== 'background')      
-           if (this.rData[key][key2]['end'])                                 // NOT a weekend
+  
+           if (this.rData[key][key2]['end'])                                                      // NOT a weekend
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00Z" ;     // m.m. for end 
-           // if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] == 'background')                                        // don't advance backgrong end 
-           //   var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;  
-          //      tAstartDate = new Date(startDateArg );
-          //      tAendDate = new Date(endDateArg);
-          //  if ( tAstartDate > startDateShown )
 
           if ( this.rData[key][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
           {
-            if (   this.rData[key][key2]['userkey'] > 0  )
+             // set the color code for approved, covered, and coverageAccepted
+            if (   this.rData[key][key2]['userkey'] > 0  )                                      
             {                                             
-                      //  var rank = +this.rData[key][key2]['rank'] ;
-                      //   console.log("835 rank %o", +this.rData[key][key2]['rank'] )
               if (  this.rData[key][key2]['rank'] &&   +this.rData[key][key2]['rank'] == 0  )     // if user is a Dosimetrist 
               {          
                 styleTxt= 'background-color:rgb(230,230,230);';                                    // default backgound = grey
@@ -849,68 +826,46 @@ selectCoverer(n, i ){
                         styleTxt += 'background-color:red'                                        // Approved by No coverer    
               }
               var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;   // Check is this user already has a group
-                  if (group2Badded == -1 ){                                                       // It is NOT a user it is a Weekend
-                    this.groups2Array.push(this.rData[key][key2]['content']);                     // add the group for this user
-                    this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})    
-                    group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ; // use for the 'group' datum of the dataSet
-                  }
-                  else {                                                                            // weekend
-                    this.rData[key][key2]['type']= 'background';                                    // add 'type' for shading
-                  }
-                }
-                if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal nonWeekend tA
-                  const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                        style:styleTxt,
-                                        end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
-                                        reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
-                                        className: this.rData[key][key2]['className']}  
-               //  console.log("774 tAO %o", tAO);    
-    
-                }   
-                else {                                                                              // make a tAO for a weekend
-                  const tAO = { id: ++setId,  start: startDateArg,
-                    className:this.rData[key][key2]['className'],
-                    end: endDateArg,  type:'background',
-                    }  
-         
-                } 
-                this.items.getDataSet().add(tAO);
-
+              if (group2Badded == -1 ){                                                       // It is NOT a user it is a Weekend
+                this.groups2Array.push(this.rData[key][key2]['content']);                     // add the group for this user
+                this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})    
+                group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ; // use for the 'group' datum of the dataSet
+              }
+              else {                                                                            // weekend
+                this.rData[key][key2]['type']= 'background';                                    // add 'type' for shading
+              }
             }
+            // create the tAO object to add to the DataSet
+            if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal nonWeekend tA.  tAO is object toB added to dataSet
+              const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
+                                    style:styleTxt,
+                                    end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
+                                    reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
+                                    className: this.rData[key][key2]['className']}  
+              this.items.getDataSet().add(tAO);                                                 // add the tAO
+            }   
+            else {                                                                              // make a tAO for a weekend
+              const tAO = { id: ++setId,  start: startDateArg,
+                className:this.rData[key][key2]['className'],
+                end: endDateArg,  type:'background',
+                }  
+              this.items.getDataSet().add(tAO);
+            }              
           }
         }
-     //   console.log('787  items %o', this.items)
-
-      //  if (this.timeline)
-    //      this.timeline.destroy;
-        this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
-        this.timeline.setOptions(this.options);
-        this.timeline.setGroups(this.groups2);
-        this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-         document.getElementById('datums').innerHTML = properties.items  ;             // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
+      }
+      this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
+      this.timeline.setOptions(this.options);
+      this.timeline.setGroups(this.groups2);
+      // SELECT function triggered by the user clicking on a tA, loads the id of the clickedOn tA in a DOM for use by the rest of the script. 
+      this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
+        document.getElementById('datums').innerHTML = properties.items  ;               // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
         });
-        
-      function logEvent(event, properties) {                                            // used to capture event if user clicke 'x' to delete tA
-        const log = document.getElementById('log');                                     // so if 'remove' is found  
-        const msg = document.createElement('div');
-        document.getElementById('chData').innerHTML = properties.items .innerHTML = 'event=' + JSON.stringify(event) + ', ' +
-            'properties=' + JSON.stringify(properties);
-        log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
-        }
       }
     );
     
     this.options = {
       selectable: true,
-
-      onAdd: function (item, callback) {
-        document.getElementById('datums').innerHTML = item.group;
-        document.getElementById('datums2').innerHTML = item.start;
-      },
-      onRemove: function (item, callback) {
-        document.getElementById('datums').innerHTML = item.id;
-        document.getElementById('datums2').innerHTML = callback;
-      },
       groupOrder: function (a, b) {
         return a.value - b.value;
       },

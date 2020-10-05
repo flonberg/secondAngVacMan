@@ -194,7 +194,7 @@
                             <caption> Coverers </caption>    
                             <tr> 
                                 <td [class] = "coverageAclass"
-                                *ngIf = "this.rData.fromION[ this.clickedFrom_rData.coverageA] "
+                                *ngIf = "this.rData.fromION[ this.clickedFrom_rData.coverageA] &&  +this.clickedFrom_rData.coverageA > 0 "
                                 > {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>     
                             </tr>
                         </table>
