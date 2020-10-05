@@ -819,43 +819,40 @@ selectCoverer(n, i ){
           for (var key2 in this.rData[key])
           {
             if (this.rData[key][key2]['start'])
-              var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z" 
-            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] !== 'background')                                       // advance end to avoid 'humping'
-              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00Z" ;
-            if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] == 'background')                                        // don't advance backgrong end 
-              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;  
-      //      tAstartDate = new Date(startDateArg );
-      //      tAendDate = new Date(endDateArg);
+              var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z"  // create string for adding to DataSet
+           // if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] !== 'background')      
+           if (this.rData[key][key2]['end'])                                 // NOT a weekend
+              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00Z" ;     // m.m. for end 
+           // if (this.rData[key][key2]['end'] && this.rData[key][key2]['type'] == 'background')                                        // don't advance backgrong end 
+           //   var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T04:00:00Z" ;  
+          //      tAstartDate = new Date(startDateArg );
+          //      tAendDate = new Date(endDateArg);
           //  if ( tAstartDate > startDateShown )
 
-             if ( this.rData[key][key2]['content']){
-                if (   this.rData[key][key2]['userkey'] > 0  ){                                                                       // adjuct color to reflect approval
-                 var rank = +this.rData[key][key2]['rank'] ;
-                  console.log("835 rank %o", +this.rData[key][key2]['rank'] )
-                  if (  this.rData[key][key2]['rank'] &&   +this.rData[key][key2]['rank'] == 0  ){                                // if user is a Dosimetrist and NOT Napolitano
-                    styleTxt = "";
-                    styleTxt= 'background-color:rgb(230,230,230);'; 
-                    if (+this.rData[key][key2]['approved'] == 0 )
-                      styleTxt = 'background-color:white;'
-             
-               
-                 //   console.log ("840 %o", +this.rData[key][key2]['coverageA'] !> 0 )
-                    else if (+this.rData[key][key2]['covA_Duty'] == 1)                                 // if coverage is accepted
+          if ( this.rData[key][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
+          {
+            if (   this.rData[key][key2]['userkey'] > 0  )
+            {                                             
+                      //  var rank = +this.rData[key][key2]['rank'] ;
+                      //   console.log("835 rank %o", +this.rData[key][key2]['rank'] )
+              if (  this.rData[key][key2]['rank'] &&   +this.rData[key][key2]['rank'] == 0  )     // if user is a Dosimetrist 
+              {          
+                styleTxt= 'background-color:rgb(230,230,230);';                                    // default backgound = grey
+                if (+this.rData[key][key2]['approved'] == 0 )                                     // if NOT approved
+                  styleTxt = 'background-color:white;'
+                else if (+this.rData[key][key2]['covA_Duty'] == 1)                                 // if has accepted overage
                       styleTxt +='background-color:green;'
-                    else if ( +this.rData[key][key2]['coverageA'] !> 0 ){                         // if coverage is nominaged
+                else if ( +this.rData[key][key2]['coverageA'] !> 0 ){                             // if tA HAS coverage but not accepted
                         styleTxt +='background-color:orange;'
-                        console.log("red %", styleTxt);
                         }
-                    else 
-                        styleTxt += 'background-color:red'                                        // no coverer    
-
-                  }
-                  var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
-                  if (group2Badded == -1 ){                                                       // if groups does not yet exist
-                    this.groups2Array.push(this.rData[key][key2]['content']);
-                    this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})
-                
-                    group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;
+                else 
+                        styleTxt += 'background-color:red'                                        // Approved by No coverer    
+              }
+              var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;   // Check is this user already has a group
+                  if (group2Badded == -1 ){                                                       // It is NOT a user it is a Weekend
+                    this.groups2Array.push(this.rData[key][key2]['content']);                     // add the group for this user
+                    this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})    
+                    group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ; // use for the 'group' datum of the dataSet
                   }
                   else {                                                                            // weekend
                     this.rData[key][key2]['type']= 'background';                                    // add 'type' for shading
@@ -867,19 +864,20 @@ selectCoverer(n, i ){
                                         end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
                                         reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
                                         className: this.rData[key][key2]['className']}  
-               //  console.log("774 tAO %o", tAO);                      
-                  this.items.getDataSet().add(tAO);
+               //  console.log("774 tAO %o", tAO);    
+    
                 }   
-                else {
+                else {                                                                              // make a tAO for a weekend
                   const tAO = { id: ++setId,  start: startDateArg,
                     className:this.rData[key][key2]['className'],
                     end: endDateArg,  type:'background',
                     }  
-                  this.items.getDataSet().add(tAO);
-                }           
-              }
+         
+                } 
+                this.items.getDataSet().add(tAO);
+
             }
-     
+          }
         }
      //   console.log('787  items %o', this.items)
 
