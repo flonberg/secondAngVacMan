@@ -467,7 +467,7 @@ selectCoverer(n, i ){
             this._vidx = this.items._data[this._id].vidx;                                        // store the vidx for editing
             const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);            // find the key of this vidx in the rawData 
             this.clickedFrom_rData= this.rData.data[rDataKey];                                   // get the row for this vidx from the rawData
-     //       this.createEditForm(this._id);                                                       // create the form for editing the tA
+            this.createEditForm(this._id);                                                       // create the form for editing the tA
             document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
             if (this.items && this.items._data[this._id].approved == 1 )
               this.helpArray = [' If you time away has been approved you can select a coverer.' ];
@@ -582,27 +582,24 @@ selectCoverer(n, i ){
   createEditForm(_id) {                                      // create the form for New tA
     const coverageA = this.findCoverage(_id);
     if (this.clickedFrom_rData.coverageA)
-      this.covererSelect.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);                      // set the value of the autoComplete Coverage widget
+      this.covererSelect.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);   // set the value of the autoComplete Coverage widget
     else
       this.covererSelect.setValue('');  
     if ( this.items._data[this._id].reason )  
        this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
-  //  this.doValidation = false;
-  //  this.invalidFromDate = false;
     this.dBcontent = this.items._data[this._id].content;
-    this.dBstartDate = new Date(this.items._data[this._id].start);
-    this.dBendDate = new Date(this.items._data[this._id].end);
-    this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');
+    this.dBstartDate = new Date(this.items._data[this._id].start);          // need to reformat e.g. 2020-12-01T00:00:00 -> 12-02-2020
+    this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
+    this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');   // used for readOnly date display widget 
     this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M-dd-yyyy');
     const reasons = ['Personal Vacation', 'Other', 'Meeting'];
     this.dBreason = reasons[this.items._data[this._id].reason];
-
     var toDateRaw = this.items._data[this._id].start
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
     var fromDateRaw = this.items._data[this._id].end;
     fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 10);
     this.shownNote = this.items._data[this._id].note;
-    this.formEdit = this.fb.group({                          // fb ison
+   /* this.formEdit = this.fb.group({                          // fb ison
       goAwayerBox: [ this.items._data[this._id].content],
       dateToEdit: [toDateRaw, Validators.required ],
       dateFromEdit: [fromDateRaw, Validators.required ],
@@ -610,8 +607,7 @@ selectCoverer(n, i ){
       noteGEdit: [ this.items._data[this._id].note]
     }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
     );;
-    console.log("561")
-  //  this.makeDateLabels();
+   */
   }
 
 

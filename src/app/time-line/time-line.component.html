@@ -36,9 +36,8 @@
             <form [formGroup]="formG" *ngIf = "newTimeAway2" (ngSubmit)="onSubmit()" name='mainForm'>
                 <div class = "heading" > Enter New Time Away Paramters </div>
                 <mat-form-field class="item" >
-
                         <mat-label>First Day Away</mat-label>
-                        <input matInput formControlName="dateFrom" 
+                        <input matInput formControlName="dateFrom"  class="param"
                         [matDatepicker]="picker" 
    
                         (dateChange)="storeDate('first', $event)" 
@@ -50,7 +49,7 @@
        
                 <mat-form-field class="item" >
                         <mat-label>Last Day Away</mat-label>
-                        <input matInput formControlName="dateTo"     [matDatepicker]="picker1" 
+                        <input matInput formControlName="dateTo"     [matDatepicker]="picker1"  class="param"
                         (dateChange)="storeDate('last', $event)"  
                         (click)="picker1.open()"     >
                         <mat-datepicker-toggle matSuffix [for]="picker1"  ></mat-datepicker-toggle>
