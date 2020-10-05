@@ -610,7 +610,6 @@ selectCoverer(n, i ){
    */
   }
 
-
   dateLessThan(from: string, to: string, reason: string) {
       return (group: FormGroup): {[key: string]: any} => 
       {
@@ -646,38 +645,31 @@ selectCoverer(n, i ){
           this.helpArray = ['Your Time Away needs to be approved before you can select coverage. '];
         var advEndDate = this.formG.value.dateTo
         var advStartDate = this.formG.value.dateFrom
-        advEndDate.setDate(advEndDate.getDate() + 1); 
+        advEndDate.setDate(advEndDate.getDate() + 1);       // User is used to entering lastDayAway as end of tA, no need to advance for dB and dataSet
         const advStartDateString = this.datePipe.transform(advStartDate, 'yyyy-MM-dd'); 
         const advEndDateString = this.datePipe.transform(advEndDate, 'yyyy-MM-dd'); 
-        console.log("589  advStartDateString " + advStartDateString)
-        this.insertP = <SinsertParams>{};                                // create instance of interface
-        this.insertP.tableName = 'vacation3';
-        this.insertP.action = 'insertRecGen';
-        this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
-        this.insertP.colVal = [advStartDateString,  // colValues 
+        this.insertP = <SinsertParams>{};                                // create instance of interface for genPOST
+          this.insertP.tableName = 'vacation3';
+          this.insertP.action = 'insertRecGen';
+          this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
+          this.insertP.colVal = [advStartDateString,  // colValues 
           advEndDateString, this.formG.value.reasonG,
           this.formG.value.noteG, this.rData['loggedInUserKey'], '0'];
         const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
         console.log("544  insertP is %o", this.insertP);
-      
             /***********  enter newTA in dataBase  */
-    this.genEditSvce.genPOST(this.insertP)
-      .subscribe(                                          
+      this.genEditSvce.genPOST(this.insertP)
+        .subscribe(                                          
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
           window.location.reload();
-        })   
-
-
-   // this.newTimeAway2 = false;    
+        })    
   }
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
-    this.ret = s;                             // stores the vacation3 vidx to a
+    this.ret = s;                                             // stores the vacation3 vidx to a
     var idx = s.lastID;
     this.lastInsertIdx = s['lastID'];
-    console.log("idx is %o" +  s );
-
            /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
     if (this.rData.loggedInUserRank < 5){   
       const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx   ;
@@ -733,7 +725,6 @@ selectCoverer(n, i ){
       console.log("timeLine platform " + this.platform);
     }
   }
-  // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     if (this.timelineContainer  ) {
       this.tlContainer = this.timelineContainer.nativeElement;
@@ -806,7 +797,8 @@ selectCoverer(n, i ){
               if (  this.rData[key][key2]['rank'] &&   +this.rData[key][key2]['rank'] == 0  )     // if user is a Dosimetrist 
               {          
                 styleTxt= 'background-color:rgb(230,230,230);';                                    // default backgound = grey
-                if (+this.rData[key][key2]['approved'] == 0 )                                     // if NOT approved
+      
+                if (+this.rData[key][key2]['approved'] == 0 && +this.rData[key][key2]['userkey'] !== 58  )                                     // if NOT approved
                   styleTxt = 'background-color:white;'
                 else if (+this.rData[key][key2]['covA_Duty'] == 1)                                 // if has accepted overage
                       styleTxt +='background-color:green;'
@@ -828,20 +820,21 @@ selectCoverer(n, i ){
             }
             // create the tAO object to add to the DataSet
             if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal nonWeekend tA.  tAO is object toB added to dataSet
-              const tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
+             this.tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
                                     style:styleTxt,
                                     end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
                                     reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
                                     className: this.rData[key][key2]['className']}  
-              this.items.getDataSet().add(tAO);                                                 // add the tAO
+                                                   // add the tAO
             }   
             else {                                                                              // make a tAO for a weekend
-              const tAO = { id: ++setId,  start: startDateArg,
+              this.tAO = { id: ++setId,  start: startDateArg,
                 className:this.rData[key][key2]['className'],
                 end: endDateArg,  type:'background',
                 }  
-              this.items.getDataSet().add(tAO);
-            }              
+   
+            }         
+            this.items.getDataSet().add(this.tAO);     
           }
         }
       }
