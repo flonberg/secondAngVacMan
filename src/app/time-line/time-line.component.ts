@@ -467,7 +467,7 @@ selectCoverer(n, i ){
             this._vidx = this.items._data[this._id].vidx;                                        // store the vidx for editing
             const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);            // find the key of this vidx in the rawData 
             this.clickedFrom_rData= this.rData.data[rDataKey];                                   // get the row for this vidx from the rawData
-            this.createEditForm(this._id);                                                       // create the form for editing the tA
+     //       this.createEditForm(this._id);                                                       // create the form for editing the tA
             document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
             if (this.items && this.items._data[this._id].approved == 1 )
               this.helpArray = [' If you time away has been approved you can select a coverer.' ];
@@ -533,15 +533,11 @@ selectCoverer(n, i ){
         this.dB_PP.editColNames = ['startDate','endDate'];      
         this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
         this.dB_PP.action = 'editAndLog';
-
-      // dParams.editColVals = [startDateEdit,endDateEdit];
-
-      // this.genEditSvce.genDB_POST(this.dB_PP);               // use REST call to update the dataBase.
-    }
-    
-         this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
+    }  
+  this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
          console.log("527 rDataK %o  and this.id is %o",   this.rData.data, this._id)
 }       /*******  end of clicked */
+
   /*********  find the key of the selected timeAway element in the rData so can find Coverers */
   find_rDataKey(dataStruct, name, value){
     for( var prop in dataStruct ) {
@@ -590,10 +586,9 @@ selectCoverer(n, i ){
     else
       this.covererSelect.setValue('');  
     if ( this.items._data[this._id].reason )  
-    this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
-    this.doValidation = false;
-    this.invalidFromDate = false;
-
+       this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
+  //  this.doValidation = false;
+  //  this.invalidFromDate = false;
     this.dBcontent = this.items._data[this._id].content;
     this.dBstartDate = new Date(this.items._data[this._id].start);
     this.dBendDate = new Date(this.items._data[this._id].end);
@@ -802,10 +797,10 @@ selectCoverer(n, i ){
           for (var key2 in this.rData[key])
           {
             if (this.rData[key][key2]['start'])
-              var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T04:11:00Z"  // create string for adding to DataSet
+              var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T00:00:00"  // create string for adding to DataSet
   
            if (this.rData[key][key2]['end'])                                                      // NOT a weekend
-              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00Z" ;     // m.m. for end 
+              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00" ;     // m.m. for end 
 
           if ( this.rData[key][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
           {
@@ -895,16 +890,7 @@ selectCoverer(n, i ){
     }
   }
   
-      /*************  remove the tA from display working, needs dataBase part **************/
-  remove() {
-    this.items.remove(this._id);                                         // remove LOCALLY
-    this.showControls = false;                                          // turn off controls             
-    this.dB_PP.editColNames = ['reasonIdx'];                            // the col which holds the DELETE sign
-    this.dB_PP.editColVals = ['99'];                                    // the DELETE code
-    this.dB_PP.whereColName = ['vidx'];
-    this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]  // the DOM element link to the timeline
-    this.genEditSvce.genDB_POST(this.dB_PP);                            // do the dB operation
-  }
+
   sendDeleteEmail(){
     if (+this.rData.loggedInUserRank == 0){
       const addrArray = Array("flonberg@partners.org", "bnapolitano@partners.org")
@@ -937,7 +923,7 @@ selectCoverer(n, i ){
                   "NewEndDate": String,
                 }
   covererSelected = false;
-  storeEdit(type,e){
+  storeEdit(type,e){                                                              // called by (dateChange) in DatePicker
     console.log("951 %o", e);
     if (type == 'coverer')
       this.covererSelected = true;
@@ -946,17 +932,14 @@ selectCoverer(n, i ){
     this.editColVals[0] = '0';
     if (e.value){
           console.log("date Entered %o", e.value);
-     //     this.editColNames.push(type);
           let newDate = new Date(e.value);
     
           let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
           let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
           newDate.setDate(newDate.getDate()+ 1);                  // Wrong time is entered by DatePicker
-    //      newDate.setHours(newDate.getHours()  -4 );                  // Wrong time is entered 
           let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
           let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
-
-    console.log("951 newDateString %o", startDateString);
+          console.log("951 newDateString %o", startDateString);
      
           {
             if (type=='startDate'){
@@ -972,7 +955,6 @@ selectCoverer(n, i ){
               this.editColVals.push(endDateStringForEdit)
             }
           }
-
           console.log("958 %o", this.items);
         //  this.editColVals.push(e.value);  
     }
