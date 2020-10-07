@@ -165,7 +165,7 @@
                     <td   *ngIf = "!_readonly && !newTimeAway2 && showSubmitChanges && drawEditControls"  >  <button  mat-raised-button color="primary" 
                         (click) = " saveEdits();" >Submit Changes</button> </td>
                     <td   *ngIf = "!_readonly && !newTimeAway2 && drawEditControls"  >  <button mat-raised-button color="primary" 
-                                                        (click) = " sendDeleteEmail();editGen('del',$event);" >Delete</button> </td>    
+                                                        (click) = " sendDeleteEmail();saveEdits('del');" >Delete</button> </td>    
                 </tr>
                 <tr>
                     <td    *ngIf = "+rData.loggedInUserRank == 0   && !_readonly "     > 

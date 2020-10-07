@@ -110,26 +110,16 @@ export class GenEditService   {
     window.location.href = 'https://ion.mgh.harvard.edu/cgi-bin/main.pl?userid=' + u;
   }
  
-  setPlatform(){             // set the dB host for the localhost version      
-  //  this.angularRoute = this.loc.path();    
-    this.emailStage = "Dev"                                                 // the default. 
-    const wlr = window.location.href;       
-    console.log("window.location.herf is " + window.location.href);
-  //  if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
- //     this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/vacMan/';      //get data from BB  for localhost or BB 
- //   }   
+  setPlatform(){             // set the dB host for the localhost version                                                     // the default. 
+    this.emailStage = "Dev";                                                   // send ALL emails to flonberg for forwarding
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
       this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
-    // this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/'; 
-      this.emailStage = "Dev"; 
+    // this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';     // might want to work with PROD data 
     }   
     if ( window.location.href.indexOf('whiteboard') !== -1 ){                   // PROD. 
-      console.log(" dectected whiteboard so setting urlBase to whitboard");
       this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
-      this.emailStage = "Prod";
     }    
     if ( window.location.href.indexOf('cat') !== -1 ){
-      console.log(" dectected balckcat so setting urlBase to whitboard");
       this.urlBase = 'https://blackcat.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
     }    
     return this.host;                           // for time-line which has its own REST

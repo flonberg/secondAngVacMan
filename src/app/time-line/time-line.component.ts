@@ -261,34 +261,34 @@ rData:any;
 
   isSafari = true
   ngOnInit() {
- let tst = window.navigator.userAgent.toLowerCase();
- console.log("262 rr %o", tst);
-   if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
-     this.isSafari = false;
-  if (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
-    this.isSafari = false;
-    this.filteredOptions = this.covererSelect.valueChanges
-        .pipe(
-          startWith(''),
-          map(value => this._filter(value))
-        );
-    this.endBeforeStart = false;
-    this.gotReason = false;
-    console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
-    this.activatedRoute                                             // point to the route clicked on
-    .queryParams                                                    // look at the queryParams
-    .subscribe(queryParams => {                                     // get the queryParams as Observable
-      this.qP = queryParams;
-      this.setQueryParams(queryParams);
-   //   this.seP.who = this.userid;
-      this.getTimelineData2(0);                                      // get the data from REST database call.
-      const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
-        action:'simpleGet',
-        tableName:'notice',
-        whereColName:'UserId',
-        whereColVal: this.userid,                                  // the UserId of the loggedInUser
-        getColName:'vacMan', 
-        };
+        if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)  // if in Safari, need to reload on Add new tA
+          this.isSafari = false;                                              // if NOT can do an add. 
+        if (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+          this.isSafari = false;
+        /**********   for AutoComplete search    */
+        this.filteredOptions = this.covererSelect.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+            );
+
+        this.endBeforeStart = false;
+        this.gotReason = false;
+        console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
+        this.activatedRoute                                             // point to the route clicked on
+        .queryParams                                                    // look at the queryParams
+        .subscribe(queryParams => {                                     // get the queryParams as Observable
+          this.qP = queryParams;
+          this.setQueryParams(queryParams);
+      //   this.seP.who = this.userid;
+          this.getTimelineData2(0);                                      // get the data from REST database call.
+          const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
+            action:'simpleGet',
+            tableName:'notice',
+            whereColName:'UserId',
+            whereColVal: this.userid,                                  // the UserId of the loggedInUser
+            getColName:'vacMan', 
+            };
         this.genEditSvce.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
           this.notice = val;                                      // save the resule
           if (this.notice &&  this.notice['vacMan']== 0)          // it r 0
@@ -806,7 +806,7 @@ selectCoverer(n, i ){
                         styleTxt +='background-color:orange;'
                         }
                 else 
-                        styleTxt += 'background-color:red'                                        // Approved by No coverer    
+                        styleTxt += 'background-color:red'                                     // Approved by No coverer    
               }
               var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;   // Check is this user already has a group
               if (group2Badded == -1 ){                                                       // It is NOT a user it is a Weekend
@@ -834,7 +834,7 @@ selectCoverer(n, i ){
                 }  
    
             }         
-            this.items.getDataSet().add(this.tAO);     
+            this.items.getDataSet().add(this.tAO);                                              // add the new tAO to dataSet. 
           }
         }
       }
@@ -906,10 +906,10 @@ selectCoverer(n, i ){
   needEndEmail = false;
   newStartDate = String;
   newEndDate = String;
-  EDO = { "OldStartDate": String,                                 // used for email 
-                  "NewStartDate": String,
-                  "OldEndDate": String,
-                  "NewEndDate": String,
+  EDO = { "OldStartDate": '',                                // used for email 
+                  "NewStartDate": '',
+                  "OldEndDate": '',
+                  "NewEndDate": '',
                 }
   covererSelected = false;
   storeEdit(type,e){                                                              // called by (dateChange) in DatePicker
@@ -927,19 +927,27 @@ selectCoverer(n, i ){
           let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
           newDate.setDate(newDate.getDate()+ 1);                  // Wrong time is entered by DatePicker
           let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
-          let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
+          let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd'); 
+          this.needStartEmail = true; 
+          this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);
+          this.EDO.NewStartDate = <string>startDateStringForEdit 
+          this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
+          this.EDO.NewEndDate = <string>endDateStringForEdit 
+     
           console.log("951 newDateString %o", startDateString);
      
           {
             if (type=='startDate'){
+              this.needStartEmail = true;
               if (!this.isSafari)
-              this.items.update({id: this._id, start: startDateString});  
+                this.items.update({id: this._id, start: startDateString});  
               this.editColNames.push("startDate");
               this.editColVals.push(startDateStringForEdit)
             }
             if (type=='endDate'){
-              if (!this.isSafari)
-              this.items.update({id: this._id, end: endDateString});  
+              this.needStartEmail = true;
+        //      if (!this.isSafari)                                                 // live update to timeLine does not work in Safari
+                this.items.update({id: this._id, end: endDateString});  
               this.editColNames.push("endDate");
               this.editColVals.push(endDateStringForEdit)
             }
@@ -952,8 +960,8 @@ selectCoverer(n, i ){
         this.editColVals.push(e.target.value);
         const dateForDataSet = e.target.value + "T00:00:00Z"; 
         if (type=='startDate'){
-          this.needStartEmail = true;
-          this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10); ; 
+          this.needStartEmail = true; 
+          this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);; 
           this.EDO.NewStartDate = e.target.value; 
           this.items.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
 
@@ -979,7 +987,7 @@ selectCoverer(n, i ){
 
     }
   }
-  saveEdits(){
+  saveEdits(param?){
    // this.editColNames.shift();                                 // remove garbage zeroth element
   //  this.editColVals.shift();
     var eP  = {
@@ -991,7 +999,11 @@ selectCoverer(n, i ){
       whereColVal:[this.items._data[this._id]['vidx']],
       userid:this.userid
     }
-    console.log("905  saveEdits ep %o", eP);
+    if (param == 'del') {                                          // user clicked Delete Button
+      eP.editColNames=['reasonIdx'];                                // sel editColName 
+      eP.editColVals= ['99'];
+      this.items.remove({id: this._id })
+    }
     if (this.needStartEmail)
       this.sendStartOrEndDateEmail();
     this.genEditSvce.genPOST(eP).subscribe(
@@ -1004,14 +1016,14 @@ selectCoverer(n, i ){
        window.location.reload();
   }
   sendStartOrEndDateEmail(){
-    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;
-    if (this.needStartEmail){
+    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script
+    if (this.needStartEmail){                   
       var msg = "<p>The  Time Away of " + this.items._data[this._id]['content'] + ' has changed';
-      if (typeof this.EDO.NewStartDate === 'string'){
-        msg += " from Start Date of " + this.EDO.OldStartDate + " to " + this.EDO.NewStartDate +',';
+      if (this.EDO.NewStartDate.length > 2 ){
+        msg += " from Start Date of " + this.EDO.OldStartDate + " to new Start Date of " + this.EDO.NewStartDate +',';
       }
-      if (typeof this.EDO.NewEndDate === 'string'){
-        msg += " from End Date of " + this.EDO.OldEndDate + " to " + this.EDO.NewEndDate +',';
+      if (this.EDO.NewEndDate.length > 2 ){
+        msg += " from End Date of " + this.EDO.OldEndDate + " to new End Date of " + this.EDO.NewEndDate +',';
       }
       msg += "</p> <p> To approve this change click on a <a href=" + link33 + "> Approve Change </a>" 
       var emp = { 
@@ -1028,22 +1040,14 @@ selectCoverer(n, i ){
             console.log("res from sendEmail2 %o", res);
           }
       );
-      console.log("Brian Email msg is " + msg);  
     }
   }
-tSP(param){
 
-}
-toggleShowPhysicists(param){
-  this.getTimelineData2(0);
-
-}
 editGen(type: string, event: any) {                                  // editGen is used for ALL fields
  console.log("editGen");
     var dateForDataSet = ''; 
    const shownId = this._id;
    var messageUsed = ""; 
-  // console.log( 'editGen ' + this.items._data[this._id]['approved'] + "thisis" + shownId);
     if (type =='start' || type =='end'){                                  // if it is a date
        messageUsed  = "The " + type + " date of the Time Away for " + this.items._data[this._id]['LastName'] + " has changed  from "
       + this.items._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
