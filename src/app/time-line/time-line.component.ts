@@ -19,28 +19,16 @@ import { style } from '@angular/animations';
 
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
-/*
-interface editsInt  {
-  name: String;
-  value: String;
-}
-*/
-/*
-interface newTAparams {
-  startDate: string;
-  endDate: string;
-  reason: number;
-  Note: string;
-}
-*/
-interface nameToUserId {                        // used to setGroups
+
+/*interface nameToUserId {                        // used to setGroups
   lastName: string;
   userid: string;
-}
-interface useridToUserkey {                     // userd in setGroups
+}*/
+
+/*interface useridToUserkey {                      // userd in setGroups
   userid: string;
   userkey: number;
-}
+}*/
 interface dN {
   dayName:string;
 }
@@ -55,22 +43,22 @@ export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
   platform = "dev";
 //  platform = "prod";
-rData:any;
-  nominatedCoverer: number;
-  nominatedCoverer2: number;
-  nomCoverers: [];
-  covererDates= [];
-  covererName = "";
-  covererName2 = "";
-  covererUserKey: number;
+  rData:any;
+ // nominatedCoverer: number;
+//  nominatedCoverer2: number;
+ // nomCoverers: [];
+  //covererDates= [];
+  covererName = "";                                     // confirmed use in href = link 
+ // covererName2 = "";
+  covererUserKey: number;                               // confirmed use
   covererUserKey2: number;
   showPhysURL: string;
   showDosimURL: string;
-  shownNote: string;
+  //shownNote: string;
   
-  showCoverers = false;
-  showSendEmailToCoverers = false;
-  dB_PostParams: dB_POSTparams
+  //c = false;
+ // showSendEmailToCoverers = false;
+  //dB_PostParams: dB_POSTparams
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
   data2: any;                                           // the dS for the tA data
@@ -87,7 +75,7 @@ rData:any;
 //  idSel: String;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
-  masterArray = ['This new page is part of upgrade of Whiteboard.',
+  masterArray = ['This new page is part of upgrade of Whiteboard.',   // used for help component
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.',
   'There is a button for Help in the lower right corner of the page. '
                 ];
@@ -95,10 +83,10 @@ rData:any;
   "Orange means that the coverer has not yer accepted the coverage.",
   "Green means that the coverage has been accepted.",
     "Pan and zoom are implemented."  ];
-  noticeColName='vacMan';
+  noticeColName='vacMan';                             // used as @input for notice.component.tx
   noticeModalComonentID='vacManModal'
   reason: String;
-  startDate: FormControl;
+// startDate: FormControl;
   endDate: FormControl;
   reasonFC: FormControl;
   notesFC: FormControl;
@@ -132,7 +120,7 @@ rData:any;
     Note: ''
   };
   */
-  dB_PP: dB_POSTparams = {                          //  create instance of interface
+  dB_PP: dB_POSTparams = {                          //  create instance of interface imported from genService
     tableName:'vacation3',
     whereColName:[],
     whereColVal: [],
@@ -172,9 +160,9 @@ rData:any;
  loggedInLastName: string;
  loggedInFirstName: string;
  loggedInRank: string;
- isLoggedInUserDosimetrist: boolean;
-  nameToUserId: nameToUserId[];
-  useridToUserkeys: useridToUserkey[];
+ //isLoggedInUserDosimetrist: boolean;
+ // nameToUserId: nameToUserId[];
+ // useridToUserkeys: useridToUserkey[];
   startDateEdited: boolean;
   endDateEdited: boolean;
   reasonEdited: boolean;
@@ -221,13 +209,13 @@ rData:any;
 
       this.ret = 1;
     this.dateLabels = [];
-    this.nomCoverers = [];
+ //   this.nomCoverers = [];
  //   this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
     this.isApprover = false;
-    this.nameToUserId = [ {lastName: '', userid: ''} ];
-    this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
+ //   this.nameToUserId = [ {lastName: '', userid: ''} ];
+   // this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
     this.contentArray = [];
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
     this.showSubmitChanges = false; 
@@ -420,7 +408,6 @@ selectCoverer(n, i ){
   }                                                       // end of StoreCovererData 
 
   enterInDbAndEmail(){
-    console.log("enterinDb %o", this.covererDates);
     this.showCoverers = true;
   }
   
@@ -586,11 +573,13 @@ selectCoverer(n, i ){
     else
       this.covererSelect.setValue('');  
     if ( this.items._data[this._id].reason )  
-       this.reasonSelect = this.items._data[this._id].reason.toString(); // set selected
+       this.reasonSelect = this.items._data[this._id].reason.toString();    // set selected
     this.dBcontent = this.items._data[this._id].content;
-    this.dBstartDate = new Date(this.items._data[this._id].start);          // need to reformat e.g. 2020-12-01T00:00:00 -> 12-02-2020
+    this.dBstartDate = new Date(this.items._data[this._id].start);          // ref'ed by [ngModel] in datePicker
     this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
+    this.dBendDate.setDate(this.dBendDate.getDate() - 1);                   // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
     this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');   // used for readOnly date display widget 
+
     this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M-dd-yyyy');
     const reasons = ['Personal Vacation', 'Other', 'Meeting'];
     this.dBreason = reasons[this.items._data[this._id].reason];
@@ -1043,85 +1032,6 @@ selectCoverer(n, i ){
     }
   }
 
-editGen(type: string, event: any) {                                  // editGen is used for ALL fields
- console.log("editGen");
-    var dateForDataSet = ''; 
-   const shownId = this._id;
-   var messageUsed = ""; 
-    if (type =='start' || type =='end'){                                  // if it is a date
-       messageUsed  = "The " + type + " date of the Time Away for " + this.items._data[this._id]['LastName'] + " has changed  from "
-      + this.items._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
-      ". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
-
-      dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
-    }
-    if (event.target && event.target.value)                               // the editColVal can be a target.balue
-      this.dB_PP.editColVals = [ event.target.value];
-    if (event.value)                                                      // or it can be an event.value
-      this.dB_PP.editColVals = [ event.value];
-    console.log('edtied local ');
-    if (type == 'reason'){
-      this.dB_PP.editColNames = ['reason'];
-      this.items.update({id: this._id, reason: dateForDataSet});  
-    }
-   
-   if (type !== 'del'){       
-    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;
-    var emp = { 
-              action:"sendEmail2",
-              addr: {"Dev":"flonberg@partners.org",
-                      "Prod":"flonberg@gmail.com"
-                    //  "Prod":"bnapolitano@partners.org"
-                    },
-              msg: messageUsed,
-              subject: "Time Away Change"
-              };
-      console.log(" 865 emp %o ", emp) ;       
-      this.genEditSvce.genPOST(emp).subscribe(
-                (res) => {
-                  console.log("res from sendEmail2 %o", res);
-                }
-              );
-    }
-    if (type === 'start' ) {
-      this.items.update({id: this._id, start: dateForDataSet});           // do the local update
-      this.items.update({id: this._id, style:'color:red' })
-      this.startDateEdited = true;
-      this.dB_PP.editColNames = ['startDate','approved'];
-      this.dB_PP.editColVals.push('0');
-      this.dB_PP.needEmail="dateChange";
-    }                                                                   // update startDate
-    if (type === 'end') {
-      emp.msg = "The end date of the Time Away for " + this.items._data[this._id]['lastName'] + " has changed  from " + this.items._data[this._id]['end'].substr(0, 10) +
-        "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
-   
-      this.items.update({id: this._id, end: dateForDataSet}); 
-      this.items.update({id: this._id, style:'color:red' })
-      this.endDateEdited = true;
-      this.dB_PP.editColNames = ['endDate','approved'];
-      this.dB_PP.editColVals.push('0');
-      this.dB_PP.needEmail="dateChange";
-    }
-    if (type == 'note'){
-      this.dB_PP.editColNames = ['note'];
-      this.dB_PP.editColVals = [ event.target.value];
-    }
-    if (type == 'del'){
-      this.drawEditControls = false;
-      this.dB_PP.editColNames = ['reasonIdx'];
-      this.dB_PP.editColVals = [ '99'];
-      this.items.remove({id: this._id })
-    }
-    if (type == 'approve'){
-      this.dB_PP.editColNames = ['approved'];
-      this.dB_PP.editColVals = [ '1'];
-      this.items.update({id: this._id, style:'color:orange' })
-    }
-    this.dB_PP.action='editAndLog';
-    this.dB_PP.userid = <string>this.userid;
-    console.log("839 this.dB_PP %o", this.dB_PP);
-    this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
-  }
   
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker
@@ -1250,7 +1160,7 @@ editGen(type: string, event: any) {                                  // editGen 
     for (let i = 0; i < s.length; i++) { 
       if (s._data[i] && this.nameList.indexOf(s._data[i].content) < 0) {                 // if name is not already in the dS
         this.nameList.push( s._data[i].content);                           // put it in the list of Names for the timeLins
-        this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };  // make dS of lastName paired with  userkey
+       // this.nameToUserId[i] = { lastName: s._data[i].content, userid: s._data[i].userkey };  // make dS of lastName paired with  userkey
         this.useridToUserkeys[i] = { userid: s._data[i].userid, userkey: s._data[i].userkey };// dS of userid paired with userkey
         this.contentArray[s._data[i].userkey] = s._data[i].content;         // used to get 'content' param to add to dataSet.
       }                         }
@@ -1302,3 +1212,85 @@ editGen(type: string, event: any) {                                  // editGen 
     return fD;
   }
   */
+ /*
+editGen(type: string, event: any) 
+{                                  // editGen is used for ALL fields
+ console.log("editGen");
+    var dateForDataSet = ''; 
+   const shownId = this._id;
+   var messageUsed = ""; 
+    if (type =='start' || type =='end'){                                  // if it is a date
+       messageUsed  = "The " + type + " date of the Time Away for " + this.items._data[this._id]['LastName'] + " has changed  from "
+      + this.items._data[this._id]['start'].substr(0, 10) +  " to " + event.target.value + 
+      ". You can approve this change by clicking on <p><a href=" + link33 + "> Approve Change </a></p>";
+
+      dateForDataSet = event.target.value + " 00:00:00";                 // make a date for dataSet
+    }
+    if (event.target && event.target.value)                               // the editColVal can be a target.balue
+      this.dB_PP.editColVals = [ event.target.value];
+    if (event.value)                                                      // or it can be an event.value
+      this.dB_PP.editColVals = [ event.value];
+    console.log('edtied local ');
+    if (type == 'reason'){
+      this.dB_PP.editColNames = ['reason'];
+      this.items.update({id: this._id, reason: dateForDataSet});  
+    }
+   
+   if (type !== 'del'){       
+    var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;
+    var emp = { 
+              action:"sendEmail2",
+              addr: {"Dev":"flonberg@partners.org",
+                      "Prod":"flonberg@gmail.com"
+                    //  "Prod":"bnapolitano@partners.org"
+                    },
+              msg: messageUsed,
+              subject: "Time Away Change"
+              };
+      console.log(" 865 emp %o ", emp) ;       
+      this.genEditSvce.genPOST(emp).subscribe(
+                (res) => {
+                  console.log("res from sendEmail2 %o", res);
+                }
+              );
+    }
+    if (type === 'start' ) {
+      this.items.update({id: this._id, start: dateForDataSet});           // do the local update
+      this.items.update({id: this._id, style:'color:red' })
+      this.startDateEdited = true;
+      this.dB_PP.editColNames = ['startDate','approved'];
+      this.dB_PP.editColVals.push('0');
+      this.dB_PP.needEmail="dateChange";
+    }                                                                   // update startDate
+    if (type === 'end') {
+      emp.msg = "The end date of the Time Away for " + this.items._data[this._id]['lastName'] + " has changed  from " + this.items._data[this._id]['end'].substr(0, 10) +
+        "to " + event.target.value  +". You can approve this change by clicking on <p><a href + " + link33 + "> Approve Change </a> </p>";
+   
+      this.items.update({id: this._id, end: dateForDataSet}); 
+      this.items.update({id: this._id, style:'color:red' })
+      this.endDateEdited = true;
+      this.dB_PP.editColNames = ['endDate','approved'];
+      this.dB_PP.editColVals.push('0');
+      this.dB_PP.needEmail="dateChange";
+    }
+    if (type == 'note'){
+      this.dB_PP.editColNames = ['note'];
+      this.dB_PP.editColVals = [ event.target.value];
+    }
+    if (type == 'del'){
+      this.drawEditControls = false;
+      this.dB_PP.editColNames = ['reasonIdx'];
+      this.dB_PP.editColVals = [ '99'];
+      this.items.remove({id: this._id })
+    }
+    if (type == 'approve'){
+      this.dB_PP.editColNames = ['approved'];
+      this.dB_PP.editColVals = [ '1'];
+      this.items.update({id: this._id, style:'color:orange' })
+    }
+    this.dB_PP.action='editAndLog';
+    this.dB_PP.userid = <string>this.userid;
+    console.log("839 this.dB_PP %o", this.dB_PP);
+    this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
+}                                                                         // end of editGen
+*/
