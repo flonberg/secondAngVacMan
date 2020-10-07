@@ -164,28 +164,28 @@ export class TimeLineComponent implements OnInit {
  // nameToUserId: nameToUserId[];
  // useridToUserkeys: useridToUserkey[];
   //startDateEdited: boolean;
-  endDateEdited: boolean;
-  reasonEdited: boolean;
-  seP = <SeditParams>{};  // define instance of SeditParams interface
-  _vidx: string;
+  //endDateEdited: boolean;
+  //reasonEdited: boolean;
+  //seP = <SeditParams>{};  // define instance of SeditParams interface
+  _vidx: string;                                            // the vidx of the clicked on tA
 
-  endDateString: string;
+  endDateString: string;                                    // used to updata the DataSte
   startDateString: string;
   //endDateShownString: string;
   //startDateShownString: string;
   index: number;
-  useridP: string;
-  form: FormGroup;
-  cutOffDate: Date;
-  startDateEntered: Date;
-  formG: FormGroup;                                       // FormGroup for Adding new tA
-  formEdit: FormGroup;                                    // Form Group for Editing tA
-  doValidation: boolean;
-  invalidFromDate: boolean;
-  formValidation: boolean;
-  newTimeAway2: boolean;
-  notice: any;
-  dateLabels: any;
+  //useridP: string;
+  //form: FormGroup;
+  //cutOffDate: Date;
+  //startDateEntered: Date;
+  formG: FormGroup;                                         // FormGroup for Adding new tA
+  //formEdit: FormGroup;                                    // Form Group for Editing tA
+  //: boolean;
+  //invalidFromDate: boolean;
+  formValidation: boolean;                                  // used to validate New Time Away widgets
+  newTimeAway2: boolean;                                    // when true hides Edit Control widgets
+  //notice: any;
+  //dateLabels: any;
   covererToggle: boolean;
   coverageAlastName: string;
   coverageAclass:string;
@@ -208,7 +208,7 @@ export class TimeLineComponent implements OnInit {
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
 
       this.ret = 1;
-    this.dateLabels = [];
+    //this.dateLabels = [];
  //   this.nomCoverers = [];
  //   this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
@@ -231,7 +231,7 @@ export class TimeLineComponent implements OnInit {
       'reason': this.reasonFC = new FormControl(),
       'note': this.notesFC = new FormControl("-"),
     }   )
-    this.cutOffDate = new Date('2019-02-01');
+   // this.cutOffDate = new Date('2019-02-01');
     this.createForm();
 
     this.formValidation = false;
@@ -303,15 +303,15 @@ console.log("213");
   }
 
 selectCoverer(n, i ){
-    this.showSendEmailToCoverers = true;
+   // this.showSendEmailToCoverers = true;
     if (this.covererToggle ){
       this.covererName = n;
       this.covererUserKey = i;
-      this.covererName2='';
+    //  this.covererName2='';
       this.writeLog("covererUserKey set to ", this.covererUserKey);
     }
     else {
-      this.covererName2 = n;  
+    //  this.covererName2 = n;  
       this.covererUserKey2 = i;    
       this.writeLog("covererUserKey2 set to ", this.covererUserKey2);
     }
@@ -537,7 +537,7 @@ console.log("516   this._id is %o   this.items %o ", this._id, this.items);
   }  
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
-    this.doValidation = false;
+    //this.doValidation = false;
     this.invalidFromDate = false;
     this.formG = this.fb.group({                          // fb is
       dateTo: ['', Validators.required ],

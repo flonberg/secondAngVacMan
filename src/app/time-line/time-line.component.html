@@ -94,8 +94,9 @@
             </form>
         
     <!--          Edit tA  Controls   -->
-    <div class = "heading" *ngIf = '!_readonly' > Edit Time Away Paramters   </div>
-    <div class = "heading" *ngIf = '_id > 0 && _readonly  ' > Time Away Paramters for {{ dBcontent }}   </div>
+    <div *ngIf = "drawEditControls && !newTimeAway2 && this._id">
+        <div class = "heading" *ngIf = '!_readonly' > Edit Time Away Paramters   </div>
+        <div class = "heading" *ngIf = '_id > 0 && _readonly  ' > Time Away Paramters for {{ dBcontent }}   </div>
         <div style="text-align:center" *ngIf = 'this.showControls'>
             <table>
                 <tr>
@@ -108,7 +109,7 @@
                                 >
                                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                                 <mat-datepicker #picker1 ></mat-datepicker>
-                         </mat-form-field>
+                            </mat-form-field>
                     </td>
                     <td *ngIf = '!_readonly' >
                             <mat-form-field style="width:150px;"  color="accent"  *ngIf = "drawEditControls && !newTimeAway2 " >
@@ -121,16 +122,16 @@
                                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                 <mat-datepicker #picker2 ></mat-datepicker>
                             </mat-form-field>
-                     </td>
-                     <td *ngIf = '_readonly'>
+                        </td>
+                        <td *ngIf = '_readonly'>
                             <mat-label>First Day Away</mat-label>
-                             <input class="param" matInput   [ngModel]='dBstartDateString'>
-                     </td>
-                     <td *ngIf = '_readonly'>
+                                <input class="param" matInput   [ngModel]='dBstartDateString'>
+                        </td>
+                        <td *ngIf = '_readonly'>
                             <mat-label>Last Day Away</mat-label>
                             <input class="param" matInput   [ngModel]='dBendDateString'>
-                     </td>
-                     <td>
+                        </td>
+                        <td>
                             <mat-form-field *ngIf = "!_readonly" class="medium">
                                 <mat-label>Reason</mat-label>
                                 <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)" class="param"
@@ -144,8 +145,8 @@
                     <td *ngIf = '_readonly'>
                             <mat-label>Reason</mat-label>
                             <input class="param" matInput   [ngModel]='dBreason'>
-                     </td>
-               
+                        </td>
+                
                     <td>
                         <mat-form-field  class="wideItem">
                                 <mat-label class="smallLabel"> Note:  </mat-label>
@@ -184,7 +185,7 @@
                                     (click) = " storeCovererData();" >Send Email To Coverer </button> </td>
                     <td>                  
                 </tr>
-        </table>  
+            </table>  
         
             <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter">  
                         <!--        Read Only Coverers Display        -->
@@ -196,22 +197,10 @@
                                 > {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>     
                             </tr>
                         </table>
-                    </div>  
+            </div>  
         </div >     
- <!--
-        <div id="controls" [formGroup] = 'form' *ngIf = "drawControls && this.data2" color:grey>
-                <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
-                    <li class="wideItem" *ngIf =_readonly>
-                    </li>
-                    <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note
-                        && this.data2._data[this._id].note.length > 0)" >
-                    </li> 
-                    <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
-                    <button mat-raised-button  >Save New Time-Away </button>   
-                    </li>
-                </ul>
-        </div>
-    -->   
+    </div>    
+
             
         </div>    
     </td>
