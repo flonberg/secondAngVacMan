@@ -87,30 +87,30 @@ export class TimeLineComponent implements OnInit {
   noticeModalComonentID='vacManModal'
   reason: String;
 // startDate: FormControl;
-  endDate: FormControl;
-  reasonFC: FormControl;
-  notesFC: FormControl;
-  deleteControl: FormControl;
-  dateFrom: FormControl;
-  goAwayerName: FormControl;
-  endBeforeStart: boolean;
-  gotReason: boolean;
-  tAstartDate: any;
+ // endDate: FormControl;
+//  reasonFC: FormControl;
+//  notesFC: FormControl;
+//  deleteControl: FormControl;
+//  dateFrom: FormControl;
+//  goAwayerName: FormControl;
+  endBeforeStart: boolean;                            // used for showing error message
+ // gotReason: boolean;
+  //tAstartDate: any;
   tAendDateObj: [{}];
  // reasonStrings: String[];
-  nameList: String[];                                   // list of names appearing in data for forming groups
+  //nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
   _readonly: boolean;
-  showControls: boolean;
+  showControls: boolean;                              // used to show edit controls
   _id: number;
   _content;                                           // store the item.content from click
-  drawControls = true;
-  drawEditControls = false;
-  isApprover: boolean;
+  //drawControls = true;
+  drawEditControls = false;                           // confirm user .html line 189
+  isApprover: boolean;                                // may use in future
   reasonSelect = '';                                  // the reason from dataBase
-  newTimeAwayBool = false;
-  saveTimeAwayBool = false;
-  showPhysicist :String;
+  //newTimeAwayBool = false;
+ // saveTimeAwayBool = false;
+  showPhysicist :String;                              // may used for rigorous switch
   param: String;
   /*
   newTAparams: newTAparams = {
@@ -147,7 +147,7 @@ export class TimeLineComponent implements OnInit {
       subject:''
     }
   }
-  storedEdits = [{}]                                // store values from startDate, endData, reason, note from user entries. 
+  // storedEdits = [{}]                                // store values from startDate, endData, reason, note from user entries. 
 
 
   /*
@@ -163,7 +163,7 @@ export class TimeLineComponent implements OnInit {
  //isLoggedInUserDosimetrist: boolean;
  // nameToUserId: nameToUserId[];
  // useridToUserkeys: useridToUserkey[];
-  startDateEdited: boolean;
+  //startDateEdited: boolean;
   endDateEdited: boolean;
   reasonEdited: boolean;
   seP = <SeditParams>{};  // define instance of SeditParams interface
@@ -217,7 +217,7 @@ export class TimeLineComponent implements OnInit {
  //   this.nameToUserId = [ {lastName: '', userid: ''} ];
    // this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
     this.contentArray = [];
-    this.newTimeAwayBool = false;                               // enable editing of existing tAs
+    //this.newTimeAwayBool = false;                               // enable editing of existing tAs
     this.showSubmitChanges = false; 
 
   
@@ -261,7 +261,7 @@ export class TimeLineComponent implements OnInit {
             );
 
         this.endBeforeStart = false;
-        this.gotReason = false;
+       // this.gotReason = false;
         console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
         this.activatedRoute                                             // point to the route clicked on
         .queryParams                                                    // look at the queryParams
@@ -336,7 +336,7 @@ selectCoverer(n, i ){
   }
   storeCovererData()
   {                    // store the nominated coverer UserKey 
-    this.showSendEmailToCoverers = false;
+   // this.showSendEmailToCoverers = false;
     this.rData['emailByKey']['116'] = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
     const devEmailAddress = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
   //  if (this.covererUserKey )
@@ -406,11 +406,11 @@ selectCoverer(n, i ){
     );
     
   }                                                       // end of StoreCovererData 
-
+/*
   enterInDbAndEmail(){
     this.showCoverers = true;
   }
-  
+  */
   closeModal(){
     document.getElementById('noticeModal').style.display = "none"; 
   }
@@ -439,6 +439,7 @@ selectCoverer(n, i ){
    this.genEditSvce.genDB_GET(getParams);
   }
   clickedFrom_rData: any;
+
      /*******************          This is called anytime the user RELEASES the mouse click **********************/
   clicked(ev) 
   {// this responds to ANY click-RELEASE in the div containing the calendar
@@ -452,8 +453,9 @@ selectCoverer(n, i ){
             this.showControls = true;                                                          // show editing controls
             this.drawEditControls = true;
             this._vidx = this.items._data[this._id].vidx;                                        // store the vidx for editing
-            const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);            // find the key of this vidx in the rawData 
-            this.clickedFrom_rData= this.rData.data[rDataKey];                                   // get the row for this vidx from the rawData
+            this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx);            // find the key of this vidx in the rawData Oct7 2020
+            this.clickedFrom_rData= this.rData.data[this.rDataKey];                                   // get the row for this vidx from the rawData
+            console.log("457 clickedFrom_rData %o", this.clickedFrom_rData)
             this.createEditForm(this._id);                                                       // create the form for editing the tA
             document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
             if (this.items && this.items._data[this._id].approved == 1 )
@@ -513,7 +515,7 @@ selectCoverer(n, i ){
   };
   this.dB_PP.whereColName=['vidx'];
   this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
-
+console.log("516   this._id is %o   this.items %o ", this._id, this.items);
  if ( this.items &&  this.items._data[this._id] ){             // Ed/
         var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
         var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
@@ -1044,10 +1046,8 @@ selectCoverer(n, i ){
     const s =  month + '-' + editTime.getDate() + '-' + editTime.getFullYear();
     return s;
   }
-  storeDate(type: string, event: MatDatepickerInputEvent<Date>) {
+  storeDate(type: string, event: MatDatepickerInputEvent<Date>) {       // test for endDate > startDate
     var loc = event;
-    console.log("1090 tAstartDate",type, this.formG.value.dateFrom);
-    console.log("1090 tAendDate",type, this.formG.value.dateTo);
     if ( this.formG.value.dateTo && this.formG.value.dateFrom > this.formG.value.dateTo)
       this.endBeforeStart = true;  
     if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
@@ -1056,7 +1056,7 @@ selectCoverer(n, i ){
   getReason()
   {
     console.log("1074  gotReason");
-    this.gotReason = true;
+   // this.gotReason = true;
     if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
       this.formValidation = true; 
   }

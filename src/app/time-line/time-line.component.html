@@ -39,7 +39,6 @@
                         <mat-label>First Day Away</mat-label>
                         <input matInput formControlName="dateFrom"  class="param"
                         [matDatepicker]="picker" 
-   
                         (dateChange)="storeDate('first', $event)" 
                         class ='genInput'  
                         (click)="picker.open()" >
@@ -168,7 +167,7 @@
                                                         (click) = " sendDeleteEmail();saveEdits('del');" >Delete</button> </td>    
                 </tr>
                 <tr>
-                    <td    *ngIf = "+rData.loggedInUserRank == 0   && !_readonly "     > 
+                    <td    *ngIf = "+rData.loggedInUserRank == 0   && !_readonly && this.clickedFrom_rData.approved > 0  "     > 
                         <mat-form-field class="example-full-width">
                             <mat-label  style='color:blue'>Choose Coverer (autocomplete) </mat-label>
                             <input type="text"  aria-label="Number" matInput [formControl]="covererSelect" [matAutocomplete]="auto" 
@@ -198,22 +197,21 @@
                             </tr>
                         </table>
                     </div>  
-        </div >      
-
- 
-            <div id="controls" [formGroup] = 'form' *ngIf = "drawControls && this.data2" color:grey>
-                    <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
-                <!--    This the readOnly version of the Reason control -->
-                        <li class="wideItem" *ngIf =_readonly>
-                        </li>
-                        <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note
-                            && this.data2._data[this._id].note.length > 0)" >
-                        </li> 
-                        <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
-                        <button mat-raised-button  >Save New Time Away </button>    <!-- any button in a form triggers onSubmit, unless type='button-->
-                        </li>
-                    </ul>
-            </div>
+        </div >     
+ <!--
+        <div id="controls" [formGroup] = 'form' *ngIf = "drawControls && this.data2" color:grey>
+                <ul *ngIf = "this.showControls && this._id " class="flex-container  ">
+                    <li class="wideItem" *ngIf =_readonly>
+                    </li>
+                    <li style="width:150px" *ngIf = "!_readonly || (this.data2._data[this._id] && this.data2._data[this._id].note
+                        && this.data2._data[this._id].note.length > 0)" >
+                    </li> 
+                    <li class="item" *ngIf = "this.reasonEdited && this.startDateEdited && endDateEdited" >
+                    <button mat-raised-button  >Save New Time-Away </button>   
+                    </li>
+                </ul>
+        </div>
+    -->   
             
         </div>    
     </td>
