@@ -97,7 +97,8 @@ export class TimeLineComponent implements OnInit {
     Note: ''
   };
   */
-  dB_PP: dB_POSTparams = {                          //  create instance of interface imported from genService
+ 
+  dB_PP: dB_POSTparams = {                          //  Need to create INSTANCE of interface imported from genService
     tableName:'vacation3',
     whereColName:[],
     whereColVal: [],
@@ -112,6 +113,7 @@ export class TimeLineComponent implements OnInit {
       subject:''
     }
   }
+/*
   insertP: SinsertParams = {
     tableName:'',
     colName: [],
@@ -124,6 +126,7 @@ export class TimeLineComponent implements OnInit {
       subject:''
     }
   }
+  */
   storedEdits = [{}]                                // store values from startDate, endData, reason, note from user entries. 
 
  loggedInLastName: string;
@@ -588,17 +591,17 @@ selectCoverer(n, i ){
         advEndDate.setDate(advEndDate.getDate() + 1);       // User is used to entering lastDayAway as end of tA, no need to advance for dB and dataSet
         const advStartDateString = this.datePipe.transform(advStartDate, 'yyyy-MM-dd'); 
         const advEndDateString = this.datePipe.transform(advEndDate, 'yyyy-MM-dd'); 
-        this.insertP = <SinsertParams>{};                                // create instance of interface for genPOST
-          this.insertP.tableName = 'vacation3';
-          this.insertP.action = 'insertRecGen';
-          this.insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
-          this.insertP.colVal = [advStartDateString,  // colValues 
+        const insertP = <SinsertParams>{};                                // create instance of interface for genPOST
+          insertP.tableName = 'vacation3';
+          insertP.action = 'insertRecGen';
+          insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
+          insertP.colVal = [advStartDateString,  // colValues 
           advEndDateString, this.formG.value.reasonG,
           this.formG.value.noteG, this.rData['loggedInUserKey'], '0'];
         const link =this.genEditSvce.urlBase +`/approveTA.php?goAwayerUserKey` + this.rData['loggedInUserKey'];       // Need to get the vidx just added/
-        console.log("544  insertP is %o", this.insertP);
+        console.log("544  insertP is %o", insertP);
             /***********  enter newTA in dataBase  */
-      this.genEditSvce.genPOST(this.insertP)
+      this.genEditSvce.genPOST(insertP)
         .subscribe(                                          
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
@@ -1004,7 +1007,7 @@ selectCoverer(n, i ){
     if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
       this.endBeforeStart = false;  
   }
-  /*
+  
   getReason()
   {
     console.log("1074  gotReason");
@@ -1012,7 +1015,7 @@ selectCoverer(n, i ){
     if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
       this.formValidation = true; 
   }
-*/
+
 
   
   /**************  format date as yyyy-mm-dd  for dataBase ********************/
