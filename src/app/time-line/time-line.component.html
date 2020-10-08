@@ -101,7 +101,7 @@
             <table>
                 <tr>
                     <td *ngIf = '!_readonly'>
-                        <mat-form-field style="width:150px;"  color="accent" *ngIf = "drawEditControls && !newTimeAway2 "  >
+                        <mat-form-field style="width:150px;"  color="accent"  >
                                 <mat-label>First --Day Away</mat-label>
                                 <input  class="param" matInput [matDatepicker]="picker1"  [ngModel]="dBstartDate"
                                 (click)="picker1.open()"
@@ -112,7 +112,7 @@
                             </mat-form-field>
                     </td>
                     <td *ngIf = '!_readonly' >
-                            <mat-form-field style="width:150px;"  color="accent"  *ngIf = "drawEditControls && !newTimeAway2 " >
+                            <mat-form-field style="width:150px;"  color="accent"   >
                                 <mat-label>Last Day Away</mat-label>
                                 
                                 <input  class="param" matInput [matDatepicker]="picker2"  [ngModel]="dBendDate"

@@ -89,44 +89,7 @@ export class TimeLineComponent implements OnInit {
   saveTimeAwayBool = false;
   showPhysicist :String;
   param: String;
-  /*
-  newTAparams: newTAparams = {
-    startDate: '',
-    endDate: '',
-    reason: -1,
-    Note: ''
-  };
-  */
  
-  dB_PP: dB_POSTparams = {                          //  Need to create INSTANCE of interface imported from genService
-    tableName:'vacation3',
-    whereColName:[],
-    whereColVal: [],
-    editColNames: [],
-    editColVals: [],
-    userid: '',
-    action: '',
-    needEmail: '',
-    email: {
-      mailToAddresses: [],
-      msg: '',
-      subject:''
-    }
-  }
-/*
-  insertP: SinsertParams = {
-    tableName:'',
-    colName: [],
-    colVal: [],
-    userid: '',
-    action:'',
-    email: {
-      mailToAddresses: [],
-      msg: '',
-      subject:''
-    }
-  }
-  */
   storedEdits = [{}]                                // store values from startDate, endData, reason, note from user entries. 
 
  loggedInLastName: string;
@@ -143,24 +106,23 @@ export class TimeLineComponent implements OnInit {
   //startDateEntered: Date;
   formG: FormGroup;                                       // FormGroup for Adding new tA
   formEdit: FormGroup;                                    // Form Group for Editing tA
-  doValidation: boolean;
-  invalidFromDate: boolean;
-  formValidation: boolean;
-  newTimeAway2: boolean;
+  //doValidation: boolean;
+  //invalidFromDate: boolean;
+  formValidation: boolean;                                // used to enable the Submit button on newTA form. 
+  newTimeAway2: boolean;                                  // turn OFF editTA controls when NewTA is active
   notice: any;
-  dateLabels: any;
-  covererToggle: boolean;
-  coverageAlastName: string;
-  coverageAclass:string;
-  coverageBclass:string;
-  coverageA_isLoggedInUser:boolean;
-  coverageB_isLoggedInUser:boolean;
-  keyFromQP: number;
+  //dateLabels: any;
+  //covererToggle: boolean;
+  //coverageAlastName: string;
+  coverageAclass:string;                                  // used to change the color of tA to reflect Accepted/NotAccepter
+  //coverageBclass:string;
+  //coverageA_isLoggedInUser:boolean;
+  //coverageB_isLoggedInUser:boolean;
+  //keyFromQP: number;
   ret: any;
   lastInsertIdx: any;
   events: any;
   rDataKey: number;
-
 
   covererSelect = new FormControl();
   foptions: string[] = [];
@@ -171,7 +133,7 @@ export class TimeLineComponent implements OnInit {
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
 
       this.ret = 1;
-    this.dateLabels = [];
+   // this.dateLabels = [];
  //   this.nomCoverers = [];
  //   this.redraw = true;
     this.showControls = false;                            // *ngIf condition for the controls section
@@ -199,9 +161,8 @@ export class TimeLineComponent implements OnInit {
 
     this.formValidation = false;
     this.newTimeAway2 = false;
-    this.covererToggle = true;
     this.covererUserKey = -1;
-    this.keyFromQP= -1;
+
   }
   
   private _filter(value: string): string[] {
@@ -263,7 +224,7 @@ export class TimeLineComponent implements OnInit {
     });
 console.log("213");
   }
-
+/*
 selectCoverer(n, i ){
 //    this.showSendEmailToCoverers = true;
     if (this.covererToggle ){
@@ -272,10 +233,9 @@ selectCoverer(n, i ){
     //  this.covererName2='';
       this.writeLog("covererUserKey set to ", this.covererUserKey);
     }
- 
     this.covererToggle = !this.covererToggle;
- 
-  }
+}
+*/
   goHome(u){
     window.location.href = 'https://ion.mgh.harvard.edu/cgi-bin/main.pl?userid=' + u;
   }
@@ -439,18 +399,8 @@ selectCoverer(n, i ){
         if ( this.items._data[this._id]['covA_Duty'] == '1')
           this.coverageAclass = "Accepted";
           else
-            this.coverageAclass = "NotAccepted";
-        if ( this.items._data[this._id]['covB_Duty'] == '1')
-            this.coverageBclass = "Accepted";
-            else
-                this.coverageBclass = "NotAccepted";     
-        /***********  Set if loggedInUser it the Coverer  */
-        if  (this.items._data[this._id]['coverageA'] ==   this.rData['loggedInUserKey']){
-          this.coverageA_isLoggedInUser = true;
-        }
-        if  (this.items._data[this._id]['coverageB'] ==   this.rData['loggedInUserKey']){
-          this.coverageB_isLoggedInUser = true;
-        }
+            this.coverageAclass = "NotAccepted"; 
+
         /************   Change Help text */
         if (+this.rData['loggedInUserKey'] == +this.items._data[this._id]['userkey']){
           this.helpArray = [
@@ -465,15 +415,16 @@ selectCoverer(n, i ){
     'editColVals':[],
     'action': 'editAndLog'                                     
   };
-  this.dB_PP.whereColName=['vidx'];
-  this.dB_PP.whereColVal = [document.getElementById('vidx').innerText]
+  const dB_PP = <dB_POSTparams>{}
+  dB_PP.whereColName=['vidx'];
+  dB_PP.whereColVal = [document.getElementById('vidx').innerText]
 
  if ( this.items &&  this.items._data[this._id] ){             // Ed/
         var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
         var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
-        this.dB_PP.editColNames = ['startDate','endDate'];      
-        this.dB_PP.editColVals = [startDateEdit ,endDateEdit ];
-        this.dB_PP.action = 'editAndLog';
+        dB_PP.editColNames = ['startDate','endDate'];      
+        dB_PP.editColVals = [startDateEdit ,endDateEdit ];
+        dB_PP.action = 'editAndLog';
     }  
   this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
          console.log("527 rDataK %o  and this.id is %o",   this.rData.data, this._id)
@@ -489,8 +440,8 @@ selectCoverer(n, i ){
   }  
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
-    this.doValidation = false;
-    this.invalidFromDate = false;
+   // this.doValidation = false;
+   // this.invalidFromDate = false;
     this.formG = this.fb.group({                          // fb is
       dateTo: ['', Validators.required ],
       dateFrom: ['', Validators.required ],
@@ -591,7 +542,7 @@ selectCoverer(n, i ){
         advEndDate.setDate(advEndDate.getDate() + 1);       // User is used to entering lastDayAway as end of tA, no need to advance for dB and dataSet
         const advStartDateString = this.datePipe.transform(advStartDate, 'yyyy-MM-dd'); 
         const advEndDateString = this.datePipe.transform(advEndDate, 'yyyy-MM-dd'); 
-        const insertP = <SinsertParams>{};                                // create instance of interface for genPOST
+        const insertP = <SinsertParams>{};                                // create instance of interface for SinsertParams for gen-service
           insertP.tableName = 'vacation3';
           insertP.action = 'insertRecGen';
           insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
