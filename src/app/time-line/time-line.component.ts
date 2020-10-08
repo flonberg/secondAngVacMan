@@ -3,12 +3,9 @@ import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailP
 import { SeditParams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-//import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
 import { DatePipe, KeyValue } from '@angular/common';
-
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -17,15 +14,6 @@ import { style } from '@angular/animations';
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 
-/*interface nameToUserId {                        // used to setGroups
-  lastName: string;
-  userid: string;
-}*/
-
-/*interface useridToUserkey {                      // userd in setGroups
-  userid: string;
-  userkey: number;
-}*/
 interface dN {
   dayName:string;
 }
@@ -39,37 +27,27 @@ interface dN {
 export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
   platform = "dev";
-//  platform = "prod";
   rData:any;
- // nominatedCoverer: number;
-//  nominatedCoverer2: number;
- // nomCoverers: [];
-  //covererDates= [];
   covererName = "";                                     // confirmed use in href = link 
- // covererName2 = "";
+
   covererUserKey: number;                               // confirmed use
-  covererUserKey2: number;
+
   showPhysURL: string;
   showDosimURL: string;
-  //shownNote: string;
-  
-  //c = false;
- // showSendEmailToCoverers = false;
-  //dB_PostParams: dB_POSTparams
+
   tlContainer: any;                                     // the div for the timeLie
   timeline: any;
   data2: any;                                           // the dS for the tA data
   options: {};                                          // options for timeLIne
   groups: any;
   groups2: any;                                         // for Group DataSet
-  groupsArray: any;
-  groups2Array: String[];
-  contentArray: any;
-  redraw: boolean;
-  showSubmitChanges: boolean;
+  //groupsArray: any;
+  groups2Array: String[];                               // Keep track of the groups as they are added 
+ // contentArray: any;
+  //redraw: boolean;
+  showSubmitChanges: boolean;                           // enable Submit Changes
   itemNum: string;
   qP: any;                                              // used to receive queryParams
-//  idSel: String;
   userkey: number;
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
   masterArray = ['This new page is part of upgrade of Whiteboard.',
@@ -83,14 +61,16 @@ export class TimeLineComponent implements OnInit {
   noticeColName='vacMan';                             // used as @input for notice.component.tx
   noticeModalComonentID='vacManModal'
   reason: String;
-  startDate: FormControl;
+
+  startDate: FormControl;                             // used in new FormGroup line # 208
   endDate: FormControl;
   reasonFC: FormControl;
   notesFC: FormControl;
   deleteControl: FormControl;
   dateFrom: FormControl;
   goAwayerName: FormControl;
-  endBeforeStart: boolean;
+
+  endBeforeStart: boolean;                            // used to trigger error message
   gotReason: boolean;
   tAstartDate: any;
   tAendDateObj: [{}];
@@ -146,35 +126,18 @@ export class TimeLineComponent implements OnInit {
   }
   storedEdits = [{}]                                // store values from startDate, endData, reason, note from user entries. 
 
-
-  /*
-  SinsertPP: SinsertParams = {
-    tableName:'vacation3',
-    colName:['startDate', 'endDate' , 'reason', 'note', 'userid'],
-    colVal:[]
-  }*/
- // sEPP: SeditParams;
  loggedInLastName: string;
  loggedInFirstName: string;
  loggedInRank: string;
- //isLoggedInUserDosimetrist: boolean;
- // nameToUserId: nameToUserId[];
- // useridToUserkeys: useridToUserkey[];
-  startDateEdited: boolean;
-  endDateEdited: boolean;
-  reasonEdited: boolean;
-  seP = <SeditParams>{};  // define instance of SeditParams interface
-  _vidx: string;
+  _vidx: string;                                          // holds the vidx from items dS which is the dataSet, used to find correspond tA in rData
 
-  endDateString: string;
+  endDateString: string;                                  // used to update the DataSet when user edits. 
   startDateString: string;
-  //endDateShownString: string;
-  //startDateShownString: string;
   index: number;
-  useridP: string;
+  //useridP: string;
   form: FormGroup;
-  cutOffDate: Date;
-  startDateEntered: Date;
+  //cutOffDate: Date;
+  //startDateEntered: Date;
   formG: FormGroup;                                       // FormGroup for Adding new tA
   formEdit: FormGroup;                                    // Form Group for Editing tA
   doValidation: boolean;
@@ -213,7 +176,7 @@ export class TimeLineComponent implements OnInit {
     this.isApprover = false;
  //   this.nameToUserId = [ {lastName: '', userid: ''} ];
    // this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
-    this.contentArray = [];
+  //  this.contentArray = [];
     this.newTimeAwayBool = false;                               // enable editing of existing tAs
     this.showSubmitChanges = false; 
 
@@ -228,8 +191,8 @@ export class TimeLineComponent implements OnInit {
       'reason': this.reasonFC = new FormControl(),
       'note': this.notesFC = new FormControl("-"),
     }   )
-    this.cutOffDate = new Date('2019-02-01');
-    this.createForm();
+   // this.cutOffDate = new Date('2019-02-01');
+    this.createForm();                                        // used for New TimeAway widgets
 
     this.formValidation = false;
     this.newTimeAway2 = false;
@@ -257,7 +220,7 @@ export class TimeLineComponent implements OnInit {
             );
 
         this.endBeforeStart = false;
-        this.gotReason = false;
+      //  this.gotReason = false;
         console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
         this.activatedRoute                                             // point to the route clicked on
         .queryParams                                                    // look at the queryParams
@@ -349,8 +312,7 @@ selectCoverer(n, i ){
   //    message +=  `<p> <a href=`+ link2 + `> Accept  ` + this.covererName2 + `  coverage. </a></p>`;
    // }
     var prodAddr = [this.rData['emailByKey'][this.covererUserKey]];         // the PROD adderess array
-      if ( this.covererUserKey2  )                                            // if there IS a second coverer
-        prodAddr.push(this.rData['emailByKey'][this.covererUserKey2])         // add her address. 
+
     var mTA = {
       "Dev": ["flonberg@partners.org"],
       "Prod": prodAddr,
@@ -1042,6 +1004,7 @@ selectCoverer(n, i ){
     if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
       this.endBeforeStart = false;  
   }
+  /*
   getReason()
   {
     console.log("1074  gotReason");
@@ -1049,7 +1012,7 @@ selectCoverer(n, i ){
     if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
       this.formValidation = true; 
   }
-
+*/
 
   
   /**************  format date as yyyy-mm-dd  for dataBase ********************/
