@@ -86,9 +86,11 @@ caption {
 }
 .covered {
   color: green;
+  font-size:12pt;
 }
 .notCovered {
   color: red;
+  font-size:12pt;
 }
 td.Accepted {
   color:green;

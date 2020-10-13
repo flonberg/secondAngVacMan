@@ -66,7 +66,7 @@
                 </mat-form-field>
                 <mat-form-field  class="wideItem" >
                         <mat-label class="smallLabel"> Note:</mat-label>
-                        <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize" (blur)="checkInterval()"
+                        <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize" 
                          cdkAutosizeMinRows="1"  cdkAutosizeMaxRows="5"  class='genInput'>
                         </textarea>
                 </mat-form-field > 
@@ -192,7 +192,7 @@
                         <table *ngIf = "_readonly" style = "width:30%; ">   
                             <caption> Coverers </caption>    
                             <tr> 
-                                <td [class] = "coverageAclass"
+                                <td [class] = "setCovererClass()"
                                 *ngIf = "this.rData.fromION[ this.clickedFrom_rData.coverageA] &&  +this.clickedFrom_rData.coverageA > 0 "
                                 > {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>     
                             </tr>

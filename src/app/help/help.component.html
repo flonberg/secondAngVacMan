@@ -1,10 +1,15 @@
-<div id="hideHelp" class='right'>
-  <button mat-raised-button *ngIf = "!showHelpBool" (click)="showHelp()" type="button"> Help </button>
-</div>
+<div style="width: 100%; overflow: hidden;">
+    <div class='right' style="width: 200px; float: left;" >
+          <button mat-raised-button (click)="goHome()" type="button">Home </button>
+    </div>
 
-<div id='helpDiv'  class='right'>
-    <button mat-raised-button  (click)="hideHelp()"> Hide Help </button>
+    <div id="hideHelp" class='right' style="margin-left: 200px;"   >
+      <button mat-raised-button *ngIf = "!showHelpBool" (click)="showHelp()" type="button"> Help </button>
+    </div>
 
-    <p *ngFor = "let line of helpArray">
-        {{ line }}  </p> 
+    <div id='helpDiv'  class='right'>
+        <button mat-raised-button  (click)="hideHelp()"> Hide Help </button>
+        <p *ngFor = "let line of helpArray">
+            {{ line }}  </p> 
+    </div>
 </div>

@@ -14,10 +14,6 @@ import { style } from '@angular/animations';
 declare var require: any;
 const vis = require('../../../node_modules/vis/dist/vis.js');
 
-interface dN {
-  dayName:string;
-}
-
 @Component({
   selector: 'app-time-line',
   templateUrl: './time-line.component.html',
@@ -26,29 +22,22 @@ interface dN {
 
 export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
-  platform = "dev";
-  rData:any;
-  covererName = "";                                     // confirmed use in href = link 
-
+//  platform = "dev";
+  rData:any;                                            // holds raw data from dataBase 
+  covererName = "";                                     // datum entered by entryWidged
   covererUserKey: number;                               // confirmed use
-
-  showPhysURL: string;
+  showPhysURL: string;                                  // used to switch between Phys-Dosim for Brian and Jon
   showDosimURL: string;
-
   tlContainer: any;                                     // the div for the timeLie
-  timeline: any;
-  data2: any;                                           // the dS for the tA data
+  timeline: any;                                       // the dS for the tA data
   options: {};                                          // options for timeLIne
-  groups: any;
   groups2: any;                                         // for Group DataSet
-  //groupsArray: any;
   groups2Array: String[];                               // Keep track of the groups as they are added 
- // contentArray: any;
-  //redraw: boolean;
   showSubmitChanges: boolean;                           // enable Submit Changes
   itemNum: string;
   qP: any;                                              // used to receive queryParams
   userkey: number;
+  platform: any;                                        // store platform from queryParams
   reasons = ['Personal Vacation', 'Other', 'Meeting'];
   masterArray = ['This new page is part of upgrade of Whiteboard.',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.',
@@ -71,84 +60,55 @@ export class TimeLineComponent implements OnInit {
   goAwayerName: FormControl;
 
   endBeforeStart: boolean;                            // used to trigger error message
-  gotReason: boolean;
-  tAstartDate: any;
-  tAendDateObj: [{}];
- // reasonStrings: String[];
+ // tAstartDate: any;
+ // tAendDateObj: [{}];
   nameList: String[];                                   // list of names appearing in data for forming groups
   userid: String;
   _readonly: boolean;
   showControls: boolean;
   _id: number;
-  _content;                                           // store the item.content from click
+  _content;                                               // store the item.content from click
   drawControls = true;
   drawEditControls = false;
-  isApprover: boolean;
-  reasonSelect = '';                                  // the reason from dataBase
+  isApprover: boolean;                                    // may be used for webPage tA approval for Brian          
+  reasonSelect = '';                                      // the reason from dataBase
   newTimeAwayBool = false;
   saveTimeAwayBool = false;
   showPhysicist :String;
-  param: String;
- 
-  storedEdits = [{}]                                // store values from startDate, endData, reason, note from user entries. 
-
+  param: String;                                          // may be used for getter showPhysicist/showDosim
+  //storedEdits = [{}]                                    // store values from startDate, endData, reason, note from user entries. 
  loggedInLastName: string;
  loggedInFirstName: string;
  loggedInRank: string;
   _vidx: string;                                          // holds the vidx from items dS which is the dataSet, used to find correspond tA in rData
-
   endDateString: string;                                  // used to update the DataSet when user edits. 
   startDateString: string;
   index: number;
-  //useridP: string;
+
   form: FormGroup;
-  //cutOffDate: Date;
-  //startDateEntered: Date;
   formG: FormGroup;                                       // FormGroup for Adding new tA
   formEdit: FormGroup;                                    // Form Group for Editing tA
-  //doValidation: boolean;
-  //invalidFromDate: boolean;
   formValidation: boolean;                                // used to enable the Submit button on newTA form. 
   newTimeAway2: boolean;                                  // turn OFF editTA controls when NewTA is active
   notice: any;
-  //dateLabels: any;
-  //covererToggle: boolean;
-  //coverageAlastName: string;
+
   coverageAclass:string;                                  // used to change the color of tA to reflect Accepted/NotAccepter
-  //coverageBclass:string;
-  //coverageA_isLoggedInUser:boolean;
-  //coverageB_isLoggedInUser:boolean;
-  //keyFromQP: number;
   ret: any;
   lastInsertIdx: any;
-  events: any;
-  rDataKey: number;
-
+  //events: any;
+  rDataKey: number;                                       // the key of this vidx in the rawData 
   covererSelect = new FormControl();
-  foptions: string[] = [];
+  foptions: string[] = [];                                // used for autoComplete
   filteredOptions: Observable<string[]>;
-
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
-
       this.ret = 1;
-   // this.dateLabels = [];
- //   this.nomCoverers = [];
- //   this.redraw = true;
-    this.showControls = false;                            // *ngIf condition for the controls section
+    this.showControls = false;                                      // *ngIf condition for the controls section
     this._readonly = true;
     this.isApprover = false;
- //   this.nameToUserId = [ {lastName: '', userid: ''} ];
-   // this.useridToUserkeys = [{ userid: 'Unknown', userkey: 0 }];
-  //  this.contentArray = [];
-    this.newTimeAwayBool = false;                               // enable editing of existing tAs
+    this.newTimeAwayBool = false;                                   // enable editing of existing tAs
     this.showSubmitChanges = false; 
-
-  
-  
-   // this.seP.whereColName = 'vidx';
-  //  this.seP.tableName = 'vacation3';
     this.index = 0;
     this.form = new FormGroup({
       'startDate': this.startDate = new FormControl('', Validators.required),
@@ -156,9 +116,7 @@ export class TimeLineComponent implements OnInit {
       'reason': this.reasonFC = new FormControl(),
       'note': this.notesFC = new FormControl("-"),
     }   )
-   // this.cutOffDate = new Date('2019-02-01');
-    this.createForm();                                        // used for New TimeAway widgets
-
+    this.createForm();                                            // create this.formG, used for New TimeAway widgets
     this.formValidation = false;
     this.newTimeAway2 = false;
     this.covererUserKey = -1;
@@ -169,7 +127,6 @@ export class TimeLineComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.foptions.filter(option => option.toLowerCase().startsWith(filterValue));
   }
-
   isSafari = true
   ngOnInit() {
         if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)  // if in Safari, need to reload on Add new tA
@@ -184,61 +141,46 @@ export class TimeLineComponent implements OnInit {
             );
 
         this.endBeforeStart = false;
-      //  this.gotReason = false;
-        console.log(" this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
-        this.activatedRoute                                             // point to the route clicked on
-        .queryParams                                                    // look at the queryParams
-        .subscribe(queryParams => {                                     // get the queryParams as Observable
-          this.qP = queryParams;
-          this.setQueryParams(queryParams);
-      //   this.seP.who = this.userid;
-          this.getTimelineData2(0);                                      // get the data from REST database call.
-          const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
-            action:'simpleGet',
-            tableName:'notice',
-            whereColName:'UserId',
-            whereColVal: this.userid,                                  // the UserId of the loggedInUser
-            getColName:'vacMan', 
-            };
-        this.genEditSvce.simpleGet(getParams).subscribe( val=>{         // get the datum from the notice table
-          this.notice = val;                                      // save the resule
-          if (this.notice &&  this.notice['vacMan']== 0)          // it r 0
-           document.getElementById('noticeModalComponent').style.display = "block";     // sNEED VAR = MODAL ID 
-          if (!this.notice ) {         // it NOT FOUND or 0
-            if (   document.getElementById('noticeModalComponent') )
-              document.getElementById('noticeModalComponent').style.display = "block";  
-            const tP = <InsertParams> {
-              action: 'insertRecGen',
-              tableName: 'notice',
-              colName: ['vacMan', 'UserId'],
-              colVal:['0',<string>this.userid,]
-            }  
-            this.genEditSvce.genPOST(tP)
-            .subscribe(                                          // can't subscribe to POST REST calls ?????
-            (response) => {
-              this.lastInsertIdx = response;
-            })
+        console.log(" 153  this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
+        this.activatedRoute                                               // point to the route clicked on
+        .queryParams                                                      // look at the queryParams
+        .subscribe
+          (queryParams => 
+            {                                                              // get the queryParams as Observable
+              this.qP = queryParams;
+              this.setQueryParams(queryParams);
+              this.getTimelineData2(0);                                    // get the data from REST database call.
+              const getParams = <dB_SimpleGETparams>{                      // set the parameters for the genDB_GET interface
+                action:'simpleGet',
+                tableName:'notice',
+                whereColName:'UserId',
+                whereColVal: this.userid,                                   // the UserId of the loggedInUser
+                getColName:'vacMan', 
+                };
+              this.genEditSvce.simpleGet(getParams).subscribe( val=>{       // get the datum from the notice table
+                this.notice = val;                                          // save the resule
+                if (this.notice &&  this.notice['vacMan']== 0)              // it r 0
+                  document.getElementById('noticeModalComponent').style.display = "block";     // NEED VAR = MODAL ID 
+                if (!this.notice ) {                                        // it NOT FOUND or 0 
+                  if (   document.getElementById('noticeModalComponent') )
+                  document.getElementById('noticeModalComponent').style.display = "block";  
+                  const tP = <InsertParams> {
+                    action: 'insertRecGen',
+                    tableName: 'notice',
+                    colName: ['vacMan', 'UserId'],
+                    colVal:['0',<string>this.userid,]
+                  }  
+                this.genEditSvce.genPOST(tP)
+                .subscribe(                                                 // 
+                (response) => {
+                  this.lastInsertIdx = response;
+                })
+              }
+            });
           }
-        });
-   //   this.genEditSvce.checkIfNoticeNeeded('vacMan');                                   // see if a notice of a change is needed
-    });
-console.log("213");
+        );
   }
-/*
-selectCoverer(n, i ){
-//    this.showSendEmailToCoverers = true;
-    if (this.covererToggle ){
-      this.covererName = n;
-      this.covererUserKey = i;
-    //  this.covererName2='';
-      this.writeLog("covererUserKey set to ", this.covererUserKey);
-    }
-    this.covererToggle = !this.covererToggle;
-}
-*/
-  goHome(u){
-    window.location.href = 'https://ion.mgh.harvard.edu/cgi-bin/main.pl?userid=' + u;
-  }
+
   writeLog(s, arg){
     this.genEditSvce.writeLog(s  + "   "  + this.covererUserKey).subscribe(
       (res) => {
@@ -267,7 +209,7 @@ selectCoverer(n, i ){
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
                       <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
                       starting  ` +  this.datePipe.transform(this.items._data[this._id].start) + `
-                      through  ` + this.datePipe.transform(this.items._data[this._id].end) + ` </p>
+                      returning on  ` + this.datePipe.transform(this.items._data[this._id].end) + ` </p>
                       <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
                       <p><a href=`+ link1 + `>  ` + this.covererName + ` accepts coverage. </a></p>
                        `;
@@ -440,8 +382,6 @@ selectCoverer(n, i ){
   }  
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
-   // this.doValidation = false;
-   // this.invalidFromDate = false;
     this.formG = this.fb.group({                          // fb is
       dateTo: ['', Validators.required ],
       dateFrom: ['', Validators.required ],
@@ -568,33 +508,39 @@ selectCoverer(n, i ){
     if (this.rData.loggedInUserRank < 5){   
       const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx   ;
       console.log("600  link1 for retFromPost is " + link11);
-    var emp = {                                         // params for email 
-        action:"sendEmail2",
-        addr: {"Dev":["flonberg@partners.org"],
-                "Prod":["bnapolitano@mgu.harvard.edu"]
-              },
-        msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-        <p> ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
-        ` has scheduled a Time Away, from ` + s['startDate']   +  ` returning on `  + s['endDate']   +      `</p>
-        <p> You can approve this Time Away using the below link: </p>
-        <a href=`+ link11 + `> Approve Time Away. </a>`,
-        subject: "New Time Away ",
-        debug: 1
-        };
-      this.genEditSvce.genPOST(emp).subscribe(
-          (res) => {
-            console.log("res from sendEmail2 %o", res);
+        var emp = {                                         // params for email 
+            action:"sendEmail2",
+            addr: {"Dev":["flonberg@partners.org"],
+                    "Prod":["bnapolitano@mgu.harvard.edu"]
+                  },
+            msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+            <p> ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
+            ` has scheduled a Time Away, from ` + s['startDate']   +  ` returning on `  + s['endDate']   +      `</p>
+            <p> You can approve this Time Away using the below link: </p>
+            <a href=`+ link11 + `> Approve Time Away. </a>`,
+            subject: "New Time Away ",
+            debug: 1
+            };
+          this.genEditSvce.genPOST(emp).subscribe(
+              (res) => {
+                console.log("res from sendEmail2 %o", res);
+              }
+            );
           }
-        );
-      }
+      //this.genEditSvce.writeLog("new tA entered vidx is " + this.lastInsertIdx);
     return idx;
   }
-
   setQueryParams(qP) {
     if (qP.userid) {
       this.userid = qP.userid;
       console.log(" 655  dddd %o", this.userid);
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
+      this.genEditSvce.writeLog("test").subscribe(
+        (res) => {
+          console.log("546 ret from writeLog %o ", res);
+        }
+      )
+
       this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=1";
       this.showPhysURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=schneider";
       this.showDosimURL = "https://whiteboard.partners.org/esb/FLwbe/AngProd/dist/material-demo/index.html?userid=" + qP.userid + " &param=2";
@@ -641,11 +587,9 @@ selectCoverer(n, i ){
     this.startDateString = this.datePipe.transform(startDate, 'yyyy-MM-dd');            // format it for dataBase startDate for getting tAs
     this.endDateString = this.datePipe.transform(endDate, 'yyyy-MM-dd');                // mm for endDate
     /****************   set the dates for showing on the calendar as the first of current month and forward 8 weeks  ******************/
-//    var startDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);    // move to first day of current month for showing
     var startDateShown = new Date();    // move to first day of current month for showing
     var endDateShown = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);      // move endDateShown foward 8 weeks from startDateShown
     endDateShown.setDate(startDate.getDate() + numWeeks * 8);   
-  //  this.genEditSvce.getTAs().subscribe(
     var url = 'REST_GET.php?action=getTAs&userid=' + this.userid;                       // userId used to switch between Dosim and Phys
     this.items = null;
     this.groups2 = null;
@@ -679,65 +623,65 @@ selectCoverer(n, i ){
           {
             if (this.rData[key][key2]['start'])
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T00:00:00"  // create string for adding to DataSet
-  
            if (this.rData[key][key2]['end'])                                                      // NOT a weekend
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00" ;     // m.m. for end 
 
           if ( this.rData[key][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
           {
-             // set the color code for approved, covered, and coverageAccepted
+                           //******* set the color code for approved, covered, and coverageAccepted   *****/
             if (   this.rData[key][key2]['userkey'] > 0  )                                      
-            {                                             
-              if (  this.rData[key][key2]['rank'] &&   +this.rData[key][key2]['rank'] == 0  )     // if user is a Dosimetrist 
+            {                                         
+              if (   (!this.rData[key][key2]['rank']   ||  +this.rData[key][key2]['rank'] < 5   ))     // if user is a Dosimetrist 
               {          
-                styleTxt= 'background-color:rgb(230,230,230);';                                    // default backgound = grey
-      
+                styleTxt= 'background-color:rgb(230,230,230);';                                    // default backgound = grey, will apply to all non dosimetrists
                 if (+this.rData[key][key2]['approved'] == 0 && +this.rData[key][key2]['userkey'] !== 58  )                                     // if NOT approved
                   styleTxt = 'background-color:white;'
-                else if (+this.rData[key][key2]['covA_Duty'] == 1)                                 // if has accepted overage
+                else if ( +this.rData[key][key2]['coverageA'] > 0    )                           // if there IS a coverer
+                {
+                   if (+this.rData[key][key2]['covA_Duty'] == 1)                                  // if has accepted overage
                       styleTxt +='background-color:green;'
-                else if ( +this.rData[key][key2]['coverageA'] !> 0 ){                             // if tA HAS coverage but not accepted
-                        styleTxt +='background-color:orange;'
-                        }
-                else 
-                        styleTxt += 'background-color:red'                                     // Approved by No coverer    
+                   else                                                                           // coverer NOT accepted
+                      styleTxt +='background-color:orange;'
+                }
+                else   
+                    styleTxt +='background-color:red;'
               }
               var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;   // Check is this user already has a group
-              if (group2Badded == -1 ){                                                       // It is NOT a user it is a Weekend
-                this.groups2Array.push(this.rData[key][key2]['content']);                     // add the group for this user
+              if (group2Badded == -1 ){                                                           // It is NOT a user it is a Weekend
+                this.groups2Array.push(this.rData[key][key2]['content']);                         // add the group for this user
                 this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})    
-                group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ; // use for the 'group' datum of the dataSet
+                group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;     // use for the 'group' datum of the dataSet
               }
-              else {                                                                            // weekend
-                this.rData[key][key2]['type']= 'background';                                    // add 'type' for shading
+              else {                                                                              // weekend
+                this.rData[key][key2]['type']= 'background';                                      // add 'type' for shading
               }
             }
-            // create the tAO object to add to the DataSet
-            if (   +this.rData[key][key2]['userkey'] > 0  ){                                    // normal nonWeekend tA.  tAO is object toB added to dataSet
+            //************    create the tAO object to add to the DataSet      *************/
+            if (   +this.rData[key][key2]['userkey'] > 0  ){                                     // normal nonWeekend tA.  tAO is object toB added to dataSet
              this.tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
-                                    style:styleTxt,
-                                    end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
-                                    reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
-                                    className: this.rData[key][key2]['className']}  
-                                                   // add the tAO
+                style:styleTxt,
+                end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
+                reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
+                className: this.rData[key][key2]['className']}  
             }   
             else {                                                                              // make a tAO for a weekend
               this.tAO = { id: ++setId,  start: startDateArg,
                 className:this.rData[key][key2]['className'],
                 end: endDateArg,  type:'background',
                 }  
-   
             }         
             this.items.getDataSet().add(this.tAO);                                              // add the new tAO to dataSet. 
           }
         }
       }
-      this.timeline = new vis.Timeline(this.tlContainer, this.items, {});
-      this.timeline.setOptions(this.options);
-      this.timeline.setGroups(this.groups2);
-      // SELECT function triggered by the user clicking on a tA, loads the id of the clickedOn tA in a DOM for use by the rest of the script. 
-      this.timeline.on('select', function ( properties ) {                              // whenever user clicks on a box in the timeLine
-        document.getElementById('datums').innerHTML = properties.items  ;               // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
+      this.timeline = new vis.Timeline(this.tlContainer, this.items, {});                       // create the timeLine
+      this.timeline.setOptions(this.options);                                                   // set the timeLine Options
+      this.timeline.setGroups(this.groups2);                                                    // set the timeLine groups
+      /********************************************************************************************************************************************************/
+      //********* SELECT function triggered by the user clicking on a tA, loads the id of the clickedOn tA in a DOM for use by the rest of the script. ********/
+      /********************************************************************************************************************************************************/
+      this.timeline.on('select', function ( properties ) {                                      // whenever user clicks on a box in the timeLine
+        document.getElementById('datums').innerHTML = properties.items  ;                       // properties.items is the _id of the item in the DataSet                                                                                   // store the _id in the DOM for use by Angular to do edits ...
         });
       }
     );
@@ -750,7 +694,7 @@ selectCoverer(n, i ){
       start: startDateShown,
       end: endDateShown,
     };
-  }                                                   // end of getTimeLineData
+  }                                                                                             // end of getTimeLineData
 
  myBubsort(array){                                            // sort by LastName 
   array = array.slice(); // creates a copy of the array
@@ -765,13 +709,7 @@ selectCoverer(n, i ){
   }
   return array;  
  }
-  removeBads(){
-    for (let key in this.items._data){
-      if (this.items._data[key].start > this.items._data[key].end){
-        delete this.items._data[key];
-      }
-    }
-  }
+ 
   
 
   sendDeleteEmail(){
@@ -816,7 +754,6 @@ selectCoverer(n, i ){
     if (e.value){
           console.log("date Entered %o", e.value);
           let newDate = new Date(e.value);
-    
           let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
           let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
           newDate.setDate(newDate.getDate()+ 1);                  // Wrong time is entered by DatePicker
@@ -827,27 +764,20 @@ selectCoverer(n, i ){
           this.EDO.NewStartDate = <string>startDateStringForEdit 
           this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
           this.EDO.NewEndDate = <string>endDateStringForEdit 
-     
-          console.log("951 newDateString %o", startDateString);
-     
-          {
-            if (type=='startDate'){
-              this.needStartEmail = true;
-              if (!this.isSafari)
-                this.items.update({id: this._id, start: startDateString});  
-              this.editColNames.push("startDate");
-              this.editColVals.push(startDateStringForEdit)
-            }
-            if (type=='endDate'){
-              this.needStartEmail = true;
-        //      if (!this.isSafari)                                                 // live update to timeLine does not work in Safari
-                this.items.update({id: this._id, end: endDateString});  
-              this.editColNames.push("endDate");
-              this.editColVals.push(endDateStringForEdit)
-            }
+          if (type=='startDate'){
+            this.needStartEmail = true;
+            this.items.update({id: this._id, start: startDateString});  
+            this.editColNames.push("startDate");
+            this.editColVals.push(startDateStringForEdit)
+          }
+          if (type=='endDate'){
+            this.needStartEmail = true;                                     
+            this.items.update({id: this._id, end: endDateString});   // live update to timeLine does not work in Safari
+            this.editColNames.push("endDate");
+            this.editColVals.push(endDateStringForEdit)
           }
           console.log("958 %o", this.items);
-        //  this.editColVals.push(e.value);  
+
     }
     else  if (e.target){
         this.editColNames.push(type);
@@ -936,8 +866,33 @@ selectCoverer(n, i ){
       );
     }
   }
-
-  
+  getReason()                                                   // validates the form and enables the Submt Button
+  {
+  //  this.gotReason = true;
+    if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
+      this.formValidation = true; 
+  }
+  setNewTimeAway2(){
+    this.newTimeAway2 = true;
+    this.helpArray = [
+      'Start Date, End Date and Reason must be entered before',
+       'new Time Away can be Submitted.  '
+    ];
+  }
+  storeDate(type: string, event: MatDatepickerInputEvent<Date>) {
+    var loc = event;
+    if ( this.formG.value.dateTo && this.formG.value.dateFrom > this.formG.value.dateTo)
+      this.endBeforeStart = true;  
+    if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
+      this.endBeforeStart = false;  
+  }
+  setCovererClass(){
+    if (+this.rData.data[this.rDataKey].covA_Duty == 1)
+      return("covered");
+    else
+      return("notCovered")  
+  }
+/*
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker
     const month = editTime.getMonth() + 1;                                // get month to assemble to edit
@@ -949,25 +904,10 @@ selectCoverer(n, i ){
     const s =  month + '-' + editTime.getDate() + '-' + editTime.getFullYear();
     return s;
   }
-  storeDate(type: string, event: MatDatepickerInputEvent<Date>) {
-    var loc = event;
-    console.log("1090 tAstartDate",type, this.formG.value.dateFrom);
-    console.log("1090 tAendDate",type, this.formG.value.dateTo);
-    if ( this.formG.value.dateTo && this.formG.value.dateFrom > this.formG.value.dateTo)
-      this.endBeforeStart = true;  
-    if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
-      this.endBeforeStart = false;  
-  }
-  
-  getReason()
-  {
-    console.log("1074  gotReason");
-    this.gotReason = true;
-    if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
-      this.formValidation = true; 
-  }
+  */
+ /*
 
-
+  */
   
   /**************  format date as yyyy-mm-dd  for dataBase ********************/
   /*
@@ -995,13 +935,7 @@ selectCoverer(n, i ){
  //   this.editReason(1, 'approved');
   }
   */
-  setNewTimeAway2(){
-    this.newTimeAway2 = true;
-    this.helpArray = [
-      'Start Date, End Date and Reason must be entered before',
-       'new Time Away can be Submitted.  '
-    ];
-  }
+
   /*
   newTimeAway() {
     this.showControls = true;                                         // show the dataEntry controls
@@ -1200,3 +1134,12 @@ editGen(type: string, event: any)
     this.genEditSvce.genDB_POST(this.dB_PP);                              // do the dB edit.
 }                                                                         // end of editGen
 */
+/*
+  removeBads(){
+    for (let key in this.items._data){
+      if (this.items._data[key].start > this.items._data[key].end){
+        delete this.items._data[key];
+      }
+    }
+  }
+  */

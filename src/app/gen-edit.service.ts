@@ -101,10 +101,10 @@ export class GenEditService   {
   writeLog(s){
     var r = Math.random();
     this.setPlatform();
-    const url2 = this.urlBase + 'logREST.php?str=' + s + "&r=" + r;
+    s += "\r\n userid is " +  this.userid;
+      const url2 = this.urlBase + 'logREST.php?str=' + s + "&r=" + r;
     console.log( url2);
     return this.http.get(url2);
-
   }
   goHome(u){
     window.location.href = 'https://ion.mgh.harvard.edu/cgi-bin/main.pl?userid=' + u;
@@ -124,7 +124,7 @@ export class GenEditService   {
     }    
     return this.host;                           // for time-line which has its own REST
     }
-    checkIfNoticeNeeded(name){                                             // The NoticeModal is used to inform of changes
+  checkIfNoticeNeeded(name){                                             // The NoticeModal is used to inform of changes
       const getParams = <dB_SimpleGETparams>{                               // set the parameters for the genDB_GET interface
         action:'simpleGet',
         tableName:'notice',

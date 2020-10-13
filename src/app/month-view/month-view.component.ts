@@ -235,12 +235,20 @@ export class MonthViewComponent implements OnInit {
     if (dowFD == 0)
       tmpDate = firstDateOnCalendar;
     /*******   make the rest of the weeks on the calendar.  */  
+    var firstTime = 0;
     for (let i=1; i < 6; i++){                                                              // max of 4 more weeks in calendar
       for (let j= 0; j < 5; j++) {                                                          // the days of each week
 
         let dayNum = tmpDate.getDay();                                                      // get dayNum of week, this will be Saturday 
-        if (dayNum == 6 )                                                                   // check if it is Saturday, 
+        console.log("242 tmpDate is %o dayNum is %o", tmpDate, dayNum)  
+        if (dayNum == 6 )                                                                   // check if it is Saturday,  
           tmpDate.setDate(tmpDate.getDate() + 2);                                           // increment 2 days to get to Monday. 
+        if (dayNum == 5  && firstTime == 0)                                                                   // check if it is Friday 
+          tmpDate.setDate(tmpDate.getDate() + 3);                                           // increment 2 days to get to Monday.  
+        firstTime++;   
+     //   else if (dayNum < 6 )
+     //     tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
+        console.log("246 tmpDate is %o dayNum is %o", tmpDate, dayNum)  
         if (!this.daysS[i])                                                                 //  if array row has not been defined
             this.daysS[i] = Array();  
             this.daysS[i][j] = <dateBox>{};                                                 // define an instance of the daysS interface
@@ -248,7 +256,11 @@ export class MonthViewComponent implements OnInit {
             this.daysS[i][j].dateString = this.datePipe.transform(this.daysS[i][j].date, 'yyyy-MM-dd');
             this.daysS[i][j].dayNumber = tmpDate.getDate();
             this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";     
-            tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
+          //  if (dayNum == 5 )                                                                   // check if it is Friday 
+            //  tmpDate.setDate(tmpDate.getDate() + 3);                                           // increment 2 days to get to Monday.   
+          // if (dayNum < 6 )
+              tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
+
       }
     }
     /*************      get the data  ************************/
