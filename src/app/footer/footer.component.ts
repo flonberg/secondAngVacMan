@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-
+  rand: number;
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() {  
+    this.rand = Math.random();
   }
 
 }

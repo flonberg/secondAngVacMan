@@ -168,15 +168,13 @@ export class MonthViewComponent implements OnInit {
     this.daysS = Array(Array());                                                      // make array to hold daysS structures
     var tmpDate = new Date();                                                         // this is the date which will be incremented
     this.date = new Date();                                                           //  today's date
-    this.baseDate = new Date('2010-01-01');
     this.monthNumber += nn;                                                           // nn will be either +1 of -1 to go forward or bacf
     if (nn != 0)                                                                      // if date has been changed by button  
       this.date = new Date(this.date.setMonth(this.date.getMonth()+ this.monthNumber));     // make the new date
     this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                       // used for the caption on the calendar 
     var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);   
-    var firstDateOnCalendar = new Date(this.date.getFullYear(), this.date.getMonth(), 1);   
     var monthShowNumber = this.date.getMonth();                                              // use to grey out days NOT in monthShown
-    const dowFD = firstDayOfShownMonth.getDay();                                             // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of 
+    const dowFD = firstDayOfShownMonth.getDay();                                             // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of firstDayOfShownMonth
     var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);    
     var lastDayNumPrevMonth = lastDayPrevMonth.getDay();            
     var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                    //  e.g. for March   ->  31
@@ -186,45 +184,35 @@ export class MonthViewComponent implements OnInit {
             lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() -1);
           }
         }
-    else  if (lastDayNumPrevMonth == 5)
-        lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 3 );
+    else  if (lastDayNumPrevMonth == 5)                                                 // if lastDayOfPrevMonth is a Friday
+        lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 3 );                      // increment if by 3 days to get to Monday to use for firstDayOnCalendar
     else  if (lastDayNumPrevMonth == 6)
-      lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 2 );
+      lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 2 );                        // mm
     else  if (lastDayNumPrevMonth == 0)
-      lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 1 );
-      firstDateOnCalendar = lastDayPrevMonth;
+      lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 1 );                        // mm
+    var firstDateOnCalendar = lastDayPrevMonth;
    
     //////////  use firstDayOnCal as dateSince to make array of physicsDuties     \\\\\\\\\\\\\\\\\
-   // var firstDayOnCal = lastDayNum - (dowFD -2);     // get dayNum of first Monday on Cal       //  E.g. April 1 is Wed. to firstDayShown is March 29, so firstDanOnCal = 29
-    var firstDayOnCal = firstDateOnCalendar.getDate();
+    var firstDayOnCal = firstDateOnCalendar.getDate();                                  // the dayNum e.g. 0 = Sunday ...
     console.log('184 firstDayOnCal is ' + firstDayOnCal + 'lastDayNum is ' + lastDayNum + ' dowFD is ' + dowFD);
-    if (dowFD == 1)                                                                 // DayOfWeek of first day on Calendar is Monday, then the firstDate on cal is the '1' of month
+    if (dowFD == 1)                                                                     // DayOfWeek of first day on Calendar is Monday, then the firstDate on cal is the '1' of month
       firstDayOnCal = 1;
 
 
     /************  make the first day shown on the calendar  **********************/
-    
-  //  if (dowFD !== 6 && dowFD !== 0)                                                 // first day of the month is a weekDay
-    //  firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() - (dowFD - 1 ));              // first of Month is a WeekDay so need to step back to Monday
-  //  if (dowFD === 6 )
-  //    firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 2 );                         // first of Month is Saturday so need to step forward 2 days to Monday
-  //  if (dowFD === 0 )
-  //    firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
   
-    var GdayNumber = firstDateOnCalendar.getDay();
-    console.log("195 GdayNumber is " + GdayNumber);  
-    
+
       this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
-    var startDateForGettingData = new Date()                                         // define a date to set in the below loop
-    if (dowFD > 0 && dowFD < 6)                                                     // if the firstDayOfMonth is NOT Sat or Sun  
+    var startDateForGettingData = new Date()                                                    // define a date to set in the below loop
+    if (dowFD > 0 && dowFD < 6)                                                                 // if the firstDayOfMonth is NOT Sat or Sun  
       { 
-      for (let i = 0;  i < 5; i++)                                                 // make the 5 days of the first week;
+      for (let i = 0;  i < 5; i++)                                                              // make the 5 days of the first week;
         {
-        if (!this.daysS[0])                                                          //  if array row has not been defined
-            this.daysS[0] = Array();                                                   // define the array for the Week
-          this.daysS[0][i] = <dateBox>{};                                              // define an instance of the daysS interface
-          this.daysS[0][i].dayNumber = firstDayOnCal;                                  // set dayNumber element of interface
+        if (!this.daysS[0])                                                                     //  if array row has not been defined
+            this.daysS[0] = Array();                                                            // define the array for the Week
+          this.daysS[0][i] = <dateBox>{};                                                       // define an instance of the daysS interface
+          this.daysS[0][i].dayNumber = firstDayOnCal;                                           // set dayNumber element of interface
         /************      first Day of first week **********************/
           if ( i == 0)
           {
@@ -243,8 +231,8 @@ export class MonthViewComponent implements OnInit {
           if (i > 0 )  {                            // go to next day
             startDateForGettingData = this.daysS[0][i].date;
             tmpDate =  new Date(this.daysS[0][i-1].date.getFullYear(), this.daysS[0][i-1].date.getMonth(), this.daysS[0][i-1].date.getDate()) // make a date to increment                                                                                           // from the previous entry in the loop
-            tmpDate.setDate(tmpDate.getDate() + 1);   
-                                          // increment the date
+            tmpDate.setDate(tmpDate.getDate() + 1);                                               // increment the date
+                                        
             this.daysS[0][i].date = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), tmpDate.getDate());                                                      // put that date in the dateBox of the MonthStructure
             this.daysS[0][i].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";
           }
@@ -252,18 +240,10 @@ export class MonthViewComponent implements OnInit {
             firstDayOnCal = 1;                                                                    // go to 1, for the first day of monthShown 
             this.daysS[0][i].dateString = this.datePipe.transform(this.daysS[0][i].date, 'yyyy-MM-dd'); 
         }
-        GdayNumber = tmpDate.getDay()
-        console.log("at end of first GdayNumber is " + GdayNumber);  
 
       } 
                                                                                    // end of first week generation
-                                                                                   /*
-      if (dowFD == 1 || dowFD == 6){
-          firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()- 1 ); 
-          tmpDate = firstDateOnCalendar  ;
-          startDateForGettingData = firstDayOfShownMonth;  
-        } 
-      */
+
 
     if (dowFD == 0 || dowFD == 6)
       tmpDate = firstDateOnCalendar;
@@ -326,10 +306,7 @@ setPhysicsMonthlyDuties(val){
     this.physicsDuties= val['PhysicsDuties'];                                       // the userkey to be used for Take-A-Duty
   console.log('226 loggedInUserkey is' + this.loggedInUserKey + 'lastName' + this.loggedInUserLastName) 
 }
-  daysSince(d:Date){
-    var diff = Math.abs(this.baseDate.getTime() - d.getTime());
-    return Math.ceil(diff / (1000 * 3600 * 24)); 
-  }
+
 
 }
 

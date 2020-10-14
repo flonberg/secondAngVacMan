@@ -23,6 +23,7 @@ const vis = require('../../../node_modules/vis/dist/vis.js');
 export class TimeLineComponent implements OnInit {
   @ViewChild('visjsTimeline', {static: false}  ) timelineContainer: ElementRef;
 //  platform = "dev";
+  rand: number                                          // detect reload of div
   rData:any;                                            // holds raw data from dataBase 
   covererName = "";                                     // datum entered by entryWidged
   covererUserKey: number;                               // confirmed use
@@ -72,6 +73,7 @@ export class TimeLineComponent implements OnInit {
   drawEditControls = false;
   isApprover: boolean;                                    // may be used for webPage tA approval for Brian          
   reasonSelect = '';                                      // the reason from dataBase
+  shownNote = ''; 
   newTimeAwayBool = false;
   saveTimeAwayBool = false;
   showPhysicist :String;
@@ -129,6 +131,7 @@ export class TimeLineComponent implements OnInit {
   }
   isSafari = true
   ngOnInit() {
+
         if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)  // if in Safari, need to reload on Add new tA
           this.isSafari = false;                                              // if NOT can do an add. 
         if (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
@@ -176,9 +179,9 @@ export class TimeLineComponent implements OnInit {
                   this.lastInsertIdx = response;
                 })
               }
-            });
+            });                                                             // close of simpleGet subscrive
           }
-        );
+        );                                                                  // close of queryParams => 
   }
 
   writeLog(s, arg){
@@ -305,6 +308,7 @@ export class TimeLineComponent implements OnInit {
         if (!this.items._data[this._id])                                                         // click was NOT in a tA box;
           return;
         if (this.items){
+                  console.log("308 clicked item is %o",  this.items._data[this._id])
             this.showControls = true;                                                          // show editing controls
             this.drawEditControls = true;
             this._vidx = this.items._data[this._id].vidx;                                        // store the vidx for editing
@@ -432,6 +436,8 @@ export class TimeLineComponent implements OnInit {
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
     var fromDateRaw = this.items._data[this._id].end;
     fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 10);
+    if (this.items._data[this._id].note)
+      this.shownNote = this.items._data[this._id].note;
   //  this.shownNote = this.items._data[this._id].note;
    /* this.formEdit = this.fb.group({                          // fb ison
       goAwayerBox: [ this.items._data[this._id].content],
@@ -496,9 +502,12 @@ export class TimeLineComponent implements OnInit {
         .subscribe(                                          
         (response) => {
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
+          this.rand = Math.random();
+         // this.ngOnInit();
           window.location.reload();
         })    
   }
+
  /**********  Use the param returned from Insert POSt to add newTA to DataSet  */
   retFromPost(s){
     this.ret = s;                                             // stores the vacation3 vidx to a
@@ -646,6 +655,7 @@ export class TimeLineComponent implements OnInit {
                 else   
                     styleTxt +='background-color:red;'
               }
+              var tst = this.rData[key][key2]['vidx'] ;
               var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;   // Check is this user already has a group
               if (group2Badded == -1 ){                                                           // It is NOT a user it is a Weekend
                 this.groups2Array.push(this.rData[key][key2]['content']);                         // add the group for this user
@@ -674,6 +684,7 @@ export class TimeLineComponent implements OnInit {
           }
         }
       }
+      if (!this.timeline)
       this.timeline = new vis.Timeline(this.tlContainer, this.items, {});                       // create the timeLine
       this.timeline.setOptions(this.options);                                                   // set the timeLine Options
       this.timeline.setGroups(this.groups2);                                                    // set the timeLine groups
@@ -748,9 +759,11 @@ export class TimeLineComponent implements OnInit {
     console.log("951 %o", e);
     if (type == 'coverer')
       this.covererSelected = true;
-    this.editColNames[0] = 'approved';
+ //   this.editColNames[0] = 'approved';
+    this.editColNames = [];
+    this.editColVals = [];
     this.showSubmitChanges = true;
-    this.editColVals[0] = '0';
+
     if (e.value){
           console.log("date Entered %o", e.value);
           let newDate = new Date(e.value);
@@ -769,12 +782,16 @@ export class TimeLineComponent implements OnInit {
             this.items.update({id: this._id, start: startDateString});  
             this.editColNames.push("startDate");
             this.editColVals.push(startDateStringForEdit)
+            this.editColNames.push("approved");
+            this.editColVals.push('0')
           }
           if (type=='endDate'){
             this.needStartEmail = true;                                     
             this.items.update({id: this._id, end: endDateString});   // live update to timeLine does not work in Safari
             this.editColNames.push("endDate");
             this.editColVals.push(endDateStringForEdit)
+            this.editColNames.push("approved");
+            this.editColVals.push('0')
           }
           console.log("958 %o", this.items);
 
@@ -835,9 +852,10 @@ export class TimeLineComponent implements OnInit {
         console.log("res from updatel %o",  res);
       }
     );
-    this.drawEditControls = false;
-    if (this.isSafari)
-       window.location.reload();
+   // if (param !== 'del')
+       this.ngOnInit();
+    //if (this.isSafari)
+     //  window.location.reload();
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script

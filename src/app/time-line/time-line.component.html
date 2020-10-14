@@ -11,7 +11,7 @@
     <tr>
         <td  colspan='7' >
             <div >
-                <table><tr>
+                <table><tr>  <td>  {{ rand }} yyy  </td>
                 <td *ngIf = "!newTimeAway2 && userid" >
                     <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
                 </td>
@@ -127,6 +127,7 @@
                             <mat-label>First Day Away</mat-label>
                                 <input class="param" matInput   [ngModel]='dBstartDateString'>
                         </td>
+
                         <td *ngIf = '_readonly'>
                             <mat-label>Last Day Away</mat-label>
                             <input class="param" matInput   [ngModel]='dBendDateString'>
@@ -151,7 +152,7 @@
                         <mat-form-field  class="wideItem">
                                 <mat-label class="smallLabel"> Note:  </mat-label>
                                 <textarea matInput  (change)="storeEdit( 'note', $event)"  class="param"
-                                    [value]="newTimeAwayBool ? ' ' : this.shownNote"
+                                    [value]="this.shownNote"
                                     [formControl] = "notesFC"
                                     cdkTextareaAutosize [readonly]="_readonly"
                                     #autosize="cdkTextareaAutosize"
@@ -161,6 +162,17 @@
                                 </textarea>
                         </mat-form-field >
                     </td>    
+                    <td *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter">  
+                        <!--        Read Only Coverers Display        -->
+                        <table *ngIf = "_readonly" style = "width:30%; ">   
+                            <caption> Coverers</caption>    
+                            <tr> 
+                                <td [class] = "setCovererClass()"
+                                *ngIf = "this.rData.fromION[ this.clickedFrom_rData.coverageA] &&  +this.clickedFrom_rData.coverageA > 0 "
+                                > {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>     
+                            </tr>
+                        </table>
+                    </td>  
 
                     <td   *ngIf = "!_readonly && !newTimeAway2 && showSubmitChanges && drawEditControls"  >  <button  mat-raised-button color="primary" 
                         (click) = " saveEdits();" >Submit Changes</button> </td>
@@ -184,20 +196,12 @@
                     <td   *ngIf = "!_readonly && !newTimeAway2 && covererSelected && drawEditControls"  >  <button  mat-raised-button color="primary" 
                                     (click) = " storeCovererData();" >Send Email To Coverer </button> </td>
                     <td>                  
-                </tr>
-            </table>  
-        
-            <div *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter">  
-                        <!--        Read Only Coverers Display        -->
-                        <table *ngIf = "_readonly" style = "width:30%; ">   
-                            <caption> Coverers </caption>    
-                            <tr> 
-                                <td [class] = "setCovererClass()"
-                                *ngIf = "this.rData.fromION[ this.clickedFrom_rData.coverageA] &&  +this.clickedFrom_rData.coverageA > 0 "
-                                > {{  this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName'] }} </td>     
-                            </tr>
-                        </table>
-            </div>  
+            
+                    
+             
+            
+            </tr>
+        </table>  
         </div >     
     </div>    
 
@@ -208,6 +212,7 @@
  
     </td>
 </tr></table>
+
 <div >
   
 <button mat-raised-button *ngIf = "userid == 'napolitano'" ><a href="https://ion.mgh.harvard.edu/cgi-bin/imrtqa/dosimAssignION.php" target="_blank">
@@ -216,6 +221,7 @@
 </button>  
 </div>
    <div id='help'  style="  position: fixed; bottom: 0; right: 0;" >
+
             <app-help [helpArray] = "helpArray"   ></app-help>
     </div>
 
@@ -223,6 +229,7 @@
 <div id="datums2"  style="display:none"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:block"> </div>
 <div id="chData" style="display:none" > chData </div>  
+
 
 
 
