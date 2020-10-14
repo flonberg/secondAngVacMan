@@ -181,11 +181,13 @@ export class MonthViewComponent implements OnInit {
     var lastDayNumPrevMonth = lastDayPrevMonth.getDay();            
     var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                    //  e.g. for March   ->  31
     console.log('182 lastDayPreMonth is %o lastDayNum is %o lastDayNumPrevMonth is %o ', lastDayPrevMonth, lastDayNum, lastDayNumPrevMonth)
-    if (lastDayNumPrevMonth > 0 && lastDayNumPrevMonth < 6){
+    if (lastDayNumPrevMonth > 0 && lastDayNumPrevMonth < 5){
       for(var i = 1; i < lastDayNumPrevMonth; i++ ){
             lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() -1);
           }
         }
+    else  if (lastDayNumPrevMonth == 5)
+        lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 3 );
     else  if (lastDayNumPrevMonth == 6)
       lastDayPrevMonth.setDate(lastDayPrevMonth.getDate() + 2 );
     else  if (lastDayNumPrevMonth == 0)
@@ -198,15 +200,17 @@ export class MonthViewComponent implements OnInit {
     console.log('184 firstDayOnCal is ' + firstDayOnCal + 'lastDayNum is ' + lastDayNum + ' dowFD is ' + dowFD);
     if (dowFD == 1)                                                                 // DayOfWeek of first day on Calendar is Monday, then the firstDate on cal is the '1' of month
       firstDayOnCal = 1;
+
+
     /************  make the first day shown on the calendar  **********************/
-    /*
-    if (dowFD !== 6 && dowFD !== 0)                                                 // first day of the month is a weekDay
-      firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() - (dowFD - 1 ));              // first of Month is a WeekDay so need to step back to Monday
-    if (dowFD === 6 )
-      firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 2 );                         // first of Month is Saturday so need to step forward 2 days to Monday
-    if (dowFD === 0 )
-      firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
-    */  
+    
+  //  if (dowFD !== 6 && dowFD !== 0)                                                 // first day of the month is a weekDay
+    //  firstDateOnCalendar.setDate(firstDateOnCalendar.getDate() - (dowFD - 1 ));              // first of Month is a WeekDay so need to step back to Monday
+  //  if (dowFD === 6 )
+  //    firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 2 );                         // first of Month is Saturday so need to step forward 2 days to Monday
+  //  if (dowFD === 0 )
+  //    firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()+ 1 );                         // first of Month is Sunday so need to step forward 1 day1 to Monday
+  
     var GdayNumber = firstDateOnCalendar.getDay();
     console.log("195 GdayNumber is " + GdayNumber);  
     
@@ -251,14 +255,17 @@ export class MonthViewComponent implements OnInit {
         GdayNumber = tmpDate.getDay()
         console.log("at end of first GdayNumber is " + GdayNumber);  
 
-      }                                                                                 // end of first week generation
+      } 
+                                                                                   // end of first week generation
+                                                                                   /*
       if (dowFD == 1 || dowFD == 6){
           firstDateOnCalendar.setDate(firstDateOnCalendar.getDate()- 1 ); 
           tmpDate = firstDateOnCalendar  ;
           startDateForGettingData = firstDayOfShownMonth;  
-        }  
+        } 
+      */
 
-    if (dowFD == 0)
+    if (dowFD == 0 || dowFD == 6)
       tmpDate = firstDateOnCalendar;
     /*******   make the rest of the weeks on the calendar.  */  
     var firstTime = 0;
