@@ -25,13 +25,12 @@
       <td style="font-weight:bold;" >  {{ item.name }} </td>
       <td> {{ item.timeSpan }}</td>
       <td  *ngFor = " let cH of calHeadings; let j = index" > 
-        
         <div *ngIf = "physicsMonthlyDuties && physicsMonthlyDuties[cH['date']] " [class] = "isTodayColor(cH['date'] ) "
             (click) = "page(physicsMonthlyDuties[cH['date']][item.Idx])"
         >
         {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }} 
         </div>
-
+        <div> {{ cH['date'] }} </div>
       </td>
     </tr> 
   </table>

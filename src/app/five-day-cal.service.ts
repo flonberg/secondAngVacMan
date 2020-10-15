@@ -1,13 +1,14 @@
 import { Injectable, Inject } from '@angular/core';
 
 import { WINDOW } from './window.provider';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FiveDayCalService {
   dS:[{}];
-  constructor( @Inject(WINDOW) private window: Window) {              // WINDOW is some magic I don't understand. 
+  constructor( @Inject(WINDOW) private window: Window , private datePipe: DatePipe,) {              // WINDOW is some magic I don't understand. 
     this.dS = [{}];
   }  // @Inject is needed 
 
@@ -33,17 +34,18 @@ export class FiveDayCalService {
   }
   
   formatDate(date) {
-    var d = new Date(date),
+    var d = new Date(date);
+    var formatedDate = this.datePipe.transform(d, 'yyyy-MM-dd');
+    /*
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
-
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
-
-    return [year, month, day].join('-');
+        */
+    return formatedDate;
 }
   getMonday(d) {
     var day = d.getDay(),
