@@ -427,13 +427,18 @@ console.log("145 isSafari %o", this.isSafari)
        this.reasonSelect = this.items._data[this._id].reason.toString();    // set selected
     this.dBcontent = this.items._data[this._id].content;
     this.dBstartDate = new Date(this.items._data[this._id].start);          // ref'ed by [ngModel] in datePicker
+    this.dBstartDate.setHours(this.dBstartDate.getHours()+4);
+    var st = '2020-10-21T00:00:00'
+    var tst = new Date(st)
+    console.log(" 428 st is  %o  tst is  %o ", tst, st)
     this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
-    if (this.isSafari)
+    this.dBendDate.setHours(this.dBendDate.getHours()+4);
+  /*  if (this.isSafari)
     {
       this.dBendDate.setDate(this.dBendDate.getDate() + 1);   
       this.dBstartDate.setDate(this.dBstartDate.getDate() + 1);   
     }
-    console.log(" 428 this.dBstartDate %o  from %o ", this.dBstartDate, this.items._data[this._id].start)
+*/
 
     this.dBendDate.setDate(this.dBendDate.getDate() - 1);                   // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
     this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');   // used for readOnly date display widget 
@@ -640,10 +645,17 @@ console.log("145 isSafari %o", this.isSafari)
           for (var key2 in this.rData[key])
           {
             if (this.rData[key][key2]['start']){
-              var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T00:00:00"  // create string for adding to DataSet
+              var fixArg = this.rData[key][key2]['start'].replace(/\s/, 'T') + "Z";    // this.rData[key][key2]['start']fix for fussy Safari
+              var stDate = new Date(this.rData[key][key2]['start'].replace(/\s/, 'T') + "Z")      // this.rData[key][key2]['start']fix for fussy Safari
+          //    stDate.setHours(stDate.getHours()+4);
+              var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
+              console.log("655  from fixArg is %o stDate is %o  startDateArg is %o", fixArg, stDate, startDateArg)
             }
-              if (this.rData[key][key2]['end'])                                                      // NOT a weekend
-              var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00" ;     // m.m. for end 
+           if (this.rData[key][key2]['end'])   {                                                   // NOT a weekend
+            var eDate = new Date(this.rData[key][key2]['end'].replace(/\s/, 'T') + "Z")      // this.rData[key][key2]['start']fix for fussy Safari
+        //    stDate.setHours(stDate.getHours()+4);
+            var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
+           }
 
           if ( this.rData[key][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
           {
