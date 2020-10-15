@@ -1,6 +1,6 @@
 
 import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams, InsertParams, dB_POSTparams } from './../gen-edit.service';
-import { SeditParams } from './../gen-edit.service';
+//import { SeditParams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormBuilder } from '@angular/forms';
@@ -142,7 +142,7 @@ export class TimeLineComponent implements OnInit {
               startWith(''),
               map(value => this._filter(value))
             );
-
+console.log("145 isSafari %o", this.isSafari)
         this.endBeforeStart = false;
         console.log(" 153  this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
         this.activatedRoute                                               // point to the route clicked on
@@ -307,6 +307,8 @@ export class TimeLineComponent implements OnInit {
        /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
         if (!this.items._data[this._id])                                                         // click was NOT in a tA box;
           return;
+
+    console.log("311  clicked %o", this.items._data[this._id])      
         if (this.items){
                   console.log("308 clicked item is %o",  this.items._data[this._id])
             this.showControls = true;                                                          // show editing controls
@@ -354,26 +356,26 @@ export class TimeLineComponent implements OnInit {
             'If you want to nominate a Second Coverer, click on the Coverage drop-down again.',  
           ]
         }
-    }
-    var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
-    'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
-    'editColNames':[],
-    'editColVals':[],
-    'action': 'editAndLog'                                     
-  };
-  const dB_PP = <dB_POSTparams>{}
-  dB_PP.whereColName=['vidx'];
-  dB_PP.whereColVal = [document.getElementById('vidx').innerText]
+      }
+      var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
+      'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
+      'editColNames':[],
+      'editColVals':[],
+      'action': 'editAndLog'                                     
+    };
+    const dB_PP = <dB_POSTparams>{}
+    dB_PP.whereColName=['vidx'];
+    dB_PP.whereColVal = [document.getElementById('vidx').innerText]
 
- if ( this.items &&  this.items._data[this._id] ){             // Ed/
-        var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
-        var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
-        dB_PP.editColNames = ['startDate','endDate'];      
-        dB_PP.editColVals = [startDateEdit ,endDateEdit ];
-        dB_PP.action = 'editAndLog';
-    }  
-  this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
-         console.log("527 rDataK %o  and this.id is %o",   this.rData.data, this._id)
+  if ( this.items &&  this.items._data[this._id] ){             // Ed/
+          var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
+          var endDateEdit = this.datePipe.transform(this.items._data[this._id].end, 'yyyy-MM-dd');
+          dB_PP.editColNames = ['startDate','endDate'];      
+          dB_PP.editColVals = [startDateEdit ,endDateEdit ];
+          dB_PP.action = 'editAndLog';
+      }  
+    this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
+          console.log("527 rDataK %o  and this.id is %o",   this.rData.data, this._id)
 }       /*******  end of clicked */
 
   /*********  find the key of the selected timeAway element in the rData so can find Coverers */
@@ -426,6 +428,13 @@ export class TimeLineComponent implements OnInit {
     this.dBcontent = this.items._data[this._id].content;
     this.dBstartDate = new Date(this.items._data[this._id].start);          // ref'ed by [ngModel] in datePicker
     this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
+    if (this.isSafari)
+    {
+      this.dBendDate.setDate(this.dBendDate.getDate() + 1);   
+      this.dBstartDate.setDate(this.dBstartDate.getDate() + 1);   
+    }
+    console.log(" 428 this.dBstartDate %o  from %o ", this.dBstartDate, this.items._data[this._id].start)
+
     this.dBendDate.setDate(this.dBendDate.getDate() - 1);                   // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
     this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');   // used for readOnly date display widget 
 
@@ -630,9 +639,10 @@ export class TimeLineComponent implements OnInit {
       {
           for (var key2 in this.rData[key])
           {
-            if (this.rData[key][key2]['start'])
+            if (this.rData[key][key2]['start']){
               var startDateArg = this.rData[key][key2]['start'].substring(0,this.rData[key][key2]['start'].length -9 )+ "T00:00:00"  // create string for adding to DataSet
-           if (this.rData[key][key2]['end'])                                                      // NOT a weekend
+            }
+              if (this.rData[key][key2]['end'])                                                      // NOT a weekend
               var endDateArg = this.rData[key][key2]['end'].substring(0,this.rData[key][key2]['end'].length -9 ) + "T00:00:00" ;     // m.m. for end 
 
           if ( this.rData[key][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box

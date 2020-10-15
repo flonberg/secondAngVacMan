@@ -13,45 +13,21 @@ export class FiveDayCalService {
   }  // @Inject is needed 
 
   makeWeek(advance){
-     const mns= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-     let weekday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-     
-    const today = new Date();
-    today.setDate(today.getDate() + advance * 7);
-    var monDate = this.getMonday(today);
-    var kludgeDate = this.getMonday(today);                         // to avoid 'date' element coming out 1 day in advance. 
-    kludgeDate.setDate(monDate.getDate() - 1);                      // may have something to do with time of day????
-    console.log(" 22222 %o", monDate);
-    for (var i=0; i < 5; i++){
-      this.dS[i] = { "monthDay" : mns[monDate.getMonth()] + "-" + monDate.getDate(),
-                  "dayName" : weekday[i] ,
-                //  "date" : kludgeDate.toISOString().split('T')[0]};
-                  "date" : this.formatDate(monDate)};  
-      monDate.setDate(monDate.getDate() + 1);
-    //  kludgeDate = this.getMonday(today);
-    //  kludgeDate.setDate(monDate.getDate() - 1);
+    const today = new Date();                                                   // make today's date
+    today.setDate(today.getDate() + advance * 7);                               // go forward by 'advance' number of weeks
+    var monDate = this.getMonday(today);                                        // go back to the Monday of that weed
+    for (var i=0; i < 5; i++){                                                  // iterate over 5 days of the week
+      this.dS[i] = { "monthDay" :  this.datePipe.transform(monDate, 'MMM d') ,  // form like 'Jun 15'
+                  "dayName" : this.datePipe.transform(monDate, 'EEEE') ,        // form like 'Monday'
+                  "date" : this.datePipe.transform(monDate, 'yyyy-MM-dd')       // form like '2020-04-13'
+                };  
+      monDate.setDate(monDate.getDate() + 1);                                   // advance to next day
     }
   }
-  
-  formatDate(date) {
-    var d = new Date(date);
-    var formatedDate = this.datePipe.transform(d, 'yyyy-MM-dd');
-    /*
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
-        */
-    return formatedDate;
-}
   getMonday(d) {
-    var day = d.getDay(),
-        diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+    var day = d.getDay(),                                                       // get like 0=Sunday, 1=Monday ...
+    diff = d.getDate() - day + (day == 0 ? -6:1);                               // find day of last Monday, e.g. Oct 15 -> 12
     return  new Date(d.setDate(diff));
   }
-
 }
 

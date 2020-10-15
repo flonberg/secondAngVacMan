@@ -9,6 +9,7 @@
       <td style="color:blue"> To page, click on a physicist's name. </td>
     </tr>    
 </table>
+
 <div *ngIf = "!physicsMonthlyDuties" class='loading' > loading... </div>
 <div *ngIf = "physicsMonthlyDuties">
   <table class='main'>
@@ -30,7 +31,6 @@
         >
         {{ physicsMonthlyDuties[cH['date']][item.Idx]['lNN'] }} 
         </div>
-        <div> {{ cH['date'] }} </div>
       </td>
     </tr> 
   </table>

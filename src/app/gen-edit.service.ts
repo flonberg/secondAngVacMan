@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 //import { start } from 'repl';
-
+/*
 export interface SeditParams {
   tableName: string;
   whereColName: string;
@@ -15,7 +15,7 @@ export interface SeditParams {
   editColVal: string;
   newVal: string;
   who: String;
-}
+}*/
 export interface dB_GETparams {
   action: string,
   tableName: string,
@@ -88,8 +88,6 @@ export class GenEditService   {
   platform: string;
   host:string;
   emailStage; String;
-
-
   userid: String;
   notice:any;
   constructor(private http: HttpClient, @Inject(WINDOW) private window: Window) { }
@@ -138,7 +136,6 @@ export class GenEditService   {
       this.setPlatform();                   // sets the platform to BB or 242
     }
     const url2 = this.urlBase + 'REST_GET.php?action=getFromFile';
-    console.log('getTa url is getFromFile' + url2);
     return this.http.get(url2);
   }  
   /*********  get using selStr from GET param  */
@@ -164,21 +161,16 @@ export class GenEditService   {
     console.log("167 multGet url is  " + url);
     return this.http.get(url) 
   }
-  getPhysicistFromION(){
-
-  }
   genDB_POST(dP){
       if (!this.urlBase){
         this.setPlatform();
       }
       const url2 = this.urlBase + 'RESTgenDB_POST.php';
-      console.log("genBDPosrt url 2is " + url2);
       this.http.post(url2, JSON.stringify(dP)).subscribe(
         (val) => {  
        //   console.log('POST call', val);
         });
     }
-
 genGet(s){
   if (!this.urlBase)          
     this.setPlatform();                   // sets the platform to BB or 242
@@ -187,7 +179,7 @@ genGet(s){
   return this.http.get(url2);
 }   
 
-  genDB_GET(dP){
+genDB_GET(dP){
       if (!this.urlBase){
         this.setPlatform();
       }
@@ -196,7 +188,7 @@ genGet(s){
       return this.http.post(url2, JSON.stringify(dP));
     }
   
-  genRest(dBParams, scriptName, hostName){
+genRest(dBParams, scriptName, hostName){
     const url = 'http:/' + hostName + scriptName;
   } 
    //////  does update of SINGLE column. Params in POST. Params are tableName, editColName, editColVal, whereColName, whereColVal  \\\\\
@@ -219,54 +211,10 @@ genGet(s){
     console.log("gen_edit 229  url is " + url2);
     return this.http.post(url2, JSON.stringify(dBParams), { responseType:  'json' });
   }
-    /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\\
-      ////// whereColName = [];  whereColVal = [] \\\\\
-    /////  Use for EDITing  \\\\\\\\\\\
 
-   /////  params: params.tablename= string; params.editColNames=[]; params.editColVals = []; \\\\
- 
-    /////  Use for GETting  \\\\\\\\\\\
- 
-    ///////  test of get from ION  \\\\\\\\\\
     IONgetterCustom(){
       const url = "https://ion.mgh.harvard.edu/cgi-bin/imrtqa/TESTgetter.php";
     }
+
   }
- /*
-  getTAs(){
-      if (!this.urlBase){           
-        this.setPlatform();                   // sets the platform to BB or 242
-      }
-      const url2 = this.urlBase + 'REST_GET.php?action=getTAs&userid=' + this.userid ;
-      console.log('getTa url is 5-21' + url2);
-      return this.http.get(url2);
-    } 
-    */
-/*
-  getPMDs(userid){
-      if (!this.urlBase){           
-        this.setPlatform();                   // sets the platform to BB or 242
-      }
-      const url2 = this.urlBase + 'REST_GET.php?action=getPMDs&userid=' + userid ;
-      console.log('getTa url is 5-21' + url2);
-      return this.http.get(url2);
-    } 
-    */
-     /*
-  getPhysicsMonthlyDuties(startDateString, userid){
-      if (!this.urlBase){
-        this.setPlatform();
-      }
-      const url2 = this.urlBase + 'getPhysicsDuties.php?dateSince=' + startDateString + '&userid=' + userid;
-      //const url2 = this.urlBase + 'RESThub.php?dataS=getPhysicsMonthlyDuties&userid=' + userid;
-      console.log("getEdit 115 url is " + url2);
-      return this.http.get(url2)
-    } 
-    */
-   /*
-  getLastIdx(){
-    const url2 = this.urlBase + 'REST_GET.php?action=getLastIdx';
-    console.log('getMyDuties url is ' + url2);
-    return this.http.get(url2);
-    }
- */
+ 

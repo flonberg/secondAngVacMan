@@ -11,7 +11,7 @@
     <tr>
         <td  colspan='7' >
             <div >
-                <table><tr>  <td>  {{ rand }} yyy  </td>
+                <table><tr>  <td>  {{ rand }}  </td>
                 <td *ngIf = "!newTimeAway2 && userid" >
                     <button mat-raised-button (click) ="setNewTimeAway2()"  >New Time Away </button> 
                 </td>
@@ -165,7 +165,7 @@
                     <td *ngIf = "drawEditControls && !newTimeAway2 && this._id" class="parentCenter">  
                         <!--        Read Only Coverers Display        -->
                         <table *ngIf = "_readonly" style = "width:30%; ">   
-                            <caption> Coverers</caption>    
+                            <caption> Coverer</caption>    
                             <tr> 
                                 <td [class] = "setCovererClass()"
                                 *ngIf = "this.rData.fromION[ this.clickedFrom_rData.coverageA] &&  +this.clickedFrom_rData.coverageA > 0 "
