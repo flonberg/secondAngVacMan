@@ -100,6 +100,7 @@ export class TimeLineComponent implements OnInit {
   //events: any;
   rDataKey: number;                                       // the key of this vidx in the rawData 
   covererSelect = new FormControl();
+  reasonSelectControl = new FormControl();
   foptions: string[] = [];                                // used for autoComplete
   filteredOptions: Observable<string[]>;                  // used for autoComplete
 
@@ -211,69 +212,41 @@ export class TimeLineComponent implements OnInit {
       "Dev": ["flonberg@partners.org"],
       "Prod": prodAddr,
      }  
-    var emp  = <emailParams> {                                                             // params for 
+    var emp  = <emailParams> {                                              // params for sending an email 
       action: "sendEmail2",
       addr: { "Dev":["flonberg@partners.org"],
               "Prod":prodAddr
       },
       msg: message,
       subject: "coverage", 
-      debug: 1
+      debug: 1                                                              // when 1 all emails go to flonberg
     }
     this.writeLog("storeCovererData", link1);
-    this.genEditSvce.genPOST(emp).subscribe(
+    this.genEditSvce.genPOST(emp).subscribe(                                // send the email to coverer nominee
       (res) => {
         console.log("res from sendEmail2 from storeCovererDate is  %o", res);
-      }
-    );
-    /*********    end of sendEmail to Coverer  *****************/
+      });
     if (this.covererName.length &&  this.covererName.length > 0){
       const covererUserKey = this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName)
-      console.log(" 397 " + covererUserKey)
-
     }
    /***********  Update the dataBase for the coverers   */
-    const userKey = this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName  )
+    const userKey = this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName  ) // the UserKey of the coverer
     const upDateParams = <dB_POSTparams>{
       action:'editAndLog',
       tableName:'vacation3',
       whereColName:['vidx'],
       whereColVal:[this.items._data[this._id].vidx],
       editColNames: ['coverageA'],
-      editColVals:  [this.find_rDataKey(this.rData.fromION, 'LastName',this.covererName  )], // store the UserKey of Coverer
+      editColVals:  [userKey],                                               // store the UserKey of Coverer
       userid: this.userid,   
     };  
-    console.log("412 %o,", upDateParams);
     this.genEditSvce.genPOST(upDateParams).subscribe(
       (res) => {
         console.log("res updateCoveresx" + res);
       }
     );
-    
-  }                                                       // end of StoreCovererData 
+  }                                                                         // end of StoreCovererData 
 
-//  enterInDbAndEmail(){
- //   this.showCoverers = true;
- // }
-  
-  closeModal(){
-    document.getElementById('noticeModal').style.display = "none"; 
-  }
-  cancelNotice(){                                                   // 
-    console.log('cancel Notice');
-    const gP = <dB_POSTparams>{
-      tableName: 'notice',
-      whereColName: ['UserId'],
-      whereColVal: [this.userid],
-      editColNames: ['vacMan'],
-      editColVals: ['1'],
-      userid: this.userid,
-      action: 'editAndLog',
-      insert: true
-    }
-    this.genEditSvce.genDB_POST(gP);
-    this.closeModal();
-  }
   getNotice(UserId){
       const getParams = <dB_GETparams>{
         tableName:'notice',
@@ -284,24 +257,24 @@ export class TimeLineComponent implements OnInit {
    this.genEditSvce.genDB_GET(getParams);
   }
   clickedFrom_rData: any;
-     /*******************          This is called anytime the user RELEASES the mouse click **********************/
+     /*******************          This is called anytime the user RELEASES the mouse click          **********************/
+     /*******************  The User clicking on a tA also triggers the timeLine SELECT function  line 672          e*******/
+     /*******************  The script can get the DataSet id of the tA clicked on from the 'datums' DOM             *******/
   clicked(ev) 
-  {// this responds to ANY click-RELEASE in the div containing the calendar
+  {
       if (document.getElementById('datums') && document.getElementById('datums').innerText.length > 0) 
-       { // user click on a tA
+      { 
            this._id = +document.getElementById('datums').innerText;     // _id of the item clickedOn in the DataSet
-       /////////  this.data2 is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
+       /////////  this.items is a DataSet Object which has the _data property to contain my data \\\\\\\\\\
         if (!this.items._data[this._id])                                                         // click was NOT in a tA box;
-          return;
-
-    console.log("311  clicked %o", this.items._data[this._id])      
+          return;  
         if (this.items){
                   console.log("308 clicked item is %o",  this.items._data[this._id])
-            this.showControls = true;                                                          // show editing controls
+            this.showControls = true;                                                            // show editing controls
             this.drawEditControls = true;
             this._vidx = this.items._data[this._id].vidx;                                        // store the vidx for editing
             const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);            // find the key of this vidx in the rawData 
-            this.clickedFrom_rData= this.rData.data[rDataKey];                                   // get the row for this vidx from the rawData
+            this.clickedFrom_rData = this.rData.data[rDataKey];                                   // get the row for this vidx from the rawData
             this.createEditForm(this._id);                                                       // create the form for editing the tA
             document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
             if (this.items && this.items._data[this._id].approved == 1 )
@@ -310,48 +283,50 @@ export class TimeLineComponent implements OnInit {
               this.helpArray = ['Your Time Away must be approved before you cen select coverers'];      
             }                  
         }
-      
-      /*******  classify loggedInUser as tA Owner or coverer */     
+          /*******  classify loggedInUser as tA Owner */     
        if (this.items && this.items._data[this._id] &&  this.items._data[this._id].className === this.userid) { // loggedInUser is tA owner 
-           this._readonly = false;                                                              // enable editing
-           } else
-          {                                                                             // user is NOT tA owner
-              this._readonly = true;                                                                // make controls readOnly
+           this._readonly = false;    
+           if ( this.clickedFrom_rData['approved'] == 1 )                                                          // enable editing
+              this.helpArray = [ "Your Time Away has been approved so you should select a coverer.",
+                    "Choose a coverer from the drop down and then click 'Send Email To Coverer.",
+                    "To edit you Time Away, make the changes and then click 'Submit Changes'."
+                  ]; 
+            else
+                this.helpArray = [ "Your Time Away needs to be approved before you can select a coverer. "
+              ]; 
+            }
+          else{                                                                                 // user is NOT tA owner
+              this._readonly = true;                                                            // make controls readOnly
               this.helpArray = [ "Click on a TimeAway to see the details for tha TimeAway.",
                                 "If TimeAway is in red, it means that now coverer has been nominated",
                                 "Orange means that the coverer has not yer accepted the coverage.",
                                 "Green means that the coverage has been accepted."
                               ]; 
            }
-           console.log('clicked  _readOnly %o',  this._readonly );  
+
        if (this.userid === 'napolitano' ) {                                                     // official 'approver'
            this.isApprover = true;
          }
 
       /***********  Set Class for Coverers display,  according to Acceptance */   
       if (this.items && this.items._data[this._id]     )  { 
-        if ( this.items._data[this._id]['covA_Duty'] == '1')
+        if ( this.items._data[this._id]['covA_Duty'] == '1')                                    // coverage has been accepted
           this.coverageAclass = "Accepted";
           else
             this.coverageAclass = "NotAccepted"; 
-
-        /************   Change Help text */
-        if (+this.rData['loggedInUserKey'] == +this.items._data[this._id]['userkey']){
-          this.helpArray = [
-            'Click on the Coverage drop-down and select person who will be you First Coverer.',  
-            'If you want to nominate a Second Coverer, click on the Coverage drop-down again.',  
-          ]
-        }
       }
+      /*
       var dParams = {              // create a set of this.insertP to b used by genDB_POST to delete the tA
       'tableName': 'vacation3', 'whereColName': 'vidx', 'whereColVal': document.getElementById('vidx').innerText,
       'editColNames':[],
       'editColVals':[],
       'action': 'editAndLog'                                     
     };
-    const dB_PP = <dB_POSTparams>{}
-    dB_PP.whereColName=['vidx'];
-    dB_PP.whereColVal = [document.getElementById('vidx').innerText]
+    */
+   /*
+    const dB_PP = <dB_POSTparams>{}                                                         // create instance of interface for a POST
+      dB_PP.whereColName=['vidx'];                                                          
+      dB_PP.whereColVal = [document.getElementById('vidx').innerText]                       // 
 
   if ( this.items &&  this.items._data[this._id] ){             // Ed/
           var startDateEdit = this.datePipe.transform(this.items._data[this._id].start, 'yyyy-MM-dd');
@@ -360,18 +335,19 @@ export class TimeLineComponent implements OnInit {
           dB_PP.editColVals = [startDateEdit ,endDateEdit ];
           dB_PP.action = 'editAndLog';
       }  
+      */
     this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
           console.log("527 rDataK %o  and this.id is %o",   this.rData.data, this._id)
-}       /*******  end of clicked */
+}                                                                                             /*******  end of clicked */
 
   /*********  find the key of the selected timeAway element in the rData so can find Coverers */
-  find_rDataKey(dataStruct, name, value){
-    for( var prop in dataStruct ) {
-        var tst = new String(dataStruct[prop][name]) ;                                          // need to do this to use indexOf()
-        if (value && tst.indexOf(value.toString().trim()) !== -1)
-               return prop;
-      }
-  }  
+find_rDataKey(dataStruct, name, value){
+  for( var prop in dataStruct ) {
+      var tst = new String(dataStruct[prop][name]) ;                                          // need to do this to use indexOf()
+      if (value && tst.indexOf(value.toString().trim()) !== -1)
+              return prop;
+    }
+}  
      /*********  This is used by the New TimeAway  ***********/
   createForm() {                                                                                // create the form for New tA
     this.formG = this.fb.group({                          // fb is
@@ -382,15 +358,15 @@ export class TimeLineComponent implements OnInit {
     }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
     );
   }
-  editStartDate: FormControl;
-  dBstartDate: Date;
-  dBendDate: Date;
-  dBstartDateString: String;
-  dBendDateString: String;
-  dBcontent: String;
-  dBreason: String;
-  tst = "";
-
+editStartDate: FormControl;
+dBstartDate: Date;
+dBendDate: Date;
+dBstartDateString: String;
+dBendDateString: String;
+dBcontent: String;
+dBreason: String;
+tst = "";
+/*
   findCoverage(itemId){                                                    // 
     const vidx =  this.items._data[itemId].vidx;                          // get the vidx of tA clicked on in the DataSet
     const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', vidx);   // find the key of this vidx in the rawData 
@@ -400,25 +376,27 @@ export class TimeLineComponent implements OnInit {
       return this.rData.fromION[coverageA].LastName                         // return the LastName using fromION data. 
     }
   }
+  */
   ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   ///////    Some params need to be fetched from the rData ds which is the raw data from the vacation3 table      //////
   
-  createEditForm(_id) {                                      // create the form for New tA
-    const coverageA = this.findCoverage(_id);
+  createEditForm(_id) {                                                   // create the form for EDITING tA
+ //   const coverageA = this.findCoverage(_id);
     if (this.clickedFrom_rData.coverageA)
       this.covererSelect.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);   // set the value of the autoComplete Coverage widget
     else
       this.covererSelect.setValue('');  
+   // this.reasonSelectControl.setValue('0')  
     if ( this.items._data[this._id].reason )  
-       this.reasonSelect = this.items._data[this._id].reason.toString();    // set selected
+       this.reasonSelect = this.items._data[this._id].reason.toString();    // set selected Reason
     this.dBcontent = this.items._data[this._id].content;
     this.dBstartDate = new Date(this.items._data[this._id].start);          // ref'ed by [ngModel] in datePicker
-    this.dBstartDate.setHours(this.dBstartDate.getHours()+4);
-    var st = '2020-10-21T00:00:00'
-    var tst = new Date(st)
-    console.log(" 428 st is  %o  tst is  %o ", tst, st)
+  //  this.dBstartDate.setHours(this.dBstartDate.getHours()+4);
+  //  var st = '2020-10-21T00:00:00'
+  //  var tst = new Date(st)
+  //  console.log(" 428 st is  %o  tst is  %o ", tst, st)
     this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
-    this.dBendDate.setHours(this.dBendDate.getHours()+4);
+   // this.dBendDate.setHours(this.dBendDate.getHours()+4);
   /*  if (this.isSafari)
     {
       this.dBendDate.setDate(this.dBendDate.getDate() + 1);   
@@ -428,10 +406,17 @@ export class TimeLineComponent implements OnInit {
 
     this.dBendDate.setDate(this.dBendDate.getDate() - 1);                   // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
     this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');   // used for readOnly date display widget 
-
+    this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
     this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M-dd-yyyy');
     const reasons = ['Personal Vacation', 'Other', 'Meeting'];
-    this.dBreason = reasons[this.items._data[this._id].reason];
+ //   this.dBreason = reasons[this.items._data[this._id].reasonIdx];
+    var tst444 = this.rData.data
+   if (this._readonly)
+    this.dBreason = reasons[this.rData.data[this.rDataKey].reasonIdx ];
+ 
+
+    var reasonString = this.rData.data[this.rDataKey].reasonIdx.toString(); 
+    this.reasonSelectControl.setValue( reasonString ); 
     var toDateRaw = this.items._data[this._id].start
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
     var fromDateRaw = this.items._data[this._id].end;
@@ -615,9 +600,11 @@ export class TimeLineComponent implements OnInit {
           this.rData = val;
           console.log("737  rData %o", this.rData);
           this.rData.data = this.myBubsort(this.rData.data);                            // alphabetize by LastName, rData.data is tAs
-          this.loggedInLastName = this.rData.fromION[this.rData['loggedInUserKey']]['LastName'];  // used for mail messages
-          this.loggedInFirstName = this.rData.fromION[this.rData['loggedInUserKey']]['FirstName'];                                        
-         }
+          if (this.rData.fromION[this.rData['loggedInUserKey']]){
+            this.loggedInLastName = this.rData.fromION[this.rData['loggedInUserKey']]['LastName'];  // used for mail messages
+            this.loggedInFirstName = this.rData.fromION[this.rData['loggedInUserKey']]['FirstName'];    
+          }                                    
+        }
         for (let key in this.rData.Rusers) {                                            // load the UserName into autoComplete array
           let value = this.rData.users[key];
             this.foptions.push( key)
@@ -1171,3 +1158,24 @@ editGen(type: string, event: any)
     else
       return 'notCovered';  
   }*/
+  /*
+  closeModal(){                                                             // trig by  cancelNotice()
+    document.getElementById('noticeModal').style.display = "none"; 
+  }
+
+  cancelNotice(){                                                           // 
+    console.log('cancel Notice');
+    const gP = <dB_POSTparams>{
+      tableName: 'notice',
+      whereColName: ['UserId'],
+      whereColVal: [this.userid],
+      editColNames: ['vacMan'],
+      editColVals: ['1'],
+      userid: this.userid,
+      action: 'editAndLog',
+      insert: true
+    }
+    this.genEditSvce.genDB_POST(gP);
+    this.closeModal();
+  }
+  */

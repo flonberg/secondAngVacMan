@@ -135,8 +135,8 @@
                         <td>
                             <mat-form-field *ngIf = "!_readonly" class="medium">
                                 <mat-label>Reason</mat-label>
-                                <mat-select [(value)]='reasonSelect' (selectionChange)="storeEdit('reason', $event)" class="param"
-                                id='reasonId'>
+                                <mat-select (selectionChange)="storeEdit('reason', $event)" class="param"
+                                    id='reasonId'  [formControl] = "reasonSelectControl">
                                         <mat-option  value="0">Personal Vacation</mat-option>
                                         <mat-option  value="1">Other</mat-option>
                                         <mat-option   value="2">Meeting</mat-option>  
@@ -225,7 +225,7 @@
             <app-help [helpArray] = "helpArray"   ></app-help>
     </div>
 
-<div id="datums"  style="display:none"> </div> <!----  Gro  ??  id ??-->
+<div id="datums"  style="display:block"> </div> <!----  Gro  ??  id ??-->
 <div id="datums2"  style="display:none"> </div> <!----- holds callBack function e.g. triggers by 'remove' -->
 <div id="vidx"  style="display:block"> </div>
 <div id="chData" style="display:none" > chData </div>  
