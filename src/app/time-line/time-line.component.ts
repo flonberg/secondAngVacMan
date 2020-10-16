@@ -644,16 +644,14 @@ console.log("145 isSafari %o", this.isSafari)
       {
           for (var key2 in this.rData[key])
           {
-            if (this.rData[key][key2]['start']){
-              var fixArg = this.rData[key][key2]['start'].replace(/\s/, 'T') + "Z";    // this.rData[key][key2]['start']fix for fussy Safari
-              var stDate = new Date(this.rData[key][key2]['start'].replace(/\s/, 'T') + "Z")      // this.rData[key][key2]['start']fix for fussy Safari
-          //    stDate.setHours(stDate.getHours()+4);
-              var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
-              console.log("655  from fixArg is %o stDate is %o  startDateArg is %o", fixArg, stDate, startDateArg)
+            if (this.rData[key][key2]['start'])
+            {             // Date is stored in dB as OBJECT so cannot be directly used in  datePipe,  so need to make a new TypeScript Date. 
+              var stDate = new Date(this.rData[key][key2]['start'].replace(/\s/, 'T') + "Z")     // this.rData[key][key2]['start']is e.g. 2020-12-21 00:00:00;  fix for fussy Safari
+              var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T04:00:00Z" ;    // this used for timeLine DataSet, the T04:00.. makes blocks come out at midnight
+                //    console.log("655  from fixArg is %o stDate is %o  from dB  is %o", fixArg, stDate, this.rData[key][key2]['start'])
             }
            if (this.rData[key][key2]['end'])   {                                                   // NOT a weekend
             var eDate = new Date(this.rData[key][key2]['end'].replace(/\s/, 'T') + "Z")      // this.rData[key][key2]['start']fix for fussy Safari
-        //    stDate.setHours(stDate.getHours()+4);
             var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
            }
 
