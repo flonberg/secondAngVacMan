@@ -283,7 +283,7 @@ export class TimeLineComponent implements OnInit {
               this.helpArray = ['Your Time Away must be approved before you cen select coverers'];      
             }                  
         }
-          /*******  classify loggedInUser as tA Owner */     
+          /*******  classify loggedInUser as tA this.rData.data[this.rDataKey].reasonIdx.toString() */     
        if (this.items && this.items._data[this._id] &&  this.items._data[this._id].className === this.userid) { // loggedInUser is tA owner 
            this._readonly = false;    
            if ( this.clickedFrom_rData['approved'] == 1 )                                                          // enable editing
@@ -381,33 +381,18 @@ tst = "";
   ///////    Some params need to be fetched from the rData ds which is the raw data from the vacation3 table      //////
   
   createEditForm(_id) {                                                   // create the form for EDITING tA
- //   const coverageA = this.findCoverage(_id);
+    this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx) // get the key in rData for this tA
     if (this.clickedFrom_rData.coverageA)
       this.covererSelect.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);   // set the value of the autoComplete Coverage widget
     else
       this.covererSelect.setValue('');  
-   // this.reasonSelectControl.setValue('0')  
-    if ( this.items._data[this._id].reason )  
-       this.reasonSelect = this.items._data[this._id].reason.toString();    // set selected Reason
+    this.reasonSelectControl.setValue( this.rData.data[this.rDataKey].reasonIdx.toString() );  // set the Reason dropDown 
     this.dBcontent = this.items._data[this._id].content;
     this.dBstartDate = new Date(this.items._data[this._id].start);          // ref'ed by [ngModel] in datePicker
-  //  this.dBstartDate.setHours(this.dBstartDate.getHours()+4);
-  //  var st = '2020-10-21T00:00:00'
-  //  var tst = new Date(st)
-  //  console.log(" 428 st is  %o  tst is  %o ", tst, st)
     this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
-   // this.dBendDate.setHours(this.dBendDate.getHours()+4);
-  /*  if (this.isSafari)
-    {
-      this.dBendDate.setDate(this.dBendDate.getDate() + 1);   
-      this.dBstartDate.setDate(this.dBstartDate.getDate() + 1);   
-    }
-*/
-
     this.dBendDate.setDate(this.dBendDate.getDate() - 1);                   // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
-    this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M-dd-yyyy');   // used for readOnly date display widget 
-    this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)
-    this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M-dd-yyyy');
+    this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M/dd/yyyy');   // used for readOnly date display widget 
+    this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M/dd/yyyy');
     const reasons = ['Personal Vacation', 'Other', 'Meeting'];
  //   this.dBreason = reasons[this.items._data[this._id].reasonIdx];
     var tst444 = this.rData.data
@@ -415,8 +400,7 @@ tst = "";
     this.dBreason = reasons[this.rData.data[this.rDataKey].reasonIdx ];
  
 
-    var reasonString = this.rData.data[this.rDataKey].reasonIdx.toString(); 
-    this.reasonSelectControl.setValue( reasonString ); 
+ 
     var toDateRaw = this.items._data[this._id].start
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
     var fromDateRaw = this.items._data[this._id].end;
@@ -739,6 +723,7 @@ tst = "";
   needEndEmail = false;
   newStartDate = String;
   newEndDate = String;
+  newReasonIdx = 1;
   EDO = { "OldStartDate": '',                                // used for email 
                   "NewStartDate": '',
                   "OldEndDate": '',
@@ -782,6 +767,10 @@ tst = "";
             this.editColVals.push(endDateStringForEdit)
             this.editColNames.push("approved");
             this.editColVals.push('0')
+          }
+          if (type == 'reason'){
+            this.editColNames.push("reasonIdx");
+            this.editColVals.push(+e.value)
           }
           console.log("958 %o", this.items);
 
