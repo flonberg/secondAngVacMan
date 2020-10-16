@@ -3,7 +3,7 @@
 <!-- 'redraw' param not used at present, can be used if user scrolls beyond fetched data   -->
 
     <div id="container">  
-        <div id="timeline" #visjsTimeline *ngIf = "index == 0"   (click) = "clicked($event)"> </div>
+        <div id="timeline" #visjsTimeline   (click) = "clicked($event)"> </div>
     </div>     
 
 <table style="width:100%; table-layout:fixed; "><tr>
@@ -153,7 +153,7 @@
                                 <mat-label class="smallLabel"> Note:  </mat-label>
                                 <textarea matInput  (change)="storeEdit( 'note', $event)"  class="param"
                                     [value]="this.shownNote"
-                                    [formControl] = "notesFC"
+                                
                                     cdkTextareaAutosize [readonly]="_readonly"
                                     #autosize="cdkTextareaAutosize"
                                     cdkAutosizeMinRows="1"

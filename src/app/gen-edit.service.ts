@@ -54,12 +54,13 @@ export interface dB_POSTparams {
     subject: string
   };                                     // INSERT edited ROW if NOT found
 }
+/*
 export interface emailParams {
   action: string,
   subject: string,
   addresses: string[],
   msg:string
-}
+}*/
 export interface InsertParams {
   action: String,
   tableName: String,
@@ -78,6 +79,13 @@ export interface SinsertParams {
     msg: String,
     subject: String
   };   
+}
+export interface emailParams{
+  action: string;
+  addr: {};
+  msg: string;
+  subject: string;
+  debug: number;
 }
 @Injectable({
   providedIn: 'root'
@@ -101,7 +109,7 @@ export class GenEditService   {
     this.setPlatform();
     s += "\r\n userid is " +  this.userid;
       const url2 = this.urlBase + 'logREST.php?str=' + s + "&r=" + r;
-    console.log( url2);
+    console.log(" 104  writeLog url is " +  url2);
     return this.http.get(url2);
   }
   goHome(u){

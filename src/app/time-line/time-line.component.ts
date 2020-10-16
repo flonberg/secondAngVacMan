@@ -101,59 +101,56 @@ export class TimeLineComponent implements OnInit {
   rDataKey: number;                                       // the key of this vidx in the rawData 
   covererSelect = new FormControl();
   foptions: string[] = [];                                // used for autoComplete
-  filteredOptions: Observable<string[]>;
+  filteredOptions: Observable<string[]>;                  // used for autoComplete
 
   constructor( private http: HttpClient, private genEditSvce: GenEditService, private router: Router,
     private activatedRoute: ActivatedRoute, private datePipe: DatePipe, private fb: FormBuilder) {  
-      this.ret = 1;
-    this.showControls = false;                                      // *ngIf condition for the controls section
+      this.ret = 1;                                       // store the vidx of the added tA
+    this.showControls = false;                            // *ngIf condition for the controls section
     this._readonly = true;
     this.isApprover = false;
-    this.newTimeAwayBool = false;                                   // enable editing of existing tAs
-    this.showSubmitChanges = false; 
-    this.index = 0;
-    this.form = new FormGroup({
+    this.newTimeAwayBool = false;                         // enable editing of existing tAs
+    this.showSubmitChanges = false;                       // Show the Submit Changes button
+   /*
+    this.form = new FormGroup({                           // Form for creating new tAs
       'startDate': this.startDate = new FormControl('', Validators.required),
       'endDate': this.endDate = new FormControl(['', Validators.required]),
       'reason': this.reasonFC = new FormControl(),
       'note': this.notesFC = new FormControl("-"),
     }   )
-    this.createForm();                                            // create this.formG, used for New TimeAway widgets
+   */
+    this.createForm();                                     // create this.formG, used for New TimeAway widgets
     this.formValidation = false;
     this.newTimeAway2 = false;
     this.covererUserKey = -1;
-
   }
-  
-  private _filter(value: string): string[] {
+  private _filter(value: string): string[] {              // autoComplete engine
     const filterValue = value.toLowerCase();
     return this.foptions.filter(option => option.toLowerCase().startsWith(filterValue));
   }
   isSafari = true
   ngOnInit() {
-
         if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)  // if in Safari, need to reload on Add new tA
           this.isSafari = false;                                              // if NOT can do an add. 
         if (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
           this.isSafari = false;
         /**********   for AutoComplete search    */
-        this.filteredOptions = this.covererSelect.valueChanges
+        this.filteredOptions = this.covererSelect.valueChanges          // autoComplete engine
             .pipe(
               startWith(''),
               map(value => this._filter(value))
             );
-console.log("145 isSafari %o", this.isSafari)
-        this.endBeforeStart = false;
+        this.endBeforeStart = false;                      // for generating error message      
         console.log(" 153  this.router.url is   "   + this.router.url   + "server is " +  window.location.href);
         this.activatedRoute                                               // point to the route clicked on
-        .queryParams                                                      // look at the queryParams
-        .subscribe
+          .queryParams                                                      // look at the queryParams
+          .subscribe
           (queryParams => 
             {                                                              // get the queryParams as Observable
               this.qP = queryParams;
               this.setQueryParams(queryParams);
               this.getTimelineData2(0);                                    // get the data from REST database call.
-              const getParams = <dB_SimpleGETparams>{                      // set the parameters for the genDB_GET interface
+              const getParams = <dB_SimpleGETparams>{                      // set the parameters for Notice GET
                 action:'simpleGet',
                 tableName:'notice',
                 whereColName:'UserId',
@@ -162,18 +159,18 @@ console.log("145 isSafari %o", this.isSafari)
                 };
               this.genEditSvce.simpleGet(getParams).subscribe( val=>{       // get the datum from the notice table
                 this.notice = val;                                          // save the resule
-                if (this.notice &&  this.notice['vacMan']== 0)              // it r 0
+                if (this.notice &&  this.notice['vacMan']== 0)              // if user as NOT checked out of Notice
                   document.getElementById('noticeModalComponent').style.display = "block";     // NEED VAR = MODAL ID 
-                if (!this.notice ) {                                        // it NOT FOUND or 0 
+                if (!this.notice ) {                                        // it NOT FOUND because first time for this use
                   if (   document.getElementById('noticeModalComponent') )
                   document.getElementById('noticeModalComponent').style.display = "block";  
-                  const tP = <InsertParams> {
+                  const tP = <InsertParams> {                               // params forinsert record for this user in the Notice table
                     action: 'insertRecGen',
                     tableName: 'notice',
                     colName: ['vacMan', 'UserId'],
                     colVal:['0',<string>this.userid,]
                   }  
-                this.genEditSvce.genPOST(tP)
+                this.genEditSvce.genPOST(tP)                                // insert into notice table
                 .subscribe(                                                 // 
                 (response) => {
                   this.lastInsertIdx = response;
@@ -191,23 +188,15 @@ console.log("145 isSafari %o", this.isSafari)
       }
     );
   }
-  setColorForCoverage(s){
-    if ( s && s == 1)
-      return 'covered';
-    else
-      return 'notCovered';  
-  }
-  storeCovererData()
+
+  storeCovererData()                                                        // called by 'Send EmailTo Coverer' button
   {                    // store the nominated coverer UserKey 
- //   this.showSendEmailToCoverers = false;
     this.rData['emailByKey']['116'] = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
-    const devEmailAddress = "flonberg@partners.org";              // since I am not in dataBase need to add adHoc
-  //  if (this.covererUserKey )
-  //    var mTA_prod = [this.rData['emailByKey'][this.covererUserKey]];
+    const devEmailAddress = "flonberg@partners.org";                        // since I am not in dataBase need to add adHoc
     var link1 = this.genEditSvce.urlBase +`/acceptCov.php?covererAUserkey=` 
           + this.covererUserKey + '&mode=acceptCov&vidx=' + this.items._data[this._id].vidx;
   
-    this.writeLog(" in storeCovererData ", link1);
+    this.writeLog(" in storeCovererData of TimeLine ", link1);
         /*************  Send Coverage Emails        */
     var message = `<html> <head><title> Vacation Coverage Acknowledgment </title></head>
                       <p> ` + this.loggedInFirstName + `  ` + this.loggedInLastName + ` would like you to cover her/his time away. 
@@ -216,16 +205,13 @@ console.log("145 isSafari %o", this.isSafari)
                       <p> THIS IS A TEST IN SOFTWARE DEVELOPEMENT, APPOLOGIES FOR THE BOTHER, PLEASE IGNORE. </p>
                       <p><a href=`+ link1 + `>  ` + this.covererName + ` accepts coverage. </a></p>
                        `;
- //   if (this.covererUserKey2 > 0 ){                                         // if the IS a second coverer
-  //    message +=  `<p> <a href=`+ link2 + `> Accept  ` + this.covererName2 + `  coverage. </a></p>`;
-   // }
     var prodAddr = [this.rData['emailByKey'][this.covererUserKey]];         // the PROD adderess array
 
     var mTA = {
       "Dev": ["flonberg@partners.org"],
       "Prod": prodAddr,
      }  
-    var emp = {
+    var emp  = <emailParams> {                                                             // params for 
       action: "sendEmail2",
       addr: { "Dev":["flonberg@partners.org"],
               "Prod":prodAddr
@@ -558,7 +544,7 @@ console.log("145 isSafari %o", this.isSafari)
       this.userid = qP.userid;
       console.log(" 655  dddd %o", this.userid);
       this.genEditSvce.setUserId(qP.userid);                                            // pass the userid to gen-edit for use in REST svces
-      this.genEditSvce.writeLog("test").subscribe(
+      this.genEditSvce.writeLog("timeLine").subscribe(
         (res) => {
           console.log("546 ret from writeLog %o ", res);
         }
@@ -621,10 +607,11 @@ console.log("145 isSafari %o", this.isSafari)
     this.groups2Array = new Array();                                                    // Array to keep track of if added to groups2
   
     if (this.param)
-      url += this.param;
+      url += this.param;                                                                // add route query params
     this.genEditSvce.genGet(url).subscribe(
       (val) => {
-        if (this.index === 0) {    
+      //  if (this.index === 0) 
+        {    
           this.rData = val;
           console.log("737  rData %o", this.rData);
           this.rData.data = this.myBubsort(this.rData.data);                            // alphabetize by LastName, rData.data is tAs
@@ -638,36 +625,33 @@ console.log("145 isSafari %o", this.isSafari)
         
                 /*****           process data and add to TimeLine DataSet             */
         var setId = 1;                                                                  // used to incement id for adding to DataSet                            
-        var styleTxt= 'background-color:rgb(195,195,195);';
+        var styleTxt= 'background-color:rgb(195,195,195);';                             // default style
         console.log("818 %o", this.rData);
-      for (var key in this.rData)
-      {
-          for (var key2 in this.rData[key])
-          {
-            if (this.rData[key][key2]['start'])
+        for (var key2 in this.rData['data'])
+        {
+            if (this.rData['data'][key2]['start'])
             {             // Date is stored in dB as OBJECT so cannot be directly used in  datePipe,  so need to make a new TypeScript Date. 
-              var stDate = new Date(this.rData[key][key2]['start'].replace(/\s/, 'T') + "Z")     // this.rData[key][key2]['start']is e.g. 2020-12-21 00:00:00;  fix for fussy Safari
+              var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') + "Z")     // this.rData[key][key2]['start']is e.g. 2020-12-21 00:00:00;  fix for fussy Safari
               var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T04:00:00Z" ;    // this used for timeLine DataSet, the T04:00.. makes blocks come out at midnight
                 //    console.log("655  from fixArg is %o stDate is %o  from dB  is %o", fixArg, stDate, this.rData[key][key2]['start'])
             }
-           if (this.rData[key][key2]['end'])   {                                                   // NOT a weekend
-            var eDate = new Date(this.rData[key][key2]['end'].replace(/\s/, 'T') + "Z")      // this.rData[key][key2]['start']fix for fussy Safari
-            var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
-           }
-
-          if ( this.rData[key][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
+            if (this.rData['data'][key2]['end'])   {                                                   // NOT a weekend
+              var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T') + "Z")      // this.rData[key][key2]['start']fix for fussy Safari
+              var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
+            }
+          if ( this.rData['data'][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
           {
                            //******* set the color code for approved, covered, and coverageAccepted   *****/
-            if (   this.rData[key][key2]['userkey'] > 0  )                                      
+            if (   this.rData['data'][key2]['userkey'] > 0  )                                      
             {                                         
-              if (   (!this.rData[key][key2]['rank']   ||  +this.rData[key][key2]['rank'] < 5   ))     // if user is a Dosimetrist 
+              if (   (!this.rData['data'][key2]['rank']   ||  +this.rData['data'][key2]['rank'] < 5   ))     // if user is a Dosimetrist 
               {          
                 styleTxt= 'background-color:rgb(230,230,230);';                                    // default backgound = grey, will apply to all non dosimetrists
-                if (+this.rData[key][key2]['approved'] == 0 && +this.rData[key][key2]['userkey'] !== 58  )                                     // if NOT approved
+                if (+this.rData['data'][key2]['approved'] == 0 && +this.rData['data'][key2]['userkey'] !== 58  )                                     // if NOT approved
                   styleTxt = 'background-color:white;'
-                else if ( +this.rData[key][key2]['coverageA'] > 0    )                           // if there IS a coverer
+                else if ( +this.rData['data'][key2]['coverageA'] > 0    )                           // if there IS a coverer
                 {
-                   if (+this.rData[key][key2]['covA_Duty'] == 1)                                  // if has accepted overage
+                   if (+this.rData['data'][key2]['covA_Duty'] == 1)                                  // if has accepted overage
                       styleTxt +='background-color:green;'
                    else                                                                           // coverer NOT accepted
                       styleTxt +='background-color:orange;'
@@ -675,34 +659,33 @@ console.log("145 isSafari %o", this.isSafari)
                 else   
                     styleTxt +='background-color:red;'
               }
-              var tst = this.rData[key][key2]['vidx'] ;
-              var group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;   // Check is this user already has a group
+              var tst = this.rData['data'][key2]['vidx'] ;
+              var group2Badded = this.groups2Array.indexOf(this.rData['data'][key2]['content'] ) ;   // Check is this user already has a group
               if (group2Badded == -1 ){                                                           // It is NOT a user it is a Weekend
-                this.groups2Array.push(this.rData[key][key2]['content']);                         // add the group for this user
-                this.groups2.add({id: this.groups2Array.indexOf(this.rData[key][key2]['content']) , content: this.rData[key][key2]['content']})    
-                group2Badded = this.groups2Array.indexOf(this.rData[key][key2]['content'] ) ;     // use for the 'group' datum of the dataSet
+                this.groups2Array.push(this.rData['data'][key2]['content']);                         // add the group for this user
+                this.groups2.add({id: this.groups2Array.indexOf(this.rData['data'][key2]['content']) , content: this.rData['data'][key2]['content']})    
+                group2Badded = this.groups2Array.indexOf(this.rData['data'][key2]['content'] ) ;     // use for the 'group' datum of the dataSet
               }
               else {                                                                              // weekend
-                this.rData[key][key2]['type']= 'background';                                      // add 'type' for shading
+                this.rData['data'][key2]['type']= 'background';                                      // add 'type' for shading
               }
             }
             //************    create the tAO object to add to the DataSet      *************/
-            if (   +this.rData[key][key2]['userkey'] > 0  ){                                     // normal nonWeekend tA.  tAO is object toB added to dataSet
-             this.tAO = { id: ++setId, content: this.rData[key][key2]['content'], start: startDateArg,
+            if (   +this.rData['data'][key2]['userkey'] > 0  ){                                     // normal nonWeekend tA.  tAO is object toB added to dataSet
+             this.tAO = { id: ++setId, content: this.rData['data'][key2]['content'], start: startDateArg,
                 style:styleTxt,
-                end: endDateArg, group:  group2Badded, vidx:this.rData[key][key2]['vidx'],
-                reason: this.rData[key][key2]['reason'], note: this.rData[key][key2]['note'],
-                className: this.rData[key][key2]['className']}  
+                end: endDateArg, group:  group2Badded, vidx:this.rData['data'][key2]['vidx'],
+                reason: this.rData['data'][key2]['reason'], note: this.rData['data'][key2]['note'],
+                className: this.rData['data'][key2]['className']}  
             }   
             else {                                                                              // make a tAO for a weekend
               this.tAO = { id: ++setId,  start: startDateArg,
-                className:this.rData[key][key2]['className'],
+                className:this.rData['data'][key2]['className'],
                 end: endDateArg,  type:'background',
                 }  
             }         
             this.items.getDataSet().add(this.tAO);                                              // add the new tAO to dataSet. 
           }
-        }
       }
       if (!this.timeline)
       this.timeline = new vis.Timeline(this.tlContainer, this.items, {});                       // create the timeLine
@@ -1181,3 +1164,10 @@ editGen(type: string, event: any)
     }
   }
   */
+   /*
+  setColorForCoverage(s){
+    if ( s && s == 1)
+      return 'covered';
+    else
+      return 'notCovered';  
+  }*/
