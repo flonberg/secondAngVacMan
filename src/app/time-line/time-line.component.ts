@@ -598,16 +598,23 @@ tst = "";
         var setId = 1;                                                                  // used to incement id for adding to DataSet                            
         var styleTxt= 'background-color:rgb(195,195,195);';                             // default style
         console.log("818 %o", this.rData);
-        for (var key2 in this.rData['data'])
+        console.log("601  isSafari is %o ", this.isSafari)
+        for (var key2  in this.rData['data'])
         {
             if (this.rData['data'][key2]['start'])
             {             // Date is stored in dB as OBJECT so cannot be directly used in  datePipe,  so need to make a new TypeScript Date. 
-              var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') + "Z")     // this.rData[key][key2]['start']is e.g. 2020-12-21 00:00:00;  fix for fussy Safari
+              var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') )     //  fix for fussy Safari
+              if (this.isSafari)
+                stDate.setDate(stDate.getDate() + 1);                       // correct for faulty Safari date conversion. 
               var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T04:00:00Z" ;    // this used for timeLine DataSet, the T04:00.. makes blocks come out at midnight
-                //    console.log("655  from fixArg is %o stDate is %o  from dB  is %o", fixArg, stDate, this.rData[key][key2]['start'])
+               //    console.log("607 date from dB is %o date from new Date is %o",this.rData['data'][key2]['start'], startDateArg )
             }
+
             if (this.rData['data'][key2]['end'])   {                                                   // NOT a weekend
-              var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T') + "Z")      // this.rData[key][key2]['start']fix for fussy Safari
+              var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T')  )      // this.rData[key][key2]['start']fix for fussy Safari
+              console.log("615  arg for new Date is %o  new date is %o ",  this.rData['data'][key2]['end'].replace(/\s/, 'T') ,  eDate)
+              if (this.isSafari)
+                eDate.setDate(eDate.getDate() + 1);      
               var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
             }
           if ( this.rData['data'][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
@@ -656,8 +663,10 @@ tst = "";
                 }  
             }         
             this.items.getDataSet().add(this.tAO);                                              // add the new tAO to dataSet. 
+      
           }
       }
+      console.log("605 DataSet is %o", this.items)
       if (!this.timeline)
       this.timeline = new vis.Timeline(this.tlContainer, this.items, {});                       // create the timeLine
       this.timeline.setOptions(this.options);                                                   // set the timeLine Options
@@ -833,8 +842,8 @@ tst = "";
     );
    // if (param !== 'del')
        this.ngOnInit();
-    //if (this.isSafari)
-     //  window.location.reload();
+    if (this.isSafari)
+       window.location.reload();
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script
