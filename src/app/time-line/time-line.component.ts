@@ -355,7 +355,8 @@ find_rDataKey(dataStruct, name, value){
       dateFrom: ['', Validators.required ],
       reasonG: [''],
       noteG: ['']
-    }, {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
+    },
+    // {validator: this.dateLessThan('dateFrom', 'dateTo', 'reasonG')}
     );
   }
 editStartDate: FormControl;
@@ -692,9 +693,8 @@ tst = "";
             "OldEndDate": '',
             "NewEndDate": '',
           }
- 
-  //covererSelected = false;
-          //*** When the user changes a TimeAway Param the change is                         */
+
+          //*** When the user changes a TimeAway Param the change is                          */
           //****** 1. Updated in the DataSet,                                                 */
           //****** 2. Stored dataStruct to use to update dB when the user clickes Save Edits  */
   storeEdit(type,e){                                                              // called by (dateChange) in DatePicker
@@ -825,13 +825,13 @@ tst = "";
     if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
       this.endBeforeStart = false;  
   }
-  setCovererClass(){
-    if (+this.rData.data[this.rDataKey].covA_Duty == 1)
-      return("covered");
+  setCovererClass(){                                                    // called by [class] of coverer td
+    if (+this.rData.data[this.rDataKey].covA_Duty == 1)                 // if the covereage is accepted
+      return("covered");                                                // return the green class
     else
       return("notCovered")  
   }
-
+/*
   dateLessThan(from: string, to: string, reason: string) {
     return (group: FormGroup): {[key: string]: any} => 
     {
@@ -856,6 +856,7 @@ tst = "";
       return {};
   }
 }
+*/
 /*
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker

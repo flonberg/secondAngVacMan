@@ -29,25 +29,25 @@ interface dateBox {
 
 export class MonthViewComponent implements OnInit {
   @Input() count: number;
-  daysS: dateBox[][];
-  monthName: string;                                                // used in .html
+  daysS: dateBox[][];                                               // populates the days in calendar
+  monthName: string;                                                // used in .html for caption on calendar
   date: Date;
   monthNumber:number;                                               // used to advance and go back months
-  baseDate: Date;    
-  physicsDuties:any;
+  //baseDate: Date;    
+  physicsDuties:any;                                                // iterated over in .html 
   physicsMonthlyDuties: [];                                         // stores the data from PhysicMonthlyDuty table
   phrase: string;                                                   // Shown in takeADuty Modal
-  qParams: any;                                                     // Used as a param for REST getDuties. 
-  loggedInUserKey: any;
-  dutyOrder: [];
-  helpArray:[String];
+  qParams: any;                                                     // Holds the queryParams from Router 
+  loggedInUserKey: number;                                          // keep track of the loggedInUser
+//  dutyOrder: [];
+  helpArray:[String];                                               // phrases for dynamic HelpArray
   physicsDutiesClass: any;
-  idxForEdit: string;
+  idxForEdit: string;                                               // dB idx for updating the dB
   loggedInUserLastName: string;
   //startDateForGettingData: Date;  
   //startDateForGettingDataString: string;
-  toPageID: string;
-  colors:string[];
+  toPageID: string;                                                 // used for page link 
+  //colors:string[];
   masterArray = ['This new Month View page is part of upgrade of Whiteboard.',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
@@ -92,7 +92,7 @@ export class MonthViewComponent implements OnInit {
     }
     this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
     this.logSvcs.logMessage('tst');
-    this.colors = ['one','two','three','four','five','six'];
+    //this.colors = ['one','two','three','four','five','six'];
     
   }
   isLoggedInUser(n){                                                // show the loggedInUser's duties in red
