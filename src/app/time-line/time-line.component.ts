@@ -389,7 +389,13 @@ tst = "";
     this.reasonSelectControl.setValue( this.rData.data[this.rDataKey].reasonIdx.toString() );  // set the Reason dropDown 
     this.dBcontent = this.items._data[this._id].content;
     this.dBstartDate = new Date(this.items._data[this._id].start);          // ref'ed by [ngModel] in datePicker
+    if (this.isSafari)
+      this.dBstartDate.setDate( this.dBstartDate.getDate() + 1);                       // correct for faulty Safari date conversion. 
+  //  if (this._id == 10)
+      console.log("393   newDate is  %o  from arg  %o ", this.dBstartDate, this.items._data[this._id].start)
     this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
+    if (this.isSafari)
+      this.dBendDate.setDate( this.dBendDate.getDate() + 1);                       // correct for faulty Safari date conversion. 
     this.dBendDate.setDate(this.dBendDate.getDate() - 1);                   // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
     this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M/dd/yyyy');   // used for readOnly date display widget 
     this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M/dd/yyyy');
@@ -598,24 +604,22 @@ tst = "";
         var setId = 1;                                                                  // used to incement id for adding to DataSet                            
         var styleTxt= 'background-color:rgb(195,195,195);';                             // default style
         console.log("818 %o", this.rData);
-        console.log("601  isSafari is %o ", this.isSafari)
         for (var key2  in this.rData['data'])
         {
             if (this.rData['data'][key2]['start'])
-            {             // Date is stored in dB as OBJECT so cannot be directly used in  datePipe,  so need to make a new TypeScript Date. 
+            {             // Need to make a new Date  
               var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') )     //  fix for fussy Safari
               if (this.isSafari)
                 stDate.setDate(stDate.getDate() + 1);                       // correct for faulty Safari date conversion. 
-              var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T04:00:00Z" ;    // this used for timeLine DataSet, the T04:00.. makes blocks come out at midnight
-               //    console.log("607 date from dB is %o date from new Date is %o",this.rData['data'][key2]['start'], startDateArg )
+               var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T00:00:00" ;    // this used for timeLine DataSet, the T05:00.. avoids going back a day
+                                                                                                  //  has to be T05 minimum to avoid DLS Time -> STD Time
+                                                                                                  //  GMT-400 for DLS time -v- GMT-500 for Std Time
             }
-
             if (this.rData['data'][key2]['end'])   {                                                   // NOT a weekend
               var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T')  )      // this.rData[key][key2]['start']fix for fussy Safari
-              console.log("615  arg for new Date is %o  new date is %o ",  this.rData['data'][key2]['end'].replace(/\s/, 'T') ,  eDate)
               if (this.isSafari)
                 eDate.setDate(eDate.getDate() + 1);      
-              var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T04:00:00Z" ; 
+              var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T00:00:00" ; 
             }
           if ( this.rData['data'][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
           {
