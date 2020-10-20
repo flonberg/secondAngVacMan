@@ -747,49 +747,23 @@ tst = "";
     else  if (e.target){                                                          // Note textAres returns a 'target' 
         this.editColNames.push(type);                                             // load name of Col in dB to be edited
         this.editColVals.push(e.target.value);                                    // load value to be inserted
-        const dateForDataSet = e.target.value + "T00:00:00Z"; 
-       /* if (type=='startDate'){
-          this.needStartEmail = true; 
-          this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);; 
-          this.EDO.NewStartDate = e.target.value; 
-          this.items.update({id: this._id, start: dateForDataSet});                // for use in the email to Brian
-
-          this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'}); 
-
-        }
-        if (type=='endDate'){
-          this.needStartEmail = true;
-          this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10); ; 
-          this.EDO.NewEndDate = e.target.value; 
-          this.items.update({id: this._id, end: dateForDataSet});   
-          this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'});   
-        }
-        */
         if (type == 'coverer'){
           this.covererName = e.target.textContent;
           this.editColNames = ['coverageA'];
           this.editColVals =[this.covererName]
         }
         var str = "approved";  
-        
-        
-   
-        // use of Constructor Property 
-
-
     }
   }
   saveEdits(param?){
-   // this.editColNames.shift();                                 // remove garbage zeroth element
-  //  this.editColVals.shift();
-    var eP  = {
-      action:'editAndLog',
+    var eP  = <dB_POSTparams>{                                      // Interface proviced in gen-edit.service.tx
+      action:'editAndLog',                                          // name of function in RESTgenDB_POST.php
       tableName:'vacation3',
       editColNames:this.editColNames,
       editColVals:this.editColVals,
       whereColName:['vidx'],
       whereColVal:[this.items._data[this._id]['vidx']],
-      userid:this.userid
+      userid:this.userid                                          // FJLlog records the user 
     }
     if (param == 'del') {                                          // user clicked Delete Button
       eP.editColNames=['reasonIdx'];                                // sel editColName 
@@ -798,19 +772,20 @@ tst = "";
     }
     if (this.needStartEmail)
       this.sendStartOrEndDateEmail();
-    this.genEditSvce.genPOST(eP).subscribe(
+    this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
       (res) => {
         console.log("res from updatel %o",  res);
       }
     );
    // if (param !== 'del')
-       this.ngOnInit();
+    //   this.ngOnInit();
     if (this.isSafari)
        window.location.reload();
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script
-    if (this.needStartEmail && +this.loggedInRank < 5 ){                   
+    //if (this.needStartEmail && +this.loggedInRank < 5 )
+    {                   
       var msg = "<p>The  Time Away of " + this.items._data[this._id]['content'] + ' has changed';
       if (this.EDO.NewStartDate.length > 2 ){
         msg += " from Start Date of " + this.EDO.OldStartDate + " to new Start Date of " + this.EDO.NewStartDate +',';
@@ -835,23 +810,18 @@ tst = "";
       );
     }
   }
-  getReason()                                                   // validates the form and enables the Submt Button
-  {
-  //  this.gotReason = true;
-    if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
-      this.formValidation = true; 
-  }
-  setNewTimeAway2(){
-    this.newTimeAway2 = true;
-    this.helpArray = [
+ 
+  setNewTimeAway2(){                                                  // called by 'New Time Away' button. 
+    this.newTimeAway2 = true;                                         // turn on the New Time Away entry widgets. 
+    this.helpArray = [                                                // set the help array phrase. 
       'Start Date, End Date and Reason must be entered before',
        'new Time Away can be Submitted.  '
     ];
   }
-  storeDate(type: string, event: MatDatepickerInputEvent<Date>) {
+  storeDate( event: MatDatepickerInputEvent<Date>) {                   // called by (dateChange) of DatePicker, checks Start < End
     var loc = event;
-    if ( this.formG.value.dateTo && this.formG.value.dateFrom > this.formG.value.dateTo)
-      this.endBeforeStart = true;  
+    if ( this.formG.value.dateTo && this.formG.value.dateFrom > this.formG.value.dateTo) // check if EndDate >= StartDate
+      this.endBeforeStart = true;                                     // used to show Error Message. 
     if ( this.formG.value.dateTo && this.formG.value.dateFrom <= this.formG.value.dateTo)
       this.endBeforeStart = false;  
   }
@@ -1163,5 +1133,13 @@ editGen(type: string, event: any)
     }
     this.genEditSvce.genDB_POST(gP);
     this.closeModal();
+  }
+  */
+  /*
+  getReason()                                                   // validates the form and enables the Submt Button
+  {
+  //  this.gotReason = true;
+    if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
+      this.formValidation = true; 
   }
   */
