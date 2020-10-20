@@ -366,89 +366,41 @@ dBendDateString: String;
 dBcontent: String;
 dBreason: String;
 tst = "";
-/*
-  findCoverage(itemId){                                                    // 
-    const vidx =  this.items._data[itemId].vidx;                          // get the vidx of tA clicked on in the DataSet
-    const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', vidx);   // find the key of this vidx in the rawData 
-    const coverageA = this.rData.data[rDataKey].coverageA;                // get the 'coverageA' datum from the rawData
-    if( this.rData.fromION[coverageA]){
 
-      return this.rData.fromION[coverageA].LastName                         // return the LastName using fromION data. 
-    }
-  }
-  */
   ////////   This triggered by clicked() and is where the data from the selected tA in the dataSet is loaded into the edit boxes. 
   ///////    Some params need to be fetched from the rData ds which is the raw data from the vacation3 table      //////
   
-  createEditForm(_id) {                                                   // create the form for EDITING tA
-    this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx) // get the key in rData for this tA
-    if (this.clickedFrom_rData.coverageA)
+  createEditForm(_id) {                                                           // create the form for EDITING tA
+    this.rDataKey = +this.find_rDataKey(this.rData.data, 'vidx', this._vidx)      // get the key in rData for this tA by matching vidx with the 'items' DataSet
+    if (this.clickedFrom_rData.coverageA)                                         // if there IS a Coverer
       this.covererSelect.setValue( this.rData.fromION[ this.clickedFrom_rData.coverageA]['LastName']);   // set the value of the autoComplete Coverage widget
     else
-      this.covererSelect.setValue('');  
-    this.reasonSelectControl.setValue( this.rData.data[this.rDataKey].reasonIdx.toString() );  // set the Reason dropDown 
-    this.dBcontent = this.items._data[this._id].content;
-    this.dBstartDate = new Date(this.items._data[this._id].start);          // ref'ed by [ngModel] in datePicker
+      this.covererSelect.setValue('');                                            // Avoid a NULL 
+    this.reasonSelectControl.setValue( this.rData.data[this.rDataKey].reasonIdx.toString() );  // set the Reason dropDown value
+    this.dBcontent = this.items._data[this._id].content;                          // Used for the caption for selected tA        
+    this.dBstartDate = new Date(this.items._data[this._id].start);                // ref'ed by [ngModel] in datePicker
     if (this.isSafari)
-      this.dBstartDate.setDate( this.dBstartDate.getDate() + 1);                       // correct for faulty Safari date conversion. 
-  //  if (this._id == 10)
-      console.log("393   newDate is  %o  from arg  %o ", this.dBstartDate, this.items._data[this._id].start)
-    this.dBendDate = new Date(this.items._data[this._id].end);              // sets [ngModel] of First Day Away widget
+      this.dBstartDate.setDate( this.dBstartDate.getDate() + 1);                  // correct for faulty Safari date conversion. 
+                          console.log("393   newDate is  %o  from arg  %o ", this.dBstartDate, this.items._data[this._id].start)
+    this.dBendDate = new Date(this.items._data[this._id].end);                    // sets [ngModel] of First Day Away widget
     if (this.isSafari)
       this.dBendDate.setDate( this.dBendDate.getDate() + 1);                       // correct for faulty Safari date conversion. 
-    this.dBendDate.setDate(this.dBendDate.getDate() - 1);                   // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
+    this.dBendDate.setDate(this.dBendDate.getDate() - 1);                          // set edit field as LAST DAY AWAY.. ref'ed by [ngModel] in datePicker
     this.dBstartDateString = this.datePipe.transform(this.dBstartDate , 'M/dd/yyyy');   // used for readOnly date display widget 
     this.dBendDateString = this.datePipe.transform(this.dBendDate , 'M/dd/yyyy');
-    const reasons = ['Personal Vacation', 'Other', 'Meeting'];
- //   this.dBreason = reasons[this.items._data[this._id].reasonIdx];
-    var tst444 = this.rData.data
-   if (this._readonly)
-    this.dBreason = reasons[this.rData.data[this.rDataKey].reasonIdx ];
- 
-
- 
-    var toDateRaw = this.items._data[this._id].start
+    const reasons = ['Personal Vacation', 'Other', 'Meeting'];                      // reasons array 
+    if (this._readonly)                                                             // useer is NOT owner of tA selected
+      this.dBreason = reasons[this.rData.data[this.rDataKey].reasonIdx ];           // used for ngModel for ' input' of readOnly reason    
+    /*var toDateRaw = this.items._data[this._id].start
     toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
     var fromDateRaw = this.items._data[this._id].end;
     fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 10);
+    */
     if (this.items._data[this._id].note)
-      this.shownNote = this.items._data[this._id].note;
-  //  this.shownNote = this.items._data[this._id].note;
-   /* this.formEdit = this.fb.group({                          // fb ison
-      goAwayerBox: [ this.items._data[this._id].content],
-      dateToEdit: [toDateRaw, Validators.required ],
-      dateFromEdit: [fromDateRaw, Validators.required ],
-      reasonGEdit: [''],
-      noteGEdit: [ this.items._data[this._id].note]
-    }, {validator: this.dateLessThan('dateFromEdit', 'dateToEdit', 'reasonGEdit')}
-    );;
-   */
+      this.shownNote = this.items._data[this._id].note;                             // used for [value] of Note entry widget
   }
 
-  dateLessThan(from: string, to: string, reason: string) {
-      return (group: FormGroup): {[key: string]: any} => 
-      {
-        let today = new Date(); 
-        if (group.controls[to].value && group.controls[from].value >= group.controls[to].value) {
-          return {
-            dates: "End Date must be after Start Date "
-          };
-        }
-        if (group.controls[from].value ){
-          let fDate = new Date(group.controls[from].value);
-          if (fDate < today)
-          return {
-            dates: "Date must be in the future"
-          };
 
-        }
-        if (group.controls[from].value.length > 0  && group.controls[from].value.length  > 0  && group.controls[reason].value.length  > 0){
-          this.formValidation = true;
-          console.log("form valid " + this.formValidation)
-        }
-        return {};
-    }
-  }
   cancelNewTA(){
     console.log("cancel newTA");
     this.newTimeAway2 = false;
@@ -479,7 +431,7 @@ tst = "";
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
           this.rand = Math.random();
          // this.ngOnInit();
-          window.location.reload();
+    //      window.location.reload();
         })    
   }
 
@@ -489,6 +441,7 @@ tst = "";
     var idx = s.lastID;
     this.lastInsertIdx = s['lastID'];
            /************  send NeedToApprove Email -- must be in subscribe to get lastInsertIdx. */
+           console.log( " 444 loggedInUserRand is %o",this.rData.loggedInUserRank )
     if (this.rData.loggedInUserRank < 5){   
       const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.lastInsertIdx   ;
       console.log("600  link1 for retFromPost is " + link11);
@@ -603,25 +556,24 @@ tst = "";
                 /*****           process data and add to TimeLine DataSet             */
         var setId = 1;                                                                  // used to incement id for adding to DataSet                            
         var styleTxt= 'background-color:rgb(195,195,195);';                             // default style
-        console.log("818 %o", this.rData);
+                                                             console.log("818 %o", this.rData);
         for (var key2  in this.rData['data'])
         {
+          /*******************      form the date arguments to add to the TimeLine DataSet  *****************/
             if (this.rData['data'][key2]['start'])
             {             // Need to make a new Date  
-              var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') )     //  fix for fussy Safari
+              var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') )        //  fix for fussy Safari
               if (this.isSafari)
-                stDate.setDate(stDate.getDate() + 1);                       // correct for faulty Safari date conversion. 
-               var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T00:00:00" ;    // this used for timeLine DataSet, the T05:00.. avoids going back a day
-                                                                                                  //  has to be T05 minimum to avoid DLS Time -> STD Time
-                                                                                                  //  GMT-400 for DLS time -v- GMT-500 for Std Time
+                stDate.setDate(stDate.getDate() + 1);                                             // correct for faulty Safari date conversion. 
+              var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T00:00:00" ;    // this used for timeLine DataSet, no 'Z' so no timeZone adjustment
             }
-            if (this.rData['data'][key2]['end'])   {                                                   // NOT a weekend
-              var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T')  )      // this.rData[key][key2]['start']fix for fussy Safari
-              if (this.isSafari)
-                eDate.setDate(eDate.getDate() + 1);      
+            if (this.rData['data'][key2]['end'])   {                                              // NOT a weekend
+              var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T')  )          // this.rData[key][key2]['start']fix for fussy Safari
+              if (this.isSafari)                                                                  
+                eDate.setDate(eDate.getDate() + 1);                                               // correct for faulty Safari date conversion
               var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T00:00:00" ; 
             }
-          if ( this.rData['data'][key2]['content'])                                                        // 'content' is the datum which appears in timeLine box
+          if ( this.rData['data'][key2]['content'])                                               // 'content' is the datum which appears in timeLine box
           {
                            //******* set the color code for approved, covered, and coverageAccepted   *****/
             if (   this.rData['data'][key2]['userkey'] > 0  )                                      
@@ -633,22 +585,22 @@ tst = "";
                   styleTxt = 'background-color:white;'
                 else if ( +this.rData['data'][key2]['coverageA'] > 0    )                           // if there IS a coverer
                 {
-                   if (+this.rData['data'][key2]['covA_Duty'] == 1)                                  // if has accepted overage
+                   if (+this.rData['data'][key2]['covA_Duty'] == 1)                                 // if has accepted overage
                       styleTxt +='background-color:green;'
-                   else                                                                           // coverer NOT accepted
+                   else                                                                             // coverer NOT accepted
                       styleTxt +='background-color:orange;'
                 }
-                else   
+                else                                                                                // no coverer nominated
                     styleTxt +='background-color:red;'
               }
-              var tst = this.rData['data'][key2]['vidx'] ;
-              var group2Badded = this.groups2Array.indexOf(this.rData['data'][key2]['content'] ) ;   // Check is this user already has a group
-              if (group2Badded == -1 ){                                                           // It is NOT a user it is a Weekend
-                this.groups2Array.push(this.rData['data'][key2]['content']);                         // add the group for this user
-                this.groups2.add({id: this.groups2Array.indexOf(this.rData['data'][key2]['content']) , content: this.rData['data'][key2]['content']})    
+              /********      set the DataSet Group  *************************************/
+              var group2Badded = this.groups2Array.indexOf(this.rData['data'][key2]['content'] ) ;   // If the Group for this user exists, use it. 
+              if (group2Badded == -1 ){                                                              // The group for this user has not been created
+                this.groups2Array.push(this.rData['data'][key2]['content']);                         // add the group for this user to the groupArrau
+                this.groups2.add({id: this.groups2Array.indexOf(this.rData['data'][key2]['content']) , content: this.rData['data'][key2]['content']})    // add to the DataSet Group
                 group2Badded = this.groups2Array.indexOf(this.rData['data'][key2]['content'] ) ;     // use for the 'group' datum of the dataSet
               }
-              else {                                                                              // weekend
+              else {                                                                                 // weekend
                 this.rData['data'][key2]['type']= 'background';                                      // add 'type' for shading
               }
             }
@@ -660,19 +612,27 @@ tst = "";
                 reason: this.rData['data'][key2]['reason'], note: this.rData['data'][key2]['note'],
                 className: this.rData['data'][key2]['className']}  
             }   
-            else {                                                                              // make a tAO for a weekend
+            else {                                                                                  // make a tAO (timeLine Entry )  for a weekend
               this.tAO = { id: ++setId,  start: startDateArg,
                 className:this.rData['data'][key2]['className'],
                 end: endDateArg,  type:'background',
                 }  
             }         
-            this.items.getDataSet().add(this.tAO);                                              // add the new tAO to dataSet. 
+            this.items.getDataSet().add(this.tAO);                                                // add the new tAO to dataSet. 
       
           }
       }
       console.log("605 DataSet is %o", this.items)
+      this.options = {
+        selectable: true,
+        groupOrder: function (a, b) {
+          return a.value - b.value;
+        },
+        start: startDateShown,
+        end: endDateShown,
+      };
       if (!this.timeline)
-      this.timeline = new vis.Timeline(this.tlContainer, this.items, {});                       // create the timeLine
+        this.timeline = new vis.Timeline(this.tlContainer, this.items, {});                       // create the timeLine
       this.timeline.setOptions(this.options);                                                   // set the timeLine Options
       this.timeline.setGroups(this.groups2);                                                    // set the timeLine groups
       /********************************************************************************************************************************************************/
@@ -683,18 +643,10 @@ tst = "";
         });
       }
     );
-    
-    this.options = {
-      selectable: true,
-      groupOrder: function (a, b) {
-        return a.value - b.value;
-      },
-      start: startDateShown,
-      end: endDateShown,
-    };
+  
   }                                                                                             // end of getTimeLineData
 
- myBubsort(array){                                            // sort by LastName 
+ myBubsort(array){                                                                              // sort by LastName, line 544
   array = array.slice(); // creates a copy of the array
   for(let i = 0; i < array.length; i++) {
       for(let j = 0; j < array.length - 1; j++) {
@@ -708,8 +660,6 @@ tst = "";
   return array;  
  }
  
-  
-
   sendDeleteEmail(){
     if (+this.rData.loggedInUserRank == 0){
       const addrArray = Array("flonberg@partners.org", "bnapolitano@partners.org")
@@ -737,62 +687,68 @@ tst = "";
   newStartDate = String;
   newEndDate = String;
   newReasonIdx = 1;
-  EDO = { "OldStartDate": '',                                // used for email 
-                  "NewStartDate": '',
-                  "OldEndDate": '',
-                  "NewEndDate": '',
-                }
-  covererSelected = false;
+  EDO =    { "OldStartDate": '',                                                  // used for email describing the change to tA
+            "NewStartDate": '',
+            "OldEndDate": '',
+            "NewEndDate": '',
+          }
+ 
+  //covererSelected = false;
+          //*** When the user changes a TimeAway Param the change is                         */
+          //****** 1. Updated in the DataSet,                                                 */
+          //****** 2. Stored dataStruct to use to update dB when the user clickes Save Edits  */
   storeEdit(type,e){                                                              // called by (dateChange) in DatePicker
     console.log("951 %o", e);
-    if (type == 'coverer')
-      this.covererSelected = true;
- //   this.editColNames[0] = 'approved';
-    this.editColNames = [];
-    this.editColVals = [];
-    this.showSubmitChanges = true;
+  //  if (type == 'coverer')
+  //    this.covererSelected = true;
 
-    if (e.value){
+    this.showSubmitChanges = true;
+    if (e.value){                                                           // DatePicker and DropDown widgets return a 'value
           console.log("date Entered %o", e.value);
-          let newDate = new Date(e.value);
-          let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
-          let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');  
-          newDate.setDate(newDate.getDate()+ 1);                  // Wrong time is entered by DatePicker
-          let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');  
-          let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd'); 
-          this.needStartEmail = true; 
-          this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);
-          this.EDO.NewStartDate = <string>startDateStringForEdit 
+          console.log(" 709 editColNames %o   editColVals %o", this.editColNames ,    this.editColVals)
+          let newDate = new Date(e.value);                                  // e.g.  Fri Oct 23 2020 00:00:00 GMT-0400 (Eastern Daylight Time)
+          let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');   // for updating DataSet
+          let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');      // for writing to dB
+          newDate.setDate(newDate.getDate()+ 1);                            // User Enters LastDayAway, dB needs first day back 
+          let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');     // for udpdating DataSet
+          let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');        // for writeing to dB
+          this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);          // The OldStartDate comes form dB
+          this.EDO.NewStartDate = <string>startDateStringForEdit                            // New startDate comes from DatePicker
           this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
           this.EDO.NewEndDate = <string>endDateStringForEdit 
-          if (type=='startDate'){
-            this.needStartEmail = true;
-            this.items.update({id: this._id, start: startDateString});  
-            this.editColNames.push("startDate");
-            this.editColVals.push(startDateStringForEdit)
-            this.editColNames.push("approved");
-            this.editColVals.push('0')
+          if (type=='startDate' ){                                                          
+            if (+this.loggedInRank == 5)                                                    // only  for Dosimetrists
+               this.needStartEmail = true;                                                  // send email to Brian
+            this.items.update({id: this._id, start: startDateString});                      // update the DataSet
+            this.editColNames.push("startDate");                                            // load into POST array for REST 
+            this.editColVals.push(startDateStringForEdit)                                   //  ""
+            if ( !this.editColNames.includes('approved')){                                    // if 'approved' has not benn added
+              this.editColNames.push("approved");                                             //  Reset the 'approved' col
+              this.editColVals.push('0')                                                      //  to '0' so Brian can reapprove. 
+            }
           }
           if (type=='endDate'){
             this.needStartEmail = true;                                     
             this.items.update({id: this._id, end: endDateString});   // live update to timeLine does not work in Safari
             this.editColNames.push("endDate");
             this.editColVals.push(endDateStringForEdit)
-            this.editColNames.push("approved");
-            this.editColVals.push('0')
+            if ( !this.editColNames.includes('approved')){                                    // if 'approved' has not benn added
+              this.editColNames.push("approved");
+              this.editColVals.push('0')
+              }
           }
           if (type == 'reason'){
             this.editColNames.push("reasonIdx");
             this.editColVals.push(+e.value)
           }
           console.log("958 %o", this.items);
-
+          console.log(" 741 editColNames %o   editColVals %o", this.editColNames ,    this.editColVals)
     }
-    else  if (e.target){
-        this.editColNames.push(type);
-        this.editColVals.push(e.target.value);
+    else  if (e.target){                                                          // Note textAres returns a 'target' 
+        this.editColNames.push(type);                                             // load name of Col in dB to be edited
+        this.editColVals.push(e.target.value);                                    // load value to be inserted
         const dateForDataSet = e.target.value + "T00:00:00Z"; 
-        if (type=='startDate'){
+       /* if (type=='startDate'){
           this.needStartEmail = true; 
           this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);; 
           this.EDO.NewStartDate = e.target.value; 
@@ -808,12 +764,15 @@ tst = "";
           this.items.update({id: this._id, end: dateForDataSet});   
           this.items.update({id: this._id, style: 'font-size:8pt; background-color:#d9dcde;color:red;'});   
         }
+        */
         if (type == 'coverer'){
           this.covererName = e.target.textContent;
           this.editColNames = ['coverageA'];
           this.editColVals =[this.covererName]
         }
         var str = "approved";  
+        
+        
    
         // use of Constructor Property 
 
@@ -851,7 +810,7 @@ tst = "";
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script
-    if (this.needStartEmail){                   
+    if (this.needStartEmail && +this.loggedInRank < 5 ){                   
       var msg = "<p>The  Time Away of " + this.items._data[this._id]['content'] + ' has changed';
       if (this.EDO.NewStartDate.length > 2 ){
         msg += " from Start Date of " + this.EDO.OldStartDate + " to new Start Date of " + this.EDO.NewStartDate +',';
@@ -902,6 +861,31 @@ tst = "";
     else
       return("notCovered")  
   }
+
+  dateLessThan(from: string, to: string, reason: string) {
+    return (group: FormGroup): {[key: string]: any} => 
+    {
+      let today = new Date(); 
+      if (group.controls[to].value && group.controls[from].value >= group.controls[to].value) {
+        return {
+          dates: "End Date must be after Start Date "
+        };
+      }
+      if (group.controls[from].value ){
+        let fDate = new Date(group.controls[from].value);
+        if (fDate < today)
+        return {
+          dates: "Date must be in the future"
+        };
+
+      }
+      if (group.controls[from].value.length > 0  && group.controls[from].value.length  > 0  && group.controls[reason].value.length  > 0){
+        this.formValidation = true;
+        console.log("form valid " + this.formValidation)
+      }
+      return {};
+  }
+}
 /*
   makeDateString(event) {
     const editTime = new Date(event.value);                               // date returned by DatePicker

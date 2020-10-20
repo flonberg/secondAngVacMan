@@ -152,8 +152,7 @@
                         <mat-form-field  class="wideItem">
                                 <mat-label class="smallLabel"> Note:  </mat-label>
                                 <textarea matInput  (change)="storeEdit( 'note', $event)"  class="param"
-                                    [value]="this.shownNote"
-                                
+                                    [value]="this.shownNote"       
                                     cdkTextareaAutosize [readonly]="_readonly"
                                     #autosize="cdkTextareaAutosize"
                                     cdkAutosizeMinRows="1"
