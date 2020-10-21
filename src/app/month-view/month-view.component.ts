@@ -238,8 +238,6 @@ export class MonthViewComponent implements OnInit {
 
       } 
                                                                                    // end of first week generation
-
-
     if (dowFD == 0 || dowFD == 6)
       tmpDate = firstDateOnCalendar;
     /*******   make the rest of the weeks on the calendar.  */  
@@ -267,7 +265,6 @@ export class MonthViewComponent implements OnInit {
             this.daysS[i][j].dayNumber = tmpDate.getDate();
             this.daysS[i][j].isInCurrMonth = tmpDate.getMonth() == monthShowNumber ? "inMonth" : "outMonth";     
             tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
-
       }
     }
     /*************      get the data  ************************/
@@ -288,36 +285,57 @@ export class MonthViewComponent implements OnInit {
 }                                                                                               ////////  end of the routine to build the monthDisplay 
 
 setPhysicsMonthlyDuties(val){
-  this.physicsMonthlyDuties = val['data'];   
-  this.physicsDutiesClass = [{}];
-  console.log("293 val['PhysicsDuties'] is %o", val['PhysicsDuties'])
- for (let entry of val['PhysicsDuties']) {
-  console.log(" 293  entry is %o",entry); // 1, "string", false
-   if (this.count == 1){                                                            // drawing the Proton Calendar
-    if (entry.CalNum == 2)
+    this.physicsMonthlyDuties = val['data'];   
+    this.physicsDutiesClass = [{}];
+    console.log("293 val['PhysicsDuties'] is %o", val['PhysicsDuties'])
+  for (let entry of val['PhysicsDuties']) {
+    console.log(" 293  entry is %o",entry); // 1, "string", false
+    if (this.count == 1){                                                            // drawing the Proton Calendar
+      if (entry.CalNum == 2)
+        this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name})
+    }  
+    else  { 
+      if (entry.CalNum == 1)
       this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name})
-   }  
-  else  { 
-    if (entry.CalNum == 1)
-    this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name})
+    }
+  
+
+    }
+    console.log("302  physicsDutiesClass %o", this.physicsDutiesClass)
+    console.log("241 physicsMonthlyDuties  %o", val['PhysicsDuties'])
+    if (val['loggedInUserKey'])      {                                                 // the data to the monthly schedule
+      this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty      
+      this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];      
+    }                            
+    if (val['loggedInUserLastName'])                                             // the userkey to be used for Take-A-Duty
+      this.loggedInUserLastName = val['loggedInUserLastName']
+    this.physicsDuties = Array();      
+    if (val['PhysicsDuties'])  
+      this.physicsDuties= val['PhysicsDuties'];                                       // the userkey to be used for Take-A-Duty
+    console.log('226 loggedInUserkey is' + this.loggedInUserKey + 'lastName' + this.loggedInUserLastName) 
   }
- 
+  getDutyClass(dName){
+    if (dName){
+      if (dName.indexOf('Morning A') !== -1)
+        return "MorningA-IORT";
+    if (dName.indexOf('Morning B') !== -1)
+        return "MorningB";
+    if (dName.indexOf('Evening A') !== -1)
+        return "EveningA";
+    if (dName.indexOf('Evening B') !== -1)
+        return "Eveningb";    
+    if (dName.indexOf('Float1') !== -1)
+        return "Float1";
+    if (dName.indexOf('Float2') !== -1)
+        return "Float2";    
+    if (dName.indexOf('ProtonAM') !== -1)
+        return "ProtonAM";   
+    if (dName.indexOf('ProtonPM') !== -1)
+        return "ProtonPM";         
+      }
+   
 
   }
-  console.log("302  physicsDutiesClass %o", this.physicsDutiesClass)
-  console.log("241 physicsMonthlyDuties  %o", val['PhysicsDuties'])
-  if (val['loggedInUserKey'])      {                                                 // the data to the monthly schedule
-    this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty      
-    this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];      
-  }                            
-  if (val['loggedInUserLastName'])                                             // the userkey to be used for Take-A-Duty
-    this.loggedInUserLastName = val['loggedInUserLastName']
-  this.physicsDuties = Array();      
-  if (val['PhysicsDuties'])  
-    this.physicsDuties= val['PhysicsDuties'];                                       // the userkey to be used for Take-A-Duty
-  console.log('226 loggedInUserkey is' + this.loggedInUserKey + 'lastName' + this.loggedInUserLastName) 
-}
-
 
 }
 
