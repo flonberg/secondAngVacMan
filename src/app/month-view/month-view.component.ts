@@ -28,7 +28,7 @@ interface dateBox {
 })
 
 export class MonthViewComponent implements OnInit {
-  @Input() count: number;
+  @Input() count: number;                                           // used to switch to Proton Calendar
   daysS: dateBox[][];                                               // populates the days in calendar
   monthName: string;                                                // used in .html for caption on calendar
   date: Date;
@@ -38,7 +38,7 @@ export class MonthViewComponent implements OnInit {
   physicsMonthlyDuties: [];                                         // stores the data from PhysicMonthlyDuty table
   phrase: string;                                                   // Shown in takeADuty Modal
   qParams: any;                                                     // Holds the queryParams from Router 
-  loggedInUserKey: number;                                          // keep track of the loggedInUser
+  loggedInUserKey: number;                                          // keep track of the loggedInUser, returned from dB
 //  dutyOrder: [];
   helpArray:[String];                                               // phrases for dynamic HelpArray
   physicsDutiesClass: any;
@@ -51,22 +51,21 @@ export class MonthViewComponent implements OnInit {
   masterArray = ['This new Month View page is part of upgrade of Whiteboard.',
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.'
                 ];
-  noticeColName='monthView';
-  noticeModalID = 'monthViewModalID'
+  noticeColName='monthView';                                        // for Notice for change-notification
+  noticeModalID = 'monthViewModalID'                                // the modal holding the change-notification
   // used to calculate a dayNumber to use as key
   constructor(private datePipe: DatePipe, private http: HttpClient, 
     private activatedRoute: ActivatedRoute, private genEditSvce: GenEditService,
     private logSvcs:LogService
      ){ }
   ngOnInit(){
-    console.log("count is " + this.count);
-      
+    console.log("62 this.count is %o", this.count)
     this.activatedRoute                                             // point to the route clicked on
     .queryParams                                                    // look at the queryParams
     .subscribe(queryParams => {   
       this.qParams = queryParams;
-      this.genEditSvce.setPlatform();                     // switch between BB and 242 databases. 
-      this.genEditSvce.checkIfNoticeNeeded('monthView');     
+      this.genEditSvce.setPlatform();                               // switch between BB and 242 databases. 
+      this.genEditSvce.checkIfNoticeNeeded('monthView');            // implements the Change Notification
     });
     this.nextMonth(0);                                              // draw the calendar for current month
     if (this.loggedInUserKey){
@@ -275,8 +274,8 @@ export class MonthViewComponent implements OnInit {
 
      // this.genEditSvce.getPMDs(this.qParams['userid']).subscribe(
       var url =  'REST_GET.php?action=getPMDs&userid=' + this.qParams['userid'] ; 
-      if (this.count == 1)
-        url += "&group=proton";
+    //  if (this.count == 1)
+     //   url += "&group=proton";
       this.genEditSvce.genGet(url ).subscribe(  
       (res) => {
         this.setPhysicsMonthlyDuties(res);
@@ -290,7 +289,23 @@ export class MonthViewComponent implements OnInit {
 
 setPhysicsMonthlyDuties(val){
   this.physicsMonthlyDuties = val['data'];   
-  console.log("241 %o", val)
+  this.physicsDutiesClass = [{}];
+  console.log("293 val['PhysicsDuties'] is %o", val['PhysicsDuties'])
+ for (let entry of val['PhysicsDuties']) {
+  console.log(" 293  entry is %o",entry); // 1, "string", false
+   if (this.count == 1){                                                            // drawing the Proton Calendar
+    if (entry.CalNum == 2)
+      this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name})
+   }  
+  else  { 
+    if (entry.CalNum == 1)
+    this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name})
+  }
+ 
+
+  }
+  console.log("302  physicsDutiesClass %o", this.physicsDutiesClass)
+  console.log("241 physicsMonthlyDuties  %o", val['PhysicsDuties'])
   if (val['loggedInUserKey'])      {                                                 // the data to the monthly schedule
     this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty      
     this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];      
