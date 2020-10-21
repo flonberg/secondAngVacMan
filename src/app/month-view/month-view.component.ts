@@ -286,23 +286,17 @@ export class MonthViewComponent implements OnInit {
 
 setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];   
-    this.physicsDutiesClass = [{}];
-    console.log("293 val['PhysicsDuties'] is %o", val['PhysicsDuties'])
+    this.physicsDutiesClass = [];
   for (let entry of val['PhysicsDuties']) {
-    console.log(" 293  entry is %o",entry); // 1, "string", false
     if (this.count == 1){                                                            // drawing the Proton Calendar
       if (entry.CalNum == 2)
-        this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name})
+        this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name, 'timeSpan':entry.timeSpan })
     }  
     else  { 
       if (entry.CalNum == 1)
-      this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name})
+      this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name,'timeSpan':entry.timeSpan  })
+      }
     }
-  
-
-    }
-    console.log("302  physicsDutiesClass %o", this.physicsDutiesClass)
-    console.log("241 physicsMonthlyDuties  %o", val['PhysicsDuties'])
     if (val['loggedInUserKey'])      {                                                 // the data to the monthly schedule
       this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty      
       this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];      
@@ -313,6 +307,7 @@ setPhysicsMonthlyDuties(val){
     if (val['PhysicsDuties'])  
       this.physicsDuties= val['PhysicsDuties'];                                       // the userkey to be used for Take-A-Duty
     console.log('226 loggedInUserkey is' + this.loggedInUserKey + 'lastName' + this.loggedInUserLastName) 
+    console.log("310  physicsDutyClass is %o", this.physicsDutiesClass)
   }
   getDutyClass(dName){
     if (dName){
@@ -323,7 +318,7 @@ setPhysicsMonthlyDuties(val){
     if (dName.indexOf('Evening A') !== -1)
         return "EveningA";
     if (dName.indexOf('Evening B') !== -1)
-        return "Eveningb";    
+        return "EveningB";    
     if (dName.indexOf('Float1') !== -1)
         return "Float1";
     if (dName.indexOf('Float2') !== -1)

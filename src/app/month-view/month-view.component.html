@@ -1,6 +1,6 @@
 
 
-<div class="wholePage">
+<div class="wholePage"*ngIf = "physicsDutiesClass[0]['timeSpan'] " >
 
   <div class="headClass">
     <table class="tinyTable">
@@ -12,18 +12,16 @@
         <td   class="small">
             <button (click) = 'nextMonth(1)'  mat-raised-button class="accent"  >Next Month </button>
           </td>
-          <td class="small">
+          <td class="small" *ngIf = "physicsDutiesClass[0]['timeSpan'] ">
               <table class="tinyTable">
-                <tr *ngFor="let item of physicsDuties | keyvalue">
-                <td  [class] = "item.value.cN" style="text-align: left; width:100px;"> {{item.value.name}}   </td>
-                <td  [class] = "item.value.cN" style="text-align: left;width:100px;"> {{item.value.timeSpan}}   </td>
+                <tr *ngFor="let item of physicsDutiesClass | keyvalue">
+                <td  [class] = "getDutyClass(item.value.dutyName)" style="text-align: left; width:100px;"> {{item.value.dutyName}}   </td>
+                <td  [class] = "getDutyClass(item.value.dutyName)" style="text-align: left;width:100px;"> {{item.value.timeSpan}}  {{ getDutyClass(item.dutyName) }} </td>
                 </tr>
               </table>
-            </td>  
+          </td>  
             <td  *ngIf = "loggedInUserKey" class="noBord" >  To assume a Duty, click on physicist's name.</td>
             <td  *ngIf = "!loggedInUserKey" class='noBord' >  To page, click on physicist's name.</td>
-           
-       
       </tr>
     </table>
   </div>

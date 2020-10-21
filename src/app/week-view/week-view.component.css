@@ -29,3 +29,9 @@ tr.main:hover{
     font-size: 20pt;
     color: blue;
 }
+.center {
+    margin: auto;
+    width: 90%;
+
+    padding: 30px;
+  }
