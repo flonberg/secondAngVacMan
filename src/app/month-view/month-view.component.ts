@@ -59,111 +59,35 @@ export class MonthViewComponent implements OnInit {
     private logSvcs:LogService
      ){ }
   ngOnInit(){
-    console.log("62 this.count is %o", this.count)
-    this.activatedRoute                                             // point to the route clicked on
-    .queryParams                                                    // look at the queryParams
-    .subscribe(queryParams => {   
-      this.qParams = queryParams;
-      this.genEditSvce.setPlatform();                               // switch between BB and 242 databases. 
-      this.genEditSvce.checkIfNoticeNeeded('monthView');            // implements the Change Notification
-    });
-    this.nextMonth(0);                                              // draw the calendar for current month
-    if (this.loggedInUserKey){
-      this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];
-    }
-      else {
-        this.helpArray = ['Click on a name to page. '];
-      }
-    this.monthNumber = 0;                                           // number for going forward or back. 
-    this.physicsDutiesClass = [
-      {'dutyId':20, 'dutyName':'MorningA-IORT'},
-      {'dutyId':21, 'dutyName':'MorningB'},
-      {'dutyId':10, 'dutyName':'EveningA'},
-      {'dutyId':22, 'dutyName':'EveningB'},
-      {'dutyId':25, 'dutyName':'Float1'},
-      {'dutyId':26, 'dutyName':'Float2'},
-    ]
-    if (this.count == 1){
-      this.physicsDutiesClass = [
-        {'dutyId':23, 'dutyName':'ProtonAM'},
-        {'dutyId':24, 'dutyName':'ProtonPM'},
-      ]
-    }
-    this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
-    this.logSvcs.logMessage('tst');
-    //this.colors = ['one','two','three','four','five','six'];
-    
-  }
-  isLoggedInUser(n){                                                // show the loggedInUser's duties in red
-    if (this.loggedInUserKey == n)
-      return "theUser";
-    else
-      return "";  
-  }
-  pagePhysicist(){
-    console.log("pagePhysicist " + this.toPageID);
-      window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
-      + this.toPageID  + '  , _blank');
-      document.getElementById('myModal').style.display = "none";  
-      return;
-  }
-
-  takeAduty(nDutyId, dDayNum){
-  //  const v = this.isUserDutyTaker();
-    console.log("takeAduty");
-    if (this.isUserDutyTaker() !== true){
-      window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
-      + this.physicsMonthlyDuties[dDayNum][nDutyId]['id'] + '  , _blank');
-      return;
-    }
-    const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
-    this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + dDayNum;         // phrase for the Modal
-    this.idxForEdit = this.physicsMonthlyDuties[dDayNum][nDutyId]['idx'];       // used to update the dB
-    this.toPageID = this.physicsMonthlyDuties[dDayNum][nDutyId]['id'];
-    document.getElementById('myModal').style.display = "block";     // show the modal 
-  }
-
-  isUserDutyTaker(){
-    if (!this.loggedInUserKey){
-      return false;
-    }
-    return true;
-    /*
-    var r = false;
-    console.log('loggedInUserKey is ' + this.loggedInUserKey);
-    Object.keys(this.physicsMonthlyDuties['users']).forEach(key => {
-      if (+key === +this.loggedInUserKey) {
-        return true;
-        }
+      this.activatedRoute                                             // point to the route clicked on
+      .queryParams                                                    // look at the queryParams
+        .subscribe(queryParams => {   
+          this.qParams = queryParams;
+          this.genEditSvce.setPlatform();                               // switch between BB and 242 databases. 
+          this.genEditSvce.checkIfNoticeNeeded('monthView');            // implements the Change Notification
       });
-    return r;
-    */
-   } 
-  confirmDuty(){
-    const editParams = {                                            // build dS to user with genEditSvce.update
-      'action': 'editAndLog',
-      'tableName': 'PhysicsMonthlyDuty',
-      'editColNames': ['phys2'],
-      'editColVals': [this.loggedInUserKey],
-      'whereColName': 'idx',
-      'whereColVal': this.idxForEdit,
-    }
-    document.getElementById(this.idxForEdit).innerText = this.loggedInUserLastName;   // put swapperLastName in box
-    this.genEditSvce.genPOST(editParams).subscribe(
-      (response)=>{
-        console.log("emailService");
+      this.nextMonth(0);                                              // GET the DATA  & draw the calendar for current month
+      if (this.loggedInUserKey){
+        this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];
       }
-    );                             // do the swap in the dB
-//    this.genEditSvce.update(editParams);                            // do the swap in the dB
-    console.log(" 131   hhhhhhhh  genPOST ");
-    document.getElementById('myModal').style.display = "none";      // clse the Modal
+        else {
+          this.helpArray = ['Click on a name to page. '];
+        }
+      this.monthNumber = 0;                                           // number for going forward or back. 
+      this.logSvcs.setURL('http://blackboard-dev.partners.org/dev/FJL/vacMan/writeLog.php');
   }
-
-  closeModal(){
-    document.getElementById('myModal').style.display = "none";
-  }
-  nextMonth(nn)
+  nextMonth(nn)                                                                       // 
   {
+      /*************      get the data  ************************/
+      var url =  'REST_GET.php?action=getPMDs&userid=' + this.qParams['userid'] ; 
+      this.genEditSvce.genGet(url ).subscribe(  
+      (res) => {
+        this.setPhysicsMonthlyDuties(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
     this.daysS = Array(Array());                                                      // make array to hold daysS structures
     var tmpDate = new Date();                                                         // this is the date which will be incremented
     this.date = new Date();                                                           //  today's date
@@ -173,11 +97,9 @@ export class MonthViewComponent implements OnInit {
     this.monthName = this.datePipe.transform(this.date, 'MMMM-yyyy');                 // used for the caption on the calendar 
     var firstDayOfShownMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1);   
     var monthShowNumber = this.date.getMonth();                                       // use to grey out days NOT in monthShown
-
     var lastDayPrevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);    
     var lastDayNumPrevMonth = lastDayPrevMonth.getDay();                              // Full date of last day of prevMonth
     var lastDayNum = +this.datePipe.transform(lastDayPrevMonth,'d');                  //  e.g. for March   ->  31
-    console.log('182 lastDayPreMonth is %o lastDayNum is %o lastDayNumPrevMonth is %o ', lastDayPrevMonth, lastDayNum, lastDayNumPrevMonth)
    /*********   derive the first date to appear on the first row of the calendar   ***********************/
     if (lastDayNumPrevMonth > 0 && lastDayNumPrevMonth < 5){                          // if lastDayOfPrevMonth is NOT weekend OR a Friday
       for(var i = 1; i < lastDayNumPrevMonth; i++ ){                                  // loop sufficient to 
@@ -193,21 +115,19 @@ export class MonthViewComponent implements OnInit {
     var firstDateOnCalendar = lastDayPrevMonth;
 
     var firstDayOnCal = firstDateOnCalendar.getDate();                                  // the dayNum e.g. 0 = Sunday ...
-    const dowFD = firstDayOfShownMonth.getDay();                                      // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of firstDayOfShownMonth
-    console.log('184 firstDayOnCal is ' + firstDayOnCal + 'lastDayNum is ' + lastDayNum + ' dowFD is ' + dowFD);
+    const dowFD = firstDayOfShownMonth.getDay();                                        // det dayOfWeek e.g. 5 for Friday, 0 = Sunday, 1=Monday ...of firstDayOfShownMonth
     if (dowFD == 1)                                                                     // DayOfWeek of first day on Calendar is Monday, then the firstDate on cal is the '1' of month
       firstDayOnCal = 1;
-   // this.startDateForGettingDataString = this.datePipe.transform(firstDateOnCalendar, 'yyyy-MM-dd');
     /////////////////            make days of first week                                        \\\\\\\\\\\\\\\\\\\
-    var startDateForGettingData = new Date()                                                    // define a date to set in the below loop
-    if (dowFD > 0 && dowFD < 6)                                                                 // if the firstDayOfMonth is NOT Sat or Sun  
+    var startDateForGettingData = new Date()                                            // define a date to set in the below loop
+    if (dowFD > 0 && dowFD < 6)                                                         // if the firstDayOfMonth is NOT Sat or Sun  
       { 
-      for (let i = 0;  i < 5; i++)                                                              // make the 5 days of the first week;
+      for (let i = 0;  i < 5; i++)                                                      // make the 5 days of the first week;
         {
-        if (!this.daysS[0])                                                                     //  if array row has not been defined
-            this.daysS[0] = Array();                                                            // define the array for the Week
-        this.daysS[0][i] = <dateBox>{};                                                       // define an instance of the daysS interface
-        this.daysS[0][i].dayNumber = firstDayOnCal;                                           // set dayNumber element of interface
+        if (!this.daysS[0])                                                             //  if array row has not been defined
+            this.daysS[0] = Array();                                                    // define the array for the Week
+        this.daysS[0][i] = <dateBox>{};                                                 // define an instance of the daysS interface
+        this.daysS[0][i].dayNumber = firstDayOnCal;                                     // set dayNumber element of interface
         /************      first Day of first week **********************/
         if ( i == 0)
           {
@@ -224,7 +144,6 @@ export class MonthViewComponent implements OnInit {
           /***************    rest of days in first week *******************/
           firstDayOnCal++; 
           if (i > 0 )  {                            // go to next day
-           // startDateForGettingData = this.daysS[0][i].date;
             tmpDate =  new Date(this.daysS[0][i-1].date.getFullYear(), this.daysS[0][i-1].date.getMonth(), this.daysS[0][i-1].date.getDate()) // make a date to increment                                                                                           // from the previous entry in the loop
             tmpDate.setDate(tmpDate.getDate() + 1);                                               // increment the date
                                         
@@ -254,8 +173,6 @@ export class MonthViewComponent implements OnInit {
         if (dayNum == 6 )    {                                                               // check if it is Saturday,  
             tmpDate.setDate(tmpDate.getDate() + 2);                                           // increment 2 days to get to Monday. 
         }
-     //   else if (dayNum < 6 )
-     //     tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
 
         if (!this.daysS[i])                                                                 //  if array row has not been defined
             this.daysS[i] = Array();  
@@ -267,23 +184,65 @@ export class MonthViewComponent implements OnInit {
             tmpDate.setDate(tmpDate.getDate() + 1);                                             // increment the date
       }
     }
-    /*************      get the data  ************************/
+}                                                                                         ////////  end of the nextMonth to build the monthDisplay 
+isUserDutyTaker(){
+  if (!this.loggedInUserKey){
+    return false;
+  }
+  return true;
+ } 
+confirmDuty(){
+  const editParams = {                                            // build dS to user with genEditSvce.update
+    'action': 'editAndLog',
+    'tableName': 'PhysicsMonthlyDuty',
+    'editColNames': ['phys2'],
+    'editColVals': [this.loggedInUserKey],
+    'whereColName': 'idx',
+    'whereColVal': this.idxForEdit,
+  }
+  document.getElementById(this.idxForEdit).innerText = this.loggedInUserLastName;   // put swapperLastName in box
+  this.genEditSvce.genPOST(editParams).subscribe(
+    (response)=>{
+      console.log("emailService");
+    }
+  );                             // do the swap in the dB
+//    this.genEditSvce.update(editParams);                            // do the swap in the dB
+  console.log(" 131   hhhhhhhh  genPOST ");
+  document.getElementById('myModal').style.display = "none";      // clse the Modal
+}
 
-     // this.genEditSvce.getPMDs(this.qParams['userid']).subscribe(
-      var url =  'REST_GET.php?action=getPMDs&userid=' + this.qParams['userid'] ; 
-    //  if (this.count == 1)
-     //   url += "&group=proton";
-      this.genEditSvce.genGet(url ).subscribe(  
-      (res) => {
-        this.setPhysicsMonthlyDuties(res);
-      },
-      err => {
-        console.log("error 223");
-        console.log(err);
-      }
-    );
-}                                                                                               ////////  end of the routine to build the monthDisplay 
+closeModal(){
+  document.getElementById('myModal').style.display = "none";
+}
 
+
+isLoggedInUser(n){                                                                      // show the loggedInUser's duties in red
+if (this.loggedInUserKey == n)
+  return "theUser";
+else
+  return "";  
+}
+pagePhysicist(){
+console.log("pagePhysicist " + this.toPageID);
+  window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
+  + this.toPageID  + '  , _blank');
+  document.getElementById('myModal').style.display = "none";  
+  return;
+}
+takeAduty(nDutyId, dDayNum){
+//  const v = this.isUserDutyTaker();
+console.log("takeAduty");
+if (this.isUserDutyTaker() !== true){
+  window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
+  + this.physicsMonthlyDuties[dDayNum][nDutyId]['id'] + '  , _blank');
+  return;
+}
+const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
+this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + dDayNum;         // phrase for the Modal
+this.idxForEdit = this.physicsMonthlyDuties[dDayNum][nDutyId]['idx'];       // used to update the dB
+this.toPageID = this.physicsMonthlyDuties[dDayNum][nDutyId]['id'];
+document.getElementById('myModal').style.display = "block";     // show the modal 
+}
 setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];   
     this.physicsDutiesClass = [];
