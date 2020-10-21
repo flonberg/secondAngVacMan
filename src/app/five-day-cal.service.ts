@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 })
 export class FiveDayCalService {
   dS:[{}];
+  weekName: string;
   constructor( @Inject(WINDOW) private window: Window , private datePipe: DatePipe,) {              // WINDOW is some magic I don't understand. 
     this.dS = [{}];
   }  // @Inject is needed 
@@ -17,6 +18,9 @@ export class FiveDayCalService {
     today.setDate(today.getDate() + advance * 7);                               // go forward by 'advance' number of weeks
     var monDate = this.getMonday(today);                                        // go back to the Monday of that weed
     for (var i=0; i < 5; i++){                                                  // iterate over 5 days of the week
+      if (i == 0){
+        this.weekName = "Week of " +  this.datePipe.transform(monDate, 'MMM d') 
+      }
       this.dS[i] = { "monthDay" :  this.datePipe.transform(monDate, 'MMM d') ,  // form like 'Jun 15'
                   "dayName" : this.datePipe.transform(monDate, 'EEEE') ,        // form like 'Monday'
                   "date" : this.datePipe.transform(monDate, 'yyyy-MM-dd')       // form like '2020-04-13'

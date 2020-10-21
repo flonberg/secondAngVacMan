@@ -2,6 +2,14 @@ table {
     table-layout:fixed;
     border-collapse:collapse
 }
+.heading {
+    font-weight:bold;
+    font-size:18;
+    width:150px;
+}
+.smallClass {
+    width:150px;
+}
 .todayClass {
     color:red;
     cursor: pointer;

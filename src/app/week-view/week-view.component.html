@@ -1,12 +1,12 @@
-<div class="center">
+<div class="center" *ngIf = "physicsMonthlyDuties">
   <div class="center">
     <table>
         <tr>  
-          <td  *ngIf = "advance  >= 0 " class="small">
+          <td  *ngIf = "advance  >= 0 " class="smallClass">
               <button (click) = 'makeWeek(-1)'  mat-raised-button class="accent"  >Previous Week </button>
           </td>
-          <td> Week Name </td>
-          <td   class="small">
+          <td class = 'heading' > {{ this.fiveDayCalSvce.weekName }}</td>
+          <td   class="smallClass">
                 <button (click) = 'makeWeek(1)'  mat-raised-button class="accent"  >Next Week </button>
           </td>
             <td style="color:blue"> To page, click on a physicist's name. </td>
