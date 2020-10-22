@@ -547,6 +547,7 @@ tst = "";
           if (this.rData.fromION[this.rData['loggedInUserKey']]){
             this.loggedInLastName = this.rData.fromION[this.rData['loggedInUserKey']]['LastName'];  // used for mail messages
             this.loggedInFirstName = this.rData.fromION[this.rData['loggedInUserKey']]['FirstName'];    
+            this.loggedInRank = this.rData.fromION[this.rData['loggedInUserKey']]['rank'];    
           }                                    
         }
         for (let key in this.rData.Rusers) {                                            // load the UserName into autoComplete array
@@ -563,16 +564,25 @@ tst = "";
           /*******************      form the date arguments to add to the TimeLine DataSet  *****************/
             if (this.rData['data'][key2]['start'])
             {             // Need to make a new Date  
-              var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') )        //  fix for fussy Safari
-              if (this.isSafari)
-                stDate.setDate(stDate.getDate() + 1);                                             // correct for faulty Safari date conversion. 
-              var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T00:00:00" ;    // this used for timeLine DataSet, no 'Z' so no timeZone adjustment
+            //  var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') )        //  fix for fussy Safari
+             /* if (this.isSafari){
+             //   stDate.setDate(stDate.getDate() + 1);                                             // correct for faulty Safari date conversion. 
+                console.log("570 stDate is %o", stDate)
+                stDate.setTime(stDate.getTime() + (23*60*60*1000));
+                console.log("571 stDate is %o", stDate)
+
+             //   stDate.setHours(stDate.getHours() + 4);
+               }
+               */
+            //var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T00:00:00" ;    // this used for timeLine DataSet, no 'Z' so no timeZone adjustment
+            var startDateArg = this.rData['data'][key2]['start'].replace(/\s/, 'T')
             }
             if (this.rData['data'][key2]['end'])   {                                              // NOT a weekend
-              var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T')  )          // this.rData[key][key2]['start']fix for fussy Safari
-              if (this.isSafari)                                                                  
-                eDate.setDate(eDate.getDate() + 1);                                               // correct for faulty Safari date conversion
-              var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T00:00:00" ; 
+           //   var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T')  )          // this.rData[key][key2]['start']fix for fussy Safari
+           //   if (this.isSafari)                                                                  
+           //    eDate.setDate(eDate.getDate() + 1);                                               // correct for faulty Safari date conversion
+           //   var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T00:00:00" ; 
+              var endDateArg = this.rData['data'][key2]['end'].replace(/\s/, 'T')
             }
           if ( this.rData['data'][key2]['content'])                                               // 'content' is the datum which appears in timeLine box
           {
@@ -707,19 +717,19 @@ tst = "";
           console.log("date Entered %o", e.value);
           console.log(" 709 editColNames %o   editColVals %o", this.editColNames ,    this.editColVals)
           let newDate = new Date(e.value);                                  // e.g.  Fri Oct 23 2020 00:00:00 GMT-0400 (Eastern Daylight Time)
-          let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');   // for updating DataSet
+          let startDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00');   // for updating DataSet
           let startDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');      // for writing to dB
           newDate.setDate(newDate.getDate()+ 1);                            // User Enters LastDayAway, dB needs first day back 
-          let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00Z');     // for udpdating DataSet
+          let endDateString = this.datePipe.transform(newDate, 'yyyy-MM-ddT00:00:00');     // for udpdating DataSet
           let endDateStringForEdit = this.datePipe.transform(newDate, 'yyyy-MM-dd');        // for writeing to dB
           this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);          // The OldStartDate comes form dB
           this.EDO.NewStartDate = <string>startDateStringForEdit                            // New startDate comes from DatePicker
           this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
           this.EDO.NewEndDate = <string>endDateStringForEdit 
           if (type=='startDate' ){                                                          
-            if (+this.loggedInRank == 5)                                                    // only  for Dosimetrists
+            if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists
                this.needStartEmail = true;                                                  // send email to Brian
-            if (!this.isSafari)   
+                      console.log('722  startDateString ' + startDateString) 
             this.items.update({id: this._id, start: startDateString});                      // update the DataSet
             this.editColNames.push("startDate");                                            // load into POST array for REST 
             this.editColVals.push(startDateStringForEdit)                                   //  ""
@@ -729,8 +739,8 @@ tst = "";
             }
           }
           if (type=='endDate'){
-            this.needStartEmail = true;   
-            if (!this.isSafari)                                  
+            if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists 
+              this.needEndEmail = true;                                 
             this.items.update({id: this._id, end: endDateString});   // live update to timeLine does not work in Safari
             this.editColNames.push("endDate");
             this.editColVals.push(endDateStringForEdit)
@@ -772,7 +782,7 @@ tst = "";
       eP.editColVals= ['99'];
       this.items.remove({id: this._id })
     }
-    if (this.needStartEmail)
+    if (this.needStartEmail || this.needEndEmail)
       this.sendStartOrEndDateEmail();
     this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
       (res) => {
@@ -790,10 +800,10 @@ tst = "";
     //if (this.needStartEmail && +this.loggedInRank < 5 )
     {                   
       var msg = "<p>The  Time Away of " + this.items._data[this._id]['content'] + ' has changed';
-      if (this.EDO.NewStartDate.length > 2 ){
+      if (this.EDO.NewStartDate.length > 2 && this.needStartEmail ){
         msg += " from Start Date of " + this.EDO.OldStartDate + " to new Start Date of " + this.EDO.NewStartDate +',';
       }
-      if (this.EDO.NewEndDate.length > 2 ){
+      if (this.EDO.NewEndDate.length > 2 && this.needEndEmail){
         msg += " from End Date of " + this.EDO.OldEndDate + " to new End Date of " + this.EDO.NewEndDate +',';
       }
       msg += "</p> <p> To approve this change click on a <a href=" + link33 + "> Approve Change </a>" 
