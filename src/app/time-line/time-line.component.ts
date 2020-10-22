@@ -406,7 +406,7 @@ tst = "";
     console.log("cancel newTA");
     this.newTimeAway2 = false;
   }
-  onSubmit()                              /*********  used for New Time Aways  */
+  onSubmit()                              /*********  called when the Submit button of FORM is clickedused for New Time Aways  */
   {
         /*********     Add to dataBase  **********************/
         if (+this.loggedInRank < 5 )
@@ -419,7 +419,7 @@ tst = "";
         const insertP = <SinsertParams>{};                                // create instance of interface for SinsertParams for gen-service
           insertP.tableName = 'vacation3';
           insertP.action = 'insertRecGen';
-          insertP.colName  = ['startDate', 'endDate' , 'reason', 'note', 'userid', 'approved'];  // names of columns to INSERT
+          insertP.colName  = ['startDate', 'endDate' , 'reasonIdx', 'note', 'userid', 'approved'];  // names of columns to INSERT
           insertP.colVal = [advStartDateString,  // colValues 
           advEndDateString, this.formG.value.reasonG,
           this.formG.value.noteG, this.rData['loggedInUserKey'], '0'];
@@ -432,7 +432,7 @@ tst = "";
           this.retFromPost(response);                         // loads params of justInserted tA and sends email to Brian
           this.rand = Math.random();
          // this.ngOnInit();
-    //      window.location.reload();
+         window.location.reload();
         })    
   }
 
@@ -719,6 +719,7 @@ tst = "";
           if (type=='startDate' ){                                                          
             if (+this.loggedInRank == 5)                                                    // only  for Dosimetrists
                this.needStartEmail = true;                                                  // send email to Brian
+            if (!this.isSafari)   
             this.items.update({id: this._id, start: startDateString});                      // update the DataSet
             this.editColNames.push("startDate");                                            // load into POST array for REST 
             this.editColVals.push(startDateStringForEdit)                                   //  ""
@@ -728,7 +729,8 @@ tst = "";
             }
           }
           if (type=='endDate'){
-            this.needStartEmail = true;                                     
+            this.needStartEmail = true;   
+            if (!this.isSafari)                                  
             this.items.update({id: this._id, end: endDateString});   // live update to timeLine does not work in Safari
             this.editColNames.push("endDate");
             this.editColVals.push(endDateStringForEdit)
@@ -780,7 +782,8 @@ tst = "";
    // if (param !== 'del')
     //   this.ngOnInit();
   //  if (this.isSafari)
-       window.location.reload();
+  console.log(" 783  eP is %o", eP);
+     window.location.reload();
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script

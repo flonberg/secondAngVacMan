@@ -134,7 +134,7 @@
                             <input class="param" matInput   [ngModel]='dBendDateString'>
                         </td>
                         <td>
-                            <mat-form-field *ngIf = "!_readonly" class="medium">
+                            <mat-form-field *ngIf = "!_readonly" class="item">
                                 <mat-label>Reason</mat-label>
                                 <mat-select (selectionChange)="storeEdit('reason', $event)" class="param"
                                     id='reasonId'  [formControl] = "reasonSelectControl">
