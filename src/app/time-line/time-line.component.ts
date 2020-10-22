@@ -779,7 +779,7 @@ tst = "";
     );
    // if (param !== 'del')
     //   this.ngOnInit();
-    if (this.isSafari)
+  //  if (this.isSafari)
        window.location.reload();
   }
   sendStartOrEndDateEmail(){
@@ -830,6 +830,12 @@ tst = "";
       return("covered");                                                // return the green class
     else
       return("notCovered")  
+  }
+  getReason()                                                   // validates the form and enables the Submt Button
+  {
+  //  this.gotReason = true;
+    if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
+      this.formValidation = true; 
   }
 /*
   dateLessThan(from: string, to: string, reason: string) {
@@ -1137,10 +1143,5 @@ editGen(type: string, event: any)
   }
   */
   /*
-  getReason()                                                   // validates the form and enables the Submt Button
-  {
-  //  this.gotReason = true;
-    if ( this.formG.value.dateTo &&  this.formG.value.dateFrom && this.formG.value.dateFrom <= this.formG.value.dateTo )
-      this.formValidation = true; 
-  }
+ 
   */

@@ -56,7 +56,7 @@
                 </mat-form-field>
                 
                 <mat-form-field  appearance="none">
-                        <mat-label>Reason</mat-label>
+                        <mat-label>Reason--</mat-label>
                             <mat-select  
                             formControlName = "reasonG"  id='reasonId'>
                                     <mat-option (click) = "getReason()" value="0">Personal Vacation</mat-option>
@@ -64,6 +64,7 @@
                                     <mat-option  (click) = "getReason()"   value="2">Meeting</mat-option>  
                             </mat-select>
                 </mat-form-field>
+
                 <mat-form-field  class="wideItem" >
                         <mat-label class="smallLabel"> Note:</mat-label>
                         <textarea matInput  formControlName = "noteG"  cdkTextareaAutosize  #autosize="cdkTextareaAutosize" 
@@ -102,7 +103,7 @@
                 <tr>
                     <td *ngIf = '!_readonly'>
                         <mat-form-field style="width:150px;"  color="accent"  >
-                                <mat-label>First --Day Away</mat-label>
+                                <mat-label>First Day Away</mat-label>
                                 <input  class="param" matInput [matDatepicker]="picker1"  [ngModel]="dBstartDate"
                                 (click)="picker1.open()"
                                 (dateChange)="storeEdit('startDate', $event)" 

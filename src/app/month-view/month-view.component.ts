@@ -144,6 +144,7 @@ export class MonthViewComponent implements OnInit {
           /***************    rest of days in first week *******************/
           firstDayOnCal++; 
           if (i > 0 )  {                            // go to next day
+
             tmpDate =  new Date(this.daysS[0][i-1].date.getFullYear(), this.daysS[0][i-1].date.getMonth(), this.daysS[0][i-1].date.getDate()) // make a date to increment                                                                                           // from the previous entry in the loop
             tmpDate.setDate(tmpDate.getDate() + 1);                                               // increment the date
                                         
