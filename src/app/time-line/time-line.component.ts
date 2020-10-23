@@ -766,12 +766,15 @@ tst = "";
           },
           msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
           <p> A Time Away for ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
-          ` has changed. </p>'`,
+          ` has changed. </p>`,
         subject:startEndSubject
       }                                          // FJLlog records the user 
     }
     if (this.EDO.NewStartDate.length> 0){
-      eP.email.msg += `From old Start Date of ` +  this.EDO.OldStartDate + ` new Start Date is ` + this.EDO.NewStartDate;
+      eP.email.msg += `<p> From old Start Date of ` +  this.EDO.OldStartDate + `to new Start Date of ` + this.EDO.NewStartDate + '</p>';
+    }
+    if (this.EDO.NewStartDate.length> 0){
+      eP.email.msg += `<p> From old End Date of ` +  this.EDO.OldEndDate + `to new End Date of ` + this.EDO.NewEndDate + '</p>';
     }
     eP.email.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
 
