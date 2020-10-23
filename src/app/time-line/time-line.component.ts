@@ -1,5 +1,5 @@
 
-import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams, InsertParams, dB_POSTparams } from './../gen-edit.service';
+import { GenEditService, SinsertParams, dB_GETparams, dB_SimpleGETparams, emailParams, InsertParams, dB_POSTparams, emailIntf } from './../gen-edit.service';
 //import { SeditParams } from './../gen-edit.service';
 import { AfterViewInit, Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -705,7 +705,7 @@ tst = "";
           this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
           this.EDO.NewEndDate = <string>endDateStringForEdit 
           if (type=='startDate' ){   
-           // this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);          // The OldStartDate comes form dB
+            this.needStartEmail = true;
             this.EDO.NewStartDate = <string>startDateStringForEdit                            // New startDate comes from DatePicker                                                       
             if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists
                this.needStartEmail = true;                                                  // send email to Brian
@@ -720,6 +720,7 @@ tst = "";
           }
           if (type=='endDate'){
           //  this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
+            this.needEndEmail = true;
             this.EDO.NewEndDate = <string>endDateStringForEdit 
             if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists 
               this.needEndEmail = true;                                 
@@ -749,9 +750,32 @@ tst = "";
         var str = "approved";  
     }
   }
-  saveEdits(param?){
+ eMailObj = {} as emailIntf;
+  saveEdits(param?)
+  {
     var startEndSubject = "Time Away Date Change";
     const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` +  this.items._data[this._id]['vidx']  ;
+    if (this.needStartEmail || this.needEndEmail )
+    {
+      this.eMailObj =<emailIntf>{
+        addr: { "Dev":["flonberg@partners.org"],
+                  "Prod":["flonberg@gmail.com"]
+          },
+          msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+          <p> A Time Away for ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
+          ` has changed. </p>`,
+          subject:startEndSubject
+          }                                          // FJLlog records the user 
+        
+        if (this.needStartEmail ){                         
+          this.eMailObj.msg += `<p> From old Start Date of ` +  this.EDO.OldStartDate + ` to new Start Date of ` + this.EDO.NewStartDate + '</p>';
+        }
+        if (this.needEndEmail ){
+          this.eMailObj.msg += `<p> From old End Date of ` +  this.EDO.OldEndDate + ` to new End Date of ` + this.EDO.NewEndDate + '</p>';
+        }
+        this.eMailObj.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
+    }
+    
     var eP  = <dB_POSTparams>{                                      // Interface proviced in gen-edit.service.tx
       action:'editAndLog',                                          // name of function in RESTgenDB_POST.php
       tableName:'vacation3',
@@ -760,23 +784,32 @@ tst = "";
       whereColName:['vidx'],
       whereColVal:[this.items._data[this._id]['vidx']],
       userid:this.userid,
-      email:{
+      email:this.eMailObj
+     }
+     this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
+      (res) => {
+        window.location.reload();                                   // reload indicates to the user that edit worked
+      }
+    );
+     /*
+      {
         addr: { "Dev":["flonberg@partners.org"],
                   "Prod":["flonberg@gmail.com"]
           },
           msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
           <p> A Time Away for ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
           ` has changed. </p>`,
-        subject:startEndSubject
-        }                                          // FJLlog records the user 
-      }
-      if (this.EDO.NewStartDate.length > 0 && this.EDO.OldStartDate !== this.EDO.NewStartDate  ){                         
-        eP.email.msg += `<p> From old Start Date of ` +  this.EDO.OldStartDate + ` to new Start Date of ` + this.EDO.NewStartDate + '</p>';
-      }
-      if (this.EDO.NewStartDate.length> 0){
-        eP.email.msg += `<p> From old End Date of ` +  this.EDO.OldEndDate + ` to new End Date of ` + this.EDO.NewEndDate + '</p>';
-      }
-      eP.email.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
+          subject:startEndSubject
+          }                                          // FJLlog records the user 
+        }
+        if (this.EDO.NewStartDate.length > 0 && this.EDO.OldStartDate !== this.EDO.NewStartDate  ){                         
+          eP.email.msg += `<p> From old Start Date of ` +  this.EDO.OldStartDate + ` to new Start Date of ` + this.EDO.NewStartDate + '</p>';
+        }
+        if (this.EDO.NewStartDate.length> 0){
+          eP.email.msg += `<p> From old End Date of ` +  this.EDO.OldEndDate + ` to new End Date of ` + this.EDO.NewEndDate + '</p>';
+        }
+        eP.email.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
+
     if (param == 'del') {                                          // user clicked Delete Button
       eP.editColNames=['reasonIdx'];                                // sel editColName 
       eP.editColVals= ['99'];
@@ -784,12 +817,14 @@ tst = "";
     }
     this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
       (res) => {
-        console.log("765 no email   res from updatel %o",  res);
-        window.location.reload();
+        window.location.reload();                                   // reload indicates to the user that edit worked
       }
     );
+    */
   }
+  /*
   sendStartOrEndDateEmail(){
+ 
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script
     //if (this.needStartEmail && +this.loggedInRank < 5 )
     {                   
@@ -810,6 +845,7 @@ tst = "";
         subject: "Time Away Change",
         debug: 1                                                    // change to '0' to send email to actual recipients
         };
+      }
       this.genEditSvce.genPOST(emp).subscribe(
           (res) => {
             console.log("res from sendEmail2 %o", res);
@@ -817,6 +853,7 @@ tst = "";
       );
     }
   }
+  */
  
   setNewTimeAway2(){                                                  // called by 'New Time Away' button. 
     this.newTimeAway2 = true;                                         // turn on the New Time Away entry widgets. 

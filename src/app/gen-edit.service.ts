@@ -38,6 +38,12 @@ export interface dB_multGETparams {
   whereColVals: String[],
 }
 
+export interface emailIntf{
+  addr : {},
+  msg: string,
+  subject: string
+}
+
 export interface dB_POSTparams {
   action: string,
   tableName: string,
