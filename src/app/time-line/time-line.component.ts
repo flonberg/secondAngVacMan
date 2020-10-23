@@ -705,7 +705,7 @@ tst = "";
           this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
           this.EDO.NewEndDate = <string>endDateStringForEdit 
           if (type=='startDate' ){   
-            this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);          // The OldStartDate comes form dB
+           // this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);          // The OldStartDate comes form dB
             this.EDO.NewStartDate = <string>startDateStringForEdit                            // New startDate comes from DatePicker                                                       
             if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists
                this.needStartEmail = true;                                                  // send email to Brian
@@ -719,7 +719,7 @@ tst = "";
             }
           }
           if (type=='endDate'){
-            this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
+          //  this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
             this.EDO.NewEndDate = <string>endDateStringForEdit 
             if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists 
               this.needEndEmail = true;                                 
@@ -768,16 +768,15 @@ tst = "";
           <p> A Time Away for ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
           ` has changed. </p>`,
         subject:startEndSubject
-      }                                          // FJLlog records the user 
-    }
-    if (this.EDO.NewStartDate.length> 0){
-      eP.email.msg += `<p> From old Start Date of ` +  this.EDO.OldStartDate + `to new Start Date of ` + this.EDO.NewStartDate + '</p>';
-    }
-    if (this.EDO.NewStartDate.length> 0){
-      eP.email.msg += `<p> From old End Date of ` +  this.EDO.OldEndDate + `to new End Date of ` + this.EDO.NewEndDate + '</p>';
-    }
-    eP.email.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
-
+        }                                          // FJLlog records the user 
+      }
+      if (this.EDO.NewStartDate.length > 0 && this.EDO.OldStartDate !== this.EDO.NewStartDate  ){                         
+        eP.email.msg += `<p> From old Start Date of ` +  this.EDO.OldStartDate + ` to new Start Date of ` + this.EDO.NewStartDate + '</p>';
+      }
+      if (this.EDO.NewStartDate.length> 0){
+        eP.email.msg += `<p> From old End Date of ` +  this.EDO.OldEndDate + ` to new End Date of ` + this.EDO.NewEndDate + '</p>';
+      }
+      eP.email.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
     if (param == 'del') {                                          // user clicked Delete Button
       eP.editColNames=['reasonIdx'];                                // sel editColName 
       eP.editColVals= ['99'];
@@ -786,23 +785,9 @@ tst = "";
     this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
       (res) => {
         console.log("765 no email   res from updatel %o",  res);
-     //   window.location.reload();
+        window.location.reload();
       }
     );
-    /*
-    this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
-      (res) => {
-        console.log("765   res from updatel %o",  res);
-        if (this.needStartEmail || this.needEndEmail)               // before putting this in the 'subscribe' loop there were intermittent failures to update. 
-           this.sendStartOrEndDateEmail();
-      }
-    );
-    */
-   // if (param !== 'del')
-    //   this.ngOnInit();
-  //  if (this.isSafari)
-  console.log(" 783  eP is %o", eP);
-  //   
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script
