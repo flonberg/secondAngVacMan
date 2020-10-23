@@ -379,7 +379,7 @@ tst = "";
       this.covererSelect.setValue('');                                            // Avoid a NULL 
     this.reasonSelectControl.setValue( this.rData.data[this.rDataKey].reasonIdx.toString() );  // set the Reason dropDown value
     this.dBcontent = this.items._data[this._id].content;                          // Used for the caption for selected tA        
-    this.dBstartDate = new Date(this.items._data[this._id].start);                // ref'ed by [ngModel] in datePicker
+    this.dBstartDate = new Date(this.items._data[this._id].start);                // need to make a DATE to be ref'ed by [ngModel] in datePicker
     if (this.isSafari)
       this.dBstartDate.setDate( this.dBstartDate.getDate() + 1);                  // correct for faulty Safari date conversion. 
                           console.log("393   newDate is  %o  from arg  %o ", this.dBstartDate, this.items._data[this._id].start)
@@ -392,11 +392,6 @@ tst = "";
     const reasons = ['Personal Vacation', 'Other', 'Meeting'];                      // reasons array 
     if (this._readonly)                                                             // useer is NOT owner of tA selected
       this.dBreason = reasons[this.rData.data[this.rDataKey].reasonIdx ];           // used for ngModel for ' input' of readOnly reason    
-    /*var toDateRaw = this.items._data[this._id].start
-    toDateRaw = toDateRaw.substring(0, toDateRaw.length - 10);;
-    var fromDateRaw = this.items._data[this._id].end;
-    fromDateRaw = fromDateRaw.substring(0, fromDateRaw.length - 10);
-    */
     if (this.items._data[this._id].note)
       this.shownNote = this.items._data[this._id].note;                             // used for [value] of Note entry widget
   }
@@ -562,28 +557,11 @@ tst = "";
         for (var key2  in this.rData['data'])
         {
           /*******************      form the date arguments to add to the TimeLine DataSet  *****************/
-            if (this.rData['data'][key2]['start'])
-            {             // Need to make a new Date  
-            //  var stDate = new Date(this.rData['data'][key2]['start'].replace(/\s/, 'T') )        //  fix for fussy Safari
-             /* if (this.isSafari){
-             //   stDate.setDate(stDate.getDate() + 1);                                             // correct for faulty Safari date conversion. 
-                console.log("570 stDate is %o", stDate)
-                stDate.setTime(stDate.getTime() + (23*60*60*1000));
-                console.log("571 stDate is %o", stDate)
+          if (this.rData['data'][key2]['start'])
+            var startDateArg = this.rData['data'][key2]['start'].replace(/\s/, 'T')             // replace 'space' with T e.g 2020-11-25T00:00:00
+          if (this.rData['data'][key2]['end'])                                                 
+            var endDateArg = this.rData['data'][key2]['end'].replace(/\s/, 'T')                 // replace 'space' with T e.g 2020-11-25T00:00:00
 
-             //   stDate.setHours(stDate.getHours() + 4);
-               }
-               */
-            //var startDateArg= this.datePipe.transform(stDate, 'yyyy-MM-dd') + "T00:00:00" ;    // this used for timeLine DataSet, no 'Z' so no timeZone adjustment
-            var startDateArg = this.rData['data'][key2]['start'].replace(/\s/, 'T')
-            }
-            if (this.rData['data'][key2]['end'])   {                                              // NOT a weekend
-           //   var eDate = new Date(this.rData['data'][key2]['end'].replace(/\s/, 'T')  )          // this.rData[key][key2]['start']fix for fussy Safari
-           //   if (this.isSafari)                                                                  
-           //    eDate.setDate(eDate.getDate() + 1);                                               // correct for faulty Safari date conversion
-           //   var endDateArg= this.datePipe.transform(eDate, 'yyyy-MM-dd') + "T00:00:00" ; 
-              var endDateArg = this.rData['data'][key2]['end'].replace(/\s/, 'T')
-            }
           if ( this.rData['data'][key2]['content'])                                               // 'content' is the datum which appears in timeLine box
           {
                            //******* set the color code for approved, covered, and coverageAccepted   *****/
@@ -726,7 +704,9 @@ tst = "";
           this.EDO.NewStartDate = <string>startDateStringForEdit                            // New startDate comes from DatePicker
           this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
           this.EDO.NewEndDate = <string>endDateStringForEdit 
-          if (type=='startDate' ){                                                          
+          if (type=='startDate' ){   
+            this.EDO.OldStartDate = this.items._data[this._id]['start'].slice(0,10);          // The OldStartDate comes form dB
+            this.EDO.NewStartDate = <string>startDateStringForEdit                            // New startDate comes from DatePicker                                                       
             if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists
                this.needStartEmail = true;                                                  // send email to Brian
                       console.log('722  startDateString ' + startDateString) 
@@ -739,6 +719,8 @@ tst = "";
             }
           }
           if (type=='endDate'){
+            this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
+            this.EDO.NewEndDate = <string>endDateStringForEdit 
             if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists 
               this.needEndEmail = true;                                 
             this.items.update({id: this._id, end: endDateString});   // live update to timeLine does not work in Safari
@@ -768,6 +750,8 @@ tst = "";
     }
   }
   saveEdits(param?){
+    var startEndSubject = "Time Away Date Change";
+    const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` +  this.items._data[this._id]['vidx']  ;
     var eP  = <dB_POSTparams>{                                      // Interface proviced in gen-edit.service.tx
       action:'editAndLog',                                          // name of function in RESTgenDB_POST.php
       tableName:'vacation3',
@@ -775,25 +759,47 @@ tst = "";
       editColVals:this.editColVals,
       whereColName:['vidx'],
       whereColVal:[this.items._data[this._id]['vidx']],
-      userid:this.userid                                          // FJLlog records the user 
+      userid:this.userid,
+      email:{
+        addr: { "Dev":["flonberg@partners.org"],
+                  "Prod":["flonberg@gmail.com"]
+          },
+          msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+          <p> A Time Away for ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
+          ` has changed. </p>'`,
+        subject:startEndSubject
+      }                                          // FJLlog records the user 
     }
+    if (this.EDO.NewStartDate.length> 0){
+      eP.email.msg += `From old Start Date of ` +  this.EDO.OldStartDate + ` new Start Date is ` + this.EDO.NewStartDate;
+    }
+    eP.email.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
+
     if (param == 'del') {                                          // user clicked Delete Button
       eP.editColNames=['reasonIdx'];                                // sel editColName 
       eP.editColVals= ['99'];
       this.items.remove({id: this._id })
     }
-    if (this.needStartEmail || this.needEndEmail)
-      this.sendStartOrEndDateEmail();
     this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
       (res) => {
-        console.log("res from updatel %o",  res);
+        console.log("765 no email   res from updatel %o",  res);
+     //   window.location.reload();
       }
     );
+    /*
+    this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
+      (res) => {
+        console.log("765   res from updatel %o",  res);
+        if (this.needStartEmail || this.needEndEmail)               // before putting this in the 'subscribe' loop there were intermittent failures to update. 
+           this.sendStartOrEndDateEmail();
+      }
+    );
+    */
    // if (param !== 'del')
     //   this.ngOnInit();
   //  if (this.isSafari)
   console.log(" 783  eP is %o", eP);
-     window.location.reload();
+  //   
   }
   sendStartOrEndDateEmail(){
     var link33 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` + this.items._data[this._id].vidx;    // the link to the approval php script
