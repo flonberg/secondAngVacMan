@@ -275,6 +275,7 @@ export class TimeLineComponent implements OnInit {
             this._vidx = this.items._data[this._id].vidx;                                        // store the vidx for editing
             const rDataKey = this.find_rDataKey(this.rData.data, 'vidx', this._vidx);            // find the key of this vidx in the rawData 
             this.clickedFrom_rData = this.rData.data[rDataKey];                                   // get the row for this vidx from the rawData
+                  console.log("283 clickedFrom_rData %o",   this.clickedFrom_rData)
             this.createEditForm(this._id);                                                       // create the form for editing the tA
             document.getElementById('vidx').innerText = this.items._data[this._id].vidx; // store the vidx for DELETE
             if (this.items && this.items._data[this._id].approved == 1 )
@@ -764,7 +765,7 @@ tst = "";
   saveEdits(param?)
   {
     var startEndSubject = "Time Away Date Change";
-    const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` +  this.items._data[this._id]['vidx']  ;
+    var link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` +  this.items._data[this._id]['vidx']  ;
     //************     Create Email for StartDate or EndDate *******************************/
     if (this.needStartEmail || this.needEndEmail )
     {
@@ -772,7 +773,7 @@ tst = "";
         addr: { "Dev":["flonberg@partners.org"],
                   "Prod":["flonberg@gmail.com"]
           },
-          msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+          msg:`<html> <head><title> Vacation Date Change </title></head>
           <p> A Time Away for ` + this.rData['fromION'][this.rData.loggedInUserKey]['FirstName'] + `  ` + this.rData['fromION'][this.rData.loggedInUserKey]['LastName']  + 
           ` has changed. </p>`,
           subject:startEndSubject
@@ -790,6 +791,8 @@ tst = "";
     else if (this.needCovererEmail){
       var prodAddr = this.rData.fromION[this.editColVals[0]]['Email'];
       var firstName =    this.rData.fromION[this.editColVals[0]]['FirstName'] ;
+      var fromDate = this.items._data[this._id].start.slice(0, 10);
+      var link11 = this.genEditSvce.urlBase +`/acceptCov.php?vidx=` +  this.items._data[this._id]['vidx']  ;
       
      
       this.eMailObj =<emailIntf>{
@@ -797,9 +800,11 @@ tst = "";
                   "Prod":["flonberg@gmail.com"]
           },
           msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
-          <p> dddd  ` + this.rData.fromION[this.editColVals[0]]['FirstName']  + 
-          ` would like you to cover for her Time Away, starting on `  + ` </p>`,
-          subject:startEndSubject
+          <p>  ` + this.clickedFrom_rData['FirstName']  + ` ` + this.clickedFrom_rData['LastName'] +
+          ` would like you to cover a Time Away, starting on `  + this.items._data[this._id].start.slice(0, 10) + 
+          ` returning on ` +  this.items._data[this._id].end.slice(0, 10)  + `. </p>
+          <p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>                                                            `,
+          subject:'Time Away Coverage'
           }  
           console.log("792 eMailObj is  is %o", this.eMailObj);   
     }
