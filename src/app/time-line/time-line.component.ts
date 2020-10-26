@@ -557,10 +557,18 @@ tst = "";
         for (var key2  in this.rData['data'])
         {
           /*******************      form the date arguments to add to the TimeLine DataSet  *****************/
-          if (this.rData['data'][key2]['start'])
+          if (this.rData['data'][key2]['start']){
             var startDateArg = this.rData['data'][key2]['start'].replace(/\s/, 'T')             // replace 'space' with T e.g 2020-11-25T00:00:00
-          if (this.rData['data'][key2]['end'])                                                 
+            if (this.isSafari){
+              startDateArg = startDateArg.replace("T00", "T04");
+            }
+          }
+          if (this.rData['data'][key2]['end'])   {                                              
             var endDateArg = this.rData['data'][key2]['end'].replace(/\s/, 'T')                 // replace 'space' with T e.g 2020-11-25T00:00:00
+            if (this.isSafari){
+              endDateArg = endDateArg.replace("T00", "T04");
+            }
+          }
 
           if ( this.rData['data'][key2]['content'])                                               // 'content' is the datum which appears in timeLine box
           {
@@ -673,6 +681,7 @@ tst = "";
   editColVals = [];
   needStartEmail = false;
   needEndEmail = false;
+  needCovererEmail = false;
   newStartDate = String;
   newEndDate = String;
   newReasonIdx = 1;
@@ -706,28 +715,28 @@ tst = "";
           this.EDO.NewEndDate = <string>endDateStringForEdit 
           if (type=='startDate' ){   
             this.needStartEmail = true;
-            this.EDO.NewStartDate = <string>startDateStringForEdit                            // New startDate comes from DatePicker                                                       
-            if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists
+            this.EDO.NewStartDate = <string>startDateStringForEdit                          // New startDate comes from DatePicker                                                       
+            if (+this.loggedInRank < 5)                                                     // only  for Dosimetrists
                this.needStartEmail = true;                                                  // send email to Brian
                       console.log('722  startDateString ' + startDateString) 
             this.items.update({id: this._id, start: startDateString});                      // update the DataSet
             this.editColNames.push("startDate");                                            // load into POST array for REST 
             this.editColVals.push(startDateStringForEdit)                                   //  ""
-            if ( !this.editColNames.includes('approved')){                                    // if 'approved' has not benn added
-              this.editColNames.push("approved");                                             //  Reset the 'approved' col
-              this.editColVals.push('0')                                                      //  to '0' so Brian can reapprove. 
+            if ( !this.editColNames.includes('approved')){                                  // if 'approved' has not benn added
+              this.editColNames.push("approved");                                           //  Reset the 'approved' col
+              this.editColVals.push('0')                                                    //  to '0' so Brian can reapprove. 
             }
           }
           if (type=='endDate'){
           //  this.EDO.OldEndDate = this.items._data[this._id]['end'].slice(0,10);
             this.needEndEmail = true;
             this.EDO.NewEndDate = <string>endDateStringForEdit 
-            if (+this.loggedInRank < 5)                                                    // only  for Dosimetrists 
+            if (+this.loggedInRank < 5)                                                     // only  for Dosimetrists 
               this.needEndEmail = true;                                 
             this.items.update({id: this._id, end: endDateString});   // live update to timeLine does not work in Safari
             this.editColNames.push("endDate");
             this.editColVals.push(endDateStringForEdit)
-            if ( !this.editColNames.includes('approved')){                                    // if 'approved' has not benn added
+            if ( !this.editColNames.includes('approved')){                                  // if 'approved' has not benn added
               this.editColNames.push("approved");
               this.editColVals.push('0')
               }
@@ -739,13 +748,14 @@ tst = "";
           console.log("958 %o", this.items);
           console.log(" 741 editColNames %o   editColVals %o", this.editColNames ,    this.editColVals)
     }
-    else  if (e.target){                                                          // Note textAres returns a 'target' 
-        this.editColNames.push(type);                                             // load name of Col in dB to be edited
-        this.editColVals.push(e.target.value);                                    // load value to be inserted
-        if (type == 'coverer'){
+    else  if (e.target){                                                                    // Note textAres returns a 'target' 
+        this.editColNames.push(type);                                                       // load name of Col in dB to be edited
+        this.editColVals.push(e.target.value);                                              // load value to be inserted
+        if (type == 'coverer'){                                                             // for Coverer
+          this.needCovererEmail = true;                                                     // make system send email to Nominated Coverer
           this.covererName = e.target.textContent;
-          this.editColNames = ['coverageA'];
-          this.editColVals =[this.covererName]
+          this.editColNames = ['coverageA'];  
+          this.editColVals =[+this.find_rDataKey(this.rData.fromION, 'LastName', e.target.textContent) ]  // find the UserKey
         }
         var str = "approved";  
     }
@@ -755,6 +765,7 @@ tst = "";
   {
     var startEndSubject = "Time Away Date Change";
     const link11 = this.genEditSvce.urlBase +`/approveTA.php?vidx=` +  this.items._data[this._id]['vidx']  ;
+    //************     Create Email for StartDate or EndDate *******************************/
     if (this.needStartEmail || this.needEndEmail )
     {
       this.eMailObj =<emailIntf>{
@@ -775,6 +786,23 @@ tst = "";
         }
         this.eMailObj.msg +=  `<p> You can approve this change by clicking on  <a href=`+ link11 + `> Approve Time Away. </a>  </p>`;
     }
+    /*********************** Create Email Message for Nominated Coverer *************************/
+    else if (this.needCovererEmail){
+      var prodAddr = this.rData.fromION[this.editColVals[0]]['Email'];
+      var firstName =    this.rData.fromION[this.editColVals[0]]['FirstName'] ;
+      
+     
+      this.eMailObj =<emailIntf>{
+        addr: { "Dev":["flonberg@partners.org"],
+                  "Prod":["flonberg@gmail.com"]
+          },
+          msg:`<html> <head><title> Vacation Coverage Acknowledgment </title></head>
+          <p> dddd  ` + this.rData.fromION[this.editColVals[0]]['FirstName']  + 
+          ` would like you to cover for her Time Away, starting on `  + ` </p>`,
+          subject:startEndSubject
+          }  
+          console.log("792 eMailObj is  is %o", this.eMailObj);   
+    }
     
     var eP  = <dB_POSTparams>{                                      // Interface proviced in gen-edit.service.tx
       action:'editAndLog',                                          // name of function in RESTgenDB_POST.php
@@ -786,9 +814,11 @@ tst = "";
       userid:this.userid,
       email:this.eMailObj
      }
+   //  var tstStr =  JSON.stringify(eP)
+   //  console.log("790 SON string is " + tstStr);
      this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
       (res) => {
-        window.location.reload();                                   // reload indicates to the user that edit worked
+   //     window.location.reload();                                   // reload indicates to the user that edit worked
       }
     );
      /*

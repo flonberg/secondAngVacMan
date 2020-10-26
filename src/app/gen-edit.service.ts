@@ -54,11 +54,7 @@ export interface dB_POSTparams {
   userid: string,
   insert?: boolean ,
   needEmail?: string,
-  email?: {
-    addr:object,
-    msg: string,
-    subject: string
-  };                                     // INSERT edited ROW if NOT found
+  email?: emailIntf                                   // INSERT edited ROW if NOT found
 }
 /*
 export interface emailParams {
@@ -222,7 +218,8 @@ genRest(dBParams, scriptName, hostName){
   genPOST(dBParams){
     dBParams['emailStage'] = this.emailStage;
     const url2 = this.urlBase + 'RESTgenDB_POST.php';
-    console.log("gen_edit 229  url is " + url2);
+//    console.log("gen_edit 229  url is " + url2);
+
     return this.http.post(url2, JSON.stringify(dBParams), { responseType:  'json' });
   }
 

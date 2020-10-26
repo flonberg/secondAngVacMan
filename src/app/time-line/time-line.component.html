@@ -76,7 +76,6 @@
                     title="Valid Start and End dates as well as Reason required"  >Submit </button>
                 <button mat-raised-button type='button' (click) = "cancelNewTA()" >Cancel </button>
 
-
                 <div *ngIf="this.formG.controls.dateFrom.invalid && ( this.formG.controls.dateFrom.dirty || this.formG.controls.dateFrom.touched  ) "
                     class="alert alert-danger">
                         <div *ngIf="this.formG.controls.dateFrom.errors.required">
