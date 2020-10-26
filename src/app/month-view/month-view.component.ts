@@ -237,17 +237,19 @@ if (this.isUserDutyTaker() !== true){
   window.open('http://ppd.partners.org/scripts/phsweb.mwl?APP=PDPERS&ACTION=PAGE&ID=' 
   + this.physicsMonthlyDuties[dDayNum][nDutyId]['id'] + '  , _blank');
   return;
-}
-const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
-this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + dDayNum;         // phrase for the Modal
-this.idxForEdit = this.physicsMonthlyDuties[dDayNum][nDutyId]['idx'];       // used to update the dB
-this.toPageID = this.physicsMonthlyDuties[dDayNum][nDutyId]['id'];
-document.getElementById('myModal').style.display = "block";     // show the modal 
+  }
+  const physicsDutiesSelected = this.physicsDutiesClass.find(t=>t.dutyId == nDutyId);
+  this.phrase = "You are assuming --- " +  physicsDutiesSelected['dutyName'] + " on " + dDayNum;         // phrase for the Modal
+  this.idxForEdit = this.physicsMonthlyDuties[dDayNum][nDutyId]['idx'];       // used to update the dB
+  this.toPageID = this.physicsMonthlyDuties[dDayNum][nDutyId]['id'];
+  document.getElementById('myModal').style.display = "block";     // show the modal 
 }
 setPhysicsMonthlyDuties(val){
     this.physicsMonthlyDuties = val['data'];   
+    console.log("249  physicsMonthlyDuties is %o ", this.physicsMonthlyDuties)
     this.physicsDutiesClass = [];
-  for (let entry of val['PhysicsDuties']) {
+  for (let entry of val['PhysicsDuties']) 
+  {
     if (this.count == 1){                                                            // drawing the Proton Calendar
       if (entry.CalNum == 2)
         this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name, 'timeSpan':entry.timeSpan })
@@ -256,7 +258,7 @@ setPhysicsMonthlyDuties(val){
       if (entry.CalNum == 1)
       this.physicsDutiesClass.push({'dutyId': entry.Idx, 'dutyName':entry.name,'timeSpan':entry.timeSpan  })
       }
-    }
+  }
     if (val['loggedInUserKey'])      {                                                 // the data to the monthly schedule
       this.loggedInUserKey = val['loggedInUserKey']                                                       // the userkey to be used for Take-A-Duty      
       this.helpArray = ['To take a duty, click on the on the name of physicists who has that duty'];      

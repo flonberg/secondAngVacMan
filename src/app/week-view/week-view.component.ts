@@ -100,11 +100,16 @@ export class WeekViewComponent implements OnInit {
       }
     );
   }
+  getDutyTaker(theDate, theIdx){
+    if (this.physicsMonthlyDuties[theDate][theIdx])
+     return this.physicsMonthlyDuties[theDate][theIdx]['lNN']
+  }
   setPhysicsMonthlyDuties(val){
-    console.log("87 val %o ", val['PhysicsDuties']);
+
     this.physicsMonthlyDuties = val['data'];   
     this.physicsRegularDuties = val['RegularDuties']
     this.WeekDutyNames = val['PhysicsDuties']
+    console.log("87 val %o ", val['data']);
 
     console.log("241 WeekDutyNames %o", this.WeekDutyNames);
     console.log("241 physicsMothlyDuties %o", this.physicsMonthlyDuties);
