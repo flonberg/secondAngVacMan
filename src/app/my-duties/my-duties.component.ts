@@ -60,5 +60,6 @@ export class MyDutiesComponent implements OnInit {
       else 
         return 'odd';   
     }
+    unsorted() { }
 
 }

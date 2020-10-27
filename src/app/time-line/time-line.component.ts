@@ -510,7 +510,7 @@ tst = "";
   {
 
     /***********   set the startDate and endDates for collecting enuff data for everyone to be in the dataStructure    ***************/
-    const numWeeks = 5;                                                                 // number of weeks to show on the calendar
+    const numWeeks = 7;                                                                 // num weeks on the calendar, see single days
     const todayDate = new Date();
     const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);         // move to first day of current month
     const endDate = new Date();  
@@ -623,6 +623,7 @@ tst = "";
       console.log("605 DataSet is %o", this.items)
       this.options = {
         selectable: true,
+        zoomable:false,
         groupOrder: function (a, b) {
           return a.value - b.value;
         },
