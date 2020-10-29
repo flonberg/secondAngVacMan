@@ -44,10 +44,10 @@ export class TimeLineComponent implements OnInit {
   'If you have difficulties or questions concerning the page, please email to flonberg@partners.org.',
   'There is a button for Help in the lower right corner of the page. '
                 ];
-  helpArray = [   "If TimeAway is in red, it means that now coverer has been nominated",
+  helpArray = [   "If TimeAway is in red, it means that now coverer has NOT been nominated",
   "Orange means that the coverer has not yer accepted the coverage.",
   "Green means that the coverage has been accepted.",
-    "Pan and zoom are implemented."  ];
+    "Pan to advance the calendar."  ];
   noticeColName='vacMan';                             // used as @input for notice.component.tx
   noticeModalComonentID='vacManModal'
   reason: String;
@@ -299,7 +299,7 @@ export class TimeLineComponent implements OnInit {
           else{                                                                                 // user is NOT tA owner
               this._readonly = true;                                                            // make controls readOnly
               this.helpArray = [ "Click on a TimeAway to see the details for tha TimeAway.",
-                                "If TimeAway is in red, it means that now coverer has been nominated",
+                                "If TimeAway is in red, it means that now coverer has NOT been nominated",
                                 "Orange means that the coverer has not yer accepted the coverage.",
                                 "Green means that the coverage has been accepted."
                               ]; 
@@ -809,6 +809,7 @@ tst = "";
           }  
           console.log("792 eMailObj is  is %o", this.eMailObj);   
     }
+
     
     var eP  = <dB_POSTparams>{                                      // Interface proviced in gen-edit.service.tx
       action:'editAndLog',                                          // name of function in RESTgenDB_POST.php
@@ -820,11 +821,14 @@ tst = "";
       userid:this.userid,
       email:this.eMailObj
      }
-   //  var tstStr =  JSON.stringify(eP)
-   //  console.log("790 SON string is " + tstStr);
+     if (param == 'del') {                                          // user clicked Delete Button
+      eP.editColNames=['reasonIdx'];                                // sel editColName 
+      eP.editColVals= ['99'];                                       // code for a deleted tA
+      this.items.remove({id: this._id })
+    }
      this.genEditSvce.genPOST(eP).subscribe(                         // do the update 
       (res) => {
-   //     window.location.reload();                                   // reload indicates to the user that edit worked
+         window.location.reload();                                   // reload indicates to the user that edit worked
       }
     );
      /*
