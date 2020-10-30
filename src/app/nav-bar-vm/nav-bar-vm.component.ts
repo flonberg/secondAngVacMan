@@ -35,17 +35,17 @@ export class NavBarVMComponent implements OnInit {
       },
       {
         label: 'ProtonMonthview',
-        link: './ProtonMonth',   
+        link: './ProtonMonth.html',   
         index: 2,   
     },
        {
         label: 'My Duties',
-        link: './MyDuties',
+        link: './MyDuties.html',
         index: 3,   
     }, 
     {
       label: 'Week View',
-      link: './WeekView',
+      link: './WeekView.html',
       index: 4,   
     }
     ];

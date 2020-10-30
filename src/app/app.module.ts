@@ -68,12 +68,12 @@ import { GenEditService, dB_SimpleGETparams } from './gen-edit.service';
     MatAutocompleteModule,
     RouterModule.forRoot([
       { path: 'MonthView.html', component: MonthViewComponent },
-      { path: 'ProtonMonth', component: ProtonmonthComponent },
+      { path: 'ProtonMonth.html', component: ProtonmonthComponent },
       { path: 'VacMan**', component: TimeLineComponent},
       { path: 'VacMan/:userid', component: TimeLineComponent},
-      { path: 'MyDuties', component:MyDutiesComponent},
+      { path: 'MyDuties.html', component:MyDutiesComponent},
     //  { path: 'WeekView', component:AutocompleteFilterExample},
-      { path: 'WeekView', component:WeekViewComponent},
+      { path: 'WeekView.html', component:WeekViewComponent},
       { path: 'DosimAssign', component:DosimAssignmentsComponent},
 
      { path: '**', component: TimeLineComponent}
