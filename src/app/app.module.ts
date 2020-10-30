@@ -67,7 +67,7 @@ import { GenEditService, dB_SimpleGETparams } from './gen-edit.service';
     FormsModule,
     MatAutocompleteModule,
     RouterModule.forRoot([
-      { path: 'MonthView', component: MonthViewComponent },
+      { path: 'MonthView.html', component: MonthViewComponent },
       { path: 'ProtonMonth', component: ProtonmonthComponent },
       { path: 'VacMan**', component: TimeLineComponent},
       { path: 'VacMan/:userid', component: TimeLineComponent},

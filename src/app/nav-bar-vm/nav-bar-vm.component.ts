@@ -30,7 +30,7 @@ export class NavBarVMComponent implements OnInit {
       },
        {
           label: 'Monthview',
-          link: './MonthView',
+          link: './MonthView.html',
           index: 1,   
       },
       {

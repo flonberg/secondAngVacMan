@@ -113,45 +113,46 @@ caption {
   }
 
 
-.MorningA-IORT:hover, .MorningB:hover, .EveningA:hover, .EveningB:hover, .ProtonAM, .ProtonPM {
+.MorningA-IORT:hover, .MorningB:hover, .EveningA:hover, 
+.EveningB:hover, .ProtonAM:hover, .ProtonPM:hover, .Float1:hover, .Float2:hover {
     background-color:yellow;
     cursor: pointer;
 }
 
 
-.one, .MorningA-IORT, .ProtonAM {
+.MorningA-IORT, .ProtonAM {
     background-color:#fcc9ae;
     height:10px;
     border: 1px outset #ccc;
 } 
-.two, .MorningB, .ProtonPM {
+ .MorningB, .ProtonPM {
     background-color:#fcdfbc;
     height:10px;
     border: 1px outset #ccc;
 }   
-.three, .EveningA {
+ .EveningA {
     background-color:#fceb8e;
     height:10px;
     border: 1px outset #ccc;
 }  
-.four, .EveningB {
+.EveningB {
     background-color:#ccccc5;
     height:10px;
     border: 1px outset #ccc;
 }  
-.five,.Float1 {
+.Float1 {
     background-color:#cce9b6;
     height:10px;
     border: 1px outset #ccc;
 }  
-.six, .Float2  {
+.Float2  {
     background-color:#a4c2b9;
     height:10px;
     border: 1px outset #ccc;
 }    
 .theUser {
     color: red;
-    font-size: 200%;
+    font-size: 110%;
 }   
 .lUser {
     color:red;
