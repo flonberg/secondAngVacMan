@@ -121,8 +121,8 @@ export class GenEditService   {
   setPlatform(){             // set the dB host for the localhost version                                                     // the default. 
     this.emailStage = "Dev";                                                   // send ALL emails to flonberg for forwarding
     if (window.location.href.indexOf('localhost') !== -1 || window.location.href.indexOf('blackboard') !== -1 ){
-      this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
-    // this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';     // might want to work with PROD data 
+     // this.urlBase = 'http://blackboard-dev.partners.org/dev/FJL/AngProd/';      //get data from BB  for localhost or BB 
+    this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';     // might want to work with PROD data 
     }   
     if ( window.location.href.indexOf('whiteboard') !== -1 ){                   // PROD. 
       this.urlBase = 'https://whiteboard.partners.org/esb/FLwbe/AngProd/';      //get data from BB  for localhost or BB 
