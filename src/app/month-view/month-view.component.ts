@@ -88,6 +88,8 @@ export class MonthViewComponent implements OnInit {
         console.log(err);
       }
     );
+
+    
     this.daysS = Array(Array());                                                      // make array to hold daysS structures
     var tmpDate = new Date();                                                         // this is the date which will be incremented
     this.date = new Date();                                                           //  today's date
