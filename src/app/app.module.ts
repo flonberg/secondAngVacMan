@@ -33,6 +33,7 @@ import { ProtonmonthComponent } from './protonmonth/protonmonth.component';
 import { DosimAssignmentsComponent } from './dosim-assignments/dosim-assignments.component';
 import { FooterComponent } from './footer/footer.component';
 import { GenEditService, dB_SimpleGETparams } from './gen-edit.service';
+import { VacmanComponent } from './vacman/vacman.component';
 //import { PhysicsCoverageComponent } from './physics-coverage/physics-coverage.component';
 
 @NgModule({
@@ -50,7 +51,7 @@ import { GenEditService, dB_SimpleGETparams } from './gen-edit.service';
     ProtonmonthComponent,
     DosimAssignmentsComponent,
     FooterComponent,
-
+    VacmanComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,14 +70,14 @@ import { GenEditService, dB_SimpleGETparams } from './gen-edit.service';
     RouterModule.forRoot([
       { path: 'MonthView.html', component: MonthViewComponent },
       { path: 'ProtonMonth.html', component: ProtonmonthComponent },
-      { path: 'VacMan**', component: TimeLineComponent},
-      { path: 'VacMan/:userid', component: TimeLineComponent},
+      { path: 'VacMan**', component: VacmanComponent},
+      { path: 'VacMan/:userid', component: VacmanComponent},
       { path: 'MyDuties.html', component:MyDutiesComponent},
     //  { path: 'WeekView', component:AutocompleteFilterExample},
       { path: 'WeekView.html', component:WeekViewComponent},
       { path: 'DosimAssign', component:DosimAssignmentsComponent},
 
-     { path: '**', component: TimeLineComponent}
+     { path: '**', component: VacmanComponent}
     ])
 
   ],
