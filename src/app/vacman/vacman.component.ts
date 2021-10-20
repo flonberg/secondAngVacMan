@@ -30,6 +30,8 @@ export class VacmanComponent implements OnInit {
   calDates: Date[] = Array();
   v1: number;
   numDaysOnCal: number;
+  calParams: calParams;
+  dayOfMonth:number;
 
   constructor(private http: HttpClient, private datePipe: DatePipe , private activatedRoute: ActivatedRoute) {
     this. activatedRoute.queryParams.subscribe(params =>{
@@ -38,6 +40,8 @@ export class VacmanComponent implements OnInit {
    }
 
   ngOnInit() {
+    this .setCalDates()
+    this .getTheData();
   }
   /**
    * Get tA data from 242.  The URL has GET params det'ing the monthInc, which det's the 2-month data acquisition interval
@@ -174,5 +178,96 @@ private daysBetweenA(val1, val2){
 //console.log("420 %o --- %o --- %o", d1, d2, diff)    
   return diff ;
 } 
+private daysBetween(val1, val2){                        // used by counter function
+  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  var endDate = new Date(val1['endDate'])
+  var calEndDate = new Date( val2['startDate'])
+  var diff =Math.round( (calEndDate.valueOf() - endDate.valueOf())/oneDay); 
+  return diff -1;
+}  
+setCalDates(){
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+           "July", "August", "September", "October", "November", "December"
+            ];
+    this .calParams = {} as calParams
+    var date = new Date();
+   // date = new Date(date.setMonth(date.getMonth()+ this .monthInc));
+    var monthToAdd = 2 + this. monthInc
+    var monthToAddStart = this. monthInc
+    var daysInMonth0 = date.getDate();
+    var firstDay = new Date(date.getFullYear(), date.getMonth() + monthToAddStart, 1);
+    this .calParams.firstMonthName = firstDay.toLocaleString('default', { month: 'long' });
+    this .calParams.daysInFirstMonth = new Date(firstDay.getFullYear(), firstDay.getMonth() + 1, 0).getDate();
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + monthToAdd, 0);
+    this .calParams.lastDateOnCal = lastDay
+    this .calParams.daysInSecondMonth = new Date(lastDay.getFullYear(), lastDay.getMonth() + 1, 0).getDate();
+    this .calParams.secondMonthName = lastDay.toLocaleString('default', { month: 'long' });
+    this. calDates = Array();
+    this .calParams.firstMonthName = monthNames[firstDay.getMonth()]
+    var i = 0;
+// if (this. monthInc > 0)
+{
+ console.log("348 %o --- %o", firstDay, this .calParams)
+}     
+    do {
+      var cDay = new Date(firstDay.valueOf());
+      this. calDates[i++] = cDay;
+      firstDay.setDate(firstDay.getDate() + 1);
+    }
+    while (firstDay <= lastDay)
+//    this .numDaysOnCal = 61; 
+  }
+ /**
+  * Determines if a day on Calendar Top is a Weekend or Today
+  * @param d 
+  * @returns weekend OR todayCell
+  */ 
+  getDateClass(d: Date){
+    let today = new Date()
+    let dDate = d.getDate();
+    let todayDate = today.getDate();
+    if (d.getDate() === today.getDate()  && 
+       d.getMonth() === today.getMonth()  &&
+       d.getFullYear() === today.getFullYear()) 
+      return 'todayCell'
+    if (d.getDay() == 6  || d.getDay() == 0)
+        return 'weekend'
+  }  
+private  counter(n){                                            // used for looper in Calendar
+    var ar = Array();
+    for (var i=0; i < n; i++ ){
+      ar[i] = i;
+    }
+
+    return ar;
+}
+getClass(n){
+  if (n == this .dayOfMonth && this. monthInc == 0)
+    return 'todayCell'
+}
+
+daysTillEnd(val){
+  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  if (!val)
+      return;
+  var endDate = new Date(val['endDate'])
+/* if (this. monthInc > 0) {    
+console.log("359 %o", val)
+}*/   
+  endDate = new Date(endDate.getTime() + endDate.getTimezoneOffset() * 60000)
+//     endDate.toLocaleString('en-US', { timeZone: 'America/New_York' })
+  var calEndDate = new Date( this. calDates[this. calDates.length-1])
+  var diff =Math.round( (calEndDate.valueOf() - endDate.valueOf())/oneDay);
+ return diff;
+}
+ /**
+  * Go to new Row on Calendar
+  */
+  zeroDayNum(){                                         // reset the dayNum for each row of Cal
+    this. dayNum = 0;
+  }
+
+
+
 
 }
