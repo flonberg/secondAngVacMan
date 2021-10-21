@@ -29,9 +29,10 @@ export class VacmanComponent implements OnInit {
   dayArray = [[]]
   calDates: Date[] = Array();
   v1: number;
-  numDaysOnCal: number;
+  numDaysOnCal: number = 61;
   calParams: calParams;
   dayOfMonth:number;
+  dayNum: number = 1;
 
   constructor(private http: HttpClient, private datePipe: DatePipe , private activatedRoute: ActivatedRoute) {
     this. activatedRoute.queryParams.subscribe(params =>{
@@ -40,6 +41,7 @@ export class VacmanComponent implements OnInit {
    }
 
   ngOnInit() {
+    this .dayOfMonth = new Date().getDate();
     this .setCalDates()
     this .getTheData();
   }
@@ -63,6 +65,7 @@ export class VacmanComponent implements OnInit {
    * @returns 
    */
 private makeDaysOfRow(vacRow){
+  this .dayArray = [[]];
   let dBC = this. daysBeforeCalcStart(vacRow[0])          // if first tA starts in earlier month
     for (let i = 0; i < vacRow[0]['daysTillStartDate']; i++){
       this. dayArray[0][i] = i + 1;
